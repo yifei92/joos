@@ -65,10 +65,13 @@ public enum Token {
 	SEMICOLON(";"),
 	STAR("*"),
 	// Literals
-	BOOLEAN_LITERAL(""),
-	CHAR_LITERAL(""),
+	BOOLEAN_LITERAL_TRUE("true"),
+	BOOLEAN_LITERAL_FALSE("false"),
+	SINGLE_QUOTE("'"),
+	CHAR_LITERAL(""), // consists of a single char surrounded by single quotes
 	INTEGER_LITERAL(""),
-	STRING_LITERAL("");
+	DOUBLE_QUOTE("\""),
+	STRING_LITERAL(""); // consists of a string of characters surrounded by double quotes
 
 	private String mRawValue;
 

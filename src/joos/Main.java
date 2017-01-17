@@ -7,6 +7,7 @@ import joos.parser.Parser;
 import joos.scanner.Scanner;
 import joos.weeder.Weeder;
 import java.util.List;
+import java.util.Arrays;
 
 public class Main {
 
@@ -19,8 +20,9 @@ public class Main {
 
     	try {
     		System.out.println("Scanning");
-    		List<Token> tokens = scanner.scan("");
+    		// List<Token> tokens = scanner.scan("");
     		System.out.println("Parsing");
+        List<String> tokens = Arrays.asList("{", "{", "{", "b", "}", "}", "}");
     		ParseTreeNode parseTree = parser.parse(tokens);
     		System.out.println("Weeding");
     		weeder.weed(parseTree);

@@ -16,7 +16,6 @@ public class CharLiteralNFA implements NFA {
 	private char mChar = Character.MIN_VALUE;
 
 	public boolean consume(char newChar) {
-		boolean didTransition = false;
 		switch (mState) {
 			case START:
 				if (newChar == '\'') {

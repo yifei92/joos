@@ -29,8 +29,13 @@ public class Scanner {
 					break;
 				case INTEGER_LITERAL:
 					nfa = new IntegerLiteralNFA();
+					break;
+				case IDENTIFIER:
+					nfa = new IdentifierNFA();
+					break;
 			}
-			if (token != Token.SINGLE_QUOTE &&
+			if (nfa == null &&
+				token != Token.SINGLE_QUOTE &&
 				token != Token.DOUBLE_QUOTE) {
 				try {
 					nfa = new KeywordNFA(token);
@@ -47,13 +52,15 @@ public class Scanner {
 		NFA nfa;
 		while(it.hasNext()) {
 			nfa = it.next();
-			if(nfa.consume(toConsume)) {
-				if (nfa.isAccepting()) {
-					mLastAcceptedTokens = nfa.getTokens();
-					mLastAcceptedEndIndex = currentCharIndex;
+			if (nfa != null) {
+				if(nfa.consume(toConsume)) {
+					if (nfa.isAccepting()) {
+						mLastAcceptedTokens = nfa.getTokens();
+						mLastAcceptedEndIndex = currentCharIndex;
+					}
+				} else {
+					it.remove();
 				}
-			} else {
-				it.remove();
 			}
 		}
 	}
@@ -75,13 +82,15 @@ public class Scanner {
 		List<NFA> nfas = mNFAs;
 		for (int currentCharIndex = 0 ; currentCharIndex < input.length() ; currentCharIndex++) {
 			char toConsume = input.charAt(currentCharIndex);
-			consumeChar(nfas, toConsume, currentCharIndex);
-			if (nfas.size() == 0) {
-				if (mLastAcceptedTokens != null) {
-					currentCharIndex = mLastAcceptedEndIndex + 1;
+			if (toConsume != ' ') {
+				consumeChar(nfas, toConsume, currentCharIndex);
+				if (nfas.size() == 0) {
+					if (mLastAcceptedTokens != null) {
+						currentCharIndex = mLastAcceptedEndIndex + 1;
+					}
+					reset();
+					nfas = mNFAs;
 				}
-				reset();
-				nfas = mNFAs;
 			}
 		}
 		return tokens;

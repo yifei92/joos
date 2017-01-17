@@ -17,7 +17,6 @@ public class StringLiteralNFA implements NFA {
 	private String mValue = "";
 
 	public boolean consume(char newChar) {
-		boolean didTransition = false;
 		switch (mState) {
 			case START:
 				if (newChar == '\"') {

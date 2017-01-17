@@ -26,7 +26,8 @@ public class KeywordNFA implements NFA {
 	public boolean consume(char newChar) {
 		// If the new char is the next char of the literal then we can accept it and make a transition.
 		// Else we kill the NFA.
-		if (newChar == mLiteral.charAt(mNextCharIndex)) {
+		if (mNextCharIndex < mLiteral.length() &&
+			newChar == mLiteral.charAt(mNextCharIndex)) {
 			mNextCharIndex++;
 			return true;
 		} else {

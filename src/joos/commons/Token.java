@@ -52,7 +52,6 @@ public enum Token {
 	COMP_LESS_THAN_EQ("<="),
 	COMP_NOT_EQ("!="),
 	DOT("."),
-	IDENTIFIER(""),
 	OP_DIV("/"),
 	OP_MINUS("+"),
 	OP_PLUS("+"),
@@ -65,6 +64,7 @@ public enum Token {
 	SEMICOLON(";"),
 	STAR("*"),
 	// Literals
+	IDENTIFIER(""),
 	BOOLEAN_LITERAL_TRUE("true"),
 	BOOLEAN_LITERAL_FALSE("false"),
 	SINGLE_QUOTE("'"),

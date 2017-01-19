@@ -7,6 +7,7 @@ import joos.parser.Parser;
 import joos.scanner.Scanner;
 import joos.weeder.Weeder;
 import java.util.List;
+import java.util.Arrays;
 import java.lang.StringBuilder;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class Main {
                 while ((currentLine = br.readLine()) != null) {
                     program.append(currentLine);
                 }
-                br.close(); 
+                br.close();
                 fr.close();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -57,6 +58,7 @@ public class Main {
                 System.out.println(token + " , " + token.getRawValue());
             }
     		System.out.println("Parsing");
+        List<String> tokens = Arrays.asList("{", "{", "{", "b", "}", "}", "}");
     		ParseTreeNode parseTree = parser.parse(tokens);
     		System.out.println("Weeding");
     		weeder.weed(parseTree);

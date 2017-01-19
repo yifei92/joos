@@ -3,6 +3,7 @@ package joos.scanner;
 import java.lang.Exception;
 import joos.scanner.NFA;
 import joos.commons.Token;
+import joos.commons.TokenType;
 
 /**
  * NFA for string literals.
@@ -60,8 +61,7 @@ public class IdentifierNFA implements NFA {
 
 	public Token[] getTokens() {
 		Token[] tokens = new Token[1];
-		Token identifier = Token.IDENTIFIER;
-		identifier.setRawValue(mName);
+		Token identifier = new Token(TokenType.IDENTIFIER, mName);
 		tokens[0] = identifier;
 		return tokens;
 	}

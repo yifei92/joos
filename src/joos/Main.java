@@ -55,15 +55,15 @@ public class Main {
     		List<Token> tokens = scanner.scan(programString);
             System.out.println("tokens are:");
             for (Token token : tokens) {
-                System.out.println(token + " , " + token.getRawValue());
+                System.out.println(token.mType + " , " + token.getRawValue());
             }
     		System.out.println("Parsing");
             List<String> tokenStrings = Arrays.asList("{", "{", "{", "b", "}", "}", "}");
-    		ParseTreeNode parseTree = parser.parse(tokenStrings);
+    		//ParseTreeNode parseTree = parser.parse(tokenStrings);
     		System.out.println("Weeding");
-    		weeder.weed(parseTree);
+    		//weeder.weed(parseTree);
     		System.out.println("Converting");
-    		ASTTreeNode astTree = astBuilder.convert(parseTree);
+    		//ASTTreeNode astTree = astBuilder.convert(parseTree);
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
     		System.out.println("Invalid!");

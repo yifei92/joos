@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import joos.commons.Token;
+import joos.commons.TokenType;
 import joos.exceptions.InvalidSyntaxException;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ public class Scanner {
 	 */
 	public Scanner() {
 		mNFAs = new ArrayList<>();
-		for (Token token : Token.values()) {
+		for (Token token : Token.getTokens()) {
 			NFA nfa = null;
-			switch (token) {
+			switch (token.mType) {
 				case STRING_LITERAL:
 					nfa = new StringLiteralNFA();
 					break;
@@ -41,8 +42,8 @@ public class Scanner {
 					break;
 			}
 			if (nfa == null &&
-				token != Token.SINGLE_QUOTE &&
-				token != Token.DOUBLE_QUOTE) {
+				token.mType != TokenType.SINGLE_QUOTE &&
+				token.mType != TokenType.DOUBLE_QUOTE) {
 				try {
 					nfa = new KeywordNFA(token);
 				} catch (Exception e) {

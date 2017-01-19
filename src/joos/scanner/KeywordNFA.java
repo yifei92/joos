@@ -21,7 +21,7 @@ public class KeywordNFA implements NFA {
 		mToken = token;
 		mLiteral = mToken.getRawValue();
 		if (mLiteral == null || mLiteral.length() == 0) {
-			throw new Exception("Invalid token " + mToken + " cannot create an NFA.");
+			throw new Exception("Invalid token " + mToken.mType + " cannot create an NFA.");
 		}
 	}
 

@@ -61,7 +61,8 @@ public class IdentifierNFA implements NFA {
 
 	public Token[] getTokens() {
 		Token[] tokens = new Token[1];
-		Token identifier = new Token(TokenType.IDENTIFIER, mName);
+		Token identifier = Token.getToken(TokenType.IDENTIFIER);
+		identifier.setRawValue(mName);
 		tokens[0] = identifier;
 		return tokens;
 	}

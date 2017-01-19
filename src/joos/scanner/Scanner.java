@@ -25,9 +25,9 @@ public class Scanner {
 	 */
 	public Scanner() {
 		mNFAs = new ArrayList<>();
-		for (Token token : Token.getTokens()) {
+		for (TokenType tokenType : TokenType.values()) {
 			NFA nfa = null;
-			switch (token.mType) {
+			switch (tokenType) {
 				case STRING_LITERAL:
 					nfa = new StringLiteralNFA();
 					break;
@@ -42,10 +42,10 @@ public class Scanner {
 					break;
 			}
 			if (nfa == null &&
-				token.mType != TokenType.SINGLE_QUOTE &&
-				token.mType != TokenType.DOUBLE_QUOTE) {
+				tokenType != TokenType.SINGLE_QUOTE &&
+				tokenType != TokenType.DOUBLE_QUOTE) {
 				try {
-					nfa = new KeywordNFA(token);
+					nfa = new KeywordNFA(tokenType);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
@@ -96,15 +96,26 @@ public class Scanner {
 	 */
 	public List<Token> scan(String input) throws InvalidSyntaxException {
 		List<Token> tokens = new ArrayList();
-		for (int currentCharIndex = 0 ; currentCharIndex < input.length() ; currentCharIndex++) {
+		int currentCharIndex = 0;
+		while (currentCharIndex < input.length()) {
 			char toConsume = input.charAt(currentCharIndex);
 			consumeChar(mNFAs, toConsume, currentCharIndex);
 			if (allNFAsInActive()) {
 				if (mLastAcceptedTokens != null) {
-					tokens.addAll(Arrays.asList(mLastAcceptedTokens));
+					for (Token acceptedToken : mLastAcceptedTokens) {
+						if (acceptedToken.mType != TokenType.SPACE) {
+							tokens.add(acceptedToken);
+						}
+					}
+		            for (Token token : mLastAcceptedTokens) {
+		            }
 					currentCharIndex = mLastAcceptedEndIndex + 1;
+				} else {
+					throw new InvalidSyntaxException("Error at char " + currentCharIndex);
 				}
 				reset();
+			} else {
+				currentCharIndex++;
 			}
 		}
 		return tokens;

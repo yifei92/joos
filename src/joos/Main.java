@@ -53,9 +53,9 @@ public class Main {
     	try {
     		System.out.println("Scanning");
     		List<Token> tokens = scanner.scan(programString);
-            System.out.println("tokens are:");
-            for (Token token : tokens) {
-                System.out.println(token.mType + " , " + token.getRawValue());
+            System.out.println("tokens: ");
+            for (Token tok : tokens) {
+                System.out.println(tok.mType + " , " + tok.mRawValue);
             }
     		System.out.println("Parsing");
             List<String> tokenStrings = Arrays.asList("{", "{", "{", "b", "}", "}", "}");
@@ -66,7 +66,7 @@ public class Main {
     		//ASTTreeNode astTree = astBuilder.convert(parseTree);
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
-    		System.out.println("Invalid!");
+    		System.out.println(e.getMessage());
     		return;
 		}
 		System.out.println("Done!");

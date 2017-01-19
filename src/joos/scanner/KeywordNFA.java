@@ -3,6 +3,7 @@ package joos.scanner;
 import java.lang.Exception;
 import joos.scanner.NFA;
 import joos.commons.Token;
+import joos.commons.TokenType;
 
 /**
  * NFA for non literal tokens. 
@@ -17,8 +18,8 @@ public class KeywordNFA implements NFA {
 	private int mNextCharIndex = 0;
 	private State mState = State.START;
 
-	public KeywordNFA(Token token) throws Exception {
-		mToken = token;
+	public KeywordNFA(TokenType tokenType) throws Exception {
+		mToken = Token.getToken(tokenType);
 		mLiteral = mToken.getRawValue();
 		if (mLiteral == null || mLiteral.length() == 0) {
 			throw new Exception("Invalid token " + mToken.mType + " cannot create an NFA.");

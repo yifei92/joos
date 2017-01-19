@@ -59,10 +59,11 @@ public class CharLiteralNFA implements NFA {
 
 	public Token[] getTokens() {
 		Token[] tokens = new Token[3];
-		Token charLiteral = new Token(TokenType.CHAR_LITERAL, String.valueOf(mChar));
-		tokens[0] = new Token(TokenType.SINGLE_QUOTE, "\'");
+		Token charLiteral = Token.getToken(TokenType.CHAR_LITERAL);
+		charLiteral.setRawValue(String.valueOf(mChar));
+		tokens[0] = Token.getToken(TokenType.SINGLE_QUOTE);
 		tokens[1] = charLiteral;
-		tokens[2] = new Token(TokenType.SINGLE_QUOTE, "\'");
+		tokens[2] = Token.getToken(TokenType.SINGLE_QUOTE);
 		return tokens;
 	}
 }

@@ -72,5 +72,7 @@ public enum TokenType {
 	CHAR_LITERAL, // consists of a single char surrounded by single quotes
 	INTEGER_LITERAL,
 	DOUBLE_QUOTE,
-	STRING_LITERAL; // consists of a string of characters surrounded by double quotes
+	STRING_LITERAL, // consists of a string of characters surrounded by double quotes
+	// Space
+	SPACE;
 }

@@ -21,6 +21,7 @@ public class IntegerLiteralNFA implements NFA {
 		switch (mState) {
 			case START:
 				if (Character.isDigit(newChar)) {
+					mInteger += newChar;
 					mState = State.INTEGER;
 					return true;
 				}
@@ -53,7 +54,8 @@ public class IntegerLiteralNFA implements NFA {
 
 	public Token[] getTokens() {
 		Token[] tokens = new Token[1];
-		Token integerLiteral = new Token(TokenType.INTEGER_LITERAL, mInteger);
+		Token integerLiteral = Token.getToken(TokenType.INTEGER_LITERAL);
+		integerLiteral.setRawValue(mInteger);
 		tokens[0] = integerLiteral;
 		return tokens;
 	}

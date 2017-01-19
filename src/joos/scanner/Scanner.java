@@ -118,6 +118,7 @@ public class Scanner {
 				currentCharIndex++;
 			}
 		}
+		tokens.add(Token.getToken(TokenType.EOF));
 		return tokens;
 	}
 }

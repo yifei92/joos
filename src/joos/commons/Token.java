@@ -101,6 +101,7 @@ public class Token {
 			mTokens.put(TokenType.STRING_LITERAL , new Token(TokenType.STRING_LITERAL, "")); // consists of a string of characters surrounded by double quotes
 			// Space
 			mTokens.put(TokenType.SPACE, new Token(TokenType.SPACE, " "));
+			mTokens.put(TokenType.EOF, new Token(TokenType.EOF, "eof"));
 		}
 		Token token = mTokens.get(tokenType);
 		return new Token(token.mType, token.mRawValue);

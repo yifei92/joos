@@ -74,5 +74,6 @@ public enum TokenType {
 	DOUBLE_QUOTE,
 	STRING_LITERAL, // consists of a string of characters surrounded by double quotes
 	// Space
-	SPACE;
+	SPACE,
+	EOF;
 }

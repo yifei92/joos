@@ -58,8 +58,8 @@ public class Main {
                 System.out.println(token + " , " + token.getRawValue());
             }
     		System.out.println("Parsing");
-        List<String> tokens = Arrays.asList("{", "{", "{", "b", "}", "}", "}");
-    		ParseTreeNode parseTree = parser.parse(tokens);
+            List<String> tokenStrings = Arrays.asList("{", "{", "{", "b", "}", "}", "}");
+    		ParseTreeNode parseTree = parser.parse(tokenStrings);
     		System.out.println("Weeding");
     		weeder.weed(parseTree);
     		System.out.println("Converting");

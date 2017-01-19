@@ -1,7 +1,9 @@
 package joos.commons;
 
 public enum Token {
-	// Full words
+	// Identifier
+	IDENTIFIER(""),
+	// Keywords
 	ABSTRACT("abstract"),
 	BOOLEAN("boolean"),
 	BYTE("byte"),
@@ -64,7 +66,6 @@ public enum Token {
 	SEMICOLON(";"),
 	STAR("*"),
 	// Literals
-	IDENTIFIER(""),
 	BOOLEAN_LITERAL_TRUE("true"),
 	BOOLEAN_LITERAL_FALSE("false"),
 	SINGLE_QUOTE("'"),

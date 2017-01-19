@@ -1,18 +1,24 @@
 package joos.scanner;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import joos.commons.Token;
 import joos.exceptions.InvalidSyntaxException;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.lang.Exception;
 
 public class Scanner {
 
 	private final List<NFA> mNFAs;
+	private final Map<NFA, Boolean> mIsNFAActive = new HashMap<NFA, Boolean>();
 
+	private int mActiveNFAsCount = 0;
 	private Token[] mLastAcceptedTokens = null;
 	private int mLastAcceptedEndIndex = -1;
+
 	/**
 	 * Initialize NFAs
 	 */
@@ -43,24 +49,22 @@ public class Scanner {
 					System.out.println(e.getMessage());
 				}
 			} 
-			mNFAs.add(nfa);
+			if (nfa != null) {
+				mIsNFAActive.put(nfa, true);
+				mNFAs.add(nfa);
+			}
 		}
 	}
 
 	private void consumeChar(List<NFA> nfas, char toConsume, int currentCharIndex) {
-		Iterator<NFA> it = nfas.iterator();
-		NFA nfa;
-		while(it.hasNext()) {
-			nfa = it.next();
-			if (nfa != null) {
-				if(nfa.consume(toConsume)) {
-					if (nfa.isAccepting()) {
-						mLastAcceptedTokens = nfa.getTokens();
-						mLastAcceptedEndIndex = currentCharIndex;
-					}
-				} else {
-					it.remove();
+		for (NFA nfa : nfas) {
+			if(mIsNFAActive.get(nfa) && nfa.consume(toConsume)) {
+				if (nfa.isAccepting()) {
+					mLastAcceptedTokens = nfa.getTokens();
+					mLastAcceptedEndIndex = currentCharIndex;
 				}
+			} else {
+				mIsNFAActive.put(nfa, false);
 			}
 		}
 	}
@@ -70,8 +74,20 @@ public class Scanner {
 		mLastAcceptedEndIndex = -1;
 		for (NFA nfa : mNFAs) {
 			nfa.reset();
+			mIsNFAActive.put(nfa, true);
 		}
 	}
+
+	/**
+	 * Returns true if all NFAs are inactive. False otherwise.
+	 */
+	private boolean allNFAsInActive() {
+		for (NFA nfa : mNFAs) {
+			if (mIsNFAActive.get(nfa)) return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Given a string of input consisting of valid ASCII characters outputs
 	 * a list of valid Tokens. If the string does not produce valid tokens
@@ -79,18 +95,15 @@ public class Scanner {
 	 */
 	public List<Token> scan(String input) throws InvalidSyntaxException {
 		List<Token> tokens = new ArrayList();
-		List<NFA> nfas = mNFAs;
 		for (int currentCharIndex = 0 ; currentCharIndex < input.length() ; currentCharIndex++) {
 			char toConsume = input.charAt(currentCharIndex);
-			if (toConsume != ' ') {
-				consumeChar(nfas, toConsume, currentCharIndex);
-				if (nfas.size() == 0) {
-					if (mLastAcceptedTokens != null) {
-						currentCharIndex = mLastAcceptedEndIndex + 1;
-					}
-					reset();
-					nfas = mNFAs;
+			consumeChar(mNFAs, toConsume, currentCharIndex);
+			if (allNFAsInActive()) {
+				if (mLastAcceptedTokens != null) {
+					tokens.addAll(Arrays.asList(mLastAcceptedTokens));
+					currentCharIndex = mLastAcceptedEndIndex + 1;
 				}
+				reset();
 			}
 		}
 		return tokens;

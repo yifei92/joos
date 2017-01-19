@@ -43,8 +43,6 @@ public class Main {
             return;
         }
 
-        System.out.println("Program is " + programString);
-
         System.out.println("Initializing");
     	Scanner scanner = new Scanner();
     	Parser parser = new Parser();
@@ -54,6 +52,10 @@ public class Main {
     	try {
     		System.out.println("Scanning");
     		List<Token> tokens = scanner.scan(programString);
+            System.out.println("tokens are:");
+            for (Token token : tokens) {
+                System.out.println(token + " , " + token.getRawValue());
+            }
     		System.out.println("Parsing");
     		ParseTreeNode parseTree = parser.parse(tokens);
     		System.out.println("Weeding");

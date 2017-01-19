@@ -11,7 +11,7 @@ import joos.commons.Token;
 public class IntegerLiteralNFA implements NFA {
 
 	// Specifies what has already been consumed by this NFA
-	private enum State { START, INTEGER, SEMICOLON, END };
+	private enum State { START, INTEGER, END };
 	private State mState = State.START;
 	private String mInteger = "";
 
@@ -19,7 +19,7 @@ public class IntegerLiteralNFA implements NFA {
 		boolean didTransition = false;
 		switch (mState) {
 			case START:
-				if (newChar == '\'') {
+				if (Character.isDigit(newChar)) {
 					mState = State.INTEGER;
 					return true;
 				}
@@ -29,14 +29,10 @@ public class IntegerLiteralNFA implements NFA {
 				if (Character.isDigit(newChar)) {
 					mInteger += newChar;
 					return true;
-				} else if (newChar == ';') {
-					mState = State.SEMICOLON;
+				} else {
+					mState = State.END;
 					return true;
 				}
-				break;
-			case SEMICOLON:
-				mState = State.END;
-				return true;
 			case END:
 			default:
 				return false;
@@ -46,7 +42,7 @@ public class IntegerLiteralNFA implements NFA {
 
 	public boolean isAccepting() {
 		// If we've accepted the last char in this literal then this NFA is in the accepting state.
-		return mState == State.SEMICOLON;
+		return mState == State.INTEGER;
 	}
 
 	public void reset() {

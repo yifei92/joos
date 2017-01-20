@@ -2,20 +2,20 @@ package joos.scanner;
 
 import java.lang.Exception;
 import joos.scanner.NFA;
-import joos.commons.Token;
+import joos.commons.TerminalToken;
 
 /**
- * NFA for non literal tokens. 
+ * NFA for non literal tokens.
  * These are tokens that have keywords or are symbols.
  */
 public class KeywordNFA implements NFA {
 
 	private final String mLiteral;
-	private final Token mToken;
+	private final TerminalToken mToken;
 
 	private int mNextCharIndex = 0;
 
-	public KeywordNFA(Token token) throws Exception {
+	public KeywordNFA(TerminalToken token) throws Exception {
 		mToken = token;
 		mLiteral = mToken.getRawValue();
 		if (mLiteral == null || mLiteral.length() == 0) {
@@ -44,8 +44,8 @@ public class KeywordNFA implements NFA {
 		mNextCharIndex = 0;
 	}
 
-	public Token[] getTokens() {
-		Token[] tokens = new Token[1];
+	public TerminalToken[] getTokens() {
+		TerminalToken[] tokens = new TerminalToken[1];
 		tokens[0] = mToken;
 		return tokens;
 	}

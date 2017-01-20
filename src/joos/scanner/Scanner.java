@@ -1,7 +1,7 @@
 package joos.scanner;
 
 import java.util.List;
-import joos.commons.Token;
+import joos.commons.TerminalToken;
 import joos.exceptions.InvalidSyntaxException;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -11,14 +11,14 @@ public class Scanner {
 
 	private final List<NFA> mNFAs;
 
-	private Token[] mLastAcceptedTokens = null;
+	private TerminalToken[] mLastAcceptedTokens = null;
 	private int mLastAcceptedEndIndex = -1;
 	/**
 	 * Initialize NFAs
 	 */
 	public Scanner() {
 		mNFAs = new ArrayList<>();
-		for (Token token : Token.values()) {
+		for (TerminalToken token : TerminalToken.values()) {
 			NFA nfa = null;
 			switch (token) {
 				case STRING_LITERAL:
@@ -35,14 +35,14 @@ public class Scanner {
 					break;
 			}
 			if (nfa == null &&
-				token != Token.SINGLE_QUOTE &&
-				token != Token.DOUBLE_QUOTE) {
+				token != TerminalToken.SINGLE_QUOTE &&
+				token != TerminalToken.DOUBLE_QUOTE) {
 				try {
 					nfa = new KeywordNFA(token);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
-			} 
+			}
 			mNFAs.add(nfa);
 		}
 	}
@@ -77,8 +77,8 @@ public class Scanner {
 	 * a list of valid Tokens. If the string does not produce valid tokens
 	 * an exception is thrown.
 	 */
-	public List<Token> scan(String input) throws InvalidSyntaxException {
-		List<Token> tokens = new ArrayList();
+	public List<TerminalToken> scan(String input) throws InvalidSyntaxException {
+		List<TerminalToken> tokens = new ArrayList();
 		List<NFA> nfas = mNFAs;
 		for (int currentCharIndex = 0 ; currentCharIndex < input.length() ; currentCharIndex++) {
 			char toConsume = input.charAt(currentCharIndex);

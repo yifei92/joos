@@ -4,47 +4,72 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 import java.util.ArrayList;
+import joos.commons.Token;
+import joos.commons.TerminalToken;
+import joos.commons.NonterminalToken;
+import java.lang.Comparable;
+import java.util.Collections;
+import java.util.Collection;
+import java.util.Arrays;
+import joos.commons.ParseTreeNode;
 
 public class Grammar {
-  Set<String> terminals;
-  Set<String> nonterminals;
-  Map<String, List<Production>> productionsByLHS;
+  Set<TerminalToken> terminals;
+  Set<NonterminalToken> nonterminals;
+  Map<NonterminalToken, List<Production>> productionsByLHS;
   Map<Integer, Production> productions;
-  Map<String, List<String>> firstTerminals;
-  String start;
+  Map<Token, Set<TerminalToken>> firstTerminals;
+  Map<Token, Set<TerminalToken>> follows;
+  NonterminalToken start;
+  Map<ProductionIndex, Set<ProductionIndex>> similarProductions;
+  ItemSet itemSetTable;
+  Map<Set<ProductionIndex>, ItemSet> itemSets;
 
   Entry startEntry;
   Map<Integer, Map<Integer, Entry>> entries;
 
   public Grammar(
-    Set<String> terminals,
-    Set<String> nonterminals,
-    Map<String, List<List<String>>> productions,
-    String start
+    Set<TerminalToken> terminals,
+    Set<NonterminalToken> nonterminals,
+    Map<NonterminalToken, List<List<Token>>> productions,
+    NonterminalToken start
   ) {
     this.terminals = terminals;
     this.nonterminals = nonterminals;
     this.start = start;
-    this.productionsByLHS = new HashMap<String, List<Production>>();
+    this.productionsByLHS = new HashMap<NonterminalToken, List<Production>>();
     this.productions = new HashMap<Integer, Production>();
-    this.firstTerminals = new HashMap<String, List<String>>();
+    this.firstTerminals = new HashMap();
     this.entries = new HashMap<Integer, Map<Integer, Entry>>();
+    this.similarProductions = new HashMap();
+    this.itemSets = new HashMap();
+    this.follows = new HashMap();
     this.generateProductions(productions);
-    this.generateFirstTerminals(this.start);
-    this.generateProductionGraph();
-    Production startProduction = this.productionsByLHS.get(this.start).get(0);
-    this.startEntry = this.entries.get(startProduction.id).get(0);
-    this.printGraph();
+    for (Token symbol : this.nonterminals) {
+      this.generateFirstTerminals(symbol);
+    }
+    for (Token symbol : this.terminals) {
+      this.generateFirstTerminals(symbol);
+    }
+    this.follows.put(this.start, new HashSet(Arrays.asList(TerminalToken.EOF)));
+    this.generateFollows(this.start);
+    for (Production production : this.productions.values()) {
+      for (int i = 0; i < production.rhs.size(); i++) {
+        generateSimilarProductions(new ProductionIndex(production, i));
+      }
+    }
+    this.generateAllItemSets();
   }
 
-  private void generateProductions(Map<String, List<List<String>>> map) {
+  private void generateProductions(Map<NonterminalToken, List<List<Token>>> map) {
     int currentID = 0;
-    for (String lhs : map.keySet()) {
-      List<List<String>> list = map.get(lhs);
+    for (NonterminalToken lhs : map.keySet()) {
+      List<List<Token>> list = map.get(lhs);
       List<Production> productionList = new ArrayList();
-      for (List<String> rhs : list) {
+      for (List<Token> rhs : list) {
         Production production = new Production(currentID++, lhs, rhs);
         productionList.add(production);
         this.productions.put(production.id, production);
@@ -53,139 +78,299 @@ public class Grammar {
     }
   }
 
-  private void generateFirstTerminals(String symbol) {
-    ArrayList<String> list = new ArrayList();
-    if (this.terminals.contains(symbol)) {
-      list.add(symbol);
+  private void generateFirstTerminals(Token symbol) {
+    if (this.firstTerminals.containsKey(symbol)) {
+      return;
+    }
+    Set<TerminalToken> set = new HashSet();
+    this.firstTerminals.put(symbol, set);
+    if (symbol instanceof TerminalToken && this.terminals.contains((TerminalToken)symbol)) {
+      set.add((TerminalToken)symbol);
     }
     else {
-      for (Production production : this.productionsByLHS.get(symbol)) {
-        generateFirstTerminals(production.rhs.get(0));
-        list.addAll(this.firstTerminals.get(production.rhs.get(0)));
+      NonterminalToken nonterminalSymbol = (NonterminalToken)symbol;
+      for (Production production : this.productionsByLHS.get(nonterminalSymbol)) {
+        int i = 0;
+        for (;;) {
+          if (production.rhs.size() > i) {
+            generateFirstTerminals(production.rhs.get(i));
+            boolean breakOut = true;
+            for (TerminalToken t : this.firstTerminals.get(production.rhs.get(i))) {
+              if (t == null) {
+                breakOut = false;
+              } else {
+                set.add(t);
+              }
+            }
+            if (breakOut) {
+              break;
+            }
+          } else {
+            set.add(null);
+            break;
+          }
+          i++;
+        }
       }
     }
-    this.firstTerminals.put(symbol, list);
   }
 
-  private void generateProductionGraph() {
-    for (String lhs : this.productionsByLHS.keySet()) {
-      for (Production production : this.productionsByLHS.get(lhs)) {
-        HashMap<Integer, Entry> map = new HashMap();
-        for (int i = 0; i < production.rhs.size(); i++) {
-          map.put(i, new Entry(production.id, i));
+  private void generateFollows(Token symbol) {
+    for (Production production : this.productionsByLHS.get(symbol)) {
+      for (int i = 0; i < production.rhs.size(); i++) {
+        Token rh = production.rhs.get(i);
+        boolean generated = true;
+        if (!this.follows.containsKey(rh)) {
+          this.follows.put(rh, new HashSet());
+          generated = false;
         }
-        this.entries.put(production.id, map);
-      }
-    }
-    for (String lhs : this.productionsByLHS.keySet()) {
-      for (Production production : this.productionsByLHS.get(lhs)) {
-        Map<Integer, Entry> productionEntries = this.entries.get(production.id);
-        int size = production.rhs.size();
-        for (int i = 0; i < production.rhs.size(); i++) {
-          Entry entry = productionEntries.get(i);
-          String rh = production.rhs.get(i);
-          if (i == size - 1) {
-            entry.actions.put(rh, new Action(new Reduction(production.lhs, size)));
-          } else {
-            entry.actions.put(rh, new Action(this.entries.get(production.id).get(i + 1)));
-          }
-          if (this.nonterminals.contains(rh)) {
-            Map<String, Entry> map = entry.epsilonMap;
-            for (Production childProduction : this.productionsByLHS.get(rh)) {
-              for (String firstTerminal : this.firstTerminals.get(childProduction.rhs.get(0))) {
-                map.put(firstTerminal, this.entries.get(childProduction.id).get(0));
+        if (rh instanceof NonterminalToken) {
+          for (int j = i + 1; j <= production.rhs.size(); j++) {
+            if (j == production.rhs.size()) {
+              Set<TerminalToken> set = this.follows.get(symbol);
+              if (!this.follows.get(rh).containsAll(set)) {
+                generated = false;
+                this.follows.get(rh).addAll(set);
+              }
+            } else {
+              Token rh2 = production.rhs.get(j);
+              boolean breakOut = true;
+              for (TerminalToken t : this.firstTerminals.get(rh2)) {
+                if (t == null) {
+                  breakOut = false;
+                } else {
+                  if (!this.follows.get(rh).contains(t)) {
+                    generated = false;
+                    this.follows.get(rh).add(t);
+                  }
+                }
+              }
+              if (breakOut) {
+                break;
               }
             }
           }
+          if (!generated) {
+            generateFollows(rh);
+          }
         }
-
       }
     }
   }
 
-  public void printGraph() {
-    for (int productionID : this.entries.keySet()) {
-      Production production = this.productions.get(productionID);
-      System.out.print("Production " + productionID + ": " + production.lhs + " ->");
-      for (String rh : production.rhs) {
-        System.out.print(" " + rh);
+  private void generateSimilarProductions(ProductionIndex productionIndex) {
+    Set<ProductionIndex> set = new HashSet();
+    this.similarProductions.put(productionIndex, set);
+    set.add(productionIndex);
+    Token rh = productionIndex.production.rhs.get(productionIndex.index);
+    if (this.nonterminals.contains(rh)) {
+      for (Production childProduction : this.productionsByLHS.get(rh)) {
+        if (childProduction.rhs.size() > 0) {
+          ProductionIndex childProductionIndex = new ProductionIndex(childProduction, 0);
+          if (!this.similarProductions.containsKey(childProductionIndex)) {
+            generateSimilarProductions(childProductionIndex);
+          }
+          set.addAll(this.similarProductions.get(childProductionIndex));
+        }
       }
-      System.out.println();
-      for (int index : this.entries.get(productionID).keySet()) {
-        System.out.println("  @" + index);
-        Entry entry = this.entries.get(productionID).get(index);
-        for (String symbol : entry.actions.keySet()) {
-          Action action = entry.actions.get(symbol);
-          if (action.entry != null) {
-            System.out.println("    " + symbol + " => (" + action.entry.productionID + ", " + action.entry.index + ")");
+    }
+  }
+
+  private void generateAllItemSets() {
+    Production startProduction = this.productionsByLHS.get(this.start).get(0);
+    ProductionIndex productionIndex = new ProductionIndex(startProduction, 0);
+    Set<ProductionIndex> set = new HashSet();
+    set.add(productionIndex);
+    this.itemSetTable = new ItemSet(set);
+    this.itemSets.put(set, this.itemSetTable);
+    generateItemSets(this.itemSetTable);
+  }
+
+  private void generateItemSets(ItemSet itemSet) {
+    for (ProductionIndex productionIndex : itemSet.definingProductionIndices) {
+      if (productionIndex.production.rhs.size() == productionIndex.index) {
+        itemSet.productionIndices.add(productionIndex);
+      } else {
+        itemSet.productionIndices.addAll(this.similarProductions.get(productionIndex));
+      }
+    }
+    Map<Token, Set<ProductionIndex>> productionsByToken = new HashMap();
+    for (ProductionIndex productionIndex : itemSet.productionIndices) {
+      if (productionIndex.index < productionIndex.production.rhs.size()) {
+        Token rh = productionIndex.production.rhs.get(productionIndex.index);
+        if (!productionsByToken.containsKey(rh)) {
+          productionsByToken.put(rh, new HashSet());
+        }
+        productionsByToken.get(rh).add(new ProductionIndex(productionIndex.production, productionIndex.index + 1));
+        if (this.firstTerminals.get(rh).contains(null)) {
+          if (productionIndex.index < productionIndex.production.rhs.size() - 1) {
+            Token rh2 = productionIndex.production.rhs.get(productionIndex.index + 1);
+            for (TerminalToken t : this.firstTerminals.get(rh2)) {
+              itemSet.links.put(t, new Action(new Reduction((NonterminalToken)rh, 0)));
+            }
           } else {
-            System.out.println("    " + symbol + " => reduce " + action.reduction.symbol);
+            for (TerminalToken t : this.follows.get(productionIndex.production.lhs)) {
+              itemSet.links.put(t, new Action(new Reduction((NonterminalToken)rh, 0)));
+            }
           }
         }
-        for (String symbol : entry.epsilonMap.keySet()) {
-          Entry epsilonEntry = entry.epsilonMap.get(symbol);
-          System.out.println("    epsilon-" + symbol + " => (" + epsilonEntry.productionID + ", " + epsilonEntry.index + ")");
+      } else {
+        for (TerminalToken t : this.follows.get(productionIndex.production.lhs)) {
+          itemSet.links.put(t, new Action(new Reduction(
+            productionIndex.production.lhs,
+            productionIndex.index
+          )));
+        }
+      }
+    }
+    for (Token token : productionsByToken.keySet()) {
+      Set<ProductionIndex> productionIndices = productionsByToken.get(token);
+      if (!this.itemSets.containsKey(productionIndices)) {
+        ItemSet childItemSet = new ItemSet(productionIndices);
+        this.itemSets.put(productionIndices, childItemSet);
+        generateItemSets(childItemSet);
+      }
+      itemSet.links.put(token, new Action(this.itemSets.get(productionIndices)));
+    }
+  }
+
+  private void printFollows() {
+    for (Token t : this.follows.keySet()) {
+      System.out.print(t + " :");
+      for (TerminalToken term : this.follows.get(t)) {
+        System.out.print(" " + term + ",");
+      }
+      System.out.println();
+    }
+  }
+
+  private void printItemSets() {
+    List<ItemSet> values = new ArrayList(this.itemSets.values());
+    Collections.sort(values);
+    for (ItemSet itemSet : values) {
+      System.out.println("ItemSet " + itemSet.id + ":");
+      System.out.println("  Productions:");
+      for (ProductionIndex productionIndex : itemSet.productionIndices) {
+        int index = productionIndex.index;
+        Production production = productionIndex.production;
+        System.out.print("    (" + index + ") " + production.lhs + " =>");
+        for (Token rh : production.rhs) {
+          System.out.print(" " + rh);
+        }
+        System.out.println();
+      }
+      System.out.println("  Links:");
+      for (Token token : itemSet.links.keySet()) {
+        Action action = itemSet.links.get(token);
+        System.out.print("    " + token + " -> ");
+        switch (action.type) {
+          case SUCCESS:
+            System.out.print("SUCCESS");
+            break;
+          case ITEMSET:
+            System.out.print(action.itemSet.id);
+            break;
+          case REDUCTION:
+            System.out.print("Reduce: " + action.reduction.symbol + ", " + action.reduction.number);
+            break;
         }
         System.out.println();
       }
       System.out.println();
-      System.out.println();
     }
   }
 
-  public void parse(List<String> tokens) {
+  public ParseTreeNode parse(List<TerminalToken> tokens) {
     int tokensIndex = 0;
-    Stack<Entry> entryStack = new Stack<Entry>();
-    entryStack.push(this.startEntry);
-    String token = tokens.get(0);
-    while (tokensIndex < tokens.size()) {
-      System.out.println(token);
-      if (entryStack.peek().actions.containsKey(token)) {
-        Action action = entryStack.peek().actions.get(token);
-        if (action.entry != null) {
-          entryStack.push(action.entry);
-          tokensIndex++;
-          token = tokens.get(tokensIndex);
-        } else {
-          for (int i = 0; i < action.reduction.number - 1; i++) {
-            entryStack.pop();
-          }
-          token = action.reduction.symbol;
+    Stack<ItemSet> stateStack = new Stack();
+    stateStack.push(this.itemSetTable);
+    Token token = tokens.get(0);
+    List<ParseTreeNode> nodes = new ArrayList();
+    ParseTreeNode node = new ParseTreeNode(token);
+    while(tokensIndex < tokens.size()) {
+      if (stateStack.peek().links.containsKey(token)) {
+        Action action = stateStack.peek().links.get(token);
+        switch (action.type) {
+          case SUCCESS:
+            System.out.println("SUCCESS");
+            return null;
+          case ITEMSET:
+            nodes.add(node);
+            stateStack.push(action.itemSet);
+            tokensIndex++;
+            token = tokens.get(tokensIndex);
+            node = new ParseTreeNode(token);
+            break;
+          case REDUCTION:
+            for (int i = 0; i < action.reduction.number; i++) {
+              stateStack.pop();
+            }
+            List<ParseTreeNode> currentChildren = new ArrayList(nodes.subList(
+              nodes.size() - action.reduction.number,
+              nodes.size()
+            ));
+            nodes = new ArrayList(nodes.subList(0, nodes.size() - action.reduction.number));
+            token = action.reduction.symbol;
+            node = new ParseTreeNode(token, currentChildren);
+            tokensIndex--;
+            break;
         }
-      } else if (entryStack.peek().epsilonMap.containsKey(token)) {
-        entryStack.push(entryStack.peek().epsilonMap.get(token));
       } else {
-        if (entryStack.size() == 1 && token == this.start && tokensIndex == tokens.size() - 1) {
+        if (token == this.start) {
           System.out.println("SUCCESS");
-          break;
-        } else if (entryStack.size() > 1 && this.nonterminals.contains(token)) {
-          entryStack.pop();
-        } else {
-          System.out.println("ERROR");
-          break;
+          return node;
         }
+        System.out.println("ERROR");
+        return null;
       }
     }
+    return null;
   }
 }
 
 class Production {
   public final int id;
-  public final String lhs;
-  public final List<String> rhs;
+  public final NonterminalToken lhs;
+  public final List<Token> rhs;
 
-  public Production(int id, String lhs, List<String> rhs) {
+  public Production(int id, NonterminalToken lhs, List<Token> rhs) {
     this.id = id;
     this.lhs = lhs;
     this.rhs = rhs;
   }
 }
 
+class ProductionIndex {
+  public final Production production;
+  public final int index;
+  public ProductionIndex(Production production, int index) {
+    this.production = production;
+    this.index = index;
+  }
+  public boolean equals(Object o) {
+    if (o instanceof ProductionIndex) {
+      ProductionIndex other = (ProductionIndex)o;
+      return other.production.equals(this.production) && other.index == this.index;
+    }
+    return false;
+  }
+  public int hashCode() {
+    return this.production.hashCode() + index;
+  }
+  public String toString() {
+    String s = "(" + this.index + ") " + this.production.lhs + "=>";
+    for (Token t : production.rhs) {
+      s += " " + t;
+    }
+    return s;
+  }
+}
+
 class Reduction {
-  public final String symbol;
+  public final NonterminalToken symbol;
   public final int number;
 
-  public Reduction(String symbol, int number) {
+  public Reduction(NonterminalToken symbol, int number) {
     this.symbol = symbol;
     this.number = number;
   }
@@ -194,28 +379,75 @@ class Reduction {
 class Entry {
   public final int productionID;
   public final int index;
-  public final Map<String, Action> actions;
-  public final Map<String, Entry> epsilonMap;
+  public final Map<Token, Action> actions;
+  public final Map<TerminalToken, Action> epsilonMap;
 
   public Entry(int productionID, int index) {
     this.productionID = productionID;
     this.index = index;
-    this.actions = new HashMap<String, Action>();
-    this.epsilonMap = new HashMap<String, Entry>();
+    this.actions = new HashMap<Token, Action>();
+    this.epsilonMap = new HashMap<TerminalToken, Action>();
   }
 }
 
 class Action {
+  public final ActionType type;
   public final Reduction reduction;
-  public final Entry entry;
+  public final ItemSet itemSet;
 
   public Action(Reduction reduction) {
+    type = ActionType.REDUCTION;
     this.reduction = reduction;
-    this.entry = null;
+    this.itemSet = null;
   }
 
-  public Action(Entry entry) {
-    this.entry = entry;
+  public Action(ItemSet itemSet) {
+    type = ActionType.ITEMSET;
+    this.itemSet = itemSet;
     this.reduction = null;
+  }
+
+  public Action() {
+    this.type = ActionType.SUCCESS;
+    this.itemSet = null;
+    this.reduction = null;
+  }
+
+  public String toString() {
+    switch (this.type) {
+      case SUCCESS:
+        return "SUCCESS";
+      case REDUCTION:
+        return this.reduction.toString();
+      case ITEMSET:
+        return "" + this.itemSet.id;
+    }
+    return super.toString();
+  }
+}
+
+enum ActionType {
+  SUCCESS, ITEMSET, REDUCTION
+}
+
+
+
+class ItemSet implements Comparable<ItemSet> {
+  public static int currentID;
+  public final int id;
+  public final Set<ProductionIndex> definingProductionIndices;
+  public final Set<ProductionIndex> productionIndices;
+  public final Map<Token, Action> links;
+
+
+  public int compareTo(ItemSet itemSet) {
+    return this.id - itemSet.id;
+  }
+
+  public ItemSet(Set<ProductionIndex> definingProductionIndices) {
+    this.id = ItemSet.currentID++;
+    this.links = new HashMap();
+    this.definingProductionIndices = definingProductionIndices;
+    this.productionIndices = new HashSet();
   }
 }

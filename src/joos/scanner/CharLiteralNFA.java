@@ -2,7 +2,7 @@ package joos.scanner;
 
 import java.lang.Exception;
 import joos.scanner.NFA;
-import joos.commons.Token;
+import joos.commons.TerminalToken;
 import java.lang.String;
 
 /**
@@ -34,7 +34,7 @@ public class CharLiteralNFA implements NFA {
 			case CHARACTER:
 				if (newChar == '\'') {
 					mState = State.END_QUOTE;
-					return true; 
+					return true;
 				}
 				break;
 			case END_QUOTE:
@@ -56,13 +56,13 @@ public class CharLiteralNFA implements NFA {
 		mChar = Character.MIN_VALUE;
 	}
 
-	public Token[] getTokens() {
-		Token[] tokens = new Token[3];
-		Token charLiteral = Token.CHAR_LITERAL;
+	public TerminalToken[] getTokens() {
+		TerminalToken[] tokens = new TerminalToken[3];
+		TerminalToken charLiteral = TerminalToken.CHAR_LITERAL;
 		charLiteral.setRawValue(String.valueOf(mChar));
-		tokens[0] = Token.SINGLE_QUOTE;
+		tokens[0] = TerminalToken.SINGLE_QUOTE;
 		tokens[1] = charLiteral;
-		tokens[2] = Token.SINGLE_QUOTE;
+		tokens[2] = TerminalToken.SINGLE_QUOTE;
 		return tokens;
 	}
 }

@@ -2,7 +2,7 @@ package joos.scanner;
 
 import java.lang.Exception;
 import joos.scanner.NFA;
-import joos.commons.Token;
+import joos.commons.TerminalToken;
 
 /**
  * NFA for string literals.
@@ -59,9 +59,9 @@ public class IdentifierNFA implements NFA {
 		mName = "";
 	}
 
-	public Token[] getTokens() {
-		Token[] tokens = new Token[1];
-		Token identifier = Token.IDENTIFIER;
+	public TerminalToken[] getTokens() {
+		TerminalToken[] tokens = new TerminalToken[1];
+		TerminalToken identifier = TerminalToken.IDENTIFIER;
 		identifier.setRawValue(mName);
 		tokens[0] = identifier;
 		return tokens;

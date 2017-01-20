@@ -16,7 +16,7 @@ import joos.commons.TokenType;
 public class FloatingPointLiteralNFA implements NFA {
 
 	// Specifies what has already been consumed by this NFA
-	private enum State { START, WHOLE_INTEGER, DOT,  END };
+	private enum State { START, INTEGER, DOT,  END };
 	private State mState = State.START;
 	private String mInteger = "";
 

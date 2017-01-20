@@ -105,6 +105,8 @@ public enum TokenType {
 	// Space
 	SPACE,
 	EOF,
+	NEW_LINE,
+	TAB,
 	// Nonterminals
 	GOAL,
 	LITERAL,

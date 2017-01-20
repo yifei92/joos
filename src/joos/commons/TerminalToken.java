@@ -30,6 +30,13 @@ public class TerminalToken implements Token {
 
 	private static Map<TokenType, TerminalToken> mTokens = null;
 
+	public static boolean isTerminalTokenType(TokenType type) {
+		if (mTokens == null) {
+			generateTokens();
+		}
+		return mTokens.get(type) != null;
+	}
+
 	public static Set<TokenType> getAllTokens() {
 		if (mTokens == null) {
 			generateTokens();
@@ -42,6 +49,10 @@ public class TerminalToken implements Token {
 			generateTokens();
 		}
 		TerminalToken token = mTokens.get(tokenType);
+		if (token == null) {
+			System.out.println("Token " + tokenType + " is not a terminal token!");
+			return null;
+		}
 		return new TerminalToken(token.mType, token.mRawValue);
 	}
 

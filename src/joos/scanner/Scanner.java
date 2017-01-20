@@ -27,33 +27,38 @@ public class Scanner {
 	public Scanner() {
 		mNFAs = new ArrayList<>();
 		for (TokenType tokenType : TokenType.values()) {
-			NFA nfa = null;
-			switch (tokenType) {
-				case STRING_LITERAL:
-					nfa = new StringLiteralNFA();
-					break;
-				case CHAR_LITERAL:
-					nfa = new CharLiteralNFA();
-					break;
-				case INTEGER_LITERAL:
-					nfa = new IntegerLiteralNFA();
-					break;
-				case IDENTIFIER:
-					nfa = new IdentifierNFA();
-					break;
-			}
-			if (nfa == null &&
-				tokenType != TokenType.SINGLE_QUOTE &&
-				tokenType != TokenType.DOUBLE_QUOTE) {
-				try {
-					nfa = new KeywordNFA(tokenType);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+			if (TerminalToken.isTerminalTokenType(tokenType)) { 
+				NFA nfa = null;
+				switch (tokenType) {
+					case STRING_LITERAL:
+						nfa = new StringLiteralNFA();
+						break;
+					case CHAR_LITERAL:
+						nfa = new CharLiteralNFA();
+						break;
+					case INTEGER_LITERAL:
+						nfa = new IntegerLiteralNFA();
+						break;
+					case IDENTIFIER:
+						nfa = new IdentifierNFA();
+						break;
+					case FLOATING_POINT_LITERAL:
+						nfa = new IntegerLiteralNFA();
+						break;
 				}
-			}
-			if (nfa != null) {
-				mIsNFAActive.put(nfa, true);
-				mNFAs.add(nfa);
+				if (nfa == null &&
+					tokenType != TokenType.SINGLE_QUOTE &&
+					tokenType != TokenType.DOUBLE_QUOTE) {
+					try {
+						nfa = new KeywordNFA(tokenType);
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}
+				if (nfa != null) {
+					mIsNFAActive.put(nfa, true);
+					mNFAs.add(nfa);
+				}
 			}
 		}
 	}

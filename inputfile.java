@@ -7,7 +7,7 @@ public class Main {
 		String c = "asd";
 		char d = 'a';
 		int e = 123123123;
-		String f = "asd\asd";
+		String f = "asdasd";
 		return 0123123; 
 	} 
 }

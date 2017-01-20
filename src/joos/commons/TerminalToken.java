@@ -151,7 +151,7 @@ public class TerminalToken implements Token {
 		// Space
 		mTokens.put(TokenType.SPACE, new TerminalToken(TokenType.SPACE, " "));
 		mTokens.put(TokenType.EOF, new TerminalToken(TokenType.EOF, "eof"));
-		mTokens.put(TokenType.NEW_LINE, new Token(TokenType.NEW_LINE, System.lineSeparator()));
-		mTokens.put(TokenType.TAB, new Token(TokenType.TAB, "\t"));
+		mTokens.put(TokenType.NEW_LINE, new TerminalToken(TokenType.NEW_LINE, System.lineSeparator()));
+		mTokens.put(TokenType.TAB, new TerminalToken(TokenType.TAB, "\t"));
 	}
 }

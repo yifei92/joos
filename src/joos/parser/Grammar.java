@@ -182,6 +182,7 @@ public class Grammar {
     Set<ProductionIndex> set = new HashSet();
     set.add(productionIndex);
     this.itemSetTable = new ItemSet(set);
+    this.itemSetTable.links.put(this.start, new Action());
     this.itemSets.put(set, this.itemSetTable);
     generateItemSets(this.itemSetTable);
   }
@@ -288,12 +289,17 @@ public class Grammar {
     List<ParseTreeNode> nodes = new ArrayList();
     ParseTreeNode node = new ParseTreeNode(token);
     while(tokensIndex < tokens.size()) {
-      if (stateStack.peek().links.containsKey(token.getType())) {
-        Action action = stateStack.peek().links.get(token.getType());
+      if (stateStack.peek().links.containsKey(token.getType()) || stateStack.peek().links.containsKey(null)) {
+        Action action = null;
+        if (stateStack.peek().links.containsKey(token.getType())) {
+          action = stateStack.peek().links.get(token.getType());
+        } else {
+          action = stateStack.peek().links.get(null);
+        }
         switch (action.type) {
           case SUCCESS:
             System.out.println("SUCCESS");
-            return null;
+            return node;
           case ITEMSET:
             nodes.add(node);
             stateStack.push(action.itemSet);
@@ -316,10 +322,6 @@ public class Grammar {
             break;
         }
       } else {
-        if (token.getType() == this.start) {
-          System.out.println("SUCCESS");
-          return node;
-        }
         System.out.println("ERROR");
         return null;
       }
@@ -373,6 +375,10 @@ class Reduction {
   public Reduction(TokenType symbol, int number) {
     this.symbol = symbol;
     this.number = number;
+  }
+
+  public String toString() {
+    return "reduce: (" + this.symbol + ", " + this.number + ")";
   }
 }
 

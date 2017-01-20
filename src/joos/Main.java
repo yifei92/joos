@@ -16,56 +16,55 @@ import java.io.BufferedReader;
 public class Main {
 
     public static void main(String[] args) {
+        StringBuilder program = new StringBuilder();
+        if (args.length > 0 && args.length < 2) {
+            try {
+                FileReader fr = new FileReader(args[0]);
+                BufferedReader br = new BufferedReader(fr);
+                String currentLine;
+                while ((currentLine = br.readLine()) != null) {
+                    program.append(currentLine);
+                }
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        } else {
+            System.out.println("Invalid number of arguments!");
+            System.out.println("Format: java joosc <filename>");
+            return;
+        }
 
-      //   StringBuilder program = new StringBuilder();
-      //   if (args.length > 0 && args.length < 2) {
-      //       try {
-      //           FileReader fr = new FileReader(args[0]);
-      //           BufferedReader br = new BufferedReader(fr);
-      //           String currentLine;
-      //           while ((currentLine = br.readLine()) != null) {
-      //               program.append(currentLine);
-      //           }
-      //           br.close();
-      //           fr.close();
-      //       } catch (IOException e) {
-      //           System.out.println(e.getMessage());
-      //           return;
-      //       }
-      //   } else {
-      //       System.out.println("Invalid number of arguments!");
-      //       System.out.println("Format: java joosc <filename>");
-      //       return;
-      //   }
-      //
-      //   String programString = program.toString();
-      //   if (programString == null || programString.length() == 0) {
-      //       System.out.println("Program is empty!");
-      //       return;
-      //   }
-      //
-      //   System.out.println("Program is " + programString);
-      //
-      //   System.out.println("Initializing");
-    	// Scanner scanner = new Scanner();
+        String programString = program.toString();
+        if (programString == null || programString.length() == 0) {
+            System.out.println("Program is empty!");
+            return;
+        }
+
+        System.out.println("Initializing");
+    	Scanner scanner = new Scanner();
     	Parser parser = new Parser();
     	Weeder weeder = new Weeder();
     	ASTBuilder astBuilder = new ASTBuilder();
 
     	try {
     		System.out.println("Scanning");
-    		// List<Token> tokens = scanner.scan(programString);
+    		List<TerminalToken> tokens = scanner.scan(programString);
+            System.out.println("tokens: ");
+            for (TerminalToken tok : tokens) {
+                System.out.println(tok.mType + " , " + tok.mRawValue);
+            }
     		System.out.println("Parsing");
-        List<TerminalToken> tokens = Arrays.asList(TerminalToken.PACKAGE, TerminalToken.IDENTIFIER, TerminalToken.SEMICOLON, TerminalToken.IMPORT, TerminalToken.IDENTIFIER, TerminalToken.SEMICOLON, TerminalToken.EOF);
     		ParseTreeNode parseTree = parser.parse(tokens);
-        parseTree.print();
     		System.out.println("Weeding");
-    		weeder.weed(parseTree);
+    		//weeder.weed(parseTree);
     		System.out.println("Converting");
-    		ASTTreeNode astTree = astBuilder.convert(parseTree);
+    		//ASTTreeNode astTree = astBuilder.convert(parseTree);
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
-    		System.out.println("Invalid!");
+    		System.out.println(e.getMessage());
     		return;
 		}
 		System.out.println("Done!");

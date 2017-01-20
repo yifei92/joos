@@ -3,6 +3,7 @@ package joos.scanner;
 import java.lang.Exception;
 import joos.scanner.NFA;
 import joos.commons.TerminalToken;
+import joos.commons.TokenType;
 
 /**
  * NFA for string literals.
@@ -63,11 +64,11 @@ public class StringLiteralNFA implements NFA {
 
 	public TerminalToken[] getTokens() {
 		TerminalToken[] tokens = new TerminalToken[3];
-		TerminalToken stringLiteral = TerminalToken.STRING_LITERAL;
+		TerminalToken stringLiteral = TerminalToken.getToken(TokenType.STRING_LITERAL);
 		stringLiteral.setRawValue(mValue);
-		tokens[0] = TerminalToken.DOUBLE_QUOTE;
+		tokens[0] = TerminalToken.getToken(TokenType.DOUBLE_QUOTE);
 		tokens[1] = stringLiteral;
-		tokens[2] = TerminalToken.DOUBLE_QUOTE;
+		tokens[2] = TerminalToken.getToken(TokenType.DOUBLE_QUOTE);
 		return tokens;
 	}
 }

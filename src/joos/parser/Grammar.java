@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Stack;
 import java.util.ArrayList;
 import joos.commons.Token;
+import joos.commons.TokenType;
 import joos.commons.TerminalToken;
 import joos.commons.NonterminalToken;
 import java.lang.Comparable;
@@ -17,13 +18,13 @@ import java.util.Arrays;
 import joos.commons.ParseTreeNode;
 
 public class Grammar {
-  Set<TerminalToken> terminals;
-  Set<NonterminalToken> nonterminals;
-  Map<NonterminalToken, List<Production>> productionsByLHS;
+  Set<TokenType> terminals;
+  Set<TokenType> nonterminals;
+  Map<TokenType, List<Production>> productionsByLHS;
   Map<Integer, Production> productions;
-  Map<Token, Set<TerminalToken>> firstTerminals;
-  Map<Token, Set<TerminalToken>> follows;
-  NonterminalToken start;
+  Map<TokenType, Set<TokenType>> firstTerminals;
+  Map<TokenType, Set<TokenType>> follows;
+  TokenType start;
   Map<ProductionIndex, Set<ProductionIndex>> similarProductions;
   ItemSet itemSetTable;
   Map<Set<ProductionIndex>, ItemSet> itemSets;
@@ -32,29 +33,29 @@ public class Grammar {
   Map<Integer, Map<Integer, Entry>> entries;
 
   public Grammar(
-    Set<TerminalToken> terminals,
-    Set<NonterminalToken> nonterminals,
-    Map<NonterminalToken, List<List<Token>>> productions,
-    NonterminalToken start
+    Set<TokenType> terminals,
+    Set<TokenType> nonterminals,
+    Map<TokenType, List<List<TokenType>>> productions,
+    TokenType start
   ) {
     this.terminals = terminals;
     this.nonterminals = nonterminals;
     this.start = start;
-    this.productionsByLHS = new HashMap<NonterminalToken, List<Production>>();
-    this.productions = new HashMap<Integer, Production>();
+    this.productionsByLHS = new HashMap();
+    this.productions = new HashMap();
     this.firstTerminals = new HashMap();
-    this.entries = new HashMap<Integer, Map<Integer, Entry>>();
+    this.entries = new HashMap();
     this.similarProductions = new HashMap();
     this.itemSets = new HashMap();
     this.follows = new HashMap();
     this.generateProductions(productions);
-    for (Token symbol : this.nonterminals) {
+    for (TokenType symbol : this.nonterminals) {
       this.generateFirstTerminals(symbol);
     }
-    for (Token symbol : this.terminals) {
+    for (TokenType symbol : this.terminals) {
       this.generateFirstTerminals(symbol);
     }
-    this.follows.put(this.start, new HashSet(Arrays.asList(TerminalToken.EOF)));
+    this.follows.put(this.start, new HashSet(Arrays.asList(TokenType.EOF)));
     this.generateFollows(this.start);
     for (Production production : this.productions.values()) {
       for (int i = 0; i < production.rhs.size(); i++) {
@@ -64,12 +65,12 @@ public class Grammar {
     this.generateAllItemSets();
   }
 
-  private void generateProductions(Map<NonterminalToken, List<List<Token>>> map) {
+  private void generateProductions(Map<TokenType, List<List<TokenType>>> map) {
     int currentID = 0;
-    for (NonterminalToken lhs : map.keySet()) {
-      List<List<Token>> list = map.get(lhs);
+    for (TokenType lhs : map.keySet()) {
+      List<List<TokenType>> list = map.get(lhs);
       List<Production> productionList = new ArrayList();
-      for (List<Token> rhs : list) {
+      for (List<TokenType> rhs : list) {
         Production production = new Production(currentID++, lhs, rhs);
         productionList.add(production);
         this.productions.put(production.id, production);
@@ -78,24 +79,23 @@ public class Grammar {
     }
   }
 
-  private void generateFirstTerminals(Token symbol) {
+  private void generateFirstTerminals(TokenType symbol) {
     if (this.firstTerminals.containsKey(symbol)) {
       return;
     }
-    Set<TerminalToken> set = new HashSet();
+    Set<TokenType> set = new HashSet();
     this.firstTerminals.put(symbol, set);
-    if (symbol instanceof TerminalToken && this.terminals.contains((TerminalToken)symbol)) {
-      set.add((TerminalToken)symbol);
+    if (this.terminals.contains(symbol)) {
+      set.add(symbol);
     }
     else {
-      NonterminalToken nonterminalSymbol = (NonterminalToken)symbol;
-      for (Production production : this.productionsByLHS.get(nonterminalSymbol)) {
+      for (Production production : this.productionsByLHS.get(symbol)) {
         int i = 0;
         for (;;) {
           if (production.rhs.size() > i) {
             generateFirstTerminals(production.rhs.get(i));
             boolean breakOut = true;
-            for (TerminalToken t : this.firstTerminals.get(production.rhs.get(i))) {
+            for (TokenType t : this.firstTerminals.get(production.rhs.get(i))) {
               if (t == null) {
                 breakOut = false;
               } else {
@@ -115,27 +115,27 @@ public class Grammar {
     }
   }
 
-  private void generateFollows(Token symbol) {
+  private void generateFollows(TokenType symbol) {
     for (Production production : this.productionsByLHS.get(symbol)) {
       for (int i = 0; i < production.rhs.size(); i++) {
-        Token rh = production.rhs.get(i);
+        TokenType rh = production.rhs.get(i);
         boolean generated = true;
         if (!this.follows.containsKey(rh)) {
           this.follows.put(rh, new HashSet());
           generated = false;
         }
-        if (rh instanceof NonterminalToken) {
+        if (this.nonterminals.contains(rh)) {
           for (int j = i + 1; j <= production.rhs.size(); j++) {
             if (j == production.rhs.size()) {
-              Set<TerminalToken> set = this.follows.get(symbol);
+              Set<TokenType> set = this.follows.get(symbol);
               if (!this.follows.get(rh).containsAll(set)) {
                 generated = false;
                 this.follows.get(rh).addAll(set);
               }
             } else {
-              Token rh2 = production.rhs.get(j);
+              TokenType rh2 = production.rhs.get(j);
               boolean breakOut = true;
-              for (TerminalToken t : this.firstTerminals.get(rh2)) {
+              for (TokenType t : this.firstTerminals.get(rh2)) {
                 if (t == null) {
                   breakOut = false;
                 } else {
@@ -162,7 +162,7 @@ public class Grammar {
     Set<ProductionIndex> set = new HashSet();
     this.similarProductions.put(productionIndex, set);
     set.add(productionIndex);
-    Token rh = productionIndex.production.rhs.get(productionIndex.index);
+    TokenType rh = productionIndex.production.rhs.get(productionIndex.index);
     if (this.nonterminals.contains(rh)) {
       for (Production childProduction : this.productionsByLHS.get(rh)) {
         if (childProduction.rhs.size() > 0) {
@@ -194,28 +194,28 @@ public class Grammar {
         itemSet.productionIndices.addAll(this.similarProductions.get(productionIndex));
       }
     }
-    Map<Token, Set<ProductionIndex>> productionsByToken = new HashMap();
+    Map<TokenType, Set<ProductionIndex>> productionsByToken = new HashMap();
     for (ProductionIndex productionIndex : itemSet.productionIndices) {
       if (productionIndex.index < productionIndex.production.rhs.size()) {
-        Token rh = productionIndex.production.rhs.get(productionIndex.index);
+        TokenType rh = productionIndex.production.rhs.get(productionIndex.index);
         if (!productionsByToken.containsKey(rh)) {
           productionsByToken.put(rh, new HashSet());
         }
         productionsByToken.get(rh).add(new ProductionIndex(productionIndex.production, productionIndex.index + 1));
         if (this.firstTerminals.get(rh).contains(null)) {
           if (productionIndex.index < productionIndex.production.rhs.size() - 1) {
-            Token rh2 = productionIndex.production.rhs.get(productionIndex.index + 1);
-            for (TerminalToken t : this.firstTerminals.get(rh2)) {
-              itemSet.links.put(t, new Action(new Reduction((NonterminalToken)rh, 0)));
+            TokenType rh2 = productionIndex.production.rhs.get(productionIndex.index + 1);
+            for (TokenType t : this.firstTerminals.get(rh2)) {
+              itemSet.links.put(t, new Action(new Reduction(rh, 0)));
             }
           } else {
-            for (TerminalToken t : this.follows.get(productionIndex.production.lhs)) {
-              itemSet.links.put(t, new Action(new Reduction((NonterminalToken)rh, 0)));
+            for (TokenType t : this.follows.get(productionIndex.production.lhs)) {
+              itemSet.links.put(t, new Action(new Reduction(rh, 0)));
             }
           }
         }
       } else {
-        for (TerminalToken t : this.follows.get(productionIndex.production.lhs)) {
+        for (TokenType t : this.follows.get(productionIndex.production.lhs)) {
           itemSet.links.put(t, new Action(new Reduction(
             productionIndex.production.lhs,
             productionIndex.index
@@ -223,7 +223,7 @@ public class Grammar {
         }
       }
     }
-    for (Token token : productionsByToken.keySet()) {
+    for (TokenType token : productionsByToken.keySet()) {
       Set<ProductionIndex> productionIndices = productionsByToken.get(token);
       if (!this.itemSets.containsKey(productionIndices)) {
         ItemSet childItemSet = new ItemSet(productionIndices);
@@ -235,9 +235,9 @@ public class Grammar {
   }
 
   private void printFollows() {
-    for (Token t : this.follows.keySet()) {
+    for (TokenType t : this.follows.keySet()) {
       System.out.print(t + " :");
-      for (TerminalToken term : this.follows.get(t)) {
+      for (TokenType term : this.follows.get(t)) {
         System.out.print(" " + term + ",");
       }
       System.out.println();
@@ -254,13 +254,13 @@ public class Grammar {
         int index = productionIndex.index;
         Production production = productionIndex.production;
         System.out.print("    (" + index + ") " + production.lhs + " =>");
-        for (Token rh : production.rhs) {
+        for (TokenType rh : production.rhs) {
           System.out.print(" " + rh);
         }
         System.out.println();
       }
       System.out.println("  Links:");
-      for (Token token : itemSet.links.keySet()) {
+      for (TokenType token : itemSet.links.keySet()) {
         Action action = itemSet.links.get(token);
         System.out.print("    " + token + " -> ");
         switch (action.type) {
@@ -288,8 +288,8 @@ public class Grammar {
     List<ParseTreeNode> nodes = new ArrayList();
     ParseTreeNode node = new ParseTreeNode(token);
     while(tokensIndex < tokens.size()) {
-      if (stateStack.peek().links.containsKey(token)) {
-        Action action = stateStack.peek().links.get(token);
+      if (stateStack.peek().links.containsKey(token.getType())) {
+        Action action = stateStack.peek().links.get(token.getType());
         switch (action.type) {
           case SUCCESS:
             System.out.println("SUCCESS");
@@ -310,13 +310,13 @@ public class Grammar {
               nodes.size()
             ));
             nodes = new ArrayList(nodes.subList(0, nodes.size() - action.reduction.number));
-            token = action.reduction.symbol;
+            token = NonterminalToken.getToken(action.reduction.symbol);
             node = new ParseTreeNode(token, currentChildren);
             tokensIndex--;
             break;
         }
       } else {
-        if (token == this.start) {
+        if (token.getType() == this.start) {
           System.out.println("SUCCESS");
           return node;
         }
@@ -330,10 +330,10 @@ public class Grammar {
 
 class Production {
   public final int id;
-  public final NonterminalToken lhs;
-  public final List<Token> rhs;
+  public final TokenType lhs;
+  public final List<TokenType> rhs;
 
-  public Production(int id, NonterminalToken lhs, List<Token> rhs) {
+  public Production(int id, TokenType lhs, List<TokenType> rhs) {
     this.id = id;
     this.lhs = lhs;
     this.rhs = rhs;
@@ -359,7 +359,7 @@ class ProductionIndex {
   }
   public String toString() {
     String s = "(" + this.index + ") " + this.production.lhs + "=>";
-    for (Token t : production.rhs) {
+    for (TokenType t : production.rhs) {
       s += " " + t;
     }
     return s;
@@ -367,10 +367,10 @@ class ProductionIndex {
 }
 
 class Reduction {
-  public final NonterminalToken symbol;
+  public final TokenType symbol;
   public final int number;
 
-  public Reduction(NonterminalToken symbol, int number) {
+  public Reduction(TokenType symbol, int number) {
     this.symbol = symbol;
     this.number = number;
   }
@@ -379,14 +379,14 @@ class Reduction {
 class Entry {
   public final int productionID;
   public final int index;
-  public final Map<Token, Action> actions;
-  public final Map<TerminalToken, Action> epsilonMap;
+  public final Map<TokenType, Action> actions;
+  public final Map<TokenType, Action> epsilonMap;
 
   public Entry(int productionID, int index) {
     this.productionID = productionID;
     this.index = index;
-    this.actions = new HashMap<Token, Action>();
-    this.epsilonMap = new HashMap<TerminalToken, Action>();
+    this.actions = new HashMap<TokenType, Action>();
+    this.epsilonMap = new HashMap<TokenType, Action>();
   }
 }
 
@@ -430,14 +430,12 @@ enum ActionType {
   SUCCESS, ITEMSET, REDUCTION
 }
 
-
-
 class ItemSet implements Comparable<ItemSet> {
   public static int currentID;
   public final int id;
   public final Set<ProductionIndex> definingProductionIndices;
   public final Set<ProductionIndex> productionIndices;
-  public final Map<Token, Action> links;
+  public final Map<TokenType, Action> links;
 
 
   public int compareTo(ItemSet itemSet) {

@@ -1,8 +1,8 @@
 package joos.parser;
 
+import joos.commons.TokenType;
 import joos.commons.NonterminalToken;
 import joos.commons.TerminalToken;
-import joos.commons.Token;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -14,1136 +14,1136 @@ public final class JavaGrammar {
   public static final Grammar grammar;
   private JavaGrammar() { }
   static {
-    HashMap<NonterminalToken, List<List<Token>>> productions = new HashMap();
+    HashMap<TokenType, List<List<TokenType>>> productions = new HashMap();
     productions.put(
-      NonterminalToken.GOAL,
+      TokenType.GOAL,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.COMPILATION_UNIT)
+        Arrays.asList(TokenType.COMPILATION_UNIT)
       )
     );
     productions.put(
-      NonterminalToken.BOOLEAN_LITERAL,
+      TokenType.BOOLEAN_LITERAL,
       Arrays.asList(
-        Arrays.asList(TerminalToken.BOOLEAN_LITERAL_TRUE),
-        Arrays.asList(TerminalToken.BOOLEAN_LITERAL_FALSE)
+        Arrays.asList(TokenType.BOOLEAN_LITERAL_TRUE),
+        Arrays.asList(TokenType.BOOLEAN_LITERAL_FALSE)
       )
     );
     productions.put(
-      NonterminalToken.LITERAL,
+      TokenType.LITERAL,
       Arrays.asList(
-        Arrays.asList(TerminalToken.INTEGER_LITERAL),
-        Arrays.asList(TerminalToken.FLOATING_POINT_LITERAL),
-        Arrays.asList(NonterminalToken.BOOLEAN_LITERAL),
-        Arrays.asList(TerminalToken.CHAR_LITERAL),
-        Arrays.asList(TerminalToken.STRING_LITERAL),
-        Arrays.asList(TerminalToken.NULL_LITERAL)
+        Arrays.asList(TokenType.INTEGER_LITERAL),
+        Arrays.asList(TokenType.FLOATING_POINT_LITERAL),
+        Arrays.asList(TokenType.BOOLEAN_LITERAL),
+        Arrays.asList(TokenType.CHAR_LITERAL),
+        Arrays.asList(TokenType.STRING_LITERAL),
+        Arrays.asList(TokenType.NULL_LITERAL)
       )
     );
     productions.put(
-      NonterminalToken.TYPE,
+      TokenType.TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.PRIMITIVE_TYPE),
-        Arrays.asList(NonterminalToken.REFERENCE_TYPE)
+        Arrays.asList(TokenType.PRIMITIVE_TYPE),
+        Arrays.asList(TokenType.REFERENCE_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.PRIMITIVE_TYPE,
+      TokenType.PRIMITIVE_TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.NUMERIC_TYPE),
-        Arrays.asList(TerminalToken.BOOLEAN),
+        Arrays.asList(TokenType.NUMERIC_TYPE),
+        Arrays.asList(TokenType.BOOLEAN),
         Arrays.asList()
       )
     );
     productions.put(
-      NonterminalToken.NUMERIC_TYPE,
+      TokenType.NUMERIC_TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.INTEGRAL_TYPE),
-        Arrays.asList(NonterminalToken.FLOATING_POINT_TYPE)
+        Arrays.asList(TokenType.INTEGRAL_TYPE),
+        Arrays.asList(TokenType.FLOATING_POINT_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.INTEGRAL_TYPE,
+      TokenType.INTEGRAL_TYPE,
       Arrays.asList(
-        Arrays.asList(TerminalToken.BYTE),
-        Arrays.asList(TerminalToken.SHORT),
-        Arrays.asList(TerminalToken.INT),
-        Arrays.asList(TerminalToken.LONG),
-        Arrays.asList(TerminalToken.CHAR)
+        Arrays.asList(TokenType.BYTE),
+        Arrays.asList(TokenType.SHORT),
+        Arrays.asList(TokenType.INT),
+        Arrays.asList(TokenType.LONG),
+        Arrays.asList(TokenType.CHAR)
       )
     );
     productions.put(
-      NonterminalToken.FLOATING_POINT_TYPE,
+      TokenType.FLOATING_POINT_TYPE,
       Arrays.asList(
-        Arrays.asList(TerminalToken.FLOAT),
-        Arrays.asList(TerminalToken.DOUBLE)
+        Arrays.asList(TokenType.FLOAT),
+        Arrays.asList(TokenType.DOUBLE)
       )
     );
     productions.put(
-      NonterminalToken.REFERENCE_TYPE,
+      TokenType.REFERENCE_TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CLASS_OR_INTERFACE_TYPE),
-        Arrays.asList(NonterminalToken.ARRAY_TYPE)
+        Arrays.asList(TokenType.CLASS_OR_INTERFACE_TYPE),
+        Arrays.asList(TokenType.ARRAY_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_OR_INTERFACE_TYPE,
+      TokenType.CLASS_OR_INTERFACE_TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.NAME)
+        Arrays.asList(TokenType.NAME)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_TYPE,
+      TokenType.CLASS_TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CLASS_OR_INTERFACE_TYPE)
+        Arrays.asList(TokenType.CLASS_OR_INTERFACE_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.INTERFACE_TYPE,
+      TokenType.INTERFACE_TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CLASS_OR_INTERFACE_TYPE)
+        Arrays.asList(TokenType.CLASS_OR_INTERFACE_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.ARRAY_TYPE,
+      TokenType.ARRAY_TYPE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.PRIMITIVE_TYPE, TerminalToken.OPEN_SBR, TerminalToken.CLOSE_SBR),
-        Arrays.asList(NonterminalToken.NAME, TerminalToken.OPEN_SBR, TerminalToken.CLOSE_SBR),
-        Arrays.asList(NonterminalToken.ARRAY_TYPE, TerminalToken.OPEN_SBR, TerminalToken.CLOSE_SBR)
+        Arrays.asList(TokenType.PRIMITIVE_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
+        Arrays.asList(TokenType.NAME, TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
+        Arrays.asList(TokenType.ARRAY_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
       )
     );
     productions.put(
-      NonterminalToken.NAME,
+      TokenType.NAME,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.SIMPLE_NAME),
-        Arrays.asList(NonterminalToken.QUALIFIED_NAME)
+        Arrays.asList(TokenType.SIMPLE_NAME),
+        Arrays.asList(TokenType.QUALIFIED_NAME)
       )
     );
     productions.put(
-      NonterminalToken.SIMPLE_NAME,
+      TokenType.SIMPLE_NAME,
       Arrays.asList(
-        Arrays.asList(TerminalToken.IDENTIFIER)
+        Arrays.asList(TokenType.IDENTIFIER)
       )
     );
     productions.put(
-      NonterminalToken.QUALIFIED_NAME,
+      TokenType.QUALIFIED_NAME,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.NAME, TerminalToken.DOT, TerminalToken.IDENTIFIER)
+        Arrays.asList(TokenType.NAME, TokenType.DOT, TokenType.IDENTIFIER)
       )
     );
     productions.put(
-      NonterminalToken.PACKAGE_DECLARATION_OPT,
-      Arrays.asList(
-        Arrays.asList(),
-        Arrays.asList(NonterminalToken.PACKAGE_DECLARATION)
-      )
-    );
-    productions.put(
-      NonterminalToken.IMPORT_DECLARATIONS_OPT,
+      TokenType.PACKAGE_DECLARATION_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.IMPORT_DECLARATIONS)
+        Arrays.asList(TokenType.PACKAGE_DECLARATION)
       )
     );
     productions.put(
-      NonterminalToken.TYPE_DECLARATIONS_OPT,
+      TokenType.IMPORT_DECLARATIONS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.TYPE_DECLARATIONS)
+        Arrays.asList(TokenType.IMPORT_DECLARATIONS)
       )
     );
     productions.put(
-      NonterminalToken.COMPILATION_UNIT,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.PACKAGE_DECLARATION_OPT, NonterminalToken.IMPORT_DECLARATIONS_OPT, NonterminalToken.TYPE_DECLARATIONS_OPT)
-      )
-    );
-    productions.put(
-      NonterminalToken.IMPORT_DECLARATIONS,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.IMPORT_DECLARATION),
-        Arrays.asList(NonterminalToken.IMPORT_DECLARATIONS, NonterminalToken.IMPORT_DECLARATION)
-      )
-    );
-    productions.put(
-      NonterminalToken.TYPE_DECLARATIONS,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.TYPE_DECLARATION),
-        Arrays.asList(NonterminalToken.TYPE_DECLARATIONS, NonterminalToken.TYPE_DECLARATION)
-      )
-    );
-    productions.put(
-      NonterminalToken.PACKAGE_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.PACKAGE, NonterminalToken.NAME, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.IMPORT_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.SINGLE_TYPE_IMPORT_DECLARATION),
-        Arrays.asList(NonterminalToken.TYPE_IMPORT_ON_DEMAND_DECLARATION)
-      )
-    );
-    productions.put(
-      NonterminalToken.SINGLE_TYPE_IMPORT_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IMPORT, NonterminalToken.NAME, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.TYPE_IMPORT_ON_DEMAND_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IMPORT, NonterminalToken.NAME, TerminalToken.DOT, TerminalToken.STAR, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.TYPE_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.CLASS_DECLARATION),
-        Arrays.asList(NonterminalToken.INTERFACE_DECLARATION),
-        Arrays.asList(TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.MODIFIERS,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.MODIFIER),
-        Arrays.asList(NonterminalToken.MODIFIERS, NonterminalToken.MODIFIER)
-      )
-    );
-    productions.put(
-      NonterminalToken.MODIFIER,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.PUBLIC),
-        Arrays.asList(TerminalToken.PROTECTED),
-        Arrays.asList(TerminalToken.PRIVATE),
-        Arrays.asList(TerminalToken.STATIC),
-        Arrays.asList(TerminalToken.ABSTRACT),
-        Arrays.asList(TerminalToken.FINAL),
-        Arrays.asList(TerminalToken.NATIVE),
-        Arrays.asList(TerminalToken.SYNCHRONIZED),
-        Arrays.asList(TerminalToken.TRANSIENT),
-        Arrays.asList(TerminalToken.VOLATILE)
-      )
-    );
-    productions.put(
-      NonterminalToken.MODIFIERS_OPT,
+      TokenType.TYPE_DECLARATIONS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.MODIFIERS)
+        Arrays.asList(TokenType.TYPE_DECLARATIONS)
       )
     );
     productions.put(
-      NonterminalToken.SUPER_OPT,
+      TokenType.COMPILATION_UNIT,
+      Arrays.asList(
+        Arrays.asList(TokenType.PACKAGE_DECLARATION_OPT, TokenType.IMPORT_DECLARATIONS_OPT, TokenType.TYPE_DECLARATIONS_OPT)
+      )
+    );
+    productions.put(
+      TokenType.IMPORT_DECLARATIONS,
+      Arrays.asList(
+        Arrays.asList(TokenType.IMPORT_DECLARATION),
+        Arrays.asList(TokenType.IMPORT_DECLARATIONS, TokenType.IMPORT_DECLARATION)
+      )
+    );
+    productions.put(
+      TokenType.TYPE_DECLARATIONS,
+      Arrays.asList(
+        Arrays.asList(TokenType.TYPE_DECLARATION),
+        Arrays.asList(TokenType.TYPE_DECLARATIONS, TokenType.TYPE_DECLARATION)
+      )
+    );
+    productions.put(
+      TokenType.PACKAGE_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.PACKAGE, TokenType.NAME, TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.IMPORT_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.SINGLE_TYPE_IMPORT_DECLARATION),
+        Arrays.asList(TokenType.TYPE_IMPORT_ON_DEMAND_DECLARATION)
+      )
+    );
+    productions.put(
+      TokenType.SINGLE_TYPE_IMPORT_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.IMPORT, TokenType.NAME, TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.TYPE_IMPORT_ON_DEMAND_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.IMPORT, TokenType.NAME, TokenType.DOT, TokenType.STAR, TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.TYPE_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.CLASS_DECLARATION),
+        Arrays.asList(TokenType.INTERFACE_DECLARATION),
+        Arrays.asList(TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.MODIFIERS,
+      Arrays.asList(
+        Arrays.asList(TokenType.MODIFIER),
+        Arrays.asList(TokenType.MODIFIERS, TokenType.MODIFIER)
+      )
+    );
+    productions.put(
+      TokenType.MODIFIER,
+      Arrays.asList(
+        Arrays.asList(TokenType.PUBLIC),
+        Arrays.asList(TokenType.PROTECTED),
+        Arrays.asList(TokenType.PRIVATE),
+        Arrays.asList(TokenType.STATIC),
+        Arrays.asList(TokenType.ABSTRACT),
+        Arrays.asList(TokenType.FINAL),
+        Arrays.asList(TokenType.NATIVE),
+        Arrays.asList(TokenType.SYNCHRONIZED),
+        Arrays.asList(TokenType.TRANSIENT),
+        Arrays.asList(TokenType.VOLATILE)
+      )
+    );
+    productions.put(
+      TokenType.MODIFIERS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.SUPER)
+        Arrays.asList(TokenType.MODIFIERS)
       )
     );
     productions.put(
-      NonterminalToken.INTERFACES_OPT,
+      TokenType.SUPER_CLAUSE_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.INTERFACES)
+        Arrays.asList(TokenType.SUPER_CLAUSE)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.MODIFIERS_OPT, TerminalToken.CLASS, TerminalToken.IDENTIFIER, NonterminalToken.SUPER_OPT, NonterminalToken.INTERFACES_OPT, NonterminalToken.CLASS_BODY)
-      )
-    );
-    productions.put(
-      NonterminalToken.SUPER,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.EXTENDS, NonterminalToken.CLASS_TYPE)
-      )
-    );
-    productions.put(
-      NonterminalToken.INTERFACES,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IMPLEMENTS, NonterminalToken.INTERFACE_TYPE_LIST)
-      )
-    );
-    productions.put(
-      NonterminalToken.INTERFACE_TYPE_LIST,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.INTERFACE_TYPE),
-        Arrays.asList(NonterminalToken.INTERFACE_TYPE_LIST, TerminalToken.COMMA, NonterminalToken.INTERFACE_TYPE)
-      )
-    );
-    productions.put(
-      NonterminalToken.CLASS_BODY_DECLARATIONS_OPT,
+      TokenType.INTERFACES_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.CLASS_BODY_DECLARATIONS)
+        Arrays.asList(TokenType.INTERFACES)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_BODY,
+      TokenType.CLASS_DECLARATION,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_CBR, NonterminalToken.CLASS_BODY_DECLARATIONS_OPT, TerminalToken.CLOSE_CBR)
+        Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.CLASS, TokenType.IDENTIFIER, TokenType.SUPER_CLAUSE_OPT, TokenType.INTERFACES_OPT, TokenType.CLASS_BODY)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_BODY_DECLARATIONS,
+      TokenType.SUPER_CLAUSE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CLASS_BODY_DECLARATION),
-        Arrays.asList(NonterminalToken.CLASS_BODY_DECLARATIONS, NonterminalToken.CLASS_BODY_DECLARATION)
+        Arrays.asList(TokenType.EXTENDS, TokenType.CLASS_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_BODY_DECLARATION,
+      TokenType.INTERFACES,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CLASS_MEMBER_DECLARATION),
-        Arrays.asList(NonterminalToken.STATIC_INITIALIZER),
-        Arrays.asList(NonterminalToken.CONSTRUCTOR_DECLARATION)
+        Arrays.asList(TokenType.IMPLEMENTS, TokenType.INTERFACE_TYPE_LIST)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_MEMBER_DECLARATION,
+      TokenType.INTERFACE_TYPE_LIST,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.FIELD_DECLARATION),
-        Arrays.asList(NonterminalToken.METHOD_DECLARATION)
+        Arrays.asList(TokenType.INTERFACE_TYPE),
+        Arrays.asList(TokenType.INTERFACE_TYPE_LIST, TokenType.COMMA, TokenType.INTERFACE_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.FIELD_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.MODIFIERS_OPT, NonterminalToken.TYPE, NonterminalToken.VARIABLE_DECLARATORS, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.VARIABLE_DECLARATORS,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.VARIABLE_DECLARATOR),
-        Arrays.asList(NonterminalToken.VARIABLE_DECLARATORS, TerminalToken.COMMA, NonterminalToken.VARIABLE_DECLARATOR)
-      )
-    );
-    productions.put(
-      NonterminalToken.VARIABLE_DECLARATOR,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.VARIABLE_DECLARATOR_ID),
-        Arrays.asList(NonterminalToken.VARIABLE_DECLARATOR_ID, TerminalToken.ASSIGN, NonterminalToken.VARIABLE_INITIALIZER)
-      )
-    );
-    productions.put(
-      NonterminalToken.VARIABLE_DECLARATOR_ID,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IDENTIFIER),
-        Arrays.asList(NonterminalToken.VARIABLE_DECLARATOR_ID, TerminalToken.OPEN_SBR, TerminalToken.CLOSE_SBR)
-      )
-    );
-    productions.put(
-      NonterminalToken.VARIABLE_INITIALIZER,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.EXPRESSION),
-        Arrays.asList(NonterminalToken.ARRAY_INITIALIZER)
-      )
-    );
-    productions.put(
-      NonterminalToken.METHOD_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.METHOD_HEADER, NonterminalToken.METHOD_BODY)
-      )
-    );
-    productions.put(
-      NonterminalToken.THROWS_OPT,
+      TokenType.CLASS_BODY_DECLARATIONS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.THROWS)
+        Arrays.asList(TokenType.CLASS_BODY_DECLARATIONS)
       )
     );
     productions.put(
-      NonterminalToken.METHOD_HEADER,
+      TokenType.CLASS_BODY,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.MODIFIERS_OPT, NonterminalToken.TYPE, NonterminalToken.METHOD_DECLARATOR, NonterminalToken.THROWS_OPT),
-        Arrays.asList(NonterminalToken.MODIFIERS_OPT, TerminalToken.VOID, NonterminalToken.METHOD_DECLARATOR, NonterminalToken.THROWS_OPT)
+        Arrays.asList(TokenType.OPEN_CBR, TokenType.CLASS_BODY_DECLARATIONS_OPT, TokenType.CLOSE_CBR)
       )
     );
     productions.put(
-      NonterminalToken.FORMAL_PARAMETER_LIST_OPT,
+      TokenType.CLASS_BODY_DECLARATIONS,
       Arrays.asList(
-        Arrays.asList(),
-        Arrays.asList(NonterminalToken.FORMAL_PARAMETER_LIST)
+        Arrays.asList(TokenType.CLASS_BODY_DECLARATION),
+        Arrays.asList(TokenType.CLASS_BODY_DECLARATIONS, TokenType.CLASS_BODY_DECLARATION)
       )
     );
     productions.put(
-      NonterminalToken.METHOD_DECLARATOR,
+      TokenType.CLASS_BODY_DECLARATION,
       Arrays.asList(
-        Arrays.asList(TerminalToken.IDENTIFIER, TerminalToken.OPEN_BR, NonterminalToken.FORMAL_PARAMETER_LIST_OPT, TerminalToken.CLOSE_BR),
-        Arrays.asList(NonterminalToken.METHOD_DECLARATOR, TerminalToken.OPEN_SBR, TerminalToken.CLOSE_SBR)
+        Arrays.asList(TokenType.CLASS_MEMBER_DECLARATION),
+        Arrays.asList(TokenType.STATIC_INITIALIZER),
+        Arrays.asList(TokenType.CONSTRUCTOR_DECLARATION)
       )
     );
     productions.put(
-      NonterminalToken.FORMAL_PARAMETER_LIST,
+      TokenType.CLASS_MEMBER_DECLARATION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.FORMAL_PARAMETER),
-        Arrays.asList(NonterminalToken.FORMAL_PARAMETER_LIST, TerminalToken.COMMA, NonterminalToken.FORMAL_PARAMETER)
+        Arrays.asList(TokenType.FIELD_DECLARATION),
+        Arrays.asList(TokenType.METHOD_DECLARATION)
       )
     );
     productions.put(
-      NonterminalToken.FORMAL_PARAMETER,
+      TokenType.FIELD_DECLARATION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.TYPE, NonterminalToken.VARIABLE_DECLARATOR_ID)
+        Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.TYPE, TokenType.VARIABLE_DECLARATORS, TokenType.SEMICOLON)
       )
     );
     productions.put(
-      NonterminalToken.THROWS,
+      TokenType.VARIABLE_DECLARATORS,
       Arrays.asList(
-        Arrays.asList(TerminalToken.THROWS, NonterminalToken.CLASS_TYPE_LIST)
+        Arrays.asList(TokenType.VARIABLE_DECLARATOR),
+        Arrays.asList(TokenType.VARIABLE_DECLARATORS, TokenType.COMMA, TokenType.VARIABLE_DECLARATOR)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_TYPE_LIST,
+      TokenType.VARIABLE_DECLARATOR,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CLASS_TYPE),
-        Arrays.asList(NonterminalToken.CLASS_TYPE_LIST, TerminalToken.COMMA, NonterminalToken.CLASS_TYPE)
+        Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID),
+        Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID, TokenType.ASSIGN, TokenType.VARIABLE_INITIALIZER)
       )
     );
     productions.put(
-      NonterminalToken.METHOD_BODY,
+      TokenType.VARIABLE_DECLARATOR_ID,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.BLOCK),
-        Arrays.asList(TerminalToken.SEMICOLON)
+        Arrays.asList(TokenType.IDENTIFIER),
+        Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
       )
     );
     productions.put(
-      NonterminalToken.STATIC_INITIALIZER,
+      TokenType.VARIABLE_INITIALIZER,
       Arrays.asList(
-        Arrays.asList(TerminalToken.STATIC, NonterminalToken.BLOCK)
+        Arrays.asList(TokenType.EXPRESSION),
+        Arrays.asList(TokenType.ARRAY_INITIALIZER)
       )
     );
     productions.put(
-      NonterminalToken.CONSTRUCTOR_DECLARATION,
+      TokenType.METHOD_DECLARATION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.MODIFIERS_OPT, NonterminalToken.CONSTRUCTOR_DECLARATOR, NonterminalToken.THROWS_OPT, NonterminalToken.CONSTRUCTOR_BODY)
+        Arrays.asList(TokenType.METHOD_HEADER, TokenType.METHOD_BODY)
       )
     );
     productions.put(
-      NonterminalToken.CONSTRUCTOR_DECLARATOR,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.SIMPLE_NAME, TerminalToken.OPEN_BR, NonterminalToken.FORMAL_PARAMETER_LIST_OPT, TerminalToken.CLOSE_BR)
-      )
-    );
-    productions.put(
-      NonterminalToken.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT,
+      TokenType.THROWS_CLAUSE_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.EXPLICIT_CONSTRUCTOR_INVOCATION)
+        Arrays.asList(TokenType.THROWS_CLAUSE)
       )
     );
     productions.put(
-      NonterminalToken.BLOCK_STATEMENTS_OPT,
+      TokenType.METHOD_HEADER,
+      Arrays.asList(
+        Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.TYPE, TokenType.METHOD_DECLARATOR, TokenType.THROWS_CLAUSE_OPT),
+        Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.VOID, TokenType.METHOD_DECLARATOR, TokenType.THROWS_CLAUSE_OPT)
+      )
+    );
+    productions.put(
+      TokenType.FORMAL_PARAMETER_LIST_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.BLOCK_STATEMENTS)
+        Arrays.asList(TokenType.FORMAL_PARAMETER_LIST)
       )
     );
     productions.put(
-      NonterminalToken.CONSTRUCTOR_BODY,
+      TokenType.METHOD_DECLARATOR,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_CBR, NonterminalToken.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT, NonterminalToken.BLOCK_STATEMENTS_OPT, TerminalToken.CLOSE_CBR)
+        Arrays.asList(TokenType.IDENTIFIER, TokenType.OPEN_BR, TokenType.FORMAL_PARAMETER_LIST_OPT, TokenType.CLOSE_BR),
+        Arrays.asList(TokenType.METHOD_DECLARATOR, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
       )
     );
     productions.put(
-      NonterminalToken.ARGUMENT_LIST_OPT,
+      TokenType.FORMAL_PARAMETER_LIST,
       Arrays.asList(
-        Arrays.asList(),
-        Arrays.asList(NonterminalToken.ARGUMENT_LIST)
+        Arrays.asList(TokenType.FORMAL_PARAMETER),
+        Arrays.asList(TokenType.FORMAL_PARAMETER_LIST, TokenType.COMMA, TokenType.FORMAL_PARAMETER)
       )
     );
     productions.put(
-      NonterminalToken.EXPLICIT_CONSTRUCTOR_INVOCATION,
+      TokenType.FORMAL_PARAMETER,
       Arrays.asList(
-        Arrays.asList(TerminalToken.THIS, TerminalToken.OPEN_BR, NonterminalToken.ARGUMENT_LIST_OPT, TerminalToken.CLOSE_BR, TerminalToken.SEMICOLON),
-        Arrays.asList(TerminalToken.SUPER, TerminalToken.OPEN_BR, NonterminalToken.ARGUMENT_LIST_OPT, TerminalToken.CLOSE_BR, TerminalToken.SEMICOLON)
+        Arrays.asList(TokenType.TYPE, TokenType.VARIABLE_DECLARATOR_ID)
       )
     );
     productions.put(
-      NonterminalToken.EXTENDS_INTERFACES_OPT,
+      TokenType.THROWS_CLAUSE,
       Arrays.asList(
-        Arrays.asList(),
-        Arrays.asList(NonterminalToken.EXTENDS_INTERFACES)
+        Arrays.asList(TokenType.THROWS, TokenType.CLASS_TYPE_LIST)
       )
     );
     productions.put(
-      NonterminalToken.INTERFACE_DECLARATION,
+      TokenType.CLASS_TYPE_LIST,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.MODIFIERS_OPT, TerminalToken.INTERFACE, TerminalToken.IDENTIFIER, NonterminalToken.EXTENDS_INTERFACES_OPT, NonterminalToken.INTERFACE_BODY)
+        Arrays.asList(TokenType.CLASS_TYPE),
+        Arrays.asList(TokenType.CLASS_TYPE_LIST, TokenType.COMMA, TokenType.CLASS_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.EXTENDS_INTERFACES,
+      TokenType.METHOD_BODY,
       Arrays.asList(
-        Arrays.asList(TerminalToken.EXTENDS, NonterminalToken.INTERFACE_TYPE),
-        Arrays.asList(NonterminalToken.EXTENDS_INTERFACES, TerminalToken.COMMA, NonterminalToken.INTERFACE_TYPE)
+        Arrays.asList(TokenType.BLOCK),
+        Arrays.asList(TokenType.SEMICOLON)
       )
     );
     productions.put(
-      NonterminalToken.INTERFACE_MEMBER_DECLARATIONS_OPT,
+      TokenType.STATIC_INITIALIZER,
       Arrays.asList(
-        Arrays.asList(),
-        Arrays.asList(NonterminalToken.INTERFACE_MEMBER_DECLARATIONS)
+        Arrays.asList(TokenType.STATIC, TokenType.BLOCK)
       )
     );
     productions.put(
-      NonterminalToken.INTERFACE_BODY,
+      TokenType.CONSTRUCTOR_DECLARATION,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_CBR, NonterminalToken.INTERFACE_MEMBER_DECLARATIONS_OPT, TerminalToken.CLOSE_CBR)
+        Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.CONSTRUCTOR_DECLARATOR, TokenType.THROWS_CLAUSE_OPT, TokenType.CONSTRUCTOR_BODY)
       )
     );
     productions.put(
-      NonterminalToken.INTERFACE_MEMBER_DECLARATIONS,
+      TokenType.CONSTRUCTOR_DECLARATOR,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.INTERFACE_MEMBER_DECLARATION),
-        Arrays.asList(NonterminalToken.INTERFACE_MEMBER_DECLARATIONS, NonterminalToken.INTERFACE_MEMBER_DECLARATION)
+        Arrays.asList(TokenType.SIMPLE_NAME, TokenType.OPEN_BR, TokenType.FORMAL_PARAMETER_LIST_OPT, TokenType.CLOSE_BR)
       )
     );
     productions.put(
-      NonterminalToken.INTERFACE_MEMBER_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.CONSTANT_DECLARATION),
-        Arrays.asList(NonterminalToken.ABSTRACT_METHOD_DECLARATION)
-      )
-    );
-    productions.put(
-      NonterminalToken.CONSTANT_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.FIELD_DECLARATION)
-      )
-    );
-    productions.put(
-      NonterminalToken.ABSTRACT_METHOD_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.METHOD_HEADER, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.VARIABLE_INITIALIZERS_OPT,
+      TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.VARIABLE_INITIALIZERS)
+        Arrays.asList(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION)
       )
     );
     productions.put(
-      NonterminalToken.COMMA_OPT,
+      TokenType.BLOCK_STATEMENTS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(TerminalToken.COMMA)
+        Arrays.asList(TokenType.BLOCK_STATEMENTS)
       )
     );
     productions.put(
-      NonterminalToken.ARRAY_INITIALIZER,
+      TokenType.CONSTRUCTOR_BODY,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_CBR, NonterminalToken.VARIABLE_INITIALIZERS_OPT, NonterminalToken.COMMA_OPT, TerminalToken.CLOSE_CBR)
+        Arrays.asList(TokenType.OPEN_CBR, TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT, TokenType.BLOCK_STATEMENTS_OPT, TokenType.CLOSE_CBR)
       )
     );
     productions.put(
-      NonterminalToken.VARIABLE_INITIALIZERS,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.VARIABLE_INITIALIZER),
-        Arrays.asList(NonterminalToken.VARIABLE_INITIALIZERS, TerminalToken.COMMA, NonterminalToken.VARIABLE_INITIALIZER)
-      )
-    );
-    productions.put(
-      NonterminalToken.BLOCK,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_CBR, NonterminalToken.BLOCK_STATEMENTS_OPT, TerminalToken.CLOSE_CBR)
-      )
-    );
-    productions.put(
-      NonterminalToken.BLOCK_STATEMENTS,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.BLOCK_STATEMENT),
-        Arrays.asList(NonterminalToken.BLOCK_STATEMENTS, NonterminalToken.BLOCK_STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.BLOCK_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.LOCAL_VARIABLE_DECLARATION_STATEMENT),
-        Arrays.asList(NonterminalToken.STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.LOCAL_VARIABLE_DECLARATION_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.LOCAL_VARIABLE_DECLARATION, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.LOCAL_VARIABLE_DECLARATION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.TYPE, NonterminalToken.VARIABLE_DECLARATORS)
-      )
-    );
-    productions.put(
-      NonterminalToken.STATEMENT,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
-        Arrays.asList(NonterminalToken.LABELED_STATEMENT),
-        Arrays.asList(NonterminalToken.IF_THEN_STATEMENT),
-        Arrays.asList(NonterminalToken.IF_THEN_ELSE_STATEMENT),
-        Arrays.asList(NonterminalToken.WHILE_STATEMENT),
-        Arrays.asList(NonterminalToken.FOR_STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.STATEMENT_NO_SHORT_IF,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
-        Arrays.asList(NonterminalToken.LABELED_STATEMENT_NO_SHORT_IF),
-        Arrays.asList(NonterminalToken.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF),
-        Arrays.asList(NonterminalToken.WHILE_STATEMENT_NO_SHORT_IF),
-        Arrays.asList(NonterminalToken.FOR_STATEMENT_NO_SHORT_IF)
-      )
-    );
-    productions.put(
-      NonterminalToken.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.BLOCK),
-        Arrays.asList(NonterminalToken.EMPTY_STATEMENT),
-        Arrays.asList(NonterminalToken.EXPRESSION_STATEMENT),
-        Arrays.asList(NonterminalToken.SWITCH_STATEMENT),
-        Arrays.asList(NonterminalToken.DO_STATEMENT),
-        Arrays.asList(NonterminalToken.BREAK_STATEMENT),
-        Arrays.asList(NonterminalToken.CONTINUE_STATEMENT),
-        Arrays.asList(NonterminalToken.RETURN_STATEMENT),
-        Arrays.asList(NonterminalToken.SYNCHRONIZED_STATEMENT),
-        Arrays.asList(NonterminalToken.THROW_STATEMENT),
-        Arrays.asList(NonterminalToken.TRY_STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.EMPTY_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.LABELED_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IDENTIFIER, TerminalToken.COLON, NonterminalToken.STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.LABELED_STATEMENT_NO_SHORT_IF,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IDENTIFIER, TerminalToken.COLON, NonterminalToken.STATEMENT_NO_SHORT_IF)
-      )
-    );
-    productions.put(
-      NonterminalToken.EXPRESSION_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.STATEMENT_EXPRESSION, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.STATEMENT_EXPRESSION,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.ASSIGNMENT),
-        Arrays.asList(NonterminalToken.PRE_INCREMENT_EXPRESSION),
-        Arrays.asList(NonterminalToken.PRE_DECREMENT_EXPRESSION),
-        Arrays.asList(NonterminalToken.POST_INCREMENT_EXPRESSION),
-        Arrays.asList(NonterminalToken.POST_DECREMENT_EXPRESSION),
-        Arrays.asList(NonterminalToken.METHOD_INVOCATION),
-        Arrays.asList(NonterminalToken.CLASS_INSTANCE_CREATION_EXPRESSION)
-      )
-    );
-    productions.put(
-      NonterminalToken.IF_THEN_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IF, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.IF_THEN_ELSE_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IF, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.STATEMENT_NO_SHORT_IF, TerminalToken.ELSE, NonterminalToken.STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.IF, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.STATEMENT_NO_SHORT_IF, TerminalToken.ELSE, NonterminalToken.STATEMENT_NO_SHORT_IF)
-      )
-    );
-    productions.put(
-      NonterminalToken.SWITCH_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.SWITCH, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.SWITCH_BLOCK)
-      )
-    );
-    productions.put(
-      NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUPS_OPT,
+      TokenType.ARGUMENT_LIST_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUPS)
+        Arrays.asList(TokenType.ARGUMENT_LIST)
       )
     );
     productions.put(
-      NonterminalToken.SWITCH_LABELS_OPT,
+      TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.THIS, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON),
+        Arrays.asList(TokenType.SUPER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.EXTENDS_INTERFACES_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.SWITCH_LABELS)
+        Arrays.asList(TokenType.EXTENDS_INTERFACES)
       )
     );
     productions.put(
-      NonterminalToken.SWITCH_BLOCK,
+      TokenType.INTERFACE_DECLARATION,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_CBR, NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUPS_OPT, NonterminalToken.SWITCH_LABELS_OPT, TerminalToken.CLOSE_CBR)
+        Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.INTERFACE, TokenType.IDENTIFIER, TokenType.EXTENDS_INTERFACES_OPT, TokenType.INTERFACE_BODY)
       )
     );
     productions.put(
-      NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUPS,
+      TokenType.EXTENDS_INTERFACES,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUP),
-        Arrays.asList(NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUPS, NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUP)
+        Arrays.asList(TokenType.EXTENDS, TokenType.INTERFACE_TYPE),
+        Arrays.asList(TokenType.EXTENDS_INTERFACES, TokenType.COMMA, TokenType.INTERFACE_TYPE)
       )
     );
     productions.put(
-      NonterminalToken.SWITCH_BLOCK_STATEMENT_GROUP,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.SWITCH_LABELS, NonterminalToken.BLOCK_STATEMENTS)
-      )
-    );
-    productions.put(
-      NonterminalToken.SWITCH_LABELS,
-      Arrays.asList(
-        Arrays.asList(NonterminalToken.SWITCH_LABEL),
-        Arrays.asList(NonterminalToken.SWITCH_LABELS, NonterminalToken.SWITCH_LABEL)
-      )
-    );
-    productions.put(
-      NonterminalToken.SWITCH_LABEL,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.CASE, NonterminalToken.CONSTANT_EXPRESSION, TerminalToken.COLON),
-        Arrays.asList(TerminalToken.DEFAULT, TerminalToken.COLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.WHILE_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.WHILE, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.STATEMENT)
-      )
-    );
-    productions.put(
-      NonterminalToken.WHILE_STATEMENT_NO_SHORT_IF,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.WHILE, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.STATEMENT_NO_SHORT_IF)
-      )
-    );
-    productions.put(
-      NonterminalToken.DO_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.DO, NonterminalToken.STATEMENT, TerminalToken.WHILE, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.FOR_INIT_OPT,
+      TokenType.INTERFACE_MEMBER_DECLARATIONS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.FOR_INIT)
+        Arrays.asList(TokenType.INTERFACE_MEMBER_DECLARATIONS)
       )
     );
     productions.put(
-      NonterminalToken.EXPRESSION_OPT,
+      TokenType.INTERFACE_BODY,
+      Arrays.asList(
+        Arrays.asList(TokenType.OPEN_CBR, TokenType.INTERFACE_MEMBER_DECLARATIONS_OPT, TokenType.CLOSE_CBR)
+      )
+    );
+    productions.put(
+      TokenType.INTERFACE_MEMBER_DECLARATIONS,
+      Arrays.asList(
+        Arrays.asList(TokenType.INTERFACE_MEMBER_DECLARATION),
+        Arrays.asList(TokenType.INTERFACE_MEMBER_DECLARATIONS, TokenType.INTERFACE_MEMBER_DECLARATION)
+      )
+    );
+    productions.put(
+      TokenType.INTERFACE_MEMBER_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.CONSTANT_DECLARATION),
+        Arrays.asList(TokenType.ABSTRACT_METHOD_DECLARATION)
+      )
+    );
+    productions.put(
+      TokenType.CONSTANT_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.FIELD_DECLARATION)
+      )
+    );
+    productions.put(
+      TokenType.ABSTRACT_METHOD_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.METHOD_HEADER, TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.VARIABLE_INITIALIZERS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.EXPRESSION)
+        Arrays.asList(TokenType.VARIABLE_INITIALIZERS)
       )
     );
     productions.put(
-      NonterminalToken.FOR_UPDATE_OPT,
+      TokenType.COMMA_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.FOR_UPDATE)
+        Arrays.asList(TokenType.COMMA)
       )
     );
     productions.put(
-      NonterminalToken.FOR_STATEMENT,
+      TokenType.ARRAY_INITIALIZER,
       Arrays.asList(
-        Arrays.asList(TerminalToken.FOR, TerminalToken.OPEN_BR, NonterminalToken.FOR_INIT_OPT, TerminalToken.SEMICOLON, NonterminalToken.EXPRESSION_OPT, TerminalToken.SEMICOLON, NonterminalToken.FOR_UPDATE_OPT, TerminalToken.CLOSE_BR, NonterminalToken.STATEMENT)
+        Arrays.asList(TokenType.OPEN_CBR, TokenType.VARIABLE_INITIALIZERS_OPT, TokenType.COMMA_OPT, TokenType.CLOSE_CBR)
       )
     );
     productions.put(
-      NonterminalToken.FOR_STATEMENT_NO_SHORT_IF,
+      TokenType.VARIABLE_INITIALIZERS,
       Arrays.asList(
-        Arrays.asList(TerminalToken.FOR, TerminalToken.OPEN_BR, NonterminalToken.FOR_INIT_OPT, TerminalToken.SEMICOLON, NonterminalToken.EXPRESSION_OPT, TerminalToken.SEMICOLON, NonterminalToken.FOR_UPDATE_OPT, TerminalToken.CLOSE_BR, NonterminalToken.STATEMENT_NO_SHORT_IF)
+        Arrays.asList(TokenType.VARIABLE_INITIALIZER),
+        Arrays.asList(TokenType.VARIABLE_INITIALIZERS, TokenType.COMMA, TokenType.VARIABLE_INITIALIZER)
       )
     );
     productions.put(
-      NonterminalToken.FOR_INIT,
+      TokenType.BLOCK,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.STATEMENT_EXPRESSION_LIST),
-        Arrays.asList(NonterminalToken.LOCAL_VARIABLE_DECLARATION)
+        Arrays.asList(TokenType.OPEN_CBR, TokenType.BLOCK_STATEMENTS_OPT, TokenType.CLOSE_CBR)
       )
     );
     productions.put(
-      NonterminalToken.FOR_UPDATE,
+      TokenType.BLOCK_STATEMENTS,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.STATEMENT_EXPRESSION_LIST)
+        Arrays.asList(TokenType.BLOCK_STATEMENT),
+        Arrays.asList(TokenType.BLOCK_STATEMENTS, TokenType.BLOCK_STATEMENT)
       )
     );
     productions.put(
-      NonterminalToken.STATEMENT_EXPRESSION_LIST,
+      TokenType.BLOCK_STATEMENT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.STATEMENT_EXPRESSION),
-        Arrays.asList(NonterminalToken.STATEMENT_EXPRESSION_LIST, TerminalToken.COMMA, NonterminalToken.STATEMENT_EXPRESSION)
+        Arrays.asList(TokenType.LOCAL_VARIABLE_DECLARATION_STATEMENT),
+        Arrays.asList(TokenType.STATEMENT)
       )
     );
     productions.put(
-      NonterminalToken.IDENTIFIER_OPT,
+      TokenType.LOCAL_VARIABLE_DECLARATION_STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.LOCAL_VARIABLE_DECLARATION, TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.LOCAL_VARIABLE_DECLARATION,
+      Arrays.asList(
+        Arrays.asList(TokenType.TYPE, TokenType.VARIABLE_DECLARATORS)
+      )
+    );
+    productions.put(
+      TokenType.STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
+        Arrays.asList(TokenType.LABELED_STATEMENT),
+        Arrays.asList(TokenType.IF_THEN_STATEMENT),
+        Arrays.asList(TokenType.IF_THEN_ELSE_STATEMENT),
+        Arrays.asList(TokenType.WHILE_STATEMENT),
+        Arrays.asList(TokenType.FOR_STATEMENT)
+      )
+    );
+    productions.put(
+      TokenType.STATEMENT_NO_SHORT_IF,
+      Arrays.asList(
+        Arrays.asList(TokenType.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
+        Arrays.asList(TokenType.LABELED_STATEMENT_NO_SHORT_IF),
+        Arrays.asList(TokenType.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF),
+        Arrays.asList(TokenType.WHILE_STATEMENT_NO_SHORT_IF),
+        Arrays.asList(TokenType.FOR_STATEMENT_NO_SHORT_IF)
+      )
+    );
+    productions.put(
+      TokenType.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.BLOCK),
+        Arrays.asList(TokenType.EMPTY_STATEMENT),
+        Arrays.asList(TokenType.EXPRESSION_STATEMENT),
+        Arrays.asList(TokenType.SWITCH_STATEMENT),
+        Arrays.asList(TokenType.DO_STATEMENT),
+        Arrays.asList(TokenType.BREAK_STATEMENT),
+        Arrays.asList(TokenType.CONTINUE_STATEMENT),
+        Arrays.asList(TokenType.RETURN_STATEMENT),
+        Arrays.asList(TokenType.SYNCHRONIZED_STATEMENT),
+        Arrays.asList(TokenType.THROW_STATEMENT),
+        Arrays.asList(TokenType.TRY_STATEMENT)
+      )
+    );
+    productions.put(
+      TokenType.EMPTY_STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.LABELED_STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.IDENTIFIER, TokenType.COLON, TokenType.STATEMENT)
+      )
+    );
+    productions.put(
+      TokenType.LABELED_STATEMENT_NO_SHORT_IF,
+      Arrays.asList(
+        Arrays.asList(TokenType.IDENTIFIER, TokenType.COLON, TokenType.STATEMENT_NO_SHORT_IF)
+      )
+    );
+    productions.put(
+      TokenType.EXPRESSION_STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.STATEMENT_EXPRESSION, TokenType.SEMICOLON)
+      )
+    );
+    productions.put(
+      TokenType.STATEMENT_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.ASSIGNMENT),
+        Arrays.asList(TokenType.PRE_INCREMENT_EXPRESSION),
+        Arrays.asList(TokenType.PRE_DECREMENT_EXPRESSION),
+        Arrays.asList(TokenType.POST_INCREMENT_EXPRESSION),
+        Arrays.asList(TokenType.POST_DECREMENT_EXPRESSION),
+        Arrays.asList(TokenType.METHOD_INVOCATION),
+        Arrays.asList(TokenType.CLASS_INSTANCE_CREATION_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.IF_THEN_STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.IF, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.STATEMENT)
+      )
+    );
+    productions.put(
+      TokenType.IF_THEN_ELSE_STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.IF, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.STATEMENT_NO_SHORT_IF, TokenType.ELSE, TokenType.STATEMENT)
+      )
+    );
+    productions.put(
+      TokenType.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF,
+      Arrays.asList(
+        Arrays.asList(TokenType.IF, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.STATEMENT_NO_SHORT_IF, TokenType.ELSE, TokenType.STATEMENT_NO_SHORT_IF)
+      )
+    );
+    productions.put(
+      TokenType.SWITCH_STATEMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.SWITCH, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.SWITCH_BLOCK)
+      )
+    );
+    productions.put(
+      TokenType.SWITCH_BLOCK_STATEMENT_GROUPS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(TerminalToken.IDENTIFIER)
+        Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUPS)
       )
     );
     productions.put(
-      NonterminalToken.BREAK_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.BREAK, NonterminalToken.IDENTIFIER_OPT, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.CONTINUE_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.CONTINUE, NonterminalToken.IDENTIFIER_OPT, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.RETURN_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.RETURN, NonterminalToken.EXPRESSION_OPT, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.THROW_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.THROW, NonterminalToken.EXPRESSION, TerminalToken.SEMICOLON)
-      )
-    );
-    productions.put(
-      NonterminalToken.SYNCHRONIZED_STATEMENT,
-      Arrays.asList(
-        Arrays.asList(TerminalToken.SYNCHRONIZED, TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.BLOCK)
-      )
-    );
-    productions.put(
-      NonterminalToken.CATCHES_OPT,
+      TokenType.SWITCH_LABELS_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.CATCHES)
+        Arrays.asList(TokenType.SWITCH_LABELS)
       )
     );
     productions.put(
-      NonterminalToken.TRY_STATEMENT,
+      TokenType.SWITCH_BLOCK,
       Arrays.asList(
-        Arrays.asList(TerminalToken.TRY, NonterminalToken.BLOCK, NonterminalToken.CATCHES),
-        Arrays.asList(TerminalToken.TRY, NonterminalToken.BLOCK, NonterminalToken.CATCHES_OPT, NonterminalToken.FINALLY)
+        Arrays.asList(TokenType.OPEN_CBR, TokenType.SWITCH_BLOCK_STATEMENT_GROUPS_OPT, TokenType.SWITCH_LABELS_OPT, TokenType.CLOSE_CBR)
       )
     );
     productions.put(
-      NonterminalToken.CATCHES,
+      TokenType.SWITCH_BLOCK_STATEMENT_GROUPS,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CATCH_CLAUSE),
-        Arrays.asList(NonterminalToken.CATCHES, NonterminalToken.CATCH_CLAUSE)
+        Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUP),
+        Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUPS, TokenType.SWITCH_BLOCK_STATEMENT_GROUP)
       )
     );
     productions.put(
-      NonterminalToken.CATCH_CLAUSE,
+      TokenType.SWITCH_BLOCK_STATEMENT_GROUP,
       Arrays.asList(
-        Arrays.asList(TerminalToken.CATCH, TerminalToken.OPEN_BR, NonterminalToken.FORMAL_PARAMETER, TerminalToken.CLOSE_BR, NonterminalToken.BLOCK)
+        Arrays.asList(TokenType.SWITCH_LABELS, TokenType.BLOCK_STATEMENTS)
       )
     );
     productions.put(
-      NonterminalToken.FINALLY,
+      TokenType.SWITCH_LABELS,
       Arrays.asList(
-        Arrays.asList(TerminalToken.FINALLY, NonterminalToken.BLOCK)
+        Arrays.asList(TokenType.SWITCH_LABEL),
+        Arrays.asList(TokenType.SWITCH_LABELS, TokenType.SWITCH_LABEL)
       )
     );
     productions.put(
-      NonterminalToken.PRIMARY,
+      TokenType.SWITCH_LABEL,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.PRIMARY_NO_NEW_ARRAY),
-        Arrays.asList(NonterminalToken.ARRAY_CREATION_EXPRESSION)
+        Arrays.asList(TokenType.CASE, TokenType.CONSTANT_EXPRESSION, TokenType.COLON),
+        Arrays.asList(TokenType.DEFAULT, TokenType.COLON)
       )
     );
     productions.put(
-      NonterminalToken.PRIMARY_NO_NEW_ARRAY,
+      TokenType.WHILE_STATEMENT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.LITERAL),
-        Arrays.asList(TerminalToken.THIS),
-        Arrays.asList(TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR),
-        Arrays.asList(NonterminalToken.CLASS_INSTANCE_CREATION_EXPRESSION),
-        Arrays.asList(NonterminalToken.FIELD_ACCESS),
-        Arrays.asList(NonterminalToken.METHOD_INVOCATION),
-        Arrays.asList(NonterminalToken.ARRAY_ACCESS)
+        Arrays.asList(TokenType.WHILE, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.STATEMENT)
       )
     );
     productions.put(
-      NonterminalToken.CLASS_INSTANCE_CREATION_EXPRESSION,
+      TokenType.WHILE_STATEMENT_NO_SHORT_IF,
       Arrays.asList(
-        Arrays.asList(TerminalToken.NEW, NonterminalToken.CLASS_TYPE, TerminalToken.OPEN_BR, NonterminalToken.ARGUMENT_LIST_OPT, TerminalToken.CLOSE_BR)
+        Arrays.asList(TokenType.WHILE, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.STATEMENT_NO_SHORT_IF)
       )
     );
     productions.put(
-      NonterminalToken.ARGUMENT_LIST,
+      TokenType.DO_STATEMENT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.EXPRESSION),
-        Arrays.asList(NonterminalToken.ARGUMENT_LIST, TerminalToken.COMMA, NonterminalToken.EXPRESSION)
+        Arrays.asList(TokenType.DO, TokenType.STATEMENT, TokenType.WHILE, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.SEMICOLON)
       )
     );
     productions.put(
-      NonterminalToken.DIMS_OPT,
+      TokenType.FOR_INIT_OPT,
       Arrays.asList(
         Arrays.asList(),
-        Arrays.asList(NonterminalToken.DIMS)
+        Arrays.asList(TokenType.FOR_INIT)
       )
     );
     productions.put(
-      NonterminalToken.ARRAY_CREATION_EXPRESSION,
+      TokenType.EXPRESSION_OPT,
       Arrays.asList(
-        Arrays.asList(TerminalToken.NEW, NonterminalToken.PRIMITIVE_TYPE, NonterminalToken.DIM_EXPRS, NonterminalToken.DIMS_OPT),
-        Arrays.asList(TerminalToken.NEW, NonterminalToken.CLASS_OR_INTERFACE_TYPE, NonterminalToken.DIM_EXPRS, NonterminalToken.DIMS_OPT)
+        Arrays.asList(),
+        Arrays.asList(TokenType.EXPRESSION)
       )
     );
     productions.put(
-      NonterminalToken.DIM_EXPRS,
+      TokenType.FOR_UPDATE_OPT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.DIM_EXPR),
-        Arrays.asList(NonterminalToken.DIM_EXPRS, NonterminalToken.DIM_EXPR)
+        Arrays.asList(),
+        Arrays.asList(TokenType.FOR_UPDATE)
       )
     );
     productions.put(
-      NonterminalToken.DIM_EXPR,
+      TokenType.FOR_STATEMENT,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_SBR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_SBR)
+        Arrays.asList(TokenType.FOR, TokenType.OPEN_BR, TokenType.FOR_INIT_OPT, TokenType.SEMICOLON, TokenType.EXPRESSION_OPT, TokenType.SEMICOLON, TokenType.FOR_UPDATE_OPT, TokenType.CLOSE_BR, TokenType.STATEMENT)
       )
     );
     productions.put(
-      NonterminalToken.DIMS,
+      TokenType.FOR_STATEMENT_NO_SHORT_IF,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_SBR, TerminalToken.CLOSE_SBR),
-        Arrays.asList(NonterminalToken.DIMS, TerminalToken.OPEN_SBR, TerminalToken.CLOSE_SBR)
+        Arrays.asList(TokenType.FOR, TokenType.OPEN_BR, TokenType.FOR_INIT_OPT, TokenType.SEMICOLON, TokenType.EXPRESSION_OPT, TokenType.SEMICOLON, TokenType.FOR_UPDATE_OPT, TokenType.CLOSE_BR, TokenType.STATEMENT_NO_SHORT_IF)
       )
     );
     productions.put(
-      NonterminalToken.FIELD_ACCESS,
+      TokenType.FOR_INIT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.PRIMARY, TerminalToken.DOT, TerminalToken.IDENTIFIER),
-        Arrays.asList(TerminalToken.SUPER, TerminalToken.DOT, TerminalToken.IDENTIFIER)
+        Arrays.asList(TokenType.STATEMENT_EXPRESSION_LIST),
+        Arrays.asList(TokenType.LOCAL_VARIABLE_DECLARATION)
       )
     );
     productions.put(
-      NonterminalToken.METHOD_INVOCATION,
+      TokenType.FOR_UPDATE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.NAME, TerminalToken.OPEN_BR, NonterminalToken.ARGUMENT_LIST_OPT, TerminalToken.CLOSE_BR),
-        Arrays.asList(NonterminalToken.PRIMARY, TerminalToken.DOT, TerminalToken.IDENTIFIER, TerminalToken.OPEN_BR, NonterminalToken.ARGUMENT_LIST_OPT, TerminalToken.CLOSE_BR),
-        Arrays.asList(TerminalToken.SUPER, TerminalToken.DOT, TerminalToken.IDENTIFIER, TerminalToken.OPEN_BR, NonterminalToken.ARGUMENT_LIST_OPT, TerminalToken.CLOSE_BR)
+        Arrays.asList(TokenType.STATEMENT_EXPRESSION_LIST)
       )
     );
     productions.put(
-      NonterminalToken.ARRAY_ACCESS,
+      TokenType.STATEMENT_EXPRESSION_LIST,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.NAME, TerminalToken.OPEN_SBR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_SBR),
-        Arrays.asList(NonterminalToken.PRIMARY_NO_NEW_ARRAY, TerminalToken.OPEN_SBR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_SBR)
+        Arrays.asList(TokenType.STATEMENT_EXPRESSION),
+        Arrays.asList(TokenType.STATEMENT_EXPRESSION_LIST, TokenType.COMMA, TokenType.STATEMENT_EXPRESSION)
       )
     );
     productions.put(
-      NonterminalToken.POSTFIX_EXPRESSION,
+      TokenType.IDENTIFIER_OPT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.PRIMARY),
-        Arrays.asList(NonterminalToken.NAME),
-        Arrays.asList(NonterminalToken.POST_INCREMENT_EXPRESSION),
-        Arrays.asList(NonterminalToken.POST_DECREMENT_EXPRESSION)
+        Arrays.asList(),
+        Arrays.asList(TokenType.IDENTIFIER)
       )
     );
     productions.put(
-      NonterminalToken.POST_INCREMENT_EXPRESSION,
+      TokenType.BREAK_STATEMENT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.POSTFIX_EXPRESSION, TerminalToken.ASSIGN_INCREMENT)
+        Arrays.asList(TokenType.BREAK, TokenType.IDENTIFIER_OPT, TokenType.SEMICOLON)
       )
     );
     productions.put(
-      NonterminalToken.POST_DECREMENT_EXPRESSION,
+      TokenType.CONTINUE_STATEMENT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.POSTFIX_EXPRESSION, TerminalToken.ASSIGN_DECREMENT)
+        Arrays.asList(TokenType.CONTINUE, TokenType.IDENTIFIER_OPT, TokenType.SEMICOLON)
       )
     );
     productions.put(
-      NonterminalToken.UNARY_EXPRESSION,
+      TokenType.RETURN_STATEMENT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.PRE_INCREMENT_EXPRESSION),
-        Arrays.asList(NonterminalToken.PRE_DECREMENT_EXPRESSION),
-        Arrays.asList(TerminalToken.OP_PLUS, NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(TerminalToken.OP_MINUS, NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(NonterminalToken.UNARY_EXPRESSION_NOT_PLUS_MINUS)
+        Arrays.asList(TokenType.RETURN, TokenType.EXPRESSION_OPT, TokenType.SEMICOLON)
       )
     );
     productions.put(
-      NonterminalToken.PRE_INCREMENT_EXPRESSION,
+      TokenType.THROW_STATEMENT,
       Arrays.asList(
-        Arrays.asList(TerminalToken.ASSIGN_INCREMENT, NonterminalToken.UNARY_EXPRESSION)
+        Arrays.asList(TokenType.THROW, TokenType.EXPRESSION, TokenType.SEMICOLON)
       )
     );
     productions.put(
-      NonterminalToken.PRE_DECREMENT_EXPRESSION,
+      TokenType.SYNCHRONIZED_STATEMENT,
       Arrays.asList(
-        Arrays.asList(TerminalToken.ASSIGN_DECREMENT, NonterminalToken.UNARY_EXPRESSION)
+        Arrays.asList(TokenType.SYNCHRONIZED, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.BLOCK)
       )
     );
     productions.put(
-      NonterminalToken.UNARY_EXPRESSION_NOT_PLUS_MINUS,
+      TokenType.CATCHES_OPT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.POSTFIX_EXPRESSION),
-        Arrays.asList(TerminalToken.BITWISE_NOT, NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(TerminalToken.BOOL_OP_NOT, NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(NonterminalToken.CAST_EXPRESSION)
+        Arrays.asList(),
+        Arrays.asList(TokenType.CATCHES)
       )
     );
     productions.put(
-      NonterminalToken.CAST_EXPRESSION,
+      TokenType.TRY_STATEMENT,
       Arrays.asList(
-        Arrays.asList(TerminalToken.OPEN_BR, NonterminalToken.PRIMITIVE_TYPE, NonterminalToken.DIMS_OPT, TerminalToken.CLOSE_BR, NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(TerminalToken.OPEN_BR, NonterminalToken.EXPRESSION, TerminalToken.CLOSE_BR, NonterminalToken.UNARY_EXPRESSION_NOT_PLUS_MINUS),
-        Arrays.asList(TerminalToken.OPEN_BR, NonterminalToken.NAME, NonterminalToken.DIMS, TerminalToken.CLOSE_BR, NonterminalToken.UNARY_EXPRESSION_NOT_PLUS_MINUS)
+        Arrays.asList(TokenType.TRY, TokenType.BLOCK, TokenType.CATCHES),
+        Arrays.asList(TokenType.TRY, TokenType.BLOCK, TokenType.CATCHES_OPT, TokenType.FINALLY_CLAUSE)
       )
     );
     productions.put(
-      NonterminalToken.MULTIPLICATIVE_EXPRESSION,
+      TokenType.CATCHES,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(NonterminalToken.MULTIPLICATIVE_EXPRESSION, TerminalToken.STAR, NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(NonterminalToken.MULTIPLICATIVE_EXPRESSION, TerminalToken.OP_DIV, NonterminalToken.UNARY_EXPRESSION),
-        Arrays.asList(NonterminalToken.MULTIPLICATIVE_EXPRESSION, TerminalToken.OP_REMAINDER, NonterminalToken.UNARY_EXPRESSION)
+        Arrays.asList(TokenType.CATCH_CLAUSE),
+        Arrays.asList(TokenType.CATCHES, TokenType.CATCH_CLAUSE)
       )
     );
     productions.put(
-      NonterminalToken.ADDITIVE_EXPRESSION,
+      TokenType.CATCH_CLAUSE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.MULTIPLICATIVE_EXPRESSION),
-        Arrays.asList(NonterminalToken.ADDITIVE_EXPRESSION, TerminalToken.OP_PLUS, NonterminalToken.MULTIPLICATIVE_EXPRESSION),
-        Arrays.asList(NonterminalToken.ADDITIVE_EXPRESSION, TerminalToken.OP_MINUS, NonterminalToken.MULTIPLICATIVE_EXPRESSION)
+        Arrays.asList(TokenType.CATCH, TokenType.OPEN_BR, TokenType.FORMAL_PARAMETER, TokenType.CLOSE_BR, TokenType.BLOCK)
       )
     );
     productions.put(
-      NonterminalToken.SHIFT_EXPRESSION,
+      TokenType.FINALLY_CLAUSE,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.ADDITIVE_EXPRESSION),
-        Arrays.asList(NonterminalToken.SHIFT_EXPRESSION, TerminalToken.OP_LEFT_SHIFT, NonterminalToken.ADDITIVE_EXPRESSION),
-        Arrays.asList(NonterminalToken.SHIFT_EXPRESSION, TerminalToken.OP_RIGHT_SHIFT, NonterminalToken.ADDITIVE_EXPRESSION),
-        Arrays.asList(NonterminalToken.SHIFT_EXPRESSION, TerminalToken.OP_UNSIGNED_RIGHT_SHIFT, NonterminalToken.ADDITIVE_EXPRESSION)
+        Arrays.asList(TokenType.FINALLY, TokenType.BLOCK)
       )
     );
     productions.put(
-      NonterminalToken.RELATIONAL_EXPRESSION,
+      TokenType.PRIMARY,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.SHIFT_EXPRESSION),
-        Arrays.asList(NonterminalToken.RELATIONAL_EXPRESSION, TerminalToken.COMP_LESS_THAN, NonterminalToken.SHIFT_EXPRESSION),
-        Arrays.asList(NonterminalToken.RELATIONAL_EXPRESSION, TerminalToken.COMP_GREATER_THAN, NonterminalToken.SHIFT_EXPRESSION),
-        Arrays.asList(NonterminalToken.RELATIONAL_EXPRESSION, TerminalToken.COMP_LESS_THAN_EQ, NonterminalToken.SHIFT_EXPRESSION),
-        Arrays.asList(NonterminalToken.RELATIONAL_EXPRESSION, TerminalToken.COMP_GREATER_THAN_EQ, NonterminalToken.SHIFT_EXPRESSION),
-        Arrays.asList(NonterminalToken.RELATIONAL_EXPRESSION, TerminalToken.INSTANCEOF, NonterminalToken.REFERENCE_TYPE)
+        Arrays.asList(TokenType.PRIMARY_NO_NEW_ARRAY),
+        Arrays.asList(TokenType.ARRAY_CREATION_EXPRESSION)
       )
     );
     productions.put(
-      NonterminalToken.EQUALITY_EXPRESSION,
+      TokenType.PRIMARY_NO_NEW_ARRAY,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.RELATIONAL_EXPRESSION),
-        Arrays.asList(NonterminalToken.EQUALITY_EXPRESSION, TerminalToken.COMP_EQ, NonterminalToken.RELATIONAL_EXPRESSION),
-        Arrays.asList(NonterminalToken.EQUALITY_EXPRESSION, TerminalToken.COMP_NOT_EQ, NonterminalToken.RELATIONAL_EXPRESSION)
+        Arrays.asList(TokenType.LITERAL),
+        Arrays.asList(TokenType.THIS),
+        Arrays.asList(TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR),
+        Arrays.asList(TokenType.CLASS_INSTANCE_CREATION_EXPRESSION),
+        Arrays.asList(TokenType.FIELD_ACCESS),
+        Arrays.asList(TokenType.METHOD_INVOCATION),
+        Arrays.asList(TokenType.ARRAY_ACCESS)
       )
     );
     productions.put(
-      NonterminalToken.AND_EXPRESSION,
+      TokenType.CLASS_INSTANCE_CREATION_EXPRESSION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.EQUALITY_EXPRESSION),
-        Arrays.asList(NonterminalToken.AND_EXPRESSION, TerminalToken.BITWISE_AND, NonterminalToken.EQUALITY_EXPRESSION)
+        Arrays.asList(TokenType.NEW, TokenType.CLASS_TYPE, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR)
       )
     );
     productions.put(
-      NonterminalToken.EXCLUSIVE_OR_EXPRESSION,
+      TokenType.ARGUMENT_LIST,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.AND_EXPRESSION),
-        Arrays.asList(NonterminalToken.EXCLUSIVE_OR_EXPRESSION, TerminalToken.BITWISE_XOR, NonterminalToken.AND_EXPRESSION)
+        Arrays.asList(TokenType.EXPRESSION),
+        Arrays.asList(TokenType.ARGUMENT_LIST, TokenType.COMMA, TokenType.EXPRESSION)
       )
     );
     productions.put(
-      NonterminalToken.INCLUSIVE_OR_EXPRESSION,
+      TokenType.DIMS_OPT,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.EXCLUSIVE_OR_EXPRESSION),
-        Arrays.asList(NonterminalToken.INCLUSIVE_OR_EXPRESSION, TerminalToken.BITWISE_OR, NonterminalToken.EXCLUSIVE_OR_EXPRESSION)
+        Arrays.asList(),
+        Arrays.asList(TokenType.DIMS)
       )
     );
     productions.put(
-      NonterminalToken.CONDITIONAL_AND_EXPRESSION,
+      TokenType.ARRAY_CREATION_EXPRESSION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.INCLUSIVE_OR_EXPRESSION),
-        Arrays.asList(NonterminalToken.CONDITIONAL_AND_EXPRESSION, TerminalToken.BOOL_OP_AND, NonterminalToken.INCLUSIVE_OR_EXPRESSION)
+        Arrays.asList(TokenType.NEW, TokenType.PRIMITIVE_TYPE, TokenType.DIM_EXPRS, TokenType.DIMS_OPT),
+        Arrays.asList(TokenType.NEW, TokenType.CLASS_OR_INTERFACE_TYPE, TokenType.DIM_EXPRS, TokenType.DIMS_OPT)
       )
     );
     productions.put(
-      NonterminalToken.CONDITIONAL_OR_EXPRESSION,
+      TokenType.DIM_EXPRS,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CONDITIONAL_AND_EXPRESSION),
-        Arrays.asList(NonterminalToken.CONDITIONAL_OR_EXPRESSION, TerminalToken.BOOL_OP_OR, NonterminalToken.CONDITIONAL_AND_EXPRESSION)
+        Arrays.asList(TokenType.DIM_EXPR),
+        Arrays.asList(TokenType.DIM_EXPRS, TokenType.DIM_EXPR)
       )
     );
     productions.put(
-      NonterminalToken.CONDITIONAL_EXPRESSION,
+      TokenType.DIM_EXPR,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CONDITIONAL_OR_EXPRESSION),
-        Arrays.asList(NonterminalToken.CONDITIONAL_OR_EXPRESSION, TerminalToken.QUESTION_MARK, NonterminalToken.EXPRESSION, TerminalToken.COLON, NonterminalToken.CONDITIONAL_EXPRESSION)
+        Arrays.asList(TokenType.OPEN_SBR, TokenType.EXPRESSION, TokenType.CLOSE_SBR)
       )
     );
     productions.put(
-      NonterminalToken.ASSIGNMENT_EXPRESSION,
+      TokenType.DIMS,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.CONDITIONAL_EXPRESSION),
-        Arrays.asList(NonterminalToken.ASSIGNMENT)
+        Arrays.asList(TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
+        Arrays.asList(TokenType.DIMS, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
       )
     );
     productions.put(
-      NonterminalToken.ASSIGNMENT,
+      TokenType.FIELD_ACCESS,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.LEFT_HAND_SIDE, NonterminalToken.ASSIGNMENT_OPERATOR, NonterminalToken.ASSIGNMENT_EXPRESSION)
+        Arrays.asList(TokenType.PRIMARY, TokenType.DOT, TokenType.IDENTIFIER),
+        Arrays.asList(TokenType.SUPER, TokenType.DOT, TokenType.IDENTIFIER)
       )
     );
     productions.put(
-      NonterminalToken.LEFT_HAND_SIDE,
+      TokenType.METHOD_INVOCATION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.NAME),
-        Arrays.asList(NonterminalToken.FIELD_ACCESS),
-        Arrays.asList(NonterminalToken.ARRAY_ACCESS)
+        Arrays.asList(TokenType.NAME, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR),
+        Arrays.asList(TokenType.PRIMARY, TokenType.DOT, TokenType.IDENTIFIER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR),
+        Arrays.asList(TokenType.SUPER, TokenType.DOT, TokenType.IDENTIFIER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR)
       )
     );
     productions.put(
-      NonterminalToken.ASSIGNMENT_OPERATOR,
+      TokenType.ARRAY_ACCESS,
       Arrays.asList(
-        Arrays.asList(TerminalToken.ASSIGN)
+        Arrays.asList(TokenType.NAME, TokenType.OPEN_SBR, TokenType.EXPRESSION, TokenType.CLOSE_SBR),
+        Arrays.asList(TokenType.PRIMARY_NO_NEW_ARRAY, TokenType.OPEN_SBR, TokenType.EXPRESSION, TokenType.CLOSE_SBR)
       )
     );
     productions.put(
-      NonterminalToken.EXPRESSION,
+      TokenType.POSTFIX_EXPRESSION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.ASSIGNMENT_EXPRESSION)
+        Arrays.asList(TokenType.PRIMARY),
+        Arrays.asList(TokenType.NAME),
+        Arrays.asList(TokenType.POST_INCREMENT_EXPRESSION),
+        Arrays.asList(TokenType.POST_DECREMENT_EXPRESSION)
       )
     );
     productions.put(
-      NonterminalToken.CONSTANT_EXPRESSION,
+      TokenType.POST_INCREMENT_EXPRESSION,
       Arrays.asList(
-        Arrays.asList(NonterminalToken.EXPRESSION)
+        Arrays.asList(TokenType.POSTFIX_EXPRESSION, TokenType.ASSIGN_INCREMENT)
       )
     );
-    HashSet<TerminalToken> terminals = new HashSet(Arrays.asList(TerminalToken.values()));
-    HashSet<NonterminalToken> nonterminals = new HashSet(Arrays.asList(NonterminalToken.values()));
+    productions.put(
+      TokenType.POST_DECREMENT_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.POSTFIX_EXPRESSION, TokenType.ASSIGN_DECREMENT)
+      )
+    );
+    productions.put(
+      TokenType.UNARY_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.PRE_INCREMENT_EXPRESSION),
+        Arrays.asList(TokenType.PRE_DECREMENT_EXPRESSION),
+        Arrays.asList(TokenType.OP_PLUS, TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.OP_MINUS, TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.UNARY_EXPRESSION_NOT_PLUS_MINUS)
+      )
+    );
+    productions.put(
+      TokenType.PRE_INCREMENT_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.ASSIGN_INCREMENT, TokenType.UNARY_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.PRE_DECREMENT_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.ASSIGN_DECREMENT, TokenType.UNARY_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.UNARY_EXPRESSION_NOT_PLUS_MINUS,
+      Arrays.asList(
+        Arrays.asList(TokenType.POSTFIX_EXPRESSION),
+        Arrays.asList(TokenType.BITWISE_NOT, TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.BOOL_OP_NOT, TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.CAST_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.CAST_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.OPEN_BR, TokenType.PRIMITIVE_TYPE, TokenType.DIMS_OPT, TokenType.CLOSE_BR, TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.UNARY_EXPRESSION_NOT_PLUS_MINUS),
+        Arrays.asList(TokenType.OPEN_BR, TokenType.NAME, TokenType.DIMS, TokenType.CLOSE_BR, TokenType.UNARY_EXPRESSION_NOT_PLUS_MINUS)
+      )
+    );
+    productions.put(
+      TokenType.MULTIPLICATIVE_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.MULTIPLICATIVE_EXPRESSION, TokenType.STAR, TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.MULTIPLICATIVE_EXPRESSION, TokenType.OP_DIV, TokenType.UNARY_EXPRESSION),
+        Arrays.asList(TokenType.MULTIPLICATIVE_EXPRESSION, TokenType.OP_REMAINDER, TokenType.UNARY_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.ADDITIVE_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.MULTIPLICATIVE_EXPRESSION),
+        Arrays.asList(TokenType.ADDITIVE_EXPRESSION, TokenType.OP_PLUS, TokenType.MULTIPLICATIVE_EXPRESSION),
+        Arrays.asList(TokenType.ADDITIVE_EXPRESSION, TokenType.OP_MINUS, TokenType.MULTIPLICATIVE_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.SHIFT_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.ADDITIVE_EXPRESSION),
+        Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_LEFT_SHIFT, TokenType.ADDITIVE_EXPRESSION),
+        Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_RIGHT_SHIFT, TokenType.ADDITIVE_EXPRESSION),
+        Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_UNSIGNED_RIGHT_SHIFT, TokenType.ADDITIVE_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.RELATIONAL_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.SHIFT_EXPRESSION),
+        Arrays.asList(TokenType.RELATIONAL_EXPRESSION, TokenType.COMP_LESS_THAN, TokenType.SHIFT_EXPRESSION),
+        Arrays.asList(TokenType.RELATIONAL_EXPRESSION, TokenType.COMP_GREATER_THAN, TokenType.SHIFT_EXPRESSION),
+        Arrays.asList(TokenType.RELATIONAL_EXPRESSION, TokenType.COMP_LESS_THAN_EQ, TokenType.SHIFT_EXPRESSION),
+        Arrays.asList(TokenType.RELATIONAL_EXPRESSION, TokenType.COMP_GREATER_THAN_EQ, TokenType.SHIFT_EXPRESSION),
+        Arrays.asList(TokenType.RELATIONAL_EXPRESSION, TokenType.INSTANCEOF, TokenType.REFERENCE_TYPE)
+      )
+    );
+    productions.put(
+      TokenType.EQUALITY_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.RELATIONAL_EXPRESSION),
+        Arrays.asList(TokenType.EQUALITY_EXPRESSION, TokenType.COMP_EQ, TokenType.RELATIONAL_EXPRESSION),
+        Arrays.asList(TokenType.EQUALITY_EXPRESSION, TokenType.COMP_NOT_EQ, TokenType.RELATIONAL_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.AND_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.EQUALITY_EXPRESSION),
+        Arrays.asList(TokenType.AND_EXPRESSION, TokenType.BITWISE_AND, TokenType.EQUALITY_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.EXCLUSIVE_OR_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.AND_EXPRESSION),
+        Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION, TokenType.BITWISE_XOR, TokenType.AND_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.INCLUSIVE_OR_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION),
+        Arrays.asList(TokenType.INCLUSIVE_OR_EXPRESSION, TokenType.BITWISE_OR, TokenType.EXCLUSIVE_OR_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.CONDITIONAL_AND_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.INCLUSIVE_OR_EXPRESSION),
+        Arrays.asList(TokenType.CONDITIONAL_AND_EXPRESSION, TokenType.BOOL_OP_AND, TokenType.INCLUSIVE_OR_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.CONDITIONAL_OR_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.CONDITIONAL_AND_EXPRESSION),
+        Arrays.asList(TokenType.CONDITIONAL_OR_EXPRESSION, TokenType.BOOL_OP_OR, TokenType.CONDITIONAL_AND_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.CONDITIONAL_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.CONDITIONAL_OR_EXPRESSION),
+        Arrays.asList(TokenType.CONDITIONAL_OR_EXPRESSION, TokenType.QUESTION_MARK, TokenType.EXPRESSION, TokenType.COLON, TokenType.CONDITIONAL_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.ASSIGNMENT_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.CONDITIONAL_EXPRESSION),
+        Arrays.asList(TokenType.ASSIGNMENT)
+      )
+    );
+    productions.put(
+      TokenType.ASSIGNMENT,
+      Arrays.asList(
+        Arrays.asList(TokenType.LEFT_HAND_SIDE, TokenType.ASSIGNMENT_OPERATOR, TokenType.ASSIGNMENT_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.LEFT_HAND_SIDE,
+      Arrays.asList(
+        Arrays.asList(TokenType.NAME),
+        Arrays.asList(TokenType.FIELD_ACCESS),
+        Arrays.asList(TokenType.ARRAY_ACCESS)
+      )
+    );
+    productions.put(
+      TokenType.ASSIGNMENT_OPERATOR,
+      Arrays.asList(
+        Arrays.asList(TokenType.ASSIGN)
+      )
+    );
+    productions.put(
+      TokenType.EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.ASSIGNMENT_EXPRESSION)
+      )
+    );
+    productions.put(
+      TokenType.CONSTANT_EXPRESSION,
+      Arrays.asList(
+        Arrays.asList(TokenType.EXPRESSION)
+      )
+    );
+    HashSet<TokenType> terminals = new HashSet(TerminalToken.getAllTokens());
+    HashSet<TokenType> nonterminals = new HashSet(NonterminalToken.getAllTokens());
     grammar = new Grammar(
       terminals,
       nonterminals,
       productions,
-      NonterminalToken.GOAL
+      TokenType.GOAL
     );
   }
 }

@@ -3,10 +3,10 @@ package joos.scanner;
 import java.lang.Exception;
 import joos.scanner.NFA;
 import joos.commons.TerminalToken;
+import joos.commons.TokenType;
 
 /**
  * NFA for string literals.
- * TODO: the accepting state char index will be one more than it should be!
  */
 public class IdentifierNFA implements NFA {
 
@@ -51,7 +51,7 @@ public class IdentifierNFA implements NFA {
 
 	public boolean isAccepting() {
 		// If we've accepted the last char in this literal then this NFA is in the accepting state.
-		return mState == State.END;
+		return mState == State.FIRST_ALPHABET_CHAR || mState == State.ALPHANUMERIC_CHARACTERS;
 	}
 
 	public void reset() {
@@ -61,7 +61,7 @@ public class IdentifierNFA implements NFA {
 
 	public TerminalToken[] getTokens() {
 		TerminalToken[] tokens = new TerminalToken[1];
-		TerminalToken identifier = TerminalToken.IDENTIFIER;
+		TerminalToken identifier = TerminalToken.getToken(TokenType.IDENTIFIER);
 		identifier.setRawValue(mName);
 		tokens[0] = identifier;
 		return tokens;

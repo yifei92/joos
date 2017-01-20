@@ -102,6 +102,8 @@ public class Token {
 			// Space
 			mTokens.put(TokenType.SPACE, new Token(TokenType.SPACE, " "));
 			mTokens.put(TokenType.EOF, new Token(TokenType.EOF, "eof"));
+			mTokens.put(TokenType.NEW_LINE, new Token(TokenType.NEW_LINE, System.lineSeparator()));
+			mTokens.put(TokenType.TAB, new Token(TokenType.TAB, "\t"));
 		}
 		Token token = mTokens.get(tokenType);
 		return new Token(token.mType, token.mRawValue);

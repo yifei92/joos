@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.Exception;
+import java.lang.Math;
 
 public class Scanner {
 
@@ -103,7 +104,8 @@ public class Scanner {
 			if (allNFAsInActive()) {
 				if (mLastAcceptedTokens != null) {
 					for (Token acceptedToken : mLastAcceptedTokens) {
-						if (acceptedToken.mType != TokenType.SPACE) {
+						if (acceptedToken.mType != TokenType.SPACE &&
+							acceptedToken.mType != TokenType.TAB) {
 							tokens.add(acceptedToken);
 						}
 					}
@@ -111,7 +113,11 @@ public class Scanner {
 		            }
 					currentCharIndex = mLastAcceptedEndIndex + 1;
 				} else {
-					throw new InvalidSyntaxException("Error at char " + currentCharIndex);
+					String errorCodeChunk = 
+						input.substring(
+							currentCharIndex,
+							Math.min(input.length(), currentCharIndex + 5));
+					throw new InvalidSyntaxException("Error at char " + currentCharIndex + " " + errorCodeChunk);
 				}
 				reset();
 			} else {

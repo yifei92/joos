@@ -7,12 +7,16 @@ import joos.commons.TerminalToken;
 import joos.commons.TokenType;
 
 /**
- * NFA for int literals
+ * NFA for float literals
+ * Valid format is either
+ * 1
+ * or
+ * 1.1f
  */
-public class IntegerLiteralNFA implements NFA {
+public class FloatingPointLiteralNFA implements NFA {
 
 	// Specifies what has already been consumed by this NFA
-	private enum State { START, INTEGER, END };
+	private enum State { START, WHOLE_INTEGER, DOT,  END };
 	private State mState = State.START;
 	private String mInteger = "";
 

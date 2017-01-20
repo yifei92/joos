@@ -43,7 +43,7 @@ public class Scanner {
 						nfa = new IdentifierNFA();
 						break;
 					case FLOATING_POINT_LITERAL:
-						nfa = new IntegerLiteralNFA();
+						nfa = new FloatingPointLiteralNFA();
 						break;
 				}
 				if (nfa == null &&

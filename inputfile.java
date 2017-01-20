@@ -1,3 +1,5 @@
+package com.test.blah;
+
 public class Main { 
 	public static void main(String [] args) { 
 		short a;

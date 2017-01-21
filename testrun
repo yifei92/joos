@@ -1,0 +1,7 @@
+#!/bin/bash
+gradle build
+for i in {1..60}
+do
+  echo "test $i"
+  java -jar build/libs/joos-1.0.jar test/$i.java
+done

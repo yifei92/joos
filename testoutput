@@ -1,0 +1,197 @@
+:compileJava UP-TO-DATE
+:processResources UP-TO-DATE
+:classes UP-TO-DATE
+:jar UP-TO-DATE
+:startScripts UP-TO-DATE
+:distTar UP-TO-DATE
+:distZip UP-TO-DATE
+:assemble UP-TO-DATE
+:compileTestJava UP-TO-DATE
+:processTestResources UP-TO-DATE
+:testClasses UP-TO-DATE
+:test UP-TO-DATE
+:check UP-TO-DATE
+:build UP-TO-DATE
+
+BUILD SUCCESSFUL
+
+Total time: 0.631 secs
+test 1
+
+SUCCESS
+test 2
+
+ERROR
+test 3
+
+SUCCESS
+test 4
+
+ERROR
+test 5
+
+SUCCESS
+test 6
+
+SUCCESS
+test 7
+
+SUCCESS
+test 8
+
+SUCCESS
+test 9
+
+SUCCESS
+test 10
+
+SUCCESS
+test 11
+
+SUCCESS
+test 12
+
+SUCCESS
+test 13
+
+ERROR
+test 14
+
+SUCCESS
+test 15
+
+SUCCESS
+test 16
+
+SUCCESS
+test 17
+
+SUCCESS
+test 18
+
+SUCCESS
+test 19
+
+SUCCESS
+test 20
+
+SUCCESS
+test 21
+
+SUCCESS
+test 22
+
+SUCCESS
+test 23
+
+SUCCESS
+test 24
+
+SUCCESS
+test 25
+
+SUCCESS
+test 26
+
+ERROR
+test 27
+
+SUCCESS
+test 28
+
+SUCCESS
+test 29
+
+SUCCESS
+test 30
+
+SUCCESS
+test 31
+
+ERROR
+test 32
+
+SUCCESS
+test 33
+
+SUCCESS
+test 34
+
+SUCCESS
+test 35
+
+SUCCESS
+test 36
+
+SUCCESS
+test 37
+
+SUCCESS
+test 38
+
+SUCCESS
+test 39
+
+SUCCESS
+test 40
+
+SUCCESS
+test 41
+
+SUCCESS
+test 42
+
+SUCCESS
+test 43
+
+SUCCESS
+test 44
+
+SUCCESS
+test 45
+
+SUCCESS
+test 46
+
+SUCCESS
+test 47
+
+SUCCESS
+test 48
+
+SUCCESS
+test 49
+Error at char 66 "\'\\
+test 50
+
+SUCCESS
+test 51
+
+ERROR
+test 52
+
+ERROR
+test 53
+
+SUCCESS
+test 54
+
+SUCCESS
+test 55
+
+SUCCESS
+test 56
+
+SUCCESS
+test 57
+
+SUCCESS
+test 58
+
+SUCCESS
+test 59
+
+SUCCESS
+test 60
+
+SUCCESS

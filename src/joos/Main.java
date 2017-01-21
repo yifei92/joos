@@ -35,9 +35,9 @@ public class Main {
 
     	try {
     		List<TerminalToken> tokens = scanner.scan(programString);
-            /*for (TerminalToken tok : tokens) {
+            for (TerminalToken tok : tokens) {
                 System.out.print(tok.mRawValue + " ");
-            }*/
+            }
             System.out.println("");
     		ParseTreeNode parseTree = parser.parse(tokens);
     		weeder.weed(parseTree);

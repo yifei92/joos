@@ -16,182 +16,302 @@
 BUILD SUCCESSFUL
 
 Total time: 0.631 secs
-test 1
-
+Test 1 _________________________________
+public class A extends java . lang . Thread { public A ( ) { } } eof 
 SUCCESS
-test 2
 
+
+Test 2 _________________________________
+public class A implements java . io . Serializable { public A ( ) { } int x ; } eof 
+SUCCESS
+
+
+Test 3 _________________________________
+public class A { public A ( ) { } public static int m ( ) { return 42 ; } } eof 
+SUCCESS
+
+
+Test 4 _________________________________
+import java . util . Vector ; public class A { public A ( ) { } protected Vector c ; } eof 
+SUCCESS
+
+
+Test 5 _________________________________
+import java . util . * ; public class A { public A ( ) { } protected Vector c ; } eof 
+SUCCESS
+
+
+Test 6 _________________________________
+package dovs . joos . features ; public class A { public A ( ) { } protected int x ; } eof 
+SUCCESS
+
+
+Test 7 _________________________________
+public interface A { } eof 
+SUCCESS
+
+
+Test 8 _________________________________
+public class A { protected static int x ; } eof 
+SUCCESS
+
+
+Test 9 _________________________________
+public class A { public A ( ) { } public int m ( java . util . Vector x ) { return x . size ( ) ; } } eof 
+SUCCESS
+
+
+Test 10 _________________________________
+public class A { public A ( ) { } protected int x ; public int m ( ) { return x ; } } eof 
+SUCCESS
+
+
+Test 11 _________________________________
+public class A { public A ( ) { } public int m1 ( ) { return 42 ; } public int m2 ( ) { return m1 ( ) ; } } eof 
+SUCCESS
+
+
+Test 12 _________________________________
+public class A { public A ( ) { } public int m ( ) { return java . util . Calendar . MONDAY ; } } eof 
+SUCCESS
+
+
+Test 13 _________________________________
+public class A { public A ( ) { } public void m2 ( ) { java . lang . System . exit ( ) ; } } eof 
 ERROR
-test 3
 
+
+Test 14 _________________________________
+public class A { public A ( ) { } public int x ; public void m ( ) { new A ( ) . x = 42 ; } } eof 
 SUCCESS
-test 4
 
+
+Test 15 _________________________________
+public class A { public int m1 ( int x ) { return 42 ; } public int m1 ( boolean x ) { return 87 ; } public int m2 ( ) { return this . m1 ( true ) ; } } eof 
+SUCCESS
+
+
+Test 16 _________________________________
+public class A { public A ( ) { } public int m ( ) { int [ ] x = new int [ 42 ] ; return x . length ; } } eof 
+SUCCESS
+
+
+Test 17 _________________________________
+public class A { public A ( ) { } } eof 
+SUCCESS
+
+
+Test 18 _________________________________
+public class A { public A ( ) { } public int m ( ) { return 42 ; } } eof 
+SUCCESS
+
+
+Test 19 _________________________________
+public class A { public A ( ) { } public int x ; } eof 
+SUCCESS
+
+
+Test 20 _________________________________
+public class A { public A ( ) { } protected int m ( ) { return 42 ; } } eof 
+SUCCESS
+
+
+Test 21 _________________________________
+public abstract class A { public abstract int m ( ) ; } eof 
+SUCCESS
+
+
+Test 22 _________________________________
+public final class A { public A ( ) { } } eof 
+SUCCESS
+
+
+Test 23 _________________________________
+public class A { public A ( ) { } public final int m ( ) { return 42 ; } } eof 
+SUCCESS
+
+
+Test 24 _________________________________
+public class A { protected A ( ) { } } eof 
+SUCCESS
+
+
+Test 25 _________________________________
+public class A { public static native int m ( int i ) ; } eof 
+SUCCESS
+
+
+Test 26 _________________________________
+public class A { public A ( ) { /* super ( ) ; */ } } eof 
 ERROR
-test 5
 
+
+Test 27 _________________________________
+public class A { public A ( ) { } protected int x = 42 ; } eof 
 SUCCESS
-test 6
 
+
+Test 28 _________________________________
+public class A { public A ( ) { } public A ( int x ) { } } eof 
 SUCCESS
-test 7
 
+
+Test 29 _________________________________
+public class A { public A ( ) { } public int m ( ) { int x = 42 ; int y = 87 ; { int z = x + y ; return z ; } } } eof 
 SUCCESS
-test 8
 
+
+Test 30 _________________________________
+public class A { public A ( ) { } public int m ( int x ) { if ( x == 42 ) return 87 ; else return 17 ; } } eof 
 SUCCESS
-test 9
 
-SUCCESS
-test 10
 
-SUCCESS
-test 11
-
-SUCCESS
-test 12
-
-SUCCESS
-test 13
-
+Test 31 _________________________________
+public class A { public A ( ) { } public void m ( ) { /* return ; */ } } eof 
 ERROR
-test 14
 
+
+Test 32 _________________________________
+public class A { public A ( ) { } public void m ( ) { int x = 42 ; x = x + 1 ; int y = x + 87 ; } } eof 
 SUCCESS
-test 15
 
+
+Test 33 _________________________________
+public class A { public A ( ) { } public int m ( int x ) { int y = 0 ; if ( x == 0 ) y = 42 ; else y = 87 ; return y ; } } eof 
 SUCCESS
-test 16
 
+
+Test 34 _________________________________
+public class A { public A ( ) { } public int m ( int x ) { while ( x > 0 ) x = x - 1 ; return x ; } } eof 
 SUCCESS
-test 17
 
+
+Test 35 _________________________________
+public class A { public A ( ) { } public int m ( int x ) { int y = 0 ; for ( int i = x ; i > 0 ; i = i - 1 ) y = y + 1 ; return y ; } } eof 
 SUCCESS
-test 18
 
+
+Test 36 _________________________________
+public class A { public A ( ) { } protected boolean x ; } eof 
 SUCCESS
-test 19
 
+
+Test 37 _________________________________
+public class A { public A ( ) { } protected int x ; } eof 
 SUCCESS
-test 20
 
+
+Test 38 _________________________________
+public class A { public A ( ) { } protected char x ; } eof 
 SUCCESS
-test 21
 
+
+Test 39 _________________________________
+public class A { public A ( ) { } protected byte x ; } eof 
 SUCCESS
-test 22
 
+
+Test 40 _________________________________
+public class A { public A ( ) { } protected short x ; } eof 
 SUCCESS
-test 23
 
+
+Test 41 _________________________________
+public class A { public A ( ) { } protected int [ ] x ; } eof 
 SUCCESS
-test 24
 
+
+Test 42 _________________________________
+public class A { public A ( ) { } public int [ ] foo ( ) { return null ; } } eof 
 SUCCESS
-test 25
 
+
+Test 43 _________________________________
+public class A { public A ( ) { } protected int x = 42 ; } eof 
 SUCCESS
-test 26
 
-ERROR
-test 27
 
+Test 44 _________________________________
+public class A { public A ( ) { } protected boolean x = false ; } eof 
 SUCCESS
-test 28
 
+
+Test 45 _________________________________
+public class A { public A ( ) { } protected String x = " foo " ; } eof 
 SUCCESS
-test 29
 
+
+Test 46 _________________________________
+public class A { public A ( ) { } protected A x = null ; } eof 
 SUCCESS
-test 30
 
+
+Test 47 _________________________________
+public class A { public A ( ) { } public A returnThis ( ) { return this ; } } eof 
 SUCCESS
-test 31
 
-ERROR
-test 32
 
+Test 48 _________________________________
+public class A { public A ( ) { } protected char x = ' a ' ; } eof 
 SUCCESS
-test 33
 
-SUCCESS
-test 34
 
-SUCCESS
-test 35
-
-SUCCESS
-test 36
-
-SUCCESS
-test 37
-
-SUCCESS
-test 38
-
-SUCCESS
-test 39
-
-SUCCESS
-test 40
-
-SUCCESS
-test 41
-
-SUCCESS
-test 42
-
-SUCCESS
-test 43
-
-SUCCESS
-test 44
-
-SUCCESS
-test 45
-
-SUCCESS
-test 46
-
-SUCCESS
-test 47
-
-SUCCESS
-test 48
-
-SUCCESS
-test 49
+Test 49 _________________________________
 Error at char 66 "\'\\
-test 50
 
+
+Test 50 _________________________________
+public class A { public A ( ) { } public void m ( ) { java . util . Vector x = null ; } } eof 
 SUCCESS
-test 51
 
+
+Test 51 _________________________________
+/* This is a comment . */ // This is another comment . public class A { public A ( ) { } } eof 
 ERROR
-test 52
 
+
+Test 52 _________________________________
+/** A Javadoc comment starts with a slash and two asterisks . */ public class A { public A ( ) { } } eof 
 ERROR
-test 53
 
-SUCCESS
-test 54
 
+Test 53 _________________________________
+public class A { public A ( ) { } public int m ( int x ) { return - 2 * x + 87 % x - ( x / 7 ) ; } } eof 
 SUCCESS
-test 55
 
-SUCCESS
-test 56
 
+Test 54 _________________________________
+public class A { public A ( ) { } public boolean m ( int x ) { return ( x < 87 ) && ( x > 42 ) && ( x <= 86 ) && ( x >= 43 ) && ( x == 51 ) && ( x != 52 ) ; } } eof 
 SUCCESS
-test 57
 
-SUCCESS
-test 58
 
+Test 55 _________________________________
+public class A { public A ( ) { } public boolean m ( boolean x ) { return ( x & true ) | ! x ; } } eof 
 SUCCESS
-test 59
 
-SUCCESS
-test 60
 
+Test 56 _________________________________
+public class A { public A ( ) { } public String m ( int x ) { return " foo " + x + true + null ; } } eof 
 SUCCESS
+
+
+Test 57 _________________________________
+public class A { public A ( ) { } public boolean m ( boolean x ) { return ( x && true ) || x ; } } eof 
+SUCCESS
+
+
+Test 58 _________________________________
+public class A { public A ( ) { } public boolean m ( Object x ) { return x instanceof A ; } } eof 
+SUCCESS
+
+
+Test 59 _________________________________
+public class A { public A ( ) { } public int m ( byte x ) { return ( int ) x ; } } eof 
+SUCCESS
+
+
+Test 60 _________________________________
+public class A { public A ( ) { } public A m ( Object x ) { return ( A ) x ; } } eof 
+SUCCESS
+
+

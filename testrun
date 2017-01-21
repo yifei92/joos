@@ -2,6 +2,7 @@
 gradle build
 for i in {1..60}
 do
-  echo "test $i"
+  printf "Test $i _________________________________\n"
   java -jar build/libs/joos-1.0.jar test/$i.java
+  printf "\n\n"
 done

@@ -4,66 +4,68 @@ import java.lang.Exception;
 import joos.scanner.NFA;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
+import java.lang.String;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
- * NFA for string literals.
+ * NFA for identifiers
  */
-public class IdentifierNFA implements NFA {
+public class IdentifierNFA extends NFA {
 
+	private static final int STATE_START = 0;
+	private static final int STATE_IDENTIFIER = 1;
 	// Specifies what has already been consumed by this NFA
-	private enum State { START, FIRST_ALPHABET_CHAR, ALPHANUMERIC_CHARACTERS, END };
-	private State mState = State.START;
+	private String mValue = "";
 
-	private String mName = "";
-
-	public boolean consume(char newChar) {
-		switch (mState) {
-			case START:
-				if (Character.isLetter(newChar)) {
-					mState = State.FIRST_ALPHABET_CHAR;
-					mName += newChar;
-					return true;
-				}
+	protected Transitions getTransitions(int state) {
+		Transitions transitions = null;
+		Map<Character, Integer> table = new HashMap<>();
+		switch (state) {
+			case STATE_START:
+				TransitionTableUtil.putAllLetters(table, STATE_IDENTIFIER);
 				break;
-			case FIRST_ALPHABET_CHAR:
-				if (Character.isLetter(newChar) || Character.isDigit(newChar)) {
-					mState = State.ALPHANUMERIC_CHARACTERS;
-					mName += newChar;
-					return true;
-				} else {
-					mState = State.END;
-					return true;
-				}
-			case ALPHANUMERIC_CHARACTERS:
-				if (Character.isLetter(newChar) || Character.isDigit(newChar)) {
-					mName += newChar;
-					return true;
-				} else {
-					mState = State.END;
-					return true;
-				}
-			case END:
-			default:
-				return false;
+			case STATE_IDENTIFIER:
+				// Allow for all letters and digits
+				TransitionTableUtil.putAllDigits(table, STATE_IDENTIFIER);
+				TransitionTableUtil.putAllLetters(table, STATE_IDENTIFIER);
+				break;
 		}
-		return false;
+		return new Transitions(state, table);
 	}
 
-	public boolean isAccepting() {
-		// If we've accepted the last char in this literal then this NFA is in the accepting state.
-		return mState == State.FIRST_ALPHABET_CHAR || mState == State.ALPHANUMERIC_CHARACTERS;
+	protected Set<Integer> getStates() {
+		return new HashSet<Integer>(
+			Arrays.asList(
+				STATE_START, 
+				STATE_IDENTIFIER));
 	}
 
+	protected Set<Integer> getAcceptStates() {
+		return new HashSet<Integer>(Arrays.asList(STATE_IDENTIFIER));
+	}
+
+	@Override
+	protected void onCharAccepted(char newChar) {
+		mValue += newChar;
+	}
+
+	@Override
 	public void reset() {
-		mState = State.START;
-		mName = "";
+		super.reset();
+		mValue = "";
 	}
 
-	public TerminalToken[] getTokens() {
-		TerminalToken[] tokens = new TerminalToken[1];
+	public List<TerminalToken> getTokens() {
+		List<TerminalToken> tokens = new ArrayList<>();
 		TerminalToken identifier = TerminalToken.getToken(TokenType.IDENTIFIER);
-		identifier.setRawValue(mName);
-		tokens[0] = identifier;
+		identifier.setRawValue(mValue);
+		tokens.add(identifier);
 		return tokens;
 	}
 }

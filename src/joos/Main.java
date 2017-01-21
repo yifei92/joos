@@ -47,19 +47,20 @@ public class Main {
     	Scanner scanner = new Scanner();
     	Parser parser = new Parser();
     	Weeder weeder = new Weeder();
-    	ASTBuilder astBuilder = new ASTBuilder();
+    	//ASTBuilder astBuilder = new ASTBuilder();
 
     	try {
     		System.out.println("Scanning");
     		List<TerminalToken> tokens = scanner.scan(programString);
             System.out.println("tokens: ");
             for (TerminalToken tok : tokens) {
-                System.out.println(tok.mType + " , " + tok.mRawValue);
+                System.out.print(tok.mRawValue + " ");
             }
+            System.out.println("");
     		System.out.println("Parsing");
     		ParseTreeNode parseTree = parser.parse(tokens);
     		System.out.println("Weeding");
-    		//weeder.weed(parseTree);
+    		weeder.weed(parseTree);
     		System.out.println("Converting");
     		//ASTTreeNode astTree = astBuilder.convert(parseTree);
 		} catch (InvalidSyntaxException e) {

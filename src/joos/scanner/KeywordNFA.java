@@ -4,19 +4,23 @@ import java.lang.Exception;
 import joos.scanner.NFA;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
+import java.lang.String;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
- * NFA for non literal tokens.
- * These are tokens that have keywords or are symbols.
+ * NFA for Keywords.
+ * Each state is the index of the letter that was just accepted.
  */
-public class KeywordNFA implements NFA {
+public class KeywordNFA extends NFA {
 
-	private final String mLiteral;
 	private final TerminalToken mToken;
-
-	private enum State {START, KEYWORD_CHAR, KEYWORD_COMPLETE, END};
-	private int mNextCharIndex = 0;
-	private State mState = State.START;
+	private final String mLiteral;
 
 	public KeywordNFA(TokenType tokenType) throws Exception {
 		mToken = TerminalToken.getToken(tokenType);
@@ -26,52 +30,34 @@ public class KeywordNFA implements NFA {
 		}
 	}
 
-	public boolean consume(char newChar) {
-		// If the new char is the next char of the literal then we can accept it and make a transition.
-		switch (mState) {
-			case START:
-				if (mNextCharIndex < mLiteral.length() &&
-					newChar == mLiteral.charAt(mNextCharIndex)) {
-					mNextCharIndex ++;
-					mState = mLiteral.length() == 1 ? State.KEYWORD_COMPLETE : State.KEYWORD_CHAR;
-					return true;
-				}
-				break;
-			case KEYWORD_CHAR:
-				if (mNextCharIndex == mLiteral.length() - 1 &&
-					newChar == mLiteral.charAt(mNextCharIndex)) {
-					mState = State.KEYWORD_COMPLETE;
-					return true;
-				} else if (mNextCharIndex < mLiteral.length() &&
-					newChar == mLiteral.charAt(mNextCharIndex)) {
-					mState = State.KEYWORD_CHAR;
-					mNextCharIndex++;
-					return true;
-				} else {
-					mState = State.END;
-					return true;
-				}
-			case KEYWORD_COMPLETE:
-				mState = State.END;
-				break;
-			case END:
-				return false;
+	protected Transitions getTransitions(int state) {
+		Map<Character, Integer> table = new HashMap<>();
+		if (state != mLiteral.length()) {
+			table.put(mLiteral.charAt(state), state+1);
 		}
-		return false;
+		return new Transitions(state, table);
 	}
 
-	public boolean isAccepting() {
-		return mState == State.KEYWORD_COMPLETE;
+	protected Set<Integer> getStates() {
+		Set<Integer> states = new HashSet<Integer>();
+		for (int i = 0 ; i <= mLiteral.length() ; i++) {
+			states.add(i);
+		}
+		return states;
 	}
 
-	public void reset() {
-		mNextCharIndex = 0;
-		mState = State.START;
+	protected Set<Integer> getAcceptStates() {
+		return new HashSet<Integer>(Arrays.asList(mLiteral.length()));
 	}
 
-	public TerminalToken[] getTokens() {
-		TerminalToken[] tokens = new TerminalToken[1];
-		tokens[0] = mToken;
+	@Override
+	protected void onCharAccepted(char newChar) {
+		/** noop **/
+	}
+
+	public List<TerminalToken> getTokens() {
+		List<TerminalToken> tokens = new ArrayList<>();
+		tokens.add(mToken);
 		return tokens;
 	}
 }

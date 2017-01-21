@@ -2,61 +2,69 @@ package joos.scanner;
 
 import java.lang.Exception;
 import joos.scanner.NFA;
-import java.lang.Character;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
+import java.lang.String;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * NFA for int literals
  */
-public class IntegerLiteralNFA implements NFA {
+public class IntegerLiteralNFA extends NFA {
 
+	private static final int STATE_START = 0;
+	private static final int STATE_INTEGER = 1;
 	// Specifies what has already been consumed by this NFA
-	private enum State { START, INTEGER, END };
-	private State mState = State.START;
-	private String mInteger = "";
+	private String mValue = "";
 
-	public boolean consume(char newChar) {
-		boolean didTransition = false;
-		switch (mState) {
-			case START:
-				if (Character.isDigit(newChar)) {
-					mInteger += newChar;
-					mState = State.INTEGER;
-					return true;
-				}
+	protected Transitions getTransitions(int state) {
+		Transitions transitions = null;
+		Map<Character, Integer> table = new HashMap<>();
+		switch (state) {
+			case STATE_START:
+				TransitionTableUtil.putAllDigits(table, STATE_INTEGER);
 				break;
-			case INTEGER:
-				// We can have any character within a char literal except for the escape char
-				if (Character.isDigit(newChar)) {
-					mInteger += newChar;
-					return true;
-				} else {
-					mState = State.END;
-					return true;
-				}
-			case END:
-			default:
-				return false;
+			case STATE_INTEGER:
+				// Allow for all digits
+				TransitionTableUtil.putAllDigits(table, STATE_INTEGER);
+				break;
 		}
-		return false;
+		return new Transitions(state, table);
 	}
 
-	public boolean isAccepting() {
-		// If we've accepted the last char in this literal then this NFA is in the accepting state.
-		return mState == State.INTEGER;
+	protected Set<Integer> getStates() {
+		return new HashSet<Integer>(
+			Arrays.asList(
+				STATE_START, 
+				STATE_INTEGER));
 	}
 
+	protected Set<Integer> getAcceptStates() {
+		return new HashSet<Integer>(Arrays.asList(STATE_INTEGER));
+	}
+
+	@Override
+	protected void onCharAccepted(char newChar) {
+		mValue += newChar;
+	}
+
+	@Override
 	public void reset() {
-		mState = State.START;
-		mInteger = "";
+		super.reset();
+		mValue = "";
 	}
 
-	public TerminalToken[] getTokens() {
-		TerminalToken[] tokens = new TerminalToken[1];
+	public List<TerminalToken> getTokens() {
+		List<TerminalToken> tokens = new ArrayList<>();
 		TerminalToken integerLiteral = TerminalToken.getToken(TokenType.INTEGER_LITERAL);
-		integerLiteral.setRawValue(mInteger);
-		tokens[0] = integerLiteral;
+		integerLiteral.setRawValue(mValue);
+		tokens.add(integerLiteral);
 		return tokens;
 	}
 }

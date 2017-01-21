@@ -2,65 +2,91 @@ package joos.scanner;
 
 import java.lang.Exception;
 import joos.scanner.NFA;
-import java.lang.Character;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
+import java.lang.String;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * NFA for float literals
- * Valid format is either
- * 1
- * or
- * 1.1f
  */
-public class FloatingPointLiteralNFA implements NFA {
+public class FloatingPointLiteralNFA extends NFA {
 
+	private static final int STATE_START = 0;
+	private static final int STATE_WHOLE_NUMBER = 1;
+	private static final int STATE_DOT = 2;
+	private static final int STATE_FRACTIONAL_NUMBER = 3;
+	private static final int STATE_F = 4;
 	// Specifies what has already been consumed by this NFA
-	private enum State { START, INTEGER, DOT,  END };
-	private State mState = State.START;
-	private String mInteger = "";
+	private String mValue = "";
 
-	public boolean consume(char newChar) {
-		boolean didTransition = false;
-		switch (mState) {
-			case START:
-				if (Character.isDigit(newChar)) {
-					mInteger += newChar;
-					mState = State.INTEGER;
-					return true;
-				}
+	protected Transitions getTransitions(int state) {
+		Transitions transitions = null;
+		Map<Character, Integer> table = new HashMap<>();
+		switch (state) {
+			case STATE_START:
+				TransitionTableUtil.putAllDigits(table, STATE_WHOLE_NUMBER);
 				break;
-			case INTEGER:
-				// We can have any character within a char literal except for the escape char
-				if (Character.isDigit(newChar)) {
-					mInteger += newChar;
-					return true;
-				} else {
-					mState = State.END;
-					return true;
-				}
-			case END:
-			default:
-				return false;
+			case STATE_WHOLE_NUMBER:
+				// Allow for the dot char
+				table.put('.', STATE_DOT);
+				// Allow for f
+				table.put('f', STATE_F);
+				// Allow for all digits
+				TransitionTableUtil.putAllDigits(table, STATE_WHOLE_NUMBER);
+				break;
+			case STATE_DOT:
+				// Allow for all digits
+				TransitionTableUtil.putAllDigits(table, STATE_FRACTIONAL_NUMBER);
+				break;
+			case STATE_FRACTIONAL_NUMBER:
+				// Allow for all digits
+				TransitionTableUtil.putAllDigits(table, STATE_FRACTIONAL_NUMBER);
+				// Allow for f
+				table.put('f', STATE_F);
+				break;
+			case STATE_F:
+				break;
 		}
-		return false;
+		return new Transitions(state, table);
 	}
 
-	public boolean isAccepting() {
-		// If we've accepted the last char in this literal then this NFA is in the accepting state.
-		return mState == State.INTEGER;
+	protected Set<Integer> getStates() {
+		return new HashSet<Integer>(
+			Arrays.asList(
+				STATE_START, 
+				STATE_WHOLE_NUMBER,
+				STATE_DOT,
+				STATE_FRACTIONAL_NUMBER,
+				STATE_F));
 	}
 
+	protected Set<Integer> getAcceptStates() {
+		return new HashSet<Integer>(Arrays.asList(STATE_F));
+	}
+
+	@Override
+	protected void onCharAccepted(char newChar) {
+		mValue += newChar;
+	}
+
+	@Override
 	public void reset() {
-		mState = State.START;
-		mInteger = "";
+		super.reset();
+		mValue = "";
 	}
 
-	public TerminalToken[] getTokens() {
-		TerminalToken[] tokens = new TerminalToken[1];
-		TerminalToken integerLiteral = TerminalToken.getToken(TokenType.INTEGER_LITERAL);
-		integerLiteral.setRawValue(mInteger);
-		tokens[0] = integerLiteral;
+	public List<TerminalToken> getTokens() {
+		List<TerminalToken> tokens = new ArrayList<>();
+		TerminalToken floatLiteral = TerminalToken.getToken(TokenType.FLOATING_POINT_LITERAL);
+		floatLiteral.setRawValue(mValue);
+		tokens.add(floatLiteral);
 		return tokens;
 	}
 }

@@ -4,71 +4,102 @@ import java.lang.Exception;
 import joos.scanner.NFA;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
+import java.lang.String;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
- * NFA for string literals.
- * TODO: escape chars in the string do not currently work.
+ * NFA for string literals
  */
-public class StringLiteralNFA implements NFA {
+public class StringLiteralNFA extends NFA {
 
+	private static final int STATE_START = 0;
+	private static final int STATE_QUOTE_OPEN = 1;
+	private static final int STATE_ESCAPE = 2;
+	private static final int STATE_STRING = 3;
+	private static final int STATE_QUOTE_CLOSE = 4;
 	// Specifies what has already been consumed by this NFA
-	private enum State { START, FIRST_DQUOTE, CHARACTERS, END_DQUOTE, END };
-	private State mState = State.START;
+	private List<TerminalToken> mTokens = new ArrayList<>();
 
-	private String mValue = "";
-
-	public boolean consume(char newChar) {
-		switch (mState) {
-			case START:
-				if (newChar == '\"') {
-					mState = State.FIRST_DQUOTE;
-					return true;
-				}
+	protected Transitions getTransitions(int state) {
+		Transitions transitions = null;
+		Map<Character, Integer> table = new HashMap<>();
+		switch (state) {
+			case STATE_START:
+				table.put('"', STATE_QUOTE_OPEN);
 				break;
-			case FIRST_DQUOTE:
-				if (newChar == '\"') {
-					mState = State.END_DQUOTE;
-					return true;
-				} else if (newChar != '\\') {
-					mState = State.CHARACTERS;
-					mValue += newChar;
-					return true;
-				}
+			case STATE_QUOTE_OPEN:
+				// Allow for the escape char
+				table.put('\\', STATE_ESCAPE);
+				// Allow for empty strings
+				table.put('"', STATE_QUOTE_CLOSE);
+				// Allow for all letters and digits
+				TransitionTableUtil.putAllLetters(table, STATE_STRING);
+				TransitionTableUtil.putAllDigits(table, STATE_STRING);
 				break;
-			case CHARACTERS:
-				if (newChar == '\"') {
-					mState = State.END_DQUOTE;
-					return true;
-				} else if (newChar != '\\'){
-					mValue += newChar;
-					return true;
-				}
+			case STATE_ESCAPE:
+				// Allow for all letters and digits
+				TransitionTableUtil.putAllLetters(table, STATE_STRING);
+				TransitionTableUtil.putAllDigits(table, STATE_STRING);
 				break;
-			case END_DQUOTE:
-				mState = State.END;
-			default:
-				return false;
+			case STATE_STRING:
+				// Allow for all letters and digits
+				TransitionTableUtil.putAllLetters(table, STATE_STRING);
+				TransitionTableUtil.putAllDigits(table, STATE_STRING);
+				// Allow for end quotes
+				table.put('"', STATE_QUOTE_CLOSE);
+				// Allow for the escape char
+				table.put('\\', STATE_ESCAPE);
+				break;
+			case STATE_QUOTE_CLOSE:
+				break;
 		}
-		return false;
+		return new Transitions(state, table);
 	}
 
-	public boolean isAccepting() {
-		// If we've accepted the last char in this literal then this NFA is in the accepting state.
-		return mState == State.END_DQUOTE;
+	protected Set<Integer> getStates() {
+		return new HashSet<Integer>(
+			Arrays.asList(
+				STATE_START, 
+				STATE_QUOTE_OPEN,
+				STATE_ESCAPE,
+				STATE_STRING,
+				STATE_QUOTE_CLOSE));
 	}
 
+	protected Set<Integer> getAcceptStates() {
+		return new HashSet<Integer>(Arrays.asList(STATE_QUOTE_CLOSE));
+	}
+
+	protected void onCharAccepted(char newChar) {
+		if (newChar != '"') { 
+			if (newChar == '\\') {
+				mTokens.add(TerminalToken.getToken(TokenType.CHARACTER_ESCAPE));
+			} else {
+				if (mTokens.size() == 0 || 
+					mTokens.size() > 0 && mTokens.get(mTokens.size() - 1).mType == TokenType.CHARACTER_ESCAPE) {
+					mTokens.add(TerminalToken.getToken(TokenType.STRING_LITERAL));
+				}
+				TerminalToken lastToken = mTokens.get(mTokens.size() - 1);
+				lastToken.setRawValue(lastToken.getRawValue() + newChar);
+			}
+		}
+	}
+
+	@Override
 	public void reset() {
-		mState = State.START;
-		mValue = "";
+		super.reset();
+		mTokens = new ArrayList<>();
 	}
 
-	public TerminalToken[] getTokens() {
-		TerminalToken[] tokens = new TerminalToken[3];
-		TerminalToken stringLiteral = TerminalToken.getToken(TokenType.STRING_LITERAL);
-		stringLiteral.setRawValue(mValue);
-		tokens[0] = TerminalToken.getToken(TokenType.DOUBLE_QUOTE);
-		tokens[1] = stringLiteral;
-		tokens[2] = TerminalToken.getToken(TokenType.DOUBLE_QUOTE);
-		return tokens;
+	public List<TerminalToken> getTokens() {
+		mTokens.add(0, TerminalToken.getToken(TokenType.DOUBLE_QUOTE));
+		mTokens.add(TerminalToken.getToken(TokenType.DOUBLE_QUOTE));
+		return mTokens;
 	}
 }

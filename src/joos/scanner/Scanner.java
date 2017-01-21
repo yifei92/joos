@@ -17,8 +17,7 @@ public class Scanner {
 	private final List<NFA> mNFAs;
 	private final Map<NFA, Boolean> mIsNFAActive = new HashMap<NFA, Boolean>();
 
-	private int mActiveNFAsCount = 0;
-	private TerminalToken[] mLastAcceptedTokens = null;
+	private List<TerminalToken> mLastAcceptedTokens = new ArrayList<>();
 	private int mLastAcceptedEndIndex = -1;
 
 	/**
@@ -52,6 +51,7 @@ public class Scanner {
 					try {
 						nfa = new KeywordNFA(tokenType);
 					} catch (Exception e) {
+						e.printStackTrace();
 						System.out.println(e.getMessage());
 					}
 				}
@@ -65,19 +65,20 @@ public class Scanner {
 
 	private void consumeChar(List<NFA> nfas, char toConsume, int currentCharIndex) {
 		for (NFA nfa : nfas) {
-			if(mIsNFAActive.get(nfa) && nfa.consume(toConsume)) {
-				if (nfa.isAccepting()) {
+			boolean madeTransition = false;
+			if(mIsNFAActive.get(nfa)) {
+				madeTransition = nfa.consume(toConsume);
+				if (madeTransition && nfa.isAccepting()) {
 					mLastAcceptedTokens = nfa.getTokens();
 					mLastAcceptedEndIndex = currentCharIndex;
 				}
-			} else {
-				mIsNFAActive.put(nfa, false);
 			}
+			mIsNFAActive.put(nfa, madeTransition);
 		}
 	}
 
 	private void reset() {
-		mLastAcceptedTokens = null;
+		mLastAcceptedTokens = new ArrayList<>();
 		mLastAcceptedEndIndex = -1;
 		for (NFA nfa : mNFAs) {
 			nfa.reset();
@@ -95,27 +96,46 @@ public class Scanner {
 		return true;
 	}
 
+	private int numNFAsActive() {
+		int s = 0;
+		for (NFA nfa : mNFAs) {
+			if (mIsNFAActive.get(nfa)) {
+				s++;
+			}
+		}
+		return s;
+	}
+
+	private void printActiveNFATokenType() {
+		if (numNFAsActive() == 1) {
+			for (NFA nfa : mNFAs) {
+				if (mIsNFAActive.get(nfa)) {
+					System.out.println("active type " + nfa.getTokens().get(0).getType());
+				}
+			}
+		}
+	}
+
 	/**
 	 * Given a string of input consisting of valid ASCII characters outputs
 	 * a list of valid Tokens. If the string does not produce valid tokens
 	 * an exception is thrown.
 	 */
 	public List<TerminalToken> scan(String input) throws InvalidSyntaxException {
+		input += " ";
 		List<TerminalToken> tokens = new ArrayList();
 		int currentCharIndex = 0;
 		while (currentCharIndex < input.length()) {
 			char toConsume = input.charAt(currentCharIndex);
 			consumeChar(mNFAs, toConsume, currentCharIndex);
 			if (allNFAsInActive()) {
-				if (mLastAcceptedTokens != null) {
+				if (mLastAcceptedTokens != null && !mLastAcceptedTokens.isEmpty()) {
 					for (TerminalToken acceptedToken : mLastAcceptedTokens) {
 						if (acceptedToken.mType != TokenType.SPACE &&
 							acceptedToken.mType != TokenType.TAB) {
 							tokens.add(acceptedToken);
 						}
 					}
-		            for (TerminalToken token : mLastAcceptedTokens) {
-		            }
 					currentCharIndex = mLastAcceptedEndIndex + 1;
 				} else {
 					String errorCodeChunk =

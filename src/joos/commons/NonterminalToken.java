@@ -38,6 +38,7 @@ public class NonterminalToken implements Token {
     mTokens.put(TokenType.GOAL, new NonterminalToken(TokenType.GOAL));
     mTokens.put(TokenType.LITERAL, new NonterminalToken(TokenType.LITERAL));
     mTokens.put(TokenType.STRING_LITERAL_WITH_QUOTES, new NonterminalToken(TokenType.STRING_LITERAL_WITH_QUOTES));
+    mTokens.put(TokenType.STRING_LITERAL_WITH_ESCAPES, new NonterminalToken(TokenType.STRING_LITERAL_WITH_ESCAPES));
     mTokens.put(TokenType.CHAR_LITERAL_WITH_QUOTES, new NonterminalToken(TokenType.CHAR_LITERAL_WITH_QUOTES));
     mTokens.put(TokenType.BOOLEAN_LITERAL, new NonterminalToken(TokenType.BOOLEAN_LITERAL));
     mTokens.put(TokenType.TYPE, new NonterminalToken(TokenType.TYPE));

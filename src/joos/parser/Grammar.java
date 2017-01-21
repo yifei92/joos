@@ -289,6 +289,7 @@ public class Grammar {
     List<ParseTreeNode> nodes = new ArrayList();
     ParseTreeNode node = new ParseTreeNode(token);
     while(tokensIndex < tokens.size()) {
+      System.out.println(token.getType());
       if (stateStack.peek().links.containsKey(token.getType()) || stateStack.peek().links.containsKey(null)) {
         Action action = null;
         if (stateStack.peek().links.containsKey(token.getType())) {

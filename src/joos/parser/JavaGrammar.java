@@ -42,13 +42,23 @@ public final class JavaGrammar {
     productions.put(
       TokenType.STRING_LITERAL_WITH_QUOTES,
       Arrays.asList(
-        Arrays.asList(TokenType.DOUBLE_QUOTE, TokenType.STRING_LITERAL, TokenType.DOUBLE_QUOTE)
+        Arrays.asList(TokenType.DOUBLE_QUOTE, TokenType.STRING_LITERAL_WITH_ESCAPES, TokenType.DOUBLE_QUOTE)
+      )
+    );
+    productions.put(
+      TokenType.STRING_LITERAL_WITH_ESCAPES,
+      Arrays.asList(
+        Arrays.asList(TokenType.CHARACTER_ESCAPE),
+        Arrays.asList(TokenType.STRING_LITERAL),
+        Arrays.asList(TokenType.STRING_LITERAL_WITH_ESCAPES, TokenType.STRING_LITERAL),
+        Arrays.asList(TokenType.STRING_LITERAL_WITH_ESCAPES, TokenType.CHARACTER_ESCAPE)
       )
     );
     productions.put(
       TokenType.CHAR_LITERAL_WITH_QUOTES,
       Arrays.asList(
-        Arrays.asList(TokenType.SINGLE_QUOTE, TokenType.CHAR_LITERAL, TokenType.SINGLE_QUOTE)
+        Arrays.asList(TokenType.SINGLE_QUOTE, TokenType.CHAR_LITERAL, TokenType.SINGLE_QUOTE),
+        Arrays.asList(TokenType.SINGLE_QUOTE, TokenType.CHARACTER_ESCAPE, TokenType.CHAR_LITERAL, TokenType.SINGLE_QUOTE)
       )
     );
     productions.put(

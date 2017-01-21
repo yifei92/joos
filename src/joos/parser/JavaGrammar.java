@@ -34,9 +34,21 @@ public final class JavaGrammar {
         Arrays.asList(TokenType.INTEGER_LITERAL),
         Arrays.asList(TokenType.FLOATING_POINT_LITERAL),
         Arrays.asList(TokenType.BOOLEAN_LITERAL),
-        Arrays.asList(TokenType.CHAR_LITERAL),
-        Arrays.asList(TokenType.STRING_LITERAL),
+        Arrays.asList(TokenType.CHAR_LITERAL_WITH_QUOTES),
+        Arrays.asList(TokenType.STRING_LITERAL_WITH_QUOTES),
         Arrays.asList(TokenType.NULL_LITERAL)
+      )
+    );
+    productions.put(
+      TokenType.STRING_LITERAL_WITH_QUOTES,
+      Arrays.asList(
+        Arrays.asList(TokenType.DOUBLE_QUOTE, TokenType.STRING_LITERAL, TokenType.DOUBLE_QUOTE)
+      )
+    );
+    productions.put(
+      TokenType.CHAR_LITERAL_WITH_QUOTES,
+      Arrays.asList(
+        Arrays.asList(TokenType.SINGLE_QUOTE, TokenType.CHAR_LITERAL, TokenType.SINGLE_QUOTE)
       )
     );
     productions.put(

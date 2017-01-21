@@ -26,7 +26,7 @@ public class ParseTreeNode {
 		for (int i = 0; i < depth; i++) {
 			System.out.print("  ");
 		}
-		System.out.print(this.token);
+		System.out.print(this.token.getType());
 		System.out.println();
 		if (this.children != null) {
 			for (ParseTreeNode child : this.children) {

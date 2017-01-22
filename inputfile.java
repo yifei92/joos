@@ -1,6 +1,8 @@
 // asdasd
 package com.test.blah;
 
+/*//asdasd
+*/
 import asdf.asdf;
 
 

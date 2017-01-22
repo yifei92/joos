@@ -51,7 +51,7 @@ public class Scanner {
 						nfa = new MultiLineCommentNFA();
 						break;
 					case COMMENT_JAVADOC:
-						nfa = new SingleLineCommentNFA();
+						nfa = new JavadocCommentNFA();
 						break;
 				}
 				if (nfa == null &&

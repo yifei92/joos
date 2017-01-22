@@ -19,13 +19,14 @@ public class MultiLineCommentNFA extends NFA {
 
 	private static final int STATE_START = 0;
 	private static final int STATE_OPEN_SLASH = 1;
-	private static final int STATE_CHARS = 2;
-	private static final int STATE_CLOSE_STAR = 3;
-	private static final int STATE_CLOSE_SLASH = 4;
+	private static final int STATE_OPEN_STAR = 2;
+	private static final int STATE_CHARS = 3;
+	private static final int STATE_CLOSE_STAR = 4;
+	private static final int STATE_CLOSE_SLASH = 5;
 
 	private static final Set<Character> STAR_EXCLUSIONS = new HashSet<Character>(Arrays.asList('*'));
-	private static final Set<Character> SLASH_EXCLUSIONS = new HashSet<Character>(Arrays.asList('/'));
-
+	private static final Set<Character> STAR_SLASH_EXCLUSIONS = new HashSet<Character>(Arrays.asList('*','/'));
+	
 	protected Transitions getTransitions(int state) {
 		Transitions transitions = null;
 		Map<Character, Integer> table = new HashMap<>();
@@ -34,7 +35,11 @@ public class MultiLineCommentNFA extends NFA {
 				table.put('/', STATE_OPEN_SLASH);
 				break;
 			case STATE_OPEN_SLASH:
-				table.put('*', STATE_CHARS);
+				table.put('*', STATE_OPEN_STAR);
+				break;
+			case STATE_OPEN_STAR:
+				// Allow for all chars except the * char else this will be a javadoc comment
+				TransitionTableUtil.putAllCharExcept(table, STAR_EXCLUSIONS, STATE_CHARS);
 				break;
 			case STATE_CHARS:
 				// Allow for all chars except the * char
@@ -43,8 +48,9 @@ public class MultiLineCommentNFA extends NFA {
 				break;
 			case STATE_CLOSE_STAR:
 				// Allow for all chars except the / char
-				TransitionTableUtil.putAllCharExcept(table, SLASH_EXCLUSIONS, STATE_CHARS);
+				TransitionTableUtil.putAllCharExcept(table, STAR_SLASH_EXCLUSIONS, STATE_CHARS);
 				table.put('/', STATE_CLOSE_SLASH);
+				table.put('*', STATE_CLOSE_STAR);
 				break;
 			case STATE_CLOSE_SLASH:
 				break;
@@ -57,6 +63,7 @@ public class MultiLineCommentNFA extends NFA {
 			Arrays.asList(
 				STATE_START, 
 				STATE_OPEN_SLASH,
+				STATE_OPEN_STAR,
 				STATE_CHARS,
 				STATE_CLOSE_STAR,
 				STATE_CLOSE_SLASH));

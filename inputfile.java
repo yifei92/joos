@@ -1,10 +1,10 @@
-// asdasd
 package com.test.blah;
 
-/*//asdasd
-*/
 import asdf.asdf;
 
+	/**
+	*asd
+	*/
 
 public class Main {
 	public static void main(String [] args) {

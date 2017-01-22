@@ -31,10 +31,7 @@ public class JavadocCommentNFA extends NFA {
 		new HashSet<Character>(Arrays.asList(System.lineSeparator().charAt(0), '*'));
 	private static final Set<Character> NEWLINE_STAR_EXCLUSIONS_SLASH =
 		new HashSet<Character>(Arrays.asList(System.lineSeparator().charAt(0), '*', '/'));
-		/**
-		 *
-		 * asdasd
-		 */
+
 	protected Transitions getTransitions(int state) {
 		Transitions transitions = null;
 		Map<Character, Integer> table = new HashMap<>();
@@ -82,7 +79,10 @@ public class JavadocCommentNFA extends NFA {
 			Arrays.asList(
 				STATE_START, 
 				STATE_OPEN_SLASH,
+				STATE_OPEN_STAR_FIRST,
 				STATE_CHARS,
+				STATE_NEWLINE,
+				STATE_NEWLINE_STAR,
 				STATE_CLOSE_STAR,
 				STATE_CLOSE_SLASH));
 	}

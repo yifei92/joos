@@ -217,10 +217,28 @@ public class Grammar {
         }
       } else {
         for (TokenType t : this.follows.get(productionIndex.production.lhs)) {
-          itemSet.links.put(t, new Action(new Reduction(
-            productionIndex.production.lhs,
-            productionIndex.index
-          )));
+          if (itemSet.links.containsKey(t)) {
+            Action action = itemSet.links.get(t);
+            if (action.type == ActionType.REDUCTION) {
+              List<Reduction> list = new ArrayList();
+              list.add(action.reduction);
+              list.add(new Reduction(
+                productionIndex.production.lhs,
+                productionIndex.index
+              ));
+              itemSet.links.put(t, new Action(list));
+            } else if (action.type == ActionType.REDUCTIONS) {
+              action.reductions.add(new Reduction(
+                productionIndex.production.lhs,
+                productionIndex.index
+              ));
+            }
+          } else {
+            itemSet.links.put(t, new Action(new Reduction(
+              productionIndex.production.lhs,
+              productionIndex.index
+            )));
+          }
         }
       }
     }
@@ -308,7 +326,7 @@ public class Grammar {
             token = tokens.get(tokensIndex);
             node = new ParseTreeNode(token);
             break;
-          case REDUCTION:
+          case REDUCTION: {
             for (int i = 0; i < action.reduction.number; i++) {
               stateStack.pop();
             }
@@ -320,6 +338,29 @@ public class Grammar {
             token = NonterminalToken.getToken(action.reduction.symbol);
             node = new ParseTreeNode(token, currentChildren);
             tokensIndex--;
+            break;
+          }
+          case REDUCTIONS:
+            Collections.sort(action.reductions, (r1, r2) -> r2.number - r1.number);
+            int numPopped = 0;
+            for (Reduction reduction : action.reductions) {
+              System.out.println(reduction.number);
+              for (int i = 0; i < reduction.number - numPopped; i++) {
+                stateStack.pop();
+              }
+              numPopped = reduction.number;
+              if (stateStack.peek().links.containsKey(reduction.symbol)) {
+                List<ParseTreeNode> currentChildren = new ArrayList(nodes.subList(
+                  nodes.size() - reduction.number,
+                  nodes.size()
+                ));
+                nodes = new ArrayList(nodes.subList(0, nodes.size() - reduction.number));
+                token = NonterminalToken.getToken(reduction.symbol);
+                node = new ParseTreeNode(token, currentChildren);
+                tokensIndex--;
+                break;
+              }
+            }
             break;
         }
       } else {
@@ -400,17 +441,27 @@ class Entry {
 class Action {
   public final ActionType type;
   public final Reduction reduction;
+  public final List<Reduction> reductions;
   public final ItemSet itemSet;
 
   public Action(Reduction reduction) {
     type = ActionType.REDUCTION;
     this.reduction = reduction;
     this.itemSet = null;
+    this.reductions = null;
   }
 
   public Action(ItemSet itemSet) {
     type = ActionType.ITEMSET;
     this.itemSet = itemSet;
+    this.reduction = null;
+    this.reductions = null;
+  }
+
+  public Action(List<Reduction> reductions) {
+    this.type = ActionType.REDUCTIONS;
+    this.reductions = reductions;
+    this.itemSet = null;
     this.reduction = null;
   }
 
@@ -418,6 +469,7 @@ class Action {
     this.type = ActionType.SUCCESS;
     this.itemSet = null;
     this.reduction = null;
+    this.reductions = null;
   }
 
   public String toString() {
@@ -434,7 +486,7 @@ class Action {
 }
 
 enum ActionType {
-  SUCCESS, ITEMSET, REDUCTION
+  SUCCESS, ITEMSET, REDUCTION, REDUCTIONS
 }
 
 class ItemSet implements Comparable<ItemSet> {

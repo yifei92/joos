@@ -344,7 +344,6 @@ public class Grammar {
             Collections.sort(action.reductions, (r1, r2) -> r2.number - r1.number);
             int numPopped = 0;
             for (Reduction reduction : action.reductions) {
-              System.out.println(reduction.number);
               for (int i = 0; i < reduction.number - numPopped; i++) {
                 stateStack.pop();
               }

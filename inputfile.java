@@ -1,6 +1,8 @@
+// asdasd
 package com.test.blah;
 
 import asdf.asdf;
+
 
 public class Main {
 	public static void main(String [] args) {

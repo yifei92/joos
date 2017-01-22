@@ -117,10 +117,10 @@ public class TerminalToken implements Token {
 		mTokens.put(TokenType.CHARACTER_ESCAPE , new TerminalToken(TokenType.CHARACTER_ESCAPE, "\\"));
 		mTokens.put(TokenType.CLOSE_BR , new TerminalToken(TokenType.CLOSE_BR, ")"));
 		mTokens.put(TokenType.CLOSE_CBR , new TerminalToken(TokenType.CLOSE_CBR, "}"));
-		mTokens.put(TokenType.CLOSE_COMMENT , new TerminalToken(TokenType.CLOSE_COMMENT, "*/"));
-		mTokens.put(TokenType.CLOSE_COMMENT_DOUBLE , new TerminalToken(TokenType.CLOSE_COMMENT_DOUBLE, "**/"));
 		mTokens.put(TokenType.CLOSE_SBR , new TerminalToken(TokenType.CLOSE_SBR, "]"));
-		mTokens.put(TokenType.COMMENT , new TerminalToken(TokenType.COMMENT, "//"));
+		mTokens.put(TokenType.COMMENT_SINGLE_LINE , new TerminalToken(TokenType.COMMENT_SINGLE_LINE, ""));
+		mTokens.put(TokenType.COMMENT_MULTI_LINE , new TerminalToken(TokenType.COMMENT_MULTI_LINE, ""));
+		mTokens.put(TokenType.COMMENT_JAVADOC , new TerminalToken(TokenType.COMMENT_JAVADOC, ""));
 		mTokens.put(TokenType.COMP_EQ , new TerminalToken(TokenType.COMP_EQ, "=="));
 		mTokens.put(TokenType.COMP_GREATER_THAN , new TerminalToken(TokenType.COMP_GREATER_THAN, ">"));
 		mTokens.put(TokenType.COMP_GREATER_THAN_EQ , new TerminalToken(TokenType.COMP_GREATER_THAN_EQ, ">="));
@@ -134,8 +134,6 @@ public class TerminalToken implements Token {
 		mTokens.put(TokenType.OP_REMAINDER , new TerminalToken(TokenType.OP_REMAINDER, "%"));
 		mTokens.put(TokenType.OPEN_BR , new TerminalToken(TokenType.OPEN_BR, "("));
 		mTokens.put(TokenType.OPEN_CBR , new TerminalToken(TokenType.OPEN_CBR, "{"));
-		mTokens.put(TokenType.OPEN_COMMENT , new TerminalToken(TokenType.OPEN_COMMENT, "/*"));
-		mTokens.put(TokenType.OPEN_COMMENT_DOUBLE , new TerminalToken(TokenType.OPEN_COMMENT_DOUBLE, "/**"));
 		mTokens.put(TokenType.OPEN_SBR , new TerminalToken(TokenType.OPEN_SBR, "["));
 		mTokens.put(TokenType.SEMICOLON , new TerminalToken(TokenType.SEMICOLON, ";"));
 		mTokens.put(TokenType.STAR , new TerminalToken(TokenType.STAR, "*"));

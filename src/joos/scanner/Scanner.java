@@ -44,6 +44,15 @@ public class Scanner {
 					case FLOATING_POINT_LITERAL:
 						nfa = new FloatingPointLiteralNFA();
 						break;
+					case COMMENT_SINGLE_LINE:
+						nfa = new SingleLineCommentNFA();
+						break;
+					case COMMENT_MULTI_LINE:
+						nfa = new SingleLineCommentNFA();
+						break;
+					case COMMENT_JAVADOC:
+						nfa = new SingleLineCommentNFA();
+						break;
 				}
 				if (nfa == null &&
 					tokenType != TokenType.SINGLE_QUOTE &&
@@ -132,7 +141,8 @@ public class Scanner {
 				if (mLastAcceptedTokens != null && !mLastAcceptedTokens.isEmpty()) {
 					for (TerminalToken acceptedToken : mLastAcceptedTokens) {
 						if (acceptedToken.mType != TokenType.SPACE &&
-							acceptedToken.mType != TokenType.TAB) {
+							acceptedToken.mType != TokenType.TAB &&
+							acceptedToken.mType != TokenType.COMMENT_SINGLE_LINE) {
 							tokens.add(acceptedToken);
 						}
 					}

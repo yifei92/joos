@@ -141,8 +141,11 @@ public class Scanner {
 				if (mLastAcceptedTokens != null && !mLastAcceptedTokens.isEmpty()) {
 					for (TerminalToken acceptedToken : mLastAcceptedTokens) {
 						if (acceptedToken.mType != TokenType.SPACE &&
+							acceptedToken.mType != TokenType.NEW_LINE &&
 							acceptedToken.mType != TokenType.TAB &&
-							acceptedToken.mType != TokenType.COMMENT_SINGLE_LINE) {
+							acceptedToken.mType != TokenType.COMMENT_SINGLE_LINE && 
+							acceptedToken.mType != TokenType.COMMENT_MULTI_LINE && 
+							acceptedToken.mType != TokenType.COMMENT_JAVADOC) {
 							tokens.add(acceptedToken);
 						}
 					}

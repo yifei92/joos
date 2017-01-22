@@ -13,8 +13,9 @@ public class FileScanner {
             FileReader fr = new FileReader(fileName);
             BufferedReader br = new BufferedReader(fr);
             String currentLine;
-            while ((currentLine = br.readLine()) != null) {
-                program.append(currentLine);
+            int value = 0;
+            while((value = br.read()) != -1) {
+                program.append((char)value);
             }
             br.close();
             fr.close();

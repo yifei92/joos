@@ -26,8 +26,6 @@ public class TransitionTableUtil {
 		for (char c = 0 ; c < 127 ; c++) {
 			if (!exclusions.contains(c)) {
 				table.put(c, toState);
-			} else {
-				System.out.println("excluded " + c);
 			}
 		}
 	}

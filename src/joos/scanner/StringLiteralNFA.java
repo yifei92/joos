@@ -44,8 +44,7 @@ public class StringLiteralNFA extends NFA {
 				break;
 			case STATE_ESCAPE:
 				// Allow for all letters and digits
-				TransitionTableUtil.putAllLetters(table, STATE_STRING);
-				TransitionTableUtil.putAllDigits(table, STATE_STRING);
+				TransitionTableUtil.putAllChars(table, STATE_STRING);
 				break;
 			case STATE_STRING:
 				// Allow for all letters and digits

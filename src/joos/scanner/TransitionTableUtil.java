@@ -2,6 +2,7 @@ package joos.scanner;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.HashSet;
 
 public class TransitionTableUtil {
 
@@ -20,6 +21,10 @@ public class TransitionTableUtil {
 		for (char c = 48 ; c <= 57 ; c++) {
 			table.put(c, toState);
 		}
+	}
+
+	public static void putAllChars(Map<Character, Integer> table, int toState) {
+		putAllCharExcept(table, new HashSet<Character>(), toState);
 	}
 
 	public static void putAllCharExcept(Map<Character, Integer> table, Set<Character> exclusions, int toState) {

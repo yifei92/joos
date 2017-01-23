@@ -86,13 +86,16 @@ public class CharLiteralNFA extends NFA {
 
 	public List<TerminalToken> getTokens() {
 		List<TerminalToken> tokens = new ArrayList<>();
-		TerminalToken charLiteral = TerminalToken.getToken(TokenType.CHAR_LITERAL);
-		charLiteral.setRawValue(mValue);
 		tokens.add(TerminalToken.getToken(TokenType.SINGLE_QUOTE));
 		if (mContainsEscape) {
-			tokens.add(TerminalToken.getToken(TokenType.CHARACTER_ESCAPE));
+			TerminalToken charEscape = TerminalToken.getToken(TokenType.CHARACTER_ESCAPE);
+			charEscape.setRawValue(mValue);
+			tokens.add(charEscape);
+		} else {
+			TerminalToken charLiteral = TerminalToken.getToken(TokenType.CHAR_LITERAL);
+			charLiteral.setRawValue(mValue);
+			tokens.add(charLiteral);
 		}
-		tokens.add(charLiteral);
 		tokens.add(TerminalToken.getToken(TokenType.SINGLE_QUOTE));
 		return tokens;
 	}

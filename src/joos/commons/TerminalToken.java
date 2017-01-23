@@ -114,7 +114,7 @@ public class TerminalToken implements Token {
 		mTokens.put(TokenType.BITWISE_OR , new TerminalToken(TokenType.BITWISE_OR, "|"));
 		mTokens.put(TokenType.BOOL_OP_AND , new TerminalToken(TokenType.BOOL_OP_AND, "&&"));
 		mTokens.put(TokenType.BOOL_OP_OR , new TerminalToken(TokenType.BOOL_OP_OR, "||"));
-		mTokens.put(TokenType.CHARACTER_ESCAPE , new TerminalToken(TokenType.CHARACTER_ESCAPE, "\\"));
+		mTokens.put(TokenType.CHARACTER_ESCAPE , new TerminalToken(TokenType.CHARACTER_ESCAPE, ""));
 		mTokens.put(TokenType.CLOSE_BR , new TerminalToken(TokenType.CLOSE_BR, ")"));
 		mTokens.put(TokenType.CLOSE_CBR , new TerminalToken(TokenType.CLOSE_CBR, "}"));
 		mTokens.put(TokenType.CLOSE_SBR , new TerminalToken(TokenType.CLOSE_SBR, "]"));

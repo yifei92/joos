@@ -15,7 +15,7 @@
 
 BUILD SUCCESSFUL
 
-Total time: 0.631 secs
+Total time: 0.61 secs
 Test 1 _________________________________
 public class A extends java . lang . Thread { public A ( ) { } } eof 
 SUCCESS
@@ -78,7 +78,7 @@ SUCCESS
 
 Test 13 _________________________________
 public class A { public A ( ) { } public void m2 ( ) { java . lang . System . exit ( ) ; } } eof 
-ERROR
+SUCCESS
 
 
 Test 14 _________________________________
@@ -142,8 +142,8 @@ SUCCESS
 
 
 Test 26 _________________________________
-public class A { public A ( ) { /* super ( ) ; */ } } eof 
-ERROR
+public class A { public A ( ) { } } eof 
+SUCCESS
 
 
 Test 27 _________________________________
@@ -167,8 +167,8 @@ SUCCESS
 
 
 Test 31 _________________________________
-public class A { public A ( ) { } public void m ( ) { /* return ; */ } } eof 
-ERROR
+public class A { public A ( ) { } public void m ( ) { } } eof 
+SUCCESS
 
 
 Test 32 _________________________________
@@ -257,7 +257,7 @@ SUCCESS
 
 
 Test 49 _________________________________
-Error at char 66 "\'\\
+Error at char 68 "\'\\
 
 
 Test 50 _________________________________
@@ -266,13 +266,13 @@ SUCCESS
 
 
 Test 51 _________________________________
-/* This is a comment . */ // This is another comment . public class A { public A ( ) { } } eof 
-ERROR
+public class A { public A ( ) { } } eof 
+SUCCESS
 
 
 Test 52 _________________________________
-/** A Javadoc comment starts with a slash and two asterisks . */ public class A { public A ( ) { } } eof 
-ERROR
+public class A { public A ( ) { } } eof 
+SUCCESS
 
 
 Test 53 _________________________________

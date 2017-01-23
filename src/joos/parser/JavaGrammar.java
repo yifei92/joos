@@ -58,7 +58,7 @@ public final class JavaGrammar {
       TokenType.CHAR_LITERAL_WITH_QUOTES,
       Arrays.asList(
         Arrays.asList(TokenType.SINGLE_QUOTE, TokenType.CHAR_LITERAL, TokenType.SINGLE_QUOTE),
-        Arrays.asList(TokenType.SINGLE_QUOTE, TokenType.CHARACTER_ESCAPE, TokenType.CHAR_LITERAL, TokenType.SINGLE_QUOTE)
+        Arrays.asList(TokenType.SINGLE_QUOTE, TokenType.CHARACTER_ESCAPE, TokenType.SINGLE_QUOTE)
       )
     );
     productions.put(

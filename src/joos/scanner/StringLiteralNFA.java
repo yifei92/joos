@@ -78,7 +78,11 @@ public class StringLiteralNFA extends NFA {
 
 	protected void onCharAccepted(char newChar) {
 		if (newChar != '"') { 
-			if (newChar == '\\') {
+			if (mTokens.size() > 0 &&
+				mTokens.get(mTokens.size() - 1).getType() == TokenType.CHARACTER_ESCAPE &&
+				(mTokens.get(mTokens.size() - 1).getRawValue() == null || mTokens.get(mTokens.size() - 1).getRawValue() == "")) {
+				mTokens.get(mTokens.size() - 1).setRawValue(Character.toString(newChar));
+			} else if (newChar == '\\') {
 				mTokens.add(TerminalToken.getToken(TokenType.CHARACTER_ESCAPE));
 			} else {
 				if (mTokens.size() == 0 || 

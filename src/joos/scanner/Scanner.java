@@ -56,7 +56,8 @@ public class Scanner {
 				}
 				if (nfa == null &&
 					tokenType != TokenType.SINGLE_QUOTE &&
-					tokenType != TokenType.DOUBLE_QUOTE) {
+					tokenType != TokenType.DOUBLE_QUOTE && 
+					tokenType != TokenType.CHARACTER_ESCAPE) {
 					try {
 						nfa = new KeywordNFA(tokenType);
 					} catch (Exception e) {

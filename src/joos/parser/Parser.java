@@ -13,11 +13,11 @@ import java.util.Arrays;
 
 public class Parser {
 
-  /**
-   * Given a list of valid Tokens returns a valid parse tree root node
-   * will the rest of the parse tree below it.
-   */
-  public ParseTreeNode parse(List<TerminalToken> tokens) throws InvalidSyntaxException {
-    return JavaGrammar.grammar.parse(tokens);
-  }
+	/**
+	 * Given a list of valid Tokens returns a valid parse tree root node
+	 * will the rest of the parse tree below it.
+	 */
+	public ParseTreeNode parse(List<TerminalToken> tokens) throws InvalidSyntaxException {
+		return JavaGrammar.grammar.parse(tokens);
+	}
 }

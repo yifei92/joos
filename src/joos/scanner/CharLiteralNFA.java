@@ -23,6 +23,8 @@ public class CharLiteralNFA extends NFA {
 	private static final int STATE_ESCAPE = 2;
 	private static final int STATE_CHAR = 3;
 	private static final int STATE_COMMA_CLOSE = 4;
+
+	private static final Set<Character> ESCAPE_EXCLUSIONS = new HashSet<Character>(Arrays.asList('\\'));
 	// Specifies what has already been consumed by this NFA
 	private String mValue = "";
 	private boolean mContainsEscape = false;
@@ -37,14 +39,12 @@ public class CharLiteralNFA extends NFA {
 			case STATE_COMMA_OPEN:
 				// Allow for the escape char
 				table.put('\\', STATE_ESCAPE);
-				// Allow for all letters and digits
-				TransitionTableUtil.putAllLetters(table, STATE_CHAR);
-				TransitionTableUtil.putAllDigits(table, STATE_CHAR);
+				// Allow for all chars except \
+				TransitionTableUtil.putAllCharExcept(table, ESCAPE_EXCLUSIONS, STATE_CHAR);
 				break;
 			case STATE_ESCAPE:
-				// Allow for all letters and digits
-				TransitionTableUtil.putAllLetters(table, STATE_CHAR);
-				TransitionTableUtil.putAllDigits(table, STATE_CHAR);
+				// Allow for all chars
+				TransitionTableUtil.putAllChars(table, STATE_CHAR);
 				break;
 			case STATE_CHAR:
 				table.put('\'', STATE_COMMA_CLOSE);

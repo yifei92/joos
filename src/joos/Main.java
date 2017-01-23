@@ -48,9 +48,11 @@ public class Main {
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());
+			System.out.println("Error");
 			System.exit(42);
 			return;
 		}
+		System.out.println("Success");
 		System.exit(0);
 	}
 }

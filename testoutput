@@ -15,303 +15,304 @@
 
 BUILD SUCCESSFUL
 
-Total time: 0.916 secs
+Total time: 0.894 secs
 Test 1 _________________________________
 public class A extends java . lang . Thread { public A ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 2 _________________________________
 public class A implements java . io . Serializable { public A ( ) { } int x ; } eof 
-SUCCESS
+Success
 
 
 Test 3 _________________________________
 public class A { public A ( ) { } public static int m ( ) { return 42 ; } } eof 
-SUCCESS
+Success
 
 
 Test 4 _________________________________
 import java . util . Vector ; public class A { public A ( ) { } protected Vector c ; } eof 
-SUCCESS
+Success
 
 
 Test 5 _________________________________
 import java . util . * ; public class A { public A ( ) { } protected Vector c ; } eof 
-SUCCESS
+Success
 
 
 Test 6 _________________________________
 package dovs . joos . features ; public class A { public A ( ) { } protected int x ; } eof 
-SUCCESS
+Success
 
 
 Test 7 _________________________________
 public interface A { } eof 
-SUCCESS
+Success
 
 
 Test 8 _________________________________
 public class A { protected static int x ; } eof 
-SUCCESS
+Success
 
 
 Test 9 _________________________________
 public class A { public A ( ) { } public int m ( java . util . Vector x ) { return x . size ( ) ; } } eof 
-SUCCESS
+Success
 
 
 Test 10 _________________________________
 public class A { public A ( ) { } protected int x ; public int m ( ) { return x ; } } eof 
-SUCCESS
+Success
 
 
 Test 11 _________________________________
 public class A { public A ( ) { } public int m1 ( ) { return 42 ; } public int m2 ( ) { return m1 ( ) ; } } eof 
-SUCCESS
+Success
 
 
 Test 12 _________________________________
 public class A { public A ( ) { } public int m ( ) { return java . util . Calendar . MONDAY ; } } eof 
-SUCCESS
+Success
 
 
 Test 13 _________________________________
 public class A { public A ( ) { } public void m2 ( ) { java . lang . System . exit ( ) ; } } eof 
-SUCCESS
+Success
 
 
 Test 14 _________________________________
 public class A { public A ( ) { } public int x ; public void m ( ) { new A ( ) . x = 42 ; } } eof 
-SUCCESS
+Success
 
 
 Test 15 _________________________________
 public class A { public int m1 ( int x ) { return 42 ; } public int m1 ( boolean x ) { return 87 ; } public int m2 ( ) { return this . m1 ( true ) ; } } eof 
-SUCCESS
+Success
 
 
 Test 16 _________________________________
 public class A { public A ( ) { } public int m ( ) { int [ ] x = new int [ 42 ] ; return x . length ; } } eof 
-SUCCESS
+Success
 
 
 Test 17 _________________________________
 public class A { public A ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 18 _________________________________
 public class A { public A ( ) { } public int m ( ) { return 42 ; } } eof 
-SUCCESS
+Success
 
 
 Test 19 _________________________________
 public class A { public A ( ) { } public int x ; } eof 
-SUCCESS
+Success
 
 
 Test 20 _________________________________
 public class A { public A ( ) { } protected int m ( ) { return 42 ; } } eof 
-SUCCESS
+Success
 
 
 Test 21 _________________________________
 public abstract class A { public abstract int m ( ) ; } eof 
-SUCCESS
+Success
 
 
 Test 22 _________________________________
 public final class A { public A ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 23 _________________________________
 public class A { public A ( ) { } public final int m ( ) { return 42 ; } } eof 
-SUCCESS
+Success
 
 
 Test 24 _________________________________
 public class A { protected A ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 25 _________________________________
 public class A { public static native int m ( int i ) ; } eof 
-SUCCESS
+Success
 
 
 Test 26 _________________________________
 public class A { public A ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 27 _________________________________
 public class A { public A ( ) { } protected int x = 42 ; } eof 
-SUCCESS
+Success
 
 
 Test 28 _________________________________
 public class A { public A ( ) { } public A ( int x ) { } } eof 
-SUCCESS
+Success
 
 
 Test 29 _________________________________
 public class A { public A ( ) { } public int m ( ) { int x = 42 ; int y = 87 ; { int z = x + y ; return z ; } } } eof 
-SUCCESS
+Success
 
 
 Test 30 _________________________________
 public class A { public A ( ) { } public int m ( int x ) { if ( x == 42 ) return 87 ; else return 17 ; } } eof 
-SUCCESS
+Success
 
 
 Test 31 _________________________________
 public class A { public A ( ) { } public void m ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 32 _________________________________
 public class A { public A ( ) { } public void m ( ) { int x = 42 ; x = x + 1 ; int y = x + 87 ; } } eof 
-SUCCESS
+Success
 
 
 Test 33 _________________________________
 public class A { public A ( ) { } public int m ( int x ) { int y = 0 ; if ( x == 0 ) y = 42 ; else y = 87 ; return y ; } } eof 
-SUCCESS
+Success
 
 
 Test 34 _________________________________
 public class A { public A ( ) { } public int m ( int x ) { while ( x > 0 ) x = x - 1 ; return x ; } } eof 
-SUCCESS
+Success
 
 
 Test 35 _________________________________
 public class A { public A ( ) { } public int m ( int x ) { int y = 0 ; for ( int i = x ; i > 0 ; i = i - 1 ) y = y + 1 ; return y ; } } eof 
-SUCCESS
+Success
 
 
 Test 36 _________________________________
 public class A { public A ( ) { } protected boolean x ; } eof 
-SUCCESS
+Success
 
 
 Test 37 _________________________________
 public class A { public A ( ) { } protected int x ; } eof 
-SUCCESS
+Success
 
 
 Test 38 _________________________________
 public class A { public A ( ) { } protected char x ; } eof 
-SUCCESS
+Success
 
 
 Test 39 _________________________________
 public class A { public A ( ) { } protected byte x ; } eof 
-SUCCESS
+Success
 
 
 Test 40 _________________________________
 public class A { public A ( ) { } protected short x ; } eof 
-SUCCESS
+Success
 
 
 Test 41 _________________________________
 public class A { public A ( ) { } protected int [ ] x ; } eof 
-SUCCESS
+Success
 
 
 Test 42 _________________________________
 public class A { public A ( ) { } public int [ ] foo ( ) { return null ; } } eof 
-SUCCESS
+Success
 
 
 Test 43 _________________________________
 public class A { public A ( ) { } protected int x = 42 ; } eof 
-SUCCESS
+Success
 
 
 Test 44 _________________________________
 public class A { public A ( ) { } protected boolean x = false ; } eof 
-SUCCESS
+Success
 
 
 Test 45 _________________________________
 public class A { public A ( ) { } protected String x = " foo " ; } eof 
-SUCCESS
+Success
 
 
 Test 46 _________________________________
 public class A { public A ( ) { } protected A x = null ; } eof 
-SUCCESS
+Success
 
 
 Test 47 _________________________________
 public class A { public A ( ) { } public A returnThis ( ) { return this ; } } eof 
-SUCCESS
+Success
 
 
 Test 48 _________________________________
 public class A { public A ( ) { } protected char x = ' a ' ; } eof 
-SUCCESS
+Success
 
 
 Test 49 _________________________________
-Error at char 68 "\'\\
+public class A { public A ( ) { } protected String x = " b t n f r \ ' \ 0 64 " ; } eof 
+Success
 
 
 Test 50 _________________________________
 public class A { public A ( ) { } public void m ( ) { java . util . Vector x = null ; } } eof 
-SUCCESS
+Success
 
 
 Test 51 _________________________________
 public class A { public A ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 52 _________________________________
 public class A { public A ( ) { } } eof 
-SUCCESS
+Success
 
 
 Test 53 _________________________________
 public class A { public A ( ) { } public int m ( int x ) { return - 2 * x + 87 % x - ( x / 7 ) ; } } eof 
-SUCCESS
+Success
 
 
 Test 54 _________________________________
 public class A { public A ( ) { } public boolean m ( int x ) { return ( x < 87 ) && ( x > 42 ) && ( x <= 86 ) && ( x >= 43 ) && ( x == 51 ) && ( x != 52 ) ; } } eof 
-SUCCESS
+Success
 
 
 Test 55 _________________________________
 public class A { public A ( ) { } public boolean m ( boolean x ) { return ( x & true ) | ! x ; } } eof 
-SUCCESS
+Success
 
 
 Test 56 _________________________________
 public class A { public A ( ) { } public String m ( int x ) { return " foo " + x + true + null ; } } eof 
-SUCCESS
+Success
 
 
 Test 57 _________________________________
 public class A { public A ( ) { } public boolean m ( boolean x ) { return ( x && true ) || x ; } } eof 
-SUCCESS
+Success
 
 
 Test 58 _________________________________
 public class A { public A ( ) { } public boolean m ( Object x ) { return x instanceof A ; } } eof 
-SUCCESS
+Success
 
 
 Test 59 _________________________________
 public class A { public A ( ) { } public int m ( byte x ) { return ( int ) x ; } } eof 
-SUCCESS
+Success
 
 
 Test 60 _________________________________
 public class A { public A ( ) { } public A m ( Object x ) { return ( A ) x ; } } eof 
-SUCCESS
+Success
 
 

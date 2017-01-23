@@ -1,8 +1,7 @@
 #!/bin/bash
 gradle build
-for i in {1..60}
-do
-  printf "Test $i _________________________________\n"
-  java -jar build/libs/joos-1.0.jar test/$i.java
+for filename in test/*.java; do 
+  printf "Test $filename _________________________________\n"
+  java -jar build/libs/joos-1.0.jar $filename.java
   printf "\n\n"
 done

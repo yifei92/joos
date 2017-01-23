@@ -23,6 +23,10 @@ public class StringLiteralNFA extends NFA {
 	private static final int STATE_ESCAPE = 2;
 	private static final int STATE_STRING = 3;
 	private static final int STATE_QUOTE_CLOSE = 4;
+
+	private static final Set<Character> STRING_LITERAL_EXCLUSIONS = new HashSet<Character>(Arrays.asList('\\', System.lineSeparator().charAt(0), '"'));
+	private static final Set<Character> NEWLINE_EXCLUSIONS = new HashSet<Character>(Arrays.asList(System.lineSeparator().charAt(0)));
+
 	// Specifies what has already been consumed by this NFA
 	private List<TerminalToken> mTokens = new ArrayList<>();
 
@@ -38,22 +42,20 @@ public class StringLiteralNFA extends NFA {
 				table.put('\\', STATE_ESCAPE);
 				// Allow for empty strings
 				table.put('"', STATE_QUOTE_CLOSE);
-				// Allow for all letters and digits
-				TransitionTableUtil.putAllLetters(table, STATE_STRING);
-				TransitionTableUtil.putAllDigits(table, STATE_STRING);
+				// Allow for all chars except the ones above
+				TransitionTableUtil.putAllCharExcept(table, STRING_LITERAL_EXCLUSIONS, STATE_STRING);
 				break;
 			case STATE_ESCAPE:
-				// Allow for all letters and digits
-				TransitionTableUtil.putAllChars(table, STATE_STRING);
+				// Allow for all chars except newline
+				TransitionTableUtil.putAllCharExcept(table, NEWLINE_EXCLUSIONS, STATE_STRING);
 				break;
 			case STATE_STRING:
-				// Allow for all letters and digits
-				TransitionTableUtil.putAllLetters(table, STATE_STRING);
-				TransitionTableUtil.putAllDigits(table, STATE_STRING);
 				// Allow for end quotes
 				table.put('"', STATE_QUOTE_CLOSE);
 				// Allow for the escape char
 				table.put('\\', STATE_ESCAPE);
+				// Allow for all chars except for above
+				TransitionTableUtil.putAllCharExcept(table, STRING_LITERAL_EXCLUSIONS, STATE_STRING);
 				break;
 			case STATE_QUOTE_CLOSE:
 				break;

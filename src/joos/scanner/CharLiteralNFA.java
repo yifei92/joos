@@ -24,7 +24,8 @@ public class CharLiteralNFA extends NFA {
 	private static final int STATE_CHAR = 3;
 	private static final int STATE_COMMA_CLOSE = 4;
 
-	private static final Set<Character> ESCAPE_EXCLUSIONS = new HashSet<Character>(Arrays.asList('\\'));
+	private static final Set<Character> ESCAPE_EXCLUSIONS = new HashSet<Character>(Arrays.asList('\\', System.lineSeparator().charAt(0)));
+	private static final Set<Character> NEWLINE_EXCLUSIONS = new HashSet<Character>(Arrays.asList(System.lineSeparator().charAt(0)));
 	// Specifies what has already been consumed by this NFA
 	private String mValue = "";
 	private boolean mContainsEscape = false;
@@ -44,7 +45,7 @@ public class CharLiteralNFA extends NFA {
 				break;
 			case STATE_ESCAPE:
 				// Allow for all chars
-				TransitionTableUtil.putAllChars(table, STATE_CHAR);
+				TransitionTableUtil.putAllCharExcept(table, NEWLINE_EXCLUSIONS, STATE_CHAR);
 				break;
 			case STATE_CHAR:
 				table.put('\'', STATE_COMMA_CLOSE);

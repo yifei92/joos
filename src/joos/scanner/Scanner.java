@@ -155,7 +155,7 @@ public class Scanner {
 					String errorCodeChunk =
 						input.substring(
 							currentCharIndex,
-							Math.min(input.length(), currentCharIndex + 5));
+							Math.min(input.length(), currentCharIndex + 15));
 					throw new InvalidSyntaxException("Error at char " + currentCharIndex + " " + errorCodeChunk);
 				}
 				reset();

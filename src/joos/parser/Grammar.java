@@ -1,21 +1,22 @@
 package joos.parser;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
+import java.lang.Comparable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
-import java.util.ArrayList;
+import joos.commons.NonterminalToken;
+import joos.commons.ParseTreeNode;
+import joos.commons.TerminalToken;
 import joos.commons.Token;
 import joos.commons.TokenType;
-import joos.commons.TerminalToken;
-import joos.commons.NonterminalToken;
-import java.lang.Comparable;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.Arrays;
-import joos.commons.ParseTreeNode;
+import joos.exceptions.InvalidSyntaxException;
 
 public class Grammar {
 	Set<TokenType> terminals;
@@ -255,11 +256,11 @@ public class Grammar {
 
 	private void printFollows() {
 		for (TokenType t : this.follows.keySet()) {
-			//System.out.print(t + " :");
+			System.out.print(t + " :");
 			for (TokenType term : this.follows.get(t)) {
-				//System.out.print(" " + term + ",");
+				System.out.print(" " + term + ",");
 			}
-			//System.out.println();
+			System.out.println();
 		}
 	}
 
@@ -267,39 +268,39 @@ public class Grammar {
 		List<ItemSet> values = new ArrayList(this.itemSets.values());
 		Collections.sort(values);
 		for (ItemSet itemSet : values) {
-			//System.out.println("ItemSet " + itemSet.id + ":");
-			//System.out.println("	Productions:");
+			System.out.println("ItemSet " + itemSet.id + ":");
+			System.out.println("	Productions:");
 			for (ProductionIndex productionIndex : itemSet.productionIndices) {
 				int index = productionIndex.index;
 				Production production = productionIndex.production;
-				//System.out.print("		(" + index + ") " + production.lhs + " =>");
+				System.out.print("		(" + index + ") " + production.lhs + " =>");
 				for (TokenType rh : production.rhs) {
-					//System.out.print(" " + rh);
+					System.out.print(" " + rh);
 				}
-				//System.out.println();
+				System.out.println();
 			}
-			//System.out.println("	Links:");
+			System.out.println("	Links:");
 			for (TokenType token : itemSet.links.keySet()) {
 				Action action = itemSet.links.get(token);
-				//System.out.print("		" + token + " -> ");
+				System.out.print("		" + token + " -> ");
 				switch (action.type) {
 					case SUCCESS:
 						System.out.print("SUCCESS");
 						break;
 					case ITEMSET:
-						//System.out.print(action.itemSet.id);
+						System.out.print(action.itemSet.id);
 						break;
 					case REDUCTION:
-						//System.out.print("Reduce: " + action.reduction.symbol + ", " + action.reduction.number);
+						System.out.print("Reduce: " + action.reduction.symbol + ", " + action.reduction.number);
 						break;
 				}
-				//System.out.println();
+				System.out.println();
 			}
-			//System.out.println();
+			System.out.println();
 		}
 	}
 
-	public ParseTreeNode parse(List<TerminalToken> tokens) {
+	public ParseTreeNode parse(List<TerminalToken> tokens) throws InvalidSyntaxException {
 		int tokensIndex = 0;
 		Stack<ItemSet> stateStack = new Stack();
 		stateStack.push(this.itemSetTable);
@@ -307,7 +308,6 @@ public class Grammar {
 		List<ParseTreeNode> nodes = new ArrayList();
 		ParseTreeNode node = new ParseTreeNode(token);
 		while(tokensIndex < tokens.size()) {
-			//System.out.println(token.getType());
 			if (stateStack.peek().links.containsKey(token.getType()) || stateStack.peek().links.containsKey(null)) {
 				Action action = null;
 				if (stateStack.peek().links.containsKey(token.getType())) {
@@ -317,7 +317,6 @@ public class Grammar {
 				}
 				switch (action.type) {
 					case SUCCESS:
-						System.out.println("SUCCESS");
 						return node;
 					case ITEMSET:
 						nodes.add(node);
@@ -363,11 +362,10 @@ public class Grammar {
 						break;
 				}
 			} else {
-				System.out.println("ERROR");
-				return null;
+				break;
 			}
 		}
-		return null;
+		throw new InvalidSyntaxException("Parsing error at token '" + tokens.get(tokensIndex).getRawValue() + "'");
 	}
 }
 

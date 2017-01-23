@@ -38,6 +38,7 @@ public class MultiLineCommentNFA extends NFA {
 				table.put('*', STATE_OPEN_STAR);
 				break;
 			case STATE_OPEN_STAR:
+				table.put('*', STATE_CLOSE_STAR);
 				// Allow for all chars except the * char else this will be a javadoc comment
 				TransitionTableUtil.putAllCharExcept(table, STAR_EXCLUSIONS, STATE_CHARS);
 				break;

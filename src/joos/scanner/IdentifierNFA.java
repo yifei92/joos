@@ -29,11 +29,15 @@ public class IdentifierNFA extends NFA {
 		switch (state) {
 			case STATE_START:
 				TransitionTableUtil.putAllLetters(table, STATE_IDENTIFIER);
+				table.put('$', STATE_IDENTIFIER);
+				table.put('_', STATE_IDENTIFIER);
 				break;
 			case STATE_IDENTIFIER:
 				// Allow for all letters and digits
 				TransitionTableUtil.putAllDigits(table, STATE_IDENTIFIER);
 				TransitionTableUtil.putAllLetters(table, STATE_IDENTIFIER);
+				table.put('$', STATE_IDENTIFIER);
+				table.put('_', STATE_IDENTIFIER);
 				break;
 		}
 		return new Transitions(state, table);

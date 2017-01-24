@@ -41,9 +41,6 @@ public class Scanner {
 					case IDENTIFIER:
 						nfa = new IdentifierNFA();
 						break;
-					case FLOATING_POINT_LITERAL:
-						nfa = new FloatingPointLiteralNFA();
-						break;
 					case COMMENT_SINGLE_LINE:
 						nfa = new SingleLineCommentNFA();
 						break;

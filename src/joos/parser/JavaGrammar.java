@@ -42,7 +42,14 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.STRING_LITERAL_WITH_QUOTES,
 			Arrays.asList(
-				Arrays.asList(TokenType.DOUBLE_QUOTE, TokenType.STRING_LITERAL_WITH_ESCAPES, TokenType.DOUBLE_QUOTE)
+				Arrays.asList(TokenType.DOUBLE_QUOTE, TokenType.STRING_LITERAL_WITH_ESCAPES_OPT, TokenType.DOUBLE_QUOTE)
+			)
+		);
+		productions.put(
+			TokenType.STRING_LITERAL_WITH_ESCAPES_OPT,
+			Arrays.asList(
+				Arrays.asList(),
+				Arrays.asList(TokenType.STRING_LITERAL_WITH_ESCAPES)
 			)
 		);
 		productions.put(
@@ -345,7 +352,7 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.VARIABLE_DECLARATOR,
 			Arrays.asList(
-				// Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID),
+				Arrays.asList(TokenType.IDENTIFIER),
 				Arrays.asList(TokenType.IDENTIFIER, TokenType.ASSIGN, TokenType.VARIABLE_INITIALIZER)
 			)
 		);
@@ -359,8 +366,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.VARIABLE_INITIALIZER,
 			Arrays.asList(
-				Arrays.asList(TokenType.EXPRESSION),
-				Arrays.asList(TokenType.ARRAY_INITIALIZER)
+				Arrays.asList(TokenType.EXPRESSION)
+				// Arrays.asList(TokenType.ARRAY_INITIALIZER)
 			)
 		);
 		productions.put(
@@ -448,13 +455,13 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.SIMPLE_NAME, TokenType.OPEN_BR, TokenType.FORMAL_PARAMETER_LIST_OPT, TokenType.CLOSE_BR)
 			)
 		);
-		productions.put(
-			TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT,
-			Arrays.asList(
-				Arrays.asList(),
-				Arrays.asList(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION)
-			)
-		);
+		// productions.put(
+		// 	TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(),
+		// 		Arrays.asList(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION)
+		// 	)
+		// );
 		productions.put(
 			TokenType.BLOCK_STATEMENTS_OPT,
 			Arrays.asList(
@@ -465,7 +472,7 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.CONSTRUCTOR_BODY,
 			Arrays.asList(
-				Arrays.asList(TokenType.OPEN_CBR, TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT, TokenType.BLOCK_STATEMENTS_OPT, TokenType.CLOSE_CBR)
+				Arrays.asList(TokenType.OPEN_CBR, /*TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT,*/ TokenType.BLOCK_STATEMENTS_OPT, TokenType.CLOSE_CBR)
 			)
 		);
 		productions.put(
@@ -475,13 +482,13 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.ARGUMENT_LIST)
 			)
 		);
-		productions.put(
-			TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION,
-			Arrays.asList(
-				Arrays.asList(TokenType.THIS, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON)
-				// Arrays.asList(TokenType.SUPER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON)
-			)
-		);
+		// productions.put(
+		// 	TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.THIS, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON),
+		// 		Arrays.asList(TokenType.SUPER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON)
+		// 	)
+		// );
 		productions.put(
 			TokenType.EXTENDS_INTERFACES_OPT,
 			Arrays.asList(
@@ -555,12 +562,12 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.COMMA)
 			)
 		);
-		productions.put(
-			TokenType.ARRAY_INITIALIZER,
-			Arrays.asList(
-				Arrays.asList(TokenType.OPEN_CBR, TokenType.VARIABLE_INITIALIZERS_OPT, TokenType.COMMA_OPT, TokenType.CLOSE_CBR)
-			)
-		);
+		// productions.put(
+		// 	TokenType.ARRAY_INITIALIZER,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.OPEN_CBR, TokenType.VARIABLE_INITIALIZERS_OPT, TokenType.COMMA_OPT, TokenType.CLOSE_CBR)
+		// 	)
+		// );
 		productions.put(
 			TokenType.VARIABLE_INITIALIZERS,
 			Arrays.asList(
@@ -934,8 +941,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.DIM_EXPRS,
 			Arrays.asList(
-				Arrays.asList(TokenType.DIM_EXPR),
-				Arrays.asList(TokenType.DIM_EXPRS, TokenType.DIM_EXPR)
+				Arrays.asList(TokenType.DIM_EXPR)
+				// Arrays.asList(TokenType.DIM_EXPRS, TokenType.DIM_EXPR)
 			)
 		);
 		productions.put(

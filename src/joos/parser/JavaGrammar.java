@@ -32,7 +32,7 @@ public final class JavaGrammar {
 			TokenType.LITERAL,
 			Arrays.asList(
 				Arrays.asList(TokenType.INTEGER_LITERAL),
-				Arrays.asList(TokenType.FLOATING_POINT_LITERAL),
+				// Arrays.asList(TokenType.FLOATING_POINT_LITERAL),
 				Arrays.asList(TokenType.BOOLEAN_LITERAL),
 				Arrays.asList(TokenType.CHAR_LITERAL_WITH_QUOTES),
 				Arrays.asList(TokenType.STRING_LITERAL_WITH_QUOTES),
@@ -79,8 +79,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.NUMERIC_TYPE,
 			Arrays.asList(
-				Arrays.asList(TokenType.INTEGRAL_TYPE),
-				Arrays.asList(TokenType.FLOATING_POINT_TYPE)
+				Arrays.asList(TokenType.INTEGRAL_TYPE)
+				// Arrays.asList(TokenType.FLOATING_POINT_TYPE)
 			)
 		);
 		productions.put(
@@ -89,17 +89,17 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.BYTE),
 				Arrays.asList(TokenType.SHORT),
 				Arrays.asList(TokenType.INT),
-				Arrays.asList(TokenType.LONG),
+				// Arrays.asList(TokenType.LONG),
 				Arrays.asList(TokenType.CHAR)
 			)
 		);
-		productions.put(
-			TokenType.FLOATING_POINT_TYPE,
-			Arrays.asList(
-				Arrays.asList(TokenType.FLOAT),
-				Arrays.asList(TokenType.DOUBLE)
-			)
-		);
+		// productions.put(
+		// 	TokenType.FLOATING_POINT_TYPE,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.FLOAT),
+		// 		Arrays.asList(TokenType.DOUBLE)
+		// 	)
+		// );
 		productions.put(
 			TokenType.REFERENCE_TYPE,
 			Arrays.asList(
@@ -189,8 +189,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.TYPE_DECLARATIONS,
 			Arrays.asList(
-				Arrays.asList(TokenType.TYPE_DECLARATION),
-				Arrays.asList(TokenType.TYPE_DECLARATIONS, TokenType.TYPE_DECLARATION)
+				Arrays.asList(TokenType.TYPE_DECLARATION)
+				// Arrays.asList(TokenType.TYPE_DECLARATIONS, TokenType.TYPE_DECLARATION)
 			)
 		);
 		productions.put(
@@ -238,14 +238,14 @@ public final class JavaGrammar {
 			Arrays.asList(
 				Arrays.asList(TokenType.PUBLIC),
 				Arrays.asList(TokenType.PROTECTED),
-				Arrays.asList(TokenType.PRIVATE),
+				// Arrays.asList(TokenType.PRIVATE),
 				Arrays.asList(TokenType.STATIC),
 				Arrays.asList(TokenType.ABSTRACT),
 				Arrays.asList(TokenType.FINAL),
-				Arrays.asList(TokenType.NATIVE),
-				Arrays.asList(TokenType.SYNCHRONIZED),
-				Arrays.asList(TokenType.TRANSIENT),
-				Arrays.asList(TokenType.VOLATILE)
+				Arrays.asList(TokenType.NATIVE)
+				// Arrays.asList(TokenType.SYNCHRONIZED),
+				// Arrays.asList(TokenType.TRANSIENT),
+				// Arrays.asList(TokenType.VOLATILE)
 			)
 		);
 		productions.put(
@@ -318,7 +318,7 @@ public final class JavaGrammar {
 			TokenType.CLASS_BODY_DECLARATION,
 			Arrays.asList(
 				Arrays.asList(TokenType.CLASS_MEMBER_DECLARATION),
-				Arrays.asList(TokenType.STATIC_INITIALIZER),
+				// Arrays.asList(TokenType.STATIC_INITIALIZER),
 				Arrays.asList(TokenType.CONSTRUCTOR_DECLARATION)
 			)
 		);
@@ -338,24 +338,24 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.VARIABLE_DECLARATORS,
 			Arrays.asList(
-				Arrays.asList(TokenType.VARIABLE_DECLARATOR),
-				Arrays.asList(TokenType.VARIABLE_DECLARATORS, TokenType.COMMA, TokenType.VARIABLE_DECLARATOR)
+				Arrays.asList(TokenType.VARIABLE_DECLARATOR)
+				// Arrays.asList(TokenType.VARIABLE_DECLARATORS, TokenType.COMMA, TokenType.VARIABLE_DECLARATOR)
 			)
 		);
 		productions.put(
 			TokenType.VARIABLE_DECLARATOR,
 			Arrays.asList(
-				Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID),
-				Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID, TokenType.ASSIGN, TokenType.VARIABLE_INITIALIZER)
+				// Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID),
+				Arrays.asList(TokenType.IDENTIFIER, TokenType.ASSIGN, TokenType.VARIABLE_INITIALIZER)
 			)
 		);
-		productions.put(
-			TokenType.VARIABLE_DECLARATOR_ID,
-			Arrays.asList(
-				Arrays.asList(TokenType.IDENTIFIER),
-				Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
-			)
-		);
+		// productions.put(
+		// 	TokenType.VARIABLE_DECLARATOR_ID,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.IDENTIFIER),
+		// 		Arrays.asList(TokenType.VARIABLE_DECLARATOR_ID, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
+		// 	)
+		// );
 		productions.put(
 			TokenType.VARIABLE_INITIALIZER,
 			Arrays.asList(
@@ -369,18 +369,18 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.METHOD_HEADER, TokenType.METHOD_BODY)
 			)
 		);
-		productions.put(
-			TokenType.THROWS_CLAUSE_OPT,
-			Arrays.asList(
-				Arrays.asList(),
-				Arrays.asList(TokenType.THROWS_CLAUSE)
-			)
-		);
+		// productions.put(
+		// 	TokenType.THROWS_CLAUSE_OPT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(),
+		// 		Arrays.asList(TokenType.THROWS_CLAUSE)
+		// 	)
+		// );
 		productions.put(
 			TokenType.METHOD_HEADER,
 			Arrays.asList(
-				Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.TYPE, TokenType.METHOD_DECLARATOR, TokenType.THROWS_CLAUSE_OPT),
-				Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.VOID, TokenType.METHOD_DECLARATOR, TokenType.THROWS_CLAUSE_OPT)
+				Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.TYPE, TokenType.METHOD_DECLARATOR),//, TokenType.THROWS_CLAUSE_OPT),
+				Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.VOID, TokenType.METHOD_DECLARATOR)//, TokenType.THROWS_CLAUSE_OPT)
 			)
 		);
 		productions.put(
@@ -407,15 +407,15 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.FORMAL_PARAMETER,
 			Arrays.asList(
-				Arrays.asList(TokenType.TYPE, TokenType.VARIABLE_DECLARATOR_ID)
+				Arrays.asList(TokenType.TYPE, TokenType.IDENTIFIER)
 			)
 		);
-		productions.put(
-			TokenType.THROWS_CLAUSE,
-			Arrays.asList(
-				Arrays.asList(TokenType.THROWS, TokenType.CLASS_TYPE_LIST)
-			)
-		);
+		// productions.put(
+		// 	TokenType.THROWS_CLAUSE,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.THROWS, TokenType.CLASS_TYPE_LIST)
+		// 	)
+		// );
 		productions.put(
 			TokenType.CLASS_TYPE_LIST,
 			Arrays.asList(
@@ -430,16 +430,16 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.SEMICOLON)
 			)
 		);
-		productions.put(
-			TokenType.STATIC_INITIALIZER,
-			Arrays.asList(
-				Arrays.asList(TokenType.STATIC, TokenType.BLOCK)
-			)
-		);
+		// productions.put(
+		// 	TokenType.STATIC_INITIALIZER,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.STATIC, TokenType.BLOCK)
+		// 	)
+		// );
 		productions.put(
 			TokenType.CONSTRUCTOR_DECLARATION,
 			Arrays.asList(
-				Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.CONSTRUCTOR_DECLARATOR, TokenType.THROWS_CLAUSE_OPT, TokenType.CONSTRUCTOR_BODY)
+				Arrays.asList(TokenType.MODIFIERS_OPT, TokenType.CONSTRUCTOR_DECLARATOR,/* TokenType.THROWS_CLAUSE_OPT,*/ TokenType.CONSTRUCTOR_BODY)
 			)
 		);
 		productions.put(
@@ -478,8 +478,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION,
 			Arrays.asList(
-				Arrays.asList(TokenType.THIS, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON),
-				Arrays.asList(TokenType.SUPER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON)
+				Arrays.asList(TokenType.THIS, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON)
+				// Arrays.asList(TokenType.SUPER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR, TokenType.SEMICOLON)
 			)
 		);
 		productions.put(
@@ -627,14 +627,14 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.BLOCK),
 				Arrays.asList(TokenType.EMPTY_STATEMENT),
 				Arrays.asList(TokenType.EXPRESSION_STATEMENT),
-				Arrays.asList(TokenType.SWITCH_STATEMENT),
-				Arrays.asList(TokenType.DO_STATEMENT),
-				Arrays.asList(TokenType.BREAK_STATEMENT),
-				Arrays.asList(TokenType.CONTINUE_STATEMENT),
-				Arrays.asList(TokenType.RETURN_STATEMENT),
-				Arrays.asList(TokenType.SYNCHRONIZED_STATEMENT),
-				Arrays.asList(TokenType.THROW_STATEMENT),
-				Arrays.asList(TokenType.TRY_STATEMENT)
+				// Arrays.asList(TokenType.SWITCH_STATEMENT),
+				// Arrays.asList(TokenType.DO_STATEMENT),
+				// Arrays.asList(TokenType.BREAK_STATEMENT),
+				// Arrays.asList(TokenType.CONTINUE_STATEMENT),
+				Arrays.asList(TokenType.RETURN_STATEMENT)
+				// Arrays.asList(TokenType.SYNCHRONIZED_STATEMENT),
+				// Arrays.asList(TokenType.THROW_STATEMENT),
+				// Arrays.asList(TokenType.TRY_STATEMENT)
 			)
 		);
 		productions.put(
@@ -665,10 +665,10 @@ public final class JavaGrammar {
 			TokenType.STATEMENT_EXPRESSION,
 			Arrays.asList(
 				Arrays.asList(TokenType.ASSIGNMENT),
-				Arrays.asList(TokenType.PRE_INCREMENT_EXPRESSION),
-				Arrays.asList(TokenType.PRE_DECREMENT_EXPRESSION),
-				Arrays.asList(TokenType.POST_INCREMENT_EXPRESSION),
-				Arrays.asList(TokenType.POST_DECREMENT_EXPRESSION),
+				// Arrays.asList(TokenType.PRE_INCREMENT_EXPRESSION),
+				// Arrays.asList(TokenType.PRE_DECREMENT_EXPRESSION),
+				// Arrays.asList(TokenType.POST_INCREMENT_EXPRESSION),
+				// Arrays.asList(TokenType.POST_DECREMENT_EXPRESSION),
 				Arrays.asList(TokenType.METHOD_INVOCATION),
 				Arrays.asList(TokenType.CLASS_INSTANCE_CREATION_EXPRESSION)
 			)
@@ -691,59 +691,59 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.IF, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.STATEMENT_NO_SHORT_IF, TokenType.ELSE, TokenType.STATEMENT_NO_SHORT_IF)
 			)
 		);
-		productions.put(
-			TokenType.SWITCH_STATEMENT,
-			Arrays.asList(
-				Arrays.asList(TokenType.SWITCH, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.SWITCH_BLOCK)
-			)
-		);
-		productions.put(
-			TokenType.SWITCH_BLOCK_STATEMENT_GROUPS_OPT,
-			Arrays.asList(
-				Arrays.asList(),
-				Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUPS)
-			)
-		);
-		productions.put(
-			TokenType.SWITCH_LABELS_OPT,
-			Arrays.asList(
-				Arrays.asList(),
-				Arrays.asList(TokenType.SWITCH_LABELS)
-			)
-		);
-		productions.put(
-			TokenType.SWITCH_BLOCK,
-			Arrays.asList(
-				Arrays.asList(TokenType.OPEN_CBR, TokenType.SWITCH_BLOCK_STATEMENT_GROUPS_OPT, TokenType.SWITCH_LABELS_OPT, TokenType.CLOSE_CBR)
-			)
-		);
-		productions.put(
-			TokenType.SWITCH_BLOCK_STATEMENT_GROUPS,
-			Arrays.asList(
-				Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUP),
-				Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUPS, TokenType.SWITCH_BLOCK_STATEMENT_GROUP)
-			)
-		);
-		productions.put(
-			TokenType.SWITCH_BLOCK_STATEMENT_GROUP,
-			Arrays.asList(
-				Arrays.asList(TokenType.SWITCH_LABELS, TokenType.BLOCK_STATEMENTS)
-			)
-		);
-		productions.put(
-			TokenType.SWITCH_LABELS,
-			Arrays.asList(
-				Arrays.asList(TokenType.SWITCH_LABEL),
-				Arrays.asList(TokenType.SWITCH_LABELS, TokenType.SWITCH_LABEL)
-			)
-		);
-		productions.put(
-			TokenType.SWITCH_LABEL,
-			Arrays.asList(
-				Arrays.asList(TokenType.CASE, TokenType.CONSTANT_EXPRESSION, TokenType.COLON),
-				Arrays.asList(TokenType.DEFAULT, TokenType.COLON)
-			)
-		);
+		// productions.put(
+		// 	TokenType.SWITCH_STATEMENT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.SWITCH, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.SWITCH_BLOCK)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SWITCH_BLOCK_STATEMENT_GROUPS_OPT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(),
+		// 		Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUPS)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SWITCH_LABELS_OPT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(),
+		// 		Arrays.asList(TokenType.SWITCH_LABELS)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SWITCH_BLOCK,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.OPEN_CBR, TokenType.SWITCH_BLOCK_STATEMENT_GROUPS_OPT, TokenType.SWITCH_LABELS_OPT, TokenType.CLOSE_CBR)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SWITCH_BLOCK_STATEMENT_GROUPS,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUP),
+		// 		Arrays.asList(TokenType.SWITCH_BLOCK_STATEMENT_GROUPS, TokenType.SWITCH_BLOCK_STATEMENT_GROUP)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SWITCH_BLOCK_STATEMENT_GROUP,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.SWITCH_LABELS, TokenType.BLOCK_STATEMENTS)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SWITCH_LABELS,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.SWITCH_LABEL),
+		// 		Arrays.asList(TokenType.SWITCH_LABELS, TokenType.SWITCH_LABEL)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SWITCH_LABEL,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.CASE, TokenType.CONSTANT_EXPRESSION, TokenType.COLON),
+		// 		Arrays.asList(TokenType.DEFAULT, TokenType.COLON)
+		// 	)
+		// );
 		productions.put(
 			TokenType.WHILE_STATEMENT,
 			Arrays.asList(
@@ -756,12 +756,12 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.WHILE, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.STATEMENT_NO_SHORT_IF)
 			)
 		);
-		productions.put(
-			TokenType.DO_STATEMENT,
-			Arrays.asList(
-				Arrays.asList(TokenType.DO, TokenType.STATEMENT, TokenType.WHILE, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.SEMICOLON)
-			)
-		);
+		// productions.put(
+		// 	TokenType.DO_STATEMENT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.DO, TokenType.STATEMENT, TokenType.WHILE, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.SEMICOLON)
+		// 	)
+		// );
 		productions.put(
 			TokenType.FOR_INIT_OPT,
 			Arrays.asList(
@@ -822,69 +822,69 @@ public final class JavaGrammar {
 				Arrays.asList(TokenType.IDENTIFIER)
 			)
 		);
-		productions.put(
-			TokenType.BREAK_STATEMENT,
-			Arrays.asList(
-				Arrays.asList(TokenType.BREAK, TokenType.IDENTIFIER_OPT, TokenType.SEMICOLON)
-			)
-		);
-		productions.put(
-			TokenType.CONTINUE_STATEMENT,
-			Arrays.asList(
-				Arrays.asList(TokenType.CONTINUE, TokenType.IDENTIFIER_OPT, TokenType.SEMICOLON)
-			)
-		);
+		// productions.put(
+		// 	TokenType.BREAK_STATEMENT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.BREAK, TokenType.IDENTIFIER_OPT, TokenType.SEMICOLON)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.CONTINUE_STATEMENT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.CONTINUE, TokenType.IDENTIFIER_OPT, TokenType.SEMICOLON)
+		// 	)
+		// );
 		productions.put(
 			TokenType.RETURN_STATEMENT,
 			Arrays.asList(
 				Arrays.asList(TokenType.RETURN, TokenType.EXPRESSION_OPT, TokenType.SEMICOLON)
 			)
 		);
-		productions.put(
-			TokenType.THROW_STATEMENT,
-			Arrays.asList(
-				Arrays.asList(TokenType.THROW, TokenType.EXPRESSION, TokenType.SEMICOLON)
-			)
-		);
-		productions.put(
-			TokenType.SYNCHRONIZED_STATEMENT,
-			Arrays.asList(
-				Arrays.asList(TokenType.SYNCHRONIZED, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.BLOCK)
-			)
-		);
-		productions.put(
-			TokenType.CATCHES_OPT,
-			Arrays.asList(
-				Arrays.asList(),
-				Arrays.asList(TokenType.CATCHES)
-			)
-		);
-		productions.put(
-			TokenType.TRY_STATEMENT,
-			Arrays.asList(
-				Arrays.asList(TokenType.TRY, TokenType.BLOCK, TokenType.CATCHES),
-				Arrays.asList(TokenType.TRY, TokenType.BLOCK, TokenType.CATCHES_OPT, TokenType.FINALLY_CLAUSE)
-			)
-		);
-		productions.put(
-			TokenType.CATCHES,
-			Arrays.asList(
-				Arrays.asList(TokenType.CATCH_CLAUSE),
-				Arrays.asList(TokenType.CATCHES, TokenType.CATCH_CLAUSE)
-			)
-		);
-		productions.put(
-			TokenType.CATCH_CLAUSE,
-			Arrays.asList(
-				Arrays.asList(TokenType.CATCH, TokenType.OPEN_BR, TokenType.FORMAL_PARAMETER, TokenType.CLOSE_BR, TokenType.BLOCK)
-			)
-		);
-		productions.put(
-			TokenType.FINALLY_CLAUSE,
-			Arrays.asList(
-				Arrays.asList(TokenType.FINALLY, TokenType.BLOCK)
-			)
-		);
+		// productions.put(
+		// 	TokenType.THROW_STATEMENT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.THROW, TokenType.EXPRESSION, TokenType.SEMICOLON)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.SYNCHRONIZED_STATEMENT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.SYNCHRONIZED, TokenType.OPEN_BR, TokenType.EXPRESSION, TokenType.CLOSE_BR, TokenType.BLOCK)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.CATCHES_OPT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(),
+		// 		Arrays.asList(TokenType.CATCHES)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.TRY_STATEMENT,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.TRY, TokenType.BLOCK, TokenType.CATCHES),
+		// 		Arrays.asList(TokenType.TRY, TokenType.BLOCK, TokenType.CATCHES_OPT, TokenType.FINALLY_CLAUSE)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.CATCHES,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.CATCH_CLAUSE),
+		// 		Arrays.asList(TokenType.CATCHES, TokenType.CATCH_CLAUSE)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.CATCH_CLAUSE,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.CATCH, TokenType.OPEN_BR, TokenType.FORMAL_PARAMETER, TokenType.CLOSE_BR, TokenType.BLOCK)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.FINALLY_CLAUSE,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.FINALLY, TokenType.BLOCK)
+		// 	)
+		// );
 		productions.put(
 			TokenType.PRIMARY,
 			Arrays.asList(
@@ -947,23 +947,23 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.DIMS,
 			Arrays.asList(
-				Arrays.asList(TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
-				Arrays.asList(TokenType.DIMS, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
+				Arrays.asList(TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
+				// Arrays.asList(TokenType.DIMS, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
 			)
 		);
 		productions.put(
 			TokenType.FIELD_ACCESS,
 			Arrays.asList(
-				Arrays.asList(TokenType.PRIMARY, TokenType.DOT, TokenType.IDENTIFIER),
-				Arrays.asList(TokenType.SUPER, TokenType.DOT, TokenType.IDENTIFIER)
+				Arrays.asList(TokenType.PRIMARY, TokenType.DOT, TokenType.IDENTIFIER)
+				// Arrays.asList(TokenType.SUPER, TokenType.DOT, TokenType.IDENTIFIER)
 			)
 		);
 		productions.put(
 			TokenType.METHOD_INVOCATION,
 			Arrays.asList(
 				Arrays.asList(TokenType.NAME, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR),
-				Arrays.asList(TokenType.PRIMARY, TokenType.DOT, TokenType.IDENTIFIER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR),
-				Arrays.asList(TokenType.SUPER, TokenType.DOT, TokenType.IDENTIFIER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR)
+				Arrays.asList(TokenType.PRIMARY, TokenType.DOT, TokenType.IDENTIFIER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR)
+				// Arrays.asList(TokenType.SUPER, TokenType.DOT, TokenType.IDENTIFIER, TokenType.OPEN_BR, TokenType.ARGUMENT_LIST_OPT, TokenType.CLOSE_BR)
 			)
 		);
 		productions.put(
@@ -977,50 +977,50 @@ public final class JavaGrammar {
 			TokenType.POSTFIX_EXPRESSION,
 			Arrays.asList(
 				Arrays.asList(TokenType.PRIMARY),
-				Arrays.asList(TokenType.NAME),
-				Arrays.asList(TokenType.POST_INCREMENT_EXPRESSION),
-				Arrays.asList(TokenType.POST_DECREMENT_EXPRESSION)
+				Arrays.asList(TokenType.NAME)
+				// Arrays.asList(TokenType.POST_INCREMENT_EXPRESSION),
+				// Arrays.asList(TokenType.POST_DECREMENT_EXPRESSION)
 			)
 		);
-		productions.put(
-			TokenType.POST_INCREMENT_EXPRESSION,
-			Arrays.asList(
-				Arrays.asList(TokenType.POSTFIX_EXPRESSION, TokenType.ASSIGN_INCREMENT)
-			)
-		);
-		productions.put(
-			TokenType.POST_DECREMENT_EXPRESSION,
-			Arrays.asList(
-				Arrays.asList(TokenType.POSTFIX_EXPRESSION, TokenType.ASSIGN_DECREMENT)
-			)
-		);
+		// productions.put(
+		// 	TokenType.POST_INCREMENT_EXPRESSION,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.POSTFIX_EXPRESSION, TokenType.ASSIGN_INCREMENT)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.POST_DECREMENT_EXPRESSION,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.POSTFIX_EXPRESSION, TokenType.ASSIGN_DECREMENT)
+		// 	)
+		// );
 		productions.put(
 			TokenType.UNARY_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.PRE_INCREMENT_EXPRESSION),
-				Arrays.asList(TokenType.PRE_DECREMENT_EXPRESSION),
-				Arrays.asList(TokenType.OP_PLUS, TokenType.UNARY_EXPRESSION),
+				// Arrays.asList(TokenType.PRE_INCREMENT_EXPRESSION),
+				// Arrays.asList(TokenType.PRE_DECREMENT_EXPRESSION),
+				// Arrays.asList(TokenType.OP_PLUS, TokenType.UNARY_EXPRESSION),
 				Arrays.asList(TokenType.OP_MINUS, TokenType.UNARY_EXPRESSION),
 				Arrays.asList(TokenType.UNARY_EXPRESSION_NOT_PLUS_MINUS)
 			)
 		);
-		productions.put(
-			TokenType.PRE_INCREMENT_EXPRESSION,
-			Arrays.asList(
-				Arrays.asList(TokenType.ASSIGN_INCREMENT, TokenType.UNARY_EXPRESSION)
-			)
-		);
-		productions.put(
-			TokenType.PRE_DECREMENT_EXPRESSION,
-			Arrays.asList(
-				Arrays.asList(TokenType.ASSIGN_DECREMENT, TokenType.UNARY_EXPRESSION)
-			)
-		);
+		// productions.put(
+		// 	TokenType.PRE_INCREMENT_EXPRESSION,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.ASSIGN_INCREMENT, TokenType.UNARY_EXPRESSION)
+		// 	)
+		// );
+		// productions.put(
+		// 	TokenType.PRE_DECREMENT_EXPRESSION,
+		// 	Arrays.asList(
+		// 		Arrays.asList(TokenType.ASSIGN_DECREMENT, TokenType.UNARY_EXPRESSION)
+		// 	)
+		// );
 		productions.put(
 			TokenType.UNARY_EXPRESSION_NOT_PLUS_MINUS,
 			Arrays.asList(
 				Arrays.asList(TokenType.POSTFIX_EXPRESSION),
-				Arrays.asList(TokenType.BITWISE_NOT, TokenType.UNARY_EXPRESSION),
+				// Arrays.asList(TokenType.BITWISE_NOT, TokenType.UNARY_EXPRESSION),
 				Arrays.asList(TokenType.BOOL_OP_NOT, TokenType.UNARY_EXPRESSION),
 				Arrays.asList(TokenType.CAST_EXPRESSION)
 			)
@@ -1053,10 +1053,10 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.SHIFT_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.ADDITIVE_EXPRESSION),
-				Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_LEFT_SHIFT, TokenType.ADDITIVE_EXPRESSION),
-				Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_RIGHT_SHIFT, TokenType.ADDITIVE_EXPRESSION),
-				Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_UNSIGNED_RIGHT_SHIFT, TokenType.ADDITIVE_EXPRESSION)
+				Arrays.asList(TokenType.ADDITIVE_EXPRESSION)
+				// Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_LEFT_SHIFT, TokenType.ADDITIVE_EXPRESSION),
+				// Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_RIGHT_SHIFT, TokenType.ADDITIVE_EXPRESSION),
+				// Arrays.asList(TokenType.SHIFT_EXPRESSION, TokenType.OP_UNSIGNED_RIGHT_SHIFT, TokenType.ADDITIVE_EXPRESSION)
 			)
 		);
 		productions.put(
@@ -1081,22 +1081,22 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.AND_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.EQUALITY_EXPRESSION),
-				Arrays.asList(TokenType.AND_EXPRESSION, TokenType.BITWISE_AND, TokenType.EQUALITY_EXPRESSION)
+				Arrays.asList(TokenType.EQUALITY_EXPRESSION)
+				// Arrays.asList(TokenType.AND_EXPRESSION, TokenType.BITWISE_AND, TokenType.EQUALITY_EXPRESSION)
 			)
 		);
 		productions.put(
 			TokenType.EXCLUSIVE_OR_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.AND_EXPRESSION),
-				Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION, TokenType.BITWISE_XOR, TokenType.AND_EXPRESSION)
+				Arrays.asList(TokenType.AND_EXPRESSION)
+				// Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION, TokenType.BITWISE_XOR, TokenType.AND_EXPRESSION)
 			)
 		);
 		productions.put(
 			TokenType.INCLUSIVE_OR_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION),
-				Arrays.asList(TokenType.INCLUSIVE_OR_EXPRESSION, TokenType.BITWISE_OR, TokenType.EXCLUSIVE_OR_EXPRESSION)
+				Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION)
+				// Arrays.asList(TokenType.INCLUSIVE_OR_EXPRESSION, TokenType.BITWISE_OR, TokenType.EXCLUSIVE_OR_EXPRESSION)
 			)
 		);
 		productions.put(
@@ -1116,8 +1116,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.CONDITIONAL_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.CONDITIONAL_OR_EXPRESSION),
-				Arrays.asList(TokenType.CONDITIONAL_OR_EXPRESSION, TokenType.QUESTION_MARK, TokenType.EXPRESSION, TokenType.COLON, TokenType.CONDITIONAL_EXPRESSION)
+				Arrays.asList(TokenType.CONDITIONAL_OR_EXPRESSION)
+				// Arrays.asList(TokenType.CONDITIONAL_OR_EXPRESSION, TokenType.QUESTION_MARK, TokenType.EXPRESSION, TokenType.COLON, TokenType.CONDITIONAL_EXPRESSION)
 			)
 		);
 		productions.put(

@@ -304,7 +304,7 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.CLASS_BODY_DECLARATIONS_OPT,
 			Arrays.asList(
-				Arrays.asList(),
+				//Arrays.asList(),
 				Arrays.asList(TokenType.CLASS_BODY_DECLARATIONS)
 			)
 		);
@@ -532,7 +532,7 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.INTERFACE_MEMBER_DECLARATION,
 			Arrays.asList(
-				Arrays.asList(TokenType.CONSTANT_DECLARATION),
+				//Arrays.asList(TokenType.CONSTANT_DECLARATION),
 				Arrays.asList(TokenType.ABSTRACT_METHOD_DECLARATION)
 			)
 		);

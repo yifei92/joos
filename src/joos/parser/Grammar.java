@@ -90,7 +90,6 @@ public class Grammar {
 			set.add(symbol);
 		}
 		else {
-      System.out.println(symbol);
 			for (Production production : this.productionsByLHS.get(symbol)) {
 				int i = 0;
 				for (;;) {
@@ -324,7 +323,6 @@ public class Grammar {
 						stateStack.push(action.itemSet);
 						tokensIndex++;
 						token = tokens.get(tokensIndex);
-            System.out.println(token.getType());
 						node = new ParseTreeNode(token);
 						break;
 					case REDUCTION: {
@@ -342,7 +340,17 @@ public class Grammar {
 						break;
 					}
 					case REDUCTIONS:
-						Collections.sort(action.reductions, (r1, r2) -> r2.number - r1.number);
+						Collections.sort(action.reductions, (r1, r2) -> {
+							if (r1.number == r2.number) {
+								if (r1.symbol == TokenType.PRIMARY_NO_NEW_ARRAY) {
+									return 1;
+								}
+								if (r2.symbol == TokenType.PRIMARY_NO_NEW_ARRAY) {
+									return -1;
+								}
+							}
+							return r2.number - r1.number;
+						});
 						int numPopped = 0;
 						for (Reduction reduction : action.reductions) {
 							for (int i = 0; i < reduction.number - numPopped; i++) {

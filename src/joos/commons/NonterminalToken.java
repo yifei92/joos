@@ -38,6 +38,7 @@ public class NonterminalToken implements Token {
     mTokens.put(TokenType.GOAL, new NonterminalToken(TokenType.GOAL));
     mTokens.put(TokenType.LITERAL, new NonterminalToken(TokenType.LITERAL));
     mTokens.put(TokenType.STRING_LITERAL_WITH_QUOTES, new NonterminalToken(TokenType.STRING_LITERAL_WITH_QUOTES));
+    mTokens.put(TokenType.STRING_LITERAL_WITH_ESCAPES_OPT, new NonterminalToken(TokenType.STRING_LITERAL_WITH_ESCAPES_OPT));
     mTokens.put(TokenType.STRING_LITERAL_WITH_ESCAPES, new NonterminalToken(TokenType.STRING_LITERAL_WITH_ESCAPES));
     mTokens.put(TokenType.CHAR_LITERAL_WITH_QUOTES, new NonterminalToken(TokenType.CHAR_LITERAL_WITH_QUOTES));
     mTokens.put(TokenType.BOOLEAN_LITERAL, new NonterminalToken(TokenType.BOOLEAN_LITERAL));
@@ -97,11 +98,11 @@ public class NonterminalToken implements Token {
     // mTokens.put(TokenType.STATIC_INITIALIZER, new NonterminalToken(TokenType.STATIC_INITIALIZER));
     mTokens.put(TokenType.CONSTRUCTOR_DECLARATION, new NonterminalToken(TokenType.CONSTRUCTOR_DECLARATION));
     mTokens.put(TokenType.CONSTRUCTOR_DECLARATOR, new NonterminalToken(TokenType.CONSTRUCTOR_DECLARATOR));
-    mTokens.put(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT, new NonterminalToken(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT));
+    // mTokens.put(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT, new NonterminalToken(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION_OPT));
     mTokens.put(TokenType.BLOCK_STATEMENTS_OPT, new NonterminalToken(TokenType.BLOCK_STATEMENTS_OPT));
     mTokens.put(TokenType.CONSTRUCTOR_BODY, new NonterminalToken(TokenType.CONSTRUCTOR_BODY));
     mTokens.put(TokenType.ARGUMENT_LIST_OPT, new NonterminalToken(TokenType.ARGUMENT_LIST_OPT));
-    mTokens.put(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION, new NonterminalToken(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION));
+    // mTokens.put(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION, new NonterminalToken(TokenType.EXPLICIT_CONSTRUCTOR_INVOCATION));
     mTokens.put(TokenType.EXTENDS_INTERFACES_OPT, new NonterminalToken(TokenType.EXTENDS_INTERFACES_OPT));
     mTokens.put(TokenType.INTERFACE_DECLARATION, new NonterminalToken(TokenType.INTERFACE_DECLARATION));
     mTokens.put(TokenType.EXTENDS_INTERFACES, new NonterminalToken(TokenType.EXTENDS_INTERFACES));
@@ -113,7 +114,7 @@ public class NonterminalToken implements Token {
     mTokens.put(TokenType.ABSTRACT_METHOD_DECLARATION, new NonterminalToken(TokenType.ABSTRACT_METHOD_DECLARATION));
     mTokens.put(TokenType.VARIABLE_INITIALIZERS_OPT, new NonterminalToken(TokenType.VARIABLE_INITIALIZERS_OPT));
     mTokens.put(TokenType.COMMA_OPT, new NonterminalToken(TokenType.COMMA_OPT));
-    mTokens.put(TokenType.ARRAY_INITIALIZER, new NonterminalToken(TokenType.ARRAY_INITIALIZER));
+    // mTokens.put(TokenType.ARRAY_INITIALIZER, new NonterminalToken(TokenType.ARRAY_INITIALIZER));
     mTokens.put(TokenType.VARIABLE_INITIALIZERS, new NonterminalToken(TokenType.VARIABLE_INITIALIZERS));
     mTokens.put(TokenType.BLOCK, new NonterminalToken(TokenType.BLOCK));
     mTokens.put(TokenType.BLOCK_STATEMENTS, new NonterminalToken(TokenType.BLOCK_STATEMENTS));

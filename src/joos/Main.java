@@ -43,7 +43,7 @@ public class Main {
 			}
 			System.out.println("");
 			ParseTreeNode parseTree = parser.parse(tokens);
-			weeder.weed(parseTree);
+			weeder.weed(parseTree,args[0]);
 			//ASTTreeNode astTree = astBuilder.convert(parseTree);
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

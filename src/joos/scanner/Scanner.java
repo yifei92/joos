@@ -78,7 +78,6 @@ public class Scanner {
 				if (madeTransition && nfa.isAccepting()) {
 					mLastAcceptedTokens = nfa.getTokens();
 					mLastAcceptedEndIndex = currentCharIndex;
-					System.out.println("accepted " + mLastAcceptedTokens.get(0).getType() + " " + mLastAcceptedTokens.get(0).getRawValue());
 				}
 			}
 			mIsNFAActive.put(nfa, madeTransition);

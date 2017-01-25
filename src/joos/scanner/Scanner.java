@@ -50,6 +50,9 @@ public class Scanner {
 					case COMMENT_JAVADOC:
 						nfa = new JavadocCommentNFA();
 						break;
+					case FLOATING_POINT_LITERAL:
+						nfa = new FloatingPointLiteralNFA();
+						break;
 				}
 				if (nfa == null &&
 					tokenType != TokenType.SINGLE_QUOTE &&

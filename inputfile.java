@@ -1,4 +1,4 @@
-public class Main {
+public class inputfile {
 	public void _$asd123() {
 	}
 	

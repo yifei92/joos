@@ -43,7 +43,12 @@ public class Main {
 			}
 			System.out.println("");
 			ParseTreeNode parseTree = parser.parse(tokens);
-			weeder.weed(parseTree,args[0]);
+			String path=args[0];
+			String filename=path;
+			if(path.lastIndexOf("/")!=-1){
+				filename=path.substring(path.lastIndexOf("/")+1);
+			}
+			weeder.weed(parseTree,filename);
 			//ASTTreeNode astTree = astBuilder.convert(parseTree);
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

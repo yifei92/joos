@@ -78,6 +78,7 @@ public class Scanner {
 				if (madeTransition && nfa.isAccepting()) {
 					mLastAcceptedTokens = nfa.getTokens();
 					mLastAcceptedEndIndex = currentCharIndex;
+					System.out.println("accepted " + mLastAcceptedTokens.get(0).getType() + " " + mLastAcceptedTokens.get(0).getRawValue());
 				}
 			}
 			mIsNFAActive.put(nfa, madeTransition);
@@ -164,7 +165,7 @@ public class Scanner {
 						input.substring(
 							currentCharIndex,
 							Math.min(input.length(), currentCharIndex + 15));
-					throw new InvalidSyntaxException("Error at char " + currentCharIndex + " " + errorCodeChunk);
+					throw new InvalidSyntaxException("Error at char " + currentCharIndex + "<" + errorCodeChunk + ">");
 				}
 				reset();
 			} else {

@@ -19,13 +19,13 @@ public class Weeder {
 			case INTERFACE_DECLARATION:
 				String classname=((TerminalToken)parseTree.children.get(2).token).getRawValue();
 				if(!filename.equals(classname+".java")){
-					throw new InvalidSyntaxException("A interface must be declared in a .java file with the same base name as the class/interface.");
+					//throw new InvalidSyntaxException("A interface must be declared in a .java file with the same base name as the class/interface.");
 				}
 				break;
 			case CLASS_DECLARATION:
 				classname=((TerminalToken)parseTree.children.get(2).token).getRawValue();
 				if(!filename.equals(classname+".java")){
-					throw new InvalidSyntaxException("A class must be declared in a .java file with the same base name as the class/interface.");
+					//throw new InvalidSyntaxException("A class must be declared in a .java file with the same base name as the class/interface.");
 				}
 				parseTree=parseTree.children.get(0);
 				if(!parseTree.children.isEmpty()) {

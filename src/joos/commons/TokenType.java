@@ -52,10 +52,11 @@ public enum TokenType {
 	// LONG,
 	// Symbols
 	ASSIGN,
-	// BITWISE_AND,
 	// BITWISE_NOT,
 	// BITWISE_OR,
+	BOOL_OP_EAGER_AND,
 	BOOL_OP_AND,
+	BOOL_OP_EAGER_OR,
 	BOOL_OP_OR,
 	ESCAPE,
 	CLOSE_BR,

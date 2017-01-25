@@ -109,9 +109,10 @@ public class TerminalToken implements Token {
 		// mTokens.put(TokenType.LONG , new TerminalToken(TokenType.LONG, "long"));
 		// Symbols
 		mTokens.put(TokenType.ASSIGN , new TerminalToken(TokenType.ASSIGN, "="));
-		// mTokens.put(TokenType.BITWISE_AND , new TerminalToken(TokenType.BITWISE_AND, "&"));
 		// mTokens.put(TokenType.BITWISE_NOT , new TerminalToken(TokenType.BITWISE_NOT, "!"));
 		// mTokens.put(TokenType.BITWISE_OR , new TerminalToken(TokenType.BITWISE_OR, "|"));
+		mTokens.put(TokenType.BOOL_OP_EAGER_AND , new TerminalToken(TokenType.BOOL_OP_EAGER_AND, "&"));
+		mTokens.put(TokenType.BOOL_OP_EAGER_OR , new TerminalToken(TokenType.BOOL_OP_EAGER_OR, "|"));
 		mTokens.put(TokenType.BOOL_OP_AND , new TerminalToken(TokenType.BOOL_OP_AND, "&&"));
 		mTokens.put(TokenType.BOOL_OP_OR , new TerminalToken(TokenType.BOOL_OP_OR, "||"));
 		mTokens.put(TokenType.ESCAPE , new TerminalToken(TokenType.ESCAPE, ""));

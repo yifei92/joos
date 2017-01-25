@@ -34,4 +34,21 @@ public class TransitionTableUtil {
 			}
 		}
 	}
+
+	public static void putAllValidEscapeChars(Map<Character, Integer> table, int toState) {
+		table.put('t', toState);
+		table.put('b', toState);
+		table.put('n', toState);
+		table.put('r', toState);
+		table.put('f', toState);
+		table.put('\'', toState);
+		table.put('\"', toState);
+		table.put('\\', toState);
+	}
+
+	public static void putAllOctals(Map<Character, Integer> table, int toState) {
+		for (char c = 48 ; c < 55 ; c++) {
+			table.put(c, toState);
+		}
+	}
 }

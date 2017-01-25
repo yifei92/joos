@@ -1,4 +1,4 @@
-public class Main {
+public class inputfile {
 	public void _$asd123() {
 	}
 	
@@ -6,6 +6,6 @@ public class Main {
 	}	
 
 	public static void main(String [] args) {
-		String c = "a\sd";
+		String c = "a\\\n\t\b\r\f\"\'d";
 	}
 }

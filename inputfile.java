@@ -6,6 +6,6 @@ public class Main {
 	}	
 
 	public static void main(String [] args) {
-		String c = "a\sd";
+		String c = "a\\\n\t\b\r\f\"\'d";
 	}
 }

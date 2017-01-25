@@ -21,11 +21,12 @@ public class CharLiteralNFA extends NFA {
 	private static final int STATE_START = 0;
 	private static final int STATE_COMMA_OPEN = 1;
 	private static final int STATE_ESCAPE = 2;
-	private static final int STATE_CHAR = 3;
-	private static final int STATE_COMMA_CLOSE = 4;
+	private static final int STATE_VALID_ESCAPE_OCTAL_1 = 3;
+	private static final int STATE_VALID_ESCAPE_OCTAL_2 = 4;
+	private static final int STATE_CHAR = 5;
+	private static final int STATE_COMMA_CLOSE = 6;
 
 	private static final Set<Character> ESCAPE_EXCLUSIONS = new HashSet<Character>(Arrays.asList('\\', System.lineSeparator().charAt(0)));
-	private static final Set<Character> NEWLINE_EXCLUSIONS = new HashSet<Character>(Arrays.asList(System.lineSeparator().charAt(0)));
 	// Specifies what has already been consumed by this NFA
 	private String mValue = "";
 	private boolean mContainsEscape = false;
@@ -44,8 +45,14 @@ public class CharLiteralNFA extends NFA {
 				TransitionTableUtil.putAllCharExcept(table, ESCAPE_EXCLUSIONS, STATE_CHAR);
 				break;
 			case STATE_ESCAPE:
-				// Allow for all chars
-				TransitionTableUtil.putAllCharExcept(table, NEWLINE_EXCLUSIONS, STATE_CHAR);
+				TransitionTableUtil.putAllValidEscapeChars(table, STATE_CHAR);
+				TransitionTableUtil.putAllOctals(table, STATE_VALID_ESCAPE_OCTAL_1);
+				break;
+			case STATE_VALID_ESCAPE_OCTAL_1:
+				TransitionTableUtil.putAllOctals(table, STATE_VALID_ESCAPE_OCTAL_2);
+				break;
+			case STATE_VALID_ESCAPE_OCTAL_2:
+				TransitionTableUtil.putAllOctals(table, STATE_CHAR);
 				break;
 			case STATE_CHAR:
 				table.put('\'', STATE_COMMA_CLOSE);
@@ -62,6 +69,8 @@ public class CharLiteralNFA extends NFA {
 				STATE_START, 
 				STATE_COMMA_OPEN,
 				STATE_ESCAPE,
+				STATE_VALID_ESCAPE_OCTAL_1,
+				STATE_VALID_ESCAPE_OCTAL_2,
 				STATE_CHAR,
 				STATE_COMMA_CLOSE));
 	}

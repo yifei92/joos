@@ -1088,8 +1088,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.AND_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.EQUALITY_EXPRESSION)
-				// Arrays.asList(TokenType.AND_EXPRESSION, TokenType.BITWISE_AND, TokenType.EQUALITY_EXPRESSION)
+				Arrays.asList(TokenType.EQUALITY_EXPRESSION),
+				Arrays.asList(TokenType.AND_EXPRESSION, TokenType.BOOL_OP_EAGER_AND, TokenType.EQUALITY_EXPRESSION)
 			)
 		);
 		productions.put(
@@ -1102,8 +1102,8 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.INCLUSIVE_OR_EXPRESSION,
 			Arrays.asList(
-				Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION)
-				// Arrays.asList(TokenType.INCLUSIVE_OR_EXPRESSION, TokenType.BITWISE_OR, TokenType.EXCLUSIVE_OR_EXPRESSION)
+				Arrays.asList(TokenType.EXCLUSIVE_OR_EXPRESSION),
+				Arrays.asList(TokenType.INCLUSIVE_OR_EXPRESSION, TokenType.BOOL_OP_EAGER_OR, TokenType.EXCLUSIVE_OR_EXPRESSION)
 			)
 		);
 		productions.put(

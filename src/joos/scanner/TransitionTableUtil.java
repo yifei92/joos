@@ -47,7 +47,7 @@ public class TransitionTableUtil {
 	}
 
 	public static void putAllOctals(Map<Character, Integer> table, int toState) {
-		for (char c = 48 ; c < 55 ; c++) {
+		for (char c = 48 ; c <= 55 ; c++) {
 			table.put(c, toState);
 		}
 	}

@@ -27,6 +27,7 @@ public class CharLiteralNFA extends NFA {
 	private static final int STATE_COMMA_CLOSE = 6;
 
 	private static final Set<Character> ESCAPE_EXCLUSIONS = new HashSet<Character>(Arrays.asList('\\', System.lineSeparator().charAt(0)));
+	private static final Set<Character> OCTAL_EXCLUSIONS = new HashSet<Character>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7'));
 	// Specifies what has already been consumed by this NFA
 	private String mValue = "";
 	private boolean mContainsEscape = false;
@@ -50,9 +51,11 @@ public class CharLiteralNFA extends NFA {
 				break;
 			case STATE_VALID_ESCAPE_OCTAL_1:
 				TransitionTableUtil.putAllOctals(table, STATE_VALID_ESCAPE_OCTAL_2);
+				table.put('\'', STATE_COMMA_CLOSE);
 				break;
 			case STATE_VALID_ESCAPE_OCTAL_2:
 				TransitionTableUtil.putAllOctals(table, STATE_CHAR);
+				table.put('\'', STATE_COMMA_CLOSE);
 				break;
 			case STATE_CHAR:
 				table.put('\'', STATE_COMMA_CLOSE);
@@ -98,7 +101,7 @@ public class CharLiteralNFA extends NFA {
 		List<TerminalToken> tokens = new ArrayList<>();
 		tokens.add(TerminalToken.getToken(TokenType.SINGLE_QUOTE));
 		if (mContainsEscape) {
-			TerminalToken charEscape = TerminalToken.getToken(TokenType.CHARACTER_ESCAPE);
+			TerminalToken charEscape = TerminalToken.getToken(TokenType.ESCAPE);
 			charEscape.setRawValue(mValue);
 			tokens.add(charEscape);
 		} else {

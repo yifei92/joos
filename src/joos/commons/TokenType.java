@@ -57,7 +57,7 @@ public enum TokenType {
 	// BITWISE_OR,
 	BOOL_OP_AND,
 	BOOL_OP_OR,
-	CHARACTER_ESCAPE,
+	ESCAPE,
 	CLOSE_BR,
 	CLOSE_CBR,
 	CLOSE_SBR,

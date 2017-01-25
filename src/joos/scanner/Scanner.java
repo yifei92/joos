@@ -54,7 +54,7 @@ public class Scanner {
 				if (nfa == null &&
 					tokenType != TokenType.SINGLE_QUOTE &&
 					tokenType != TokenType.DOUBLE_QUOTE && 
-					tokenType != TokenType.CHARACTER_ESCAPE) {
+					tokenType != TokenType.ESCAPE) {
 					try {
 						nfa = new KeywordNFA(tokenType);
 					} catch (Exception e) {
@@ -123,6 +123,26 @@ public class Scanner {
 		}
 	}
 
+	private void addTokens(List<TerminalToken> tokenList, List<TerminalToken> acceptedTokenList) throws InvalidSyntaxException {
+		for (TerminalToken acceptedToken : mLastAcceptedTokens) {
+			if (acceptedToken.mType != TokenType.SPACE &&
+				acceptedToken.mType != TokenType.NEW_LINE &&
+				acceptedToken.mType != TokenType.TAB &&
+				acceptedToken.mType != TokenType.COMMENT_SINGLE_LINE && 
+				acceptedToken.mType != TokenType.COMMENT_MULTI_LINE && 
+				acceptedToken.mType != TokenType.COMMENT_JAVADOC) {
+				// We need to do extra validation on the octal escape token that cannot be done using an NFA
+				if (acceptedToken.mType == TokenType.ESCAPE) {
+					String octal = acceptedToken.getRawValue();
+					if (octal.length() == 3 && (octal.charAt(0) < 48 || octal.charAt(0) > 51)) {
+						throw new InvalidSyntaxException("Invalid octal escape " + octal);
+					}
+				}
+				tokenList.add(acceptedToken);
+			}
+		}
+	}
+
 	/**
 	 * Given a string of input consisting of valid ASCII characters outputs
 	 * a list of valid Tokens. If the string does not produce valid tokens
@@ -137,16 +157,7 @@ public class Scanner {
 			consumeChar(mNFAs, toConsume, currentCharIndex);
 			if (allNFAsInActive()) {
 				if (mLastAcceptedTokens != null && !mLastAcceptedTokens.isEmpty()) {
-					for (TerminalToken acceptedToken : mLastAcceptedTokens) {
-						if (acceptedToken.mType != TokenType.SPACE &&
-							acceptedToken.mType != TokenType.NEW_LINE &&
-							acceptedToken.mType != TokenType.TAB &&
-							acceptedToken.mType != TokenType.COMMENT_SINGLE_LINE && 
-							acceptedToken.mType != TokenType.COMMENT_MULTI_LINE && 
-							acceptedToken.mType != TokenType.COMMENT_JAVADOC) {
-							tokens.add(acceptedToken);
-						}
-					}
+					addTokens(tokens, mLastAcceptedTokens);
 					currentCharIndex = mLastAcceptedEndIndex + 1;
 				} else {
 					String errorCodeChunk =

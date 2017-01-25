@@ -6,6 +6,8 @@ public class inputfile {
 	}	
 
 	public static void main(String [] args) {
-		String c = "a\\\n\t\b\r\f\"\'d";
+		char c = '\44';
+		char d = '\3';
+		String c = "i\058a\\\n\t\b\r\f\"\'d";
 	}
 }

@@ -1,6 +1,7 @@
 package joos.weeder;
 
 import joos.commons.ParseTreeNode;
+import joos.commons.TerminalToken;
 import joos.commons.TokenType;
 import joos.exceptions.InvalidSyntaxException;
 
@@ -13,9 +14,19 @@ public class Weeder {
 	 * Given a parse tree looks for any last invalid cases.
 	 * Throws an InvalidSyntaxException.
 	 */
-	public void weed(ParseTreeNode parseTree) throws InvalidSyntaxException {
+	public void weed(ParseTreeNode parseTree,String filename) throws InvalidSyntaxException {
 		switch (parseTree.token.getType()){
-			case CLASS_DECLARATION: //interface?
+			case INTERFACE_DECLARATION:
+				String classname=((TerminalToken)parseTree.children.get(2).token).getRawValue();
+				if(!filename.equals(classname+".java")){
+					throw new InvalidSyntaxException("A interface must be declared in a .java file with the same base name as the class/interface.");
+				}
+				break;
+			case CLASS_DECLARATION:
+				classname=((TerminalToken)parseTree.children.get(2).token).getRawValue();
+				if(!filename.equals(classname+".java")){
+					throw new InvalidSyntaxException("A class must be declared in a .java file with the same base name as the class/interface.");
+				}
 				parseTree=parseTree.children.get(0);
 				if(!parseTree.children.isEmpty()) {
 					ParseTreeNode current = parseTree.children.get(0);
@@ -29,6 +40,7 @@ public class Weeder {
 						throw new InvalidSyntaxException("A class cannot be both abstract and final");
 					}
 				}
+
 				break;
 			case CLASS_BODY_DECLARATIONS:
 				ParseTreeNode current=parseTree.children.get(0);
@@ -105,8 +117,8 @@ public class Weeder {
 
 		}
 		if(parseTree.children!=null) {
-			for (ParseTreeNode childe : parseTree.children) {
-				weed(childe);
+			for (ParseTreeNode child : parseTree.children) {
+				weed(child,filename);
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 #!/bin/bash
-gradle build
+chmod 777 buildscript
+./buildscript
+echo "Build complete. Running tests >>>>>>>>>>>>>>>>>>>>>>"
 for filename in test/*; do 
   printf "Test $filename _________________________________\n"
   java -jar build/libs/joos-1.0.jar $filename

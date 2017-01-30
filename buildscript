@@ -1,0 +1,18 @@
+#!/bin/bash 
+echo "Scanning for java files in src"
+find src -name *.java > sources
+if [ -d "build" ]
+then
+echo "Build directory exists"
+else
+	echo "Creating build directory"
+	mkdir build
+fi
+echo "Compiling java files"
+javac -d ./build @sources
+cd build
+echo "Packaging jar file"
+jar cfe ../joosc.jar joos.Main *
+cd ..
+rm sources
+echo "COMPLETE!"

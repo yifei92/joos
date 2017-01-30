@@ -1,3 +1,4 @@
 #!/bin/bash
-gradle build
-java -jar build/libs/joos-1.0.jar inputfile.java
+chmod 777 buildscrip
+./buildscript
+java -jar joosc.jar inputfile.java

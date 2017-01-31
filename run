@@ -1,4 +1,5 @@
 #!/bin/bash
-chmod 777 buildscrip
+chmod 777 buildscript
 ./buildscript
 java -jar joosc.jar inputfile.java
+echo $?

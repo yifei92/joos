@@ -1,6 +1,6 @@
 #!/bin/bash 
 echo "Scanning for java files in src"
-find src -name *.java > sources
+find src -name "*.java" > sources
 if [ -d "build" ]
 then
 echo "Build directory exists"

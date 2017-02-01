@@ -4,6 +4,6 @@ chmod 777 buildscript
 echo "Build complete. Running tests >>>>>>>>>>>>>>>>>>>>>>"
 for filename in test/*; do 
   printf "Test $filename _________________________________\n"
-  java -jar build/libs/joos-1.0.jar $filename
+  java -jar joosc.jar $filename
   printf "\n\n"
 done

@@ -93,6 +93,7 @@ public class TerminalToken implements Token {
 		mTokens.put(TokenType.CATCH , new TerminalToken(TokenType.CATCH, "catch"));
 		mTokens.put(TokenType.TRY , new TerminalToken(TokenType.TRY, "try"));
 		mTokens.put(TokenType.FINALLY , new TerminalToken(TokenType.FINALLY, "finally"));
+		mTokens.put(TokenType.GOTO, new TerminalToken(TokenType.GOTO, "goto"));
 		mTokens.put(TokenType.THROW , new TerminalToken(TokenType.THROW, "throw"));
 		mTokens.put(TokenType.THROWS , new TerminalToken(TokenType.THROWS, "throws"));
 		mTokens.put(TokenType.CONTINUE , new TerminalToken(TokenType.CONTINUE, "continue"));

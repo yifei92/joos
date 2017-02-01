@@ -19,17 +19,17 @@ public class Weeder {
 			case INTERFACE_DECLARATION:
 				String classname=((TerminalToken)parseTree.children.get(2).token).getRawValue();
 				if(!filename.equals(classname+".java")){
-					//throw new InvalidSyntaxException("A interface must be declared in a .java file with the same base name as the class/interface.");
+					throw new InvalidSyntaxException("A interface must be declared in a .java file with the same base name as the class/interface.");
 				}
 				break;
 			case CLASS_DECLARATION:
 				classname=((TerminalToken)parseTree.children.get(2).token).getRawValue();
 				if(!filename.equals(classname+".java")){
-					//throw new InvalidSyntaxException("A class must be declared in a .java file with the same base name as the class/interface.");
+					throw new InvalidSyntaxException("A class must be declared in a .java file with the same base name as the class/interface.");
 				}
-				parseTree=parseTree.children.get(0);
-				if(!parseTree.children.isEmpty()) {
-					ParseTreeNode current = parseTree.children.get(0);
+				ParseTreeNode MODIFIERS_OPT=parseTree.children.get(0);
+				if(!MODIFIERS_OPT.children.isEmpty()) {
+					ParseTreeNode current = MODIFIERS_OPT.children.get(0);
 					List<TokenType> modifiers = new ArrayList();
 					while (current.children.size()>1) {
 						modifiers.add(current.children.get(1).children.get(0).token.getType());
@@ -42,20 +42,20 @@ public class Weeder {
 				}
 
 				break;
-			case CLASS_BODY_DECLARATIONS:
+			case CLASS_BODY_DECLARATIONS_OPT:
 				ParseTreeNode current=parseTree.children.get(0);
 				List<TokenType> declaration = new ArrayList();
-				while (current.token.getType() !=TokenType.CLASS_BODY_DECLARATION) {
+				while (current.children.get(0).token.getType() !=TokenType.CLASS_BODY_DECLARATION) {
 					declaration.add(current.children.get(1).children.get(0).token.getType());
 					current = current.children.get(0);
 				}
-				declaration.add(current.children.get(0).token.getType());
+				declaration.add(current.children.get(0).children.get(0).token.getType());
 				if(!declaration.contains(TokenType.CONSTRUCTOR_DECLARATION)){
 					throw new InvalidSyntaxException("Every class must contain at least one explicit constructor");
 				}
 				break;
 			case METHOD_DECLARATION:
-				ParseTreeNode modifieroptional=parseTree.children.get(0);
+				ParseTreeNode modifieroptional=parseTree.children.get(0).children.get(0);
 				if(!modifieroptional.children.isEmpty()) {
 					current = modifieroptional.children.get(0);
 					List<TokenType> modifiers = new ArrayList();
@@ -63,7 +63,7 @@ public class Weeder {
 						modifiers.add(current.children.get(1).children.get(0).token.getType());
 						current = current.children.get(0);
 					}
-					modifiers.add(current.children.get(0).token.getType());
+					modifiers.add(current.children.get(0).children.get(0).token.getType());
 					if(modifiers.contains(TokenType.STATIC)&&modifiers.contains(TokenType.FINAL)){
 						throw new InvalidSyntaxException("A static method cannot be final");
 					}
@@ -72,13 +72,16 @@ public class Weeder {
 					}
 					if(modifiers.contains(TokenType.ABSTRACT)||modifiers.contains(TokenType.NATIVE)){
 						if(parseTree.children.get(1).children.get(0).token.getType()!=TokenType.SEMICOLON){
-							throw new InvalidSyntaxException("A method has a body if and only if it is neither abstract nor native.");
+							throw new InvalidSyntaxException("A method has a body if it is neither abstract nor native.");
 						}
 					}
 					else{
-						if (parseTree.children.get(1).children.get(0).token.getType()!=TokenType.SEMICOLON){
-							throw new InvalidSyntaxException("A method has a body if and only if it is neither abstract nor native.");
+						if (parseTree.children.get(1).children.get(0).token.getType()==TokenType.SEMICOLON){
+							throw new InvalidSyntaxException("A method should have a body unless it is neither abstract nor native.");
 						}
+					}
+					if(!modifiers.contains(TokenType.PUBLIC)&&!modifiers.contains(TokenType.PROTECTED)&&!modifiers.contains(TokenType.PRIVATE)){
+						throw new InvalidSyntaxException("Methods must have a access modifier");
 					}
 				}
 				break;
@@ -99,9 +102,9 @@ public class Weeder {
 				}
 				break;
 			case FIELD_DECLARATION:
-				parseTree=parseTree.children.get(0);
-				if(!parseTree.children.isEmpty()) {
-					current = parseTree.children.get(0);
+				MODIFIERS_OPT=parseTree.children.get(0);
+				if(!MODIFIERS_OPT.children.isEmpty()) {
+					current = MODIFIERS_OPT.children.get(0);
 					List<TokenType> modifiers = new ArrayList();
 					while (current.children.size()>1) {
 						modifiers.add(current.children.get(1).children.get(0).token.getType());
@@ -113,6 +116,13 @@ public class Weeder {
 					}
 				}
 				break;
+			case INTEGER_LITERAL:
+				String integer=((TerminalToken)parseTree.token).getRawValue();
+				try{
+					Integer.parseInt(integer);
+				}catch(NumberFormatException e){
+					throw new InvalidSyntaxException("Interger literal not valide int");
+				}
 			default:
 
 		}

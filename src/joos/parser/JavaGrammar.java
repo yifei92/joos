@@ -611,7 +611,7 @@ public final class JavaGrammar {
 			TokenType.STATEMENT,
 			Arrays.asList(
 				Arrays.asList(TokenType.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
-				Arrays.asList(TokenType.LABELED_STATEMENT),
+				//Arrays.asList(TokenType.LABELED_STATEMENT),
 				Arrays.asList(TokenType.IF_THEN_STATEMENT),
 				Arrays.asList(TokenType.IF_THEN_ELSE_STATEMENT),
 				Arrays.asList(TokenType.WHILE_STATEMENT),
@@ -622,7 +622,7 @@ public final class JavaGrammar {
 			TokenType.STATEMENT_NO_SHORT_IF,
 			Arrays.asList(
 				Arrays.asList(TokenType.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
-				Arrays.asList(TokenType.LABELED_STATEMENT_NO_SHORT_IF),
+				//Arrays.asList(TokenType.LABELED_STATEMENT_NO_SHORT_IF),
 				Arrays.asList(TokenType.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF),
 				Arrays.asList(TokenType.WHILE_STATEMENT_NO_SHORT_IF),
 				Arrays.asList(TokenType.FOR_STATEMENT_NO_SHORT_IF)

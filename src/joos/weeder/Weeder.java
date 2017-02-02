@@ -7,6 +7,9 @@ import joos.exceptions.InvalidSyntaxException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes;
+
+import static joos.commons.TerminalToken.isTerminalTokenType;
 
 public class Weeder {
 
@@ -35,10 +38,16 @@ public class Weeder {
 						modifiers.add(current.children.get(1).children.get(0).token.getType());
 						current = current.children.get(0);
 					}
-					modifiers.add(current.children.get(0).token.getType());
+					modifiers.add(current.children.get(0).children.get(0).token.getType());
 					if(modifiers.contains(TokenType.ABSTRACT)&&modifiers.contains(TokenType.FINAL)){
 						throw new InvalidSyntaxException("A class cannot be both abstract and final");
 					}
+					if(!modifiers.contains(TokenType.PUBLIC)&&!modifiers.contains(TokenType.PROTECTED)){
+						throw new InvalidSyntaxException("A class need a accesor modifier");
+					}
+				}
+				else{
+					throw new InvalidSyntaxException("A class need a accesor modifier");
 				}
 
 				break;
@@ -84,6 +93,9 @@ public class Weeder {
 						throw new InvalidSyntaxException("Methods must have a access modifier");
 					}
 				}
+				else{
+					throw new InvalidSyntaxException("Methods must have a access modifier");
+				}
 				break;
 			case ABSTRACT_METHOD_DECLARATION:
 				ParseTreeNode methodheader=parseTree.children.get(0);
@@ -95,7 +107,7 @@ public class Weeder {
 						modifiers.add(current.children.get(1).children.get(0).token.getType());
 						current = current.children.get(0);
 					}
-					modifiers.add(current.children.get(0).token.getType());
+					modifiers.add(current.children.get(0).children.get(0).token.getType());
 					if (modifiers.contains(TokenType.STATIC) || modifiers.contains(TokenType.FINAL) || modifiers.contains(TokenType.NATIVE)) {
 						throw new InvalidSyntaxException("An interface method cannot be static, final, or native.");
 					}
@@ -110,19 +122,66 @@ public class Weeder {
 						modifiers.add(current.children.get(1).children.get(0).token.getType());
 						current = current.children.get(0);
 					}
-					modifiers.add(current.children.get(0).token.getType());
+					modifiers.add(current.children.get(0).children.get(0).token.getType());
 					if(modifiers.contains(TokenType.FINAL)){
 						throw new InvalidSyntaxException("No field can be final");
 					}
+					if(!modifiers.contains(TokenType.PUBLIC)&&!modifiers.contains(TokenType.PROTECTED)&&!modifiers.contains(TokenType.PRIVATE)){
+						throw new InvalidSyntaxException("fields must have a access modifier");
+					}
+				}
+				else {
+					throw new InvalidSyntaxException("fields must have a access modifier");
 				}
 				break;
 			case INTEGER_LITERAL:
 				String integer=((TerminalToken)parseTree.token).getRawValue();
+				if(integer.matches("0[1-7][0-7]*")){
+					throw new InvalidSyntaxException("octal not valid");
+				}
 				try{
 					Integer.parseInt(integer);
 				}catch(NumberFormatException e){
 					throw new InvalidSyntaxException("Interger literal not valide int");
 				}
+				break;
+			case CAST_EXPRESSION :
+				boolean valide=false;
+				ParseTreeNode EXPRESSION=parseTree.children.get(1);
+				if(EXPRESSION.token.getType()==TokenType.PRIMITIVE_TYPE||EXPRESSION.token.getType()==TokenType.NAME){
+					break;
+				}
+				while (!isTerminalTokenType(EXPRESSION.token.getType())){
+					if(EXPRESSION.children.size()>2){
+						break;
+					}
+					if(EXPRESSION.token.getType()== TokenType.NAME){
+						valide=true;
+						break;
+					}
+					EXPRESSION=EXPRESSION.children.get(0);
+				}
+				if(!valide) {
+					throw new InvalidSyntaxException("non valide cast expression");
+				}
+				break;
+			case UNARY_EXPRESSION:
+				if(parseTree.children.size()==2) {
+					EXPRESSION = parseTree.children.get(1);
+					while (!isTerminalTokenType(EXPRESSION.token.getType())) {
+						if (EXPRESSION.children.size() > 2) {
+							break;
+						}
+						EXPRESSION = EXPRESSION.children.get(0);
+					}
+
+					if (EXPRESSION.token.getType() == TokenType.INTEGER_LITERAL) {
+						TerminalToken negint = (TerminalToken) EXPRESSION.token;
+						negint.setRawValue("-" + negint.getRawValue());
+					}
+					parseTree.children.remove(0);
+				}
+				break;
 			default:
 
 		}

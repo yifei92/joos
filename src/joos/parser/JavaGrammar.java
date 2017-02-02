@@ -136,8 +136,8 @@ public final class JavaGrammar {
 			TokenType.ARRAY_TYPE,
 			Arrays.asList(
 				Arrays.asList(TokenType.PRIMITIVE_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
-				Arrays.asList(TokenType.NAME, TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
-				Arrays.asList(TokenType.ARRAY_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
+				Arrays.asList(TokenType.NAME, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
+				//Arrays.asList(TokenType.ARRAY_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
 			)
 		);
 		productions.put(
@@ -812,7 +812,7 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.FOR_UPDATE,
 			Arrays.asList(
-				Arrays.asList(TokenType.STATEMENT_EXPRESSION_LIST)
+				Arrays.asList(TokenType.STATEMENT_EXPRESSION)
 			)
 		);
 		productions.put(

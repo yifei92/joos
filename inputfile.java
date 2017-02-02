@@ -9,6 +9,7 @@ public class J1_1_AmbiguousName_AccessResultFromMethod{
 
     public J1_1_AmbiguousName_AccessResultFromMethod(int j){
 	i = j;
+	goto asd;
     }
 
     public J1_1_AmbiguousName_AccessResultFromMethod inc(){

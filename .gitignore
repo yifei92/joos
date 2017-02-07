@@ -1,6 +1,12 @@
 .gradle
 /build/
 
+joosc.jar
+*.swp
+*.swn
+*.swp
+*.swo
+
 # Ignore Gradle GUI config
 gradle-app.setting
 

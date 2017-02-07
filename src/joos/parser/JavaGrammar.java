@@ -136,8 +136,8 @@ public final class JavaGrammar {
 			TokenType.ARRAY_TYPE,
 			Arrays.asList(
 				Arrays.asList(TokenType.PRIMITIVE_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
-				Arrays.asList(TokenType.NAME, TokenType.OPEN_SBR, TokenType.CLOSE_SBR),
-				Arrays.asList(TokenType.ARRAY_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
+				Arrays.asList(TokenType.NAME, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
+				//Arrays.asList(TokenType.ARRAY_TYPE, TokenType.OPEN_SBR, TokenType.CLOSE_SBR)
 			)
 		);
 		productions.put(
@@ -611,7 +611,7 @@ public final class JavaGrammar {
 			TokenType.STATEMENT,
 			Arrays.asList(
 				Arrays.asList(TokenType.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
-				Arrays.asList(TokenType.LABELED_STATEMENT),
+				//Arrays.asList(TokenType.LABELED_STATEMENT),
 				Arrays.asList(TokenType.IF_THEN_STATEMENT),
 				Arrays.asList(TokenType.IF_THEN_ELSE_STATEMENT),
 				Arrays.asList(TokenType.WHILE_STATEMENT),
@@ -622,7 +622,7 @@ public final class JavaGrammar {
 			TokenType.STATEMENT_NO_SHORT_IF,
 			Arrays.asList(
 				Arrays.asList(TokenType.STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT),
-				Arrays.asList(TokenType.LABELED_STATEMENT_NO_SHORT_IF),
+				//Arrays.asList(TokenType.LABELED_STATEMENT_NO_SHORT_IF),
 				Arrays.asList(TokenType.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF),
 				Arrays.asList(TokenType.WHILE_STATEMENT_NO_SHORT_IF),
 				Arrays.asList(TokenType.FOR_STATEMENT_NO_SHORT_IF)
@@ -812,7 +812,7 @@ public final class JavaGrammar {
 		productions.put(
 			TokenType.FOR_UPDATE,
 			Arrays.asList(
-				Arrays.asList(TokenType.STATEMENT_EXPRESSION_LIST)
+				Arrays.asList(TokenType.STATEMENT_EXPRESSION)
 			)
 		);
 		productions.put(

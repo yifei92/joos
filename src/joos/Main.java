@@ -34,22 +34,23 @@ public class Main {
 		Scanner scanner = new Scanner();
 		Parser parser = new Parser();
 		Weeder weeder = new Weeder();
-		//ASTBuilder astBuilder = new ASTBuilder();
-
+		ASTBuilder astBuilder = new ASTBuilder();
+		ParseTreeNode parseTree = null;
 		try {
 			List<TerminalToken> tokens = scanner.scan(programString);
 			for (TerminalToken tok : tokens) {
 				System.out.print(tok.mRawValue + " ");
 			}
 			System.out.println("");
-			ParseTreeNode parseTree = parser.parse(tokens);
+			parseTree = parser.parse(tokens);
 			String path=args[0];
 			String filename=path;
 			if(path.lastIndexOf("/")!=-1){
 				filename=path.substring(path.lastIndexOf("/")+1);
 			}
 			weeder.weed(parseTree,filename);
-			//ASTTreeNode astTree = astBuilder.convert(parseTree);
+			astBuilder.convert(parseTree);
+			//parseTree.print();
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());
@@ -57,6 +58,8 @@ public class Main {
 			System.exit(42);
 			return;
 		}
+
+
 		System.out.println("Success");
 		System.exit(0);
 	}

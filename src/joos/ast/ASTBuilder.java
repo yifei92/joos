@@ -14,11 +14,54 @@ public class ASTBuilder {
 	/**
 	 * Given a parse tree converts it into ast.
 	 */
-	public ParseTreeNode convert(ParseTreeNode parseTree) throws InvalidSyntaxException {
+	public ParseTreeNode convert(ParseTreeNode parseTree)  {
 		switch (parseTree.token.getType()) {
+			case CONDITIONAL_OR_EXPRESSION:
+			case CONDITIONAL_AND_EXPRESSION:
+			case INCLUSIVE_OR_EXPRESSION:
+			case EXCLUSIVE_OR_EXPRESSION:
+			case AND_EXPRESSION:
+			case ADDITIVE_EXPRESSION:
+			case MULTIPLICATIVE_EXPRESSION:
+
+				if (parseTree.children.size() > 1) {
+					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
+					while (current.children!=null&&current.children.size() > 1) {
+						parseTree.children.add(0, current.children.get(1));
+						parseTree.children.add(0, current.children.get(2));
+						current = current.children.get(0);
+					}
+					parseTree.children.add(0, current.children.get(0));
+				}
+
+			case EXPRESSION:
+			case ASSIGNMENT_EXPRESSION:
+			case CONDITIONAL_EXPRESSION:
+			case EQUALITY_EXPRESSION:
+			case RELATIONAL_EXPRESSION:
+			case SHIFT_EXPRESSION:
+			case UNARY_EXPRESSION:
+			case UNARY_EXPRESSION_NOT_PLUS_MINUS:
+			//case POSTFIX_EXPRESSION:
+				if (parseTree.children.size() == 1) {
+					ParseTreeNode current = parseTree.children.get(0);
+					while ((current.children.size() == 1) && current.children.get(0).children!=null) {
+						current=current.children.get(0);
+					}
+					parseTree.children.clear();
+					parseTree.children.add(current);
+				}
+				break;
+			case FIELD_DECLARATION:
+			case METHOD_DECLARATION:
+			case CLASS_DECLARATION :
+				parseTree.children.set(0,parseTree.children.get(0).children.get(0));
+				break;
 			case MODIFIERS:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
 						parseTree.children.add(0, current.children.get(1));
 						current = current.children.get(0);
@@ -29,7 +72,9 @@ public class ASTBuilder {
 			case FORMAL_PARAMETER_LIST:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
+						parseTree.children.add(0, current.children.get(1));
 						parseTree.children.add(0, current.children.get(2));
 						current = current.children.get(0);
 					}
@@ -39,6 +84,7 @@ public class ASTBuilder {
 			case IMPORT_DECLARATIONS:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
 						parseTree.children.add(0, current.children.get(1));
 						current = current.children.get(0);
@@ -49,7 +95,9 @@ public class ASTBuilder {
 			case INTERFACE_TYPE_LIST:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
+						parseTree.children.add(0, current.children.get(1));
 						parseTree.children.add(0, current.children.get(2));
 						current = current.children.get(0);
 					}
@@ -59,6 +107,7 @@ public class ASTBuilder {
 			case CLASS_BODY_DECLARATIONS:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
 						parseTree.children.add(0, current.children.get(1));
 						current = current.children.get(0);
@@ -69,7 +118,9 @@ public class ASTBuilder {
 			case CLASS_TYPE_LIST:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
+						parseTree.children.add(0, current.children.get(1));
 						parseTree.children.add(0, current.children.get(2));
 						current = current.children.get(0);
 					}
@@ -79,6 +130,7 @@ public class ASTBuilder {
 			case INTERFACE_MEMBER_DECLARATIONS:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
 						parseTree.children.add(0, current.children.get(1));
 						current = current.children.get(0);
@@ -89,7 +141,9 @@ public class ASTBuilder {
 			case VARIABLE_INITIALIZERS:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
+						parseTree.children.add(0, current.children.get(1));
 						parseTree.children.add(0, current.children.get(2));
 						current = current.children.get(0);
 					}
@@ -99,10 +153,10 @@ public class ASTBuilder {
 			case BLOCK_STATEMENTS:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
 						parseTree.children.add(0, current.children.get(1));
 						current = current.children.get(0);
-
 					}
 					parseTree.children.add(0, current.children.get(0));
 				}
@@ -110,7 +164,9 @@ public class ASTBuilder {
 			case STATEMENT_EXPRESSION_LIST:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
+					parseTree.children.remove(0);
 					while (current.children.size() > 1) {
+						parseTree.children.add(0, current.children.get(1));
 						parseTree.children.add(0, current.children.get(2));
 						current = current.children.get(0);
 					}

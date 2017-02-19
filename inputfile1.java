@@ -3,7 +3,7 @@
  * This method is supposed to test whether access to the resulting
  * objects of method calls are parsed correctly.
  **/
-public class inputfile{
+public class inputfile1{
 
     public int i;
 

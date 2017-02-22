@@ -7,7 +7,7 @@ import java.util.Map;;
 import java.util.HashMap;
 
 public class Environment {
-
+	public final String mName;
 	// A reference to the parent environment
 	public final Environment mParent;
 	// A reference to the ast node that is this environment
@@ -18,9 +18,15 @@ public class Environment {
 	// A reference to the child environments of this environment
 	public List<Environment> mChildrenEnvironments;
 
-	public Environment(Environment parent, ParseTreeNode scope) {
+	/**
+	 * @param  parent reference to the parent environment
+	 * @param  scope  reference to the ParseTreeNode that counts as
+	 * @param  name   name of this Environment (name of the class )
+	 */
+	public Environment(Environment parent, ParseTreeNode scope, String name) {
 		mParent = parent;
 		mScope = scope;
+		mName = name;
 		mNames = new HashMap<>();
 		mChildrenEnvironments = new ArrayList<>();
 	}
@@ -50,7 +56,7 @@ public class Environment {
 		if (mScope == null) {
 			System.out.print("S: root ");
 		} else {
-			System.out.print("S: " + mScope.token.getType() + " ");
+			System.out.print("S: " + (mName == null ? mScope.token.getType() : mName) + " ");
 		}
 		
 		for (String name : mNames.keySet()) {

@@ -7,6 +7,7 @@ import java.util.Map;;
 import java.util.HashMap;
 
 public class Environment {
+
 	public final String mName;
 	// A reference to the parent environment
 	public final Environment mParent;
@@ -29,19 +30,6 @@ public class Environment {
 		mName = name;
 		mNames = new HashMap<>();
 		mChildrenEnvironments = new ArrayList<>();
-	}
-
-	/**
-	 * Looks in this environment for the given name. 
-	 * If the name does not exist in the current environment we recursively search all parent environments.
-	 * If no name is found in this environment or the parent environments null is returned.
-	 */
-	public ParseTreeNode containsName(String name) {
-		ParseTreeNode nameNode = mNames != null ? mNames.get(name) : null;
-		if (nameNode == null && mParent != null) {
-			nameNode = mParent.containsName(name);
-		}
-		return nameNode;
 	}
 
 	public void print() {

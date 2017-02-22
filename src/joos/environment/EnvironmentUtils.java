@@ -37,10 +37,12 @@ public class EnvironmentUtils {
 		}
 		// If we have not found the target parse tree node then  check the children of the currentParseTreeNode using the next environment
 		Environment foundEnvironment = null;
-		for (ParseTreeNode child : currentParseTreeNode.children) {
-			foundEnvironment = search(nextEnvironment, child, targetParseTreeNode);
-			if (foundEnvironment != null) {
-				return foundEnvironment;
+		if (currentParseTreeNode.children != null) {
+			for (ParseTreeNode child : currentParseTreeNode.children) {
+				foundEnvironment = search(nextEnvironment, child, targetParseTreeNode);
+				if (foundEnvironment != null) {
+					return foundEnvironment;
+				}
 			}
 		}
 		return null;

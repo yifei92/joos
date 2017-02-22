@@ -9,7 +9,7 @@ public class inputfile{
 
     public int i;
 
-    public J1_1_AmbiguousName_AccessResultFromMethod(int j){   
+    public constr(int j){   
         i = j;
         int x;
         int k;
@@ -21,11 +21,11 @@ public class inputfile{
         }
     }
 
-    public J1_1_AmbiguousName_AccessResultFromMethod inc(int a, int b){
+    public J1_1_AmbiguousName_AccessResultFromMethod m1(int a, int b){
 	   return new J1_1_AmbiguousName_AccessResultFromMethod(i+1);
     }
 
-    public static int test(int b){
+    public static int m2(int b){
 	   return new J1_1_AmbiguousName_AccessResultFromMethod(120).inc().inc().inc().i;
     }
 

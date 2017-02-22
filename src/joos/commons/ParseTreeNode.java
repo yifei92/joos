@@ -36,7 +36,7 @@ public class ParseTreeNode {
 		Environment thisEnvironment = EnvironmentUtils.findEvironment(rootEnvironment, rootParseTreeNode, this);
 		String environmentString = " E: ";
 		if (thisEnvironment != null) {
-			environmentString += EnvironmentUtils.getEnvironmentType(thisEnvironment).toString();
+			environmentString += EnvironmentUtils.getEnvironmentType(thisEnvironment).toString() + " ";
 			if (thisEnvironment.mName != null) {
 				environmentString += thisEnvironment.mName;
 			}
@@ -45,7 +45,7 @@ public class ParseTreeNode {
 		System.out.println();
 		if (this.children != null) {
 			for (ParseTreeNode child : this.children) {
-				child.print(depth + 1);
+				child.printWithEnvironments(rootEnvironment, rootParseTreeNode, depth + 1);
 			}
 		}
 	}

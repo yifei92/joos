@@ -50,6 +50,9 @@ public class Main {
 			System.out.println("Building environment");
 			Environment environment = EnvironmentBuilder.build(parseTrees);
 			environment.print();
+			for (ParseTreeNode parseTree : parseTrees) {
+				parseTree.printWithEnvironments(environment, parseTree);
+			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

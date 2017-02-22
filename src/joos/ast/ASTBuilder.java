@@ -54,8 +54,8 @@ public class ASTBuilder {
 				}
 				break;
 			case FIELD_DECLARATION:
-			case METHOD_DECLARATION:
-			case CLASS_DECLARATION :
+			case METHOD_HEADER:
+			case CLASS_DECLARATION:
 				parseTree.children.set(0,parseTree.children.get(0).children.get(0));
 				break;
 			case MODIFIERS:

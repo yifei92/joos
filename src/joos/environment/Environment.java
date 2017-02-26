@@ -18,6 +18,9 @@ public class Environment {
 	public Map<String, ParseTreeNode> mNames;
 
     public Map<String, ParseTreeNode> mimports;
+
+	public String packagename;
+
     // A reference to the child environments of this environment
 	public List<Environment> mChildrenEnvironments;
 

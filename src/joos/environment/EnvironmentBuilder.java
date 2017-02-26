@@ -30,16 +30,48 @@ public class EnvironmentBuilder {
 		if (node == null) return; 
 		Environment nextEnvironment = environment;
 		switch (node.token.getType()) {
+			case PACKAGE_DECLARATION:
+				ParseTreeNode namenode=node.children.get(0);
+				String PackageFullName="";
+				for(int i=0;i<namenode.children.size();i++){
+					PackageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
+				}
+				if(environment.packagename!=null){
+					throw new TypeLinkingException("already have a package name");
+				}
+				else{
+					environment.packagename=PackageFullName;
+				}
+				break;
             case IMPORT_DECLARATION:
-				String packagename=((TerminalToken)node.children.get(1).token).getRawValue();
-				if(environment.mimports.containsKey(packagename)){
+				PackageFullName = "";
+				if(node.children.get(0).token.getType()==TokenType.ABSTRACT.SINGLE_TYPE_IMPORT_DECLARATION){
+					namenode=node.children.get(0).children.get(1);
+					for(int i=0;i<namenode.children.size();i++){
+						PackageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
+					}
+				}
+				else{
+					namenode=node.children.get(0).children.get(1);
+					for(int i=0;i<namenode.children.size();i++){
+						PackageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
+					}
+				}
+				if(environment.mimports.containsKey(PackageFullName)){
 					throw new TypeLinkingException("package name appare twice");
 				}
-                environment.mimports.put(packagename,node);
+                environment.mimports.put(PackageFullName,node);
                 break;
 			case INTERFACE_DECLARATION: // fall through
 			case CLASS_DECLARATION: 
 				// create a new environment for this new block
+				String typename=((TerminalToken)node.children.get(2).token).getRawValue();
+				if(environment.packagename==null){
+					environment.packagename=typename;
+				}
+				else{
+					environment.packagename=environment.packagename+"."+typename;
+				}
 				Environment newEnvironment  = new Environment(environment, node, getClassOrInterfaceName(node));
 				environment.mChildrenEnvironments.add(newEnvironment);
 				nextEnvironment = newEnvironment;

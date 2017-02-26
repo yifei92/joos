@@ -173,6 +173,22 @@ public class ASTBuilder {
 					parseTree.children.add(0, current.children.get(0));
 				}
 				break;
+			case NAME:
+				if(parseTree.children.get(0).token.getType()==TokenType.SIMPLE_NAME){
+					parseTree.children.set(0,parseTree.children.get(0).children.get(0));
+				}
+				else{
+					ParseTreeNode current=parseTree.children.get(0);
+					parseTree.children.clear();
+					parseTree.children.add(0,current.children.get(2));
+					parseTree.children.add(0,current.children.get(1));
+					while(current.children.get(0).children.get(0).token.getType()!=TokenType.SIMPLE_NAME){
+						parseTree.children.add(0,current.children.get(2));
+						parseTree.children.add(0,current.children.get(1));
+						current=current.children.get(0);
+					}
+					parseTree.children.add(0,current.children.get(0).children.get(0));
+				}
 			default:
 		}
 		if (parseTree.children != null) {

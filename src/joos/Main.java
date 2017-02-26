@@ -30,6 +30,7 @@ public class Main {
 
 		try {
 			List<ParseTreeNode> parseTrees = new ArrayList<>();
+			System.out.println(files.size());
 			for (JoosFile joosFile : files) {
 				Scanner scanner = new Scanner();
 				Parser parser = new Parser();
@@ -53,7 +54,7 @@ public class Main {
 			for (ParseTreeNode parseTree : parseTrees) {
 				parseTree.printWithEnvironments(environment, parseTree);
 			}
-		} catch (InvalidSyntaxException e) {
+		} catch (Exception e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());
 			System.out.println("Error");

@@ -3,6 +3,8 @@ package joos.environment;
 import joos.commons.ParseTreeNode;
 import joos.commons.TokenType;
 import joos.commons.TerminalToken;
+import joos.exceptions.TypeLinkingException;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -11,7 +13,7 @@ public class EnvironmentBuilder {
 	/**
 	 * Builds the environment tree using the given parse trees for each joos file.
 	 */
-	public static Environment build (List<ParseTreeNode> parseTrees) {
+	public static Environment build (List<ParseTreeNode> parseTrees) throws TypeLinkingException {
 		Environment rootEnvironment = new Environment(null, null, null);
 		for (ParseTreeNode parseTree : parseTrees) {
 			traverse(rootEnvironment, parseTree);
@@ -24,10 +26,17 @@ public class EnvironmentBuilder {
 	 * Traverses the parse tree and adds new child environments (with appropriate scopes and parents)
 	 * as well as new names the given environment.
 	 */
-	private static void traverse (final Environment environment, final ParseTreeNode node) {
+	private static void traverse (final Environment environment, final ParseTreeNode node) throws TypeLinkingException {
 		if (node == null) return; 
 		Environment nextEnvironment = environment;
 		switch (node.token.getType()) {
+            case IMPORT_DECLARATION:
+				String packagename=((TerminalToken)node.children.get(1).token).getRawValue();
+				if(environment.mimports.containsKey(packagename)){
+					throw new TypeLinkingException("package name appare twice");
+				}
+                environment.mimports.put(packagename,node);
+                break;
 			case INTERFACE_DECLARATION: // fall through
 			case CLASS_DECLARATION: 
 				// create a new environment for this new block
@@ -154,7 +163,7 @@ public class EnvironmentBuilder {
 		return null;
 	}
 
-	private static String getClassOrInterfaceName(ParseTreeNode classOrInterfaceNode) {
+	public static String getClassOrInterfaceName(ParseTreeNode classOrInterfaceNode) {
 		for (ParseTreeNode child : classOrInterfaceNode.children) {
 			if (child.token.getType() == TokenType.IDENTIFIER) {
 				return ((TerminalToken) child.token).getRawValue();

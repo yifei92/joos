@@ -1,6 +1,7 @@
 package joos;
 
 import joos.ast.ASTBuilder;
+import joos.exceptions.TypeLinkingException;
 import joos.filereader.FileScanner;
 import joos.filereader.JoosFile;
 import joos.commons.*;
@@ -54,8 +55,14 @@ public class Main {
 			for (ParseTreeNode parseTree : parseTrees) {
 				parseTree.printWithEnvironments(environment, parseTree);
 			}
-		} catch (Exception e) {
+		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
+			System.out.println(e.getMessage());
+			System.out.println("Error");
+			System.exit(42);
+			return;
+		}
+		catch (TypeLinkingException e){
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);

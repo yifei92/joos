@@ -30,7 +30,12 @@ public class Environment {
 		mParent = parent;
 		mScope = scope;
 		mName = name;
-        mimports=parent.mimports;
+		if(parent==null) {
+			mimports = new HashMap<>();
+		}
+		else {
+			mimports=parent.mimports;
+		}
 		mNames = new HashMap<>();
 		mChildrenEnvironments = new ArrayList<>();
 	}

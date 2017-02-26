@@ -59,17 +59,21 @@ public class EnvironmentBuilder {
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
 					}
+					if(environment.mSingleImports.containsKey(packageFullName)||environment.mOnDemandeImports.containsKey(packageFullName)){
+						throw new TypeLinkingException("Import already exists");
+					}
+					environment.mSingleImports.put(packageFullName,node);
 				}
 				else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
 					}
+					if(environment.mSingleImports.containsKey(packageFullName)||environment.mOnDemandeImports.containsKey(packageFullName)){
+						throw new TypeLinkingException("Import already exists");
+					}
+					environment.mOnDemandeImports.put(packageFullName,node);
 				}
-				if(environment.mImports.containsKey(packageFullName)){
-					throw new TypeLinkingException("Import already exists");
-				}
-        environment.mImports.put(packageFullName,node);
         break;
 			case VARIABLE_DECLARATOR:
 				ParseTreeNode identifierNode = findNodeWithTokenType(node, TokenType.IDENTIFIER);

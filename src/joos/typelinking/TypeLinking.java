@@ -21,7 +21,7 @@ public class TypeLinking {
         switch (current.token.getType()) {
             case INTERFACE_DECLARATION:
             case CLASS_DECLARATION:
-                if(environment.mImports.containsKey(getClassOrInterfaceName(current))){
+                if(environment.mSingleImports.containsKey(getClassOrInterfaceName(current))){
                     throw new TypeLinkingException("type same name as packege");
                 }
             break;

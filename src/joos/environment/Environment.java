@@ -17,9 +17,7 @@ public class Environment {
 	// A reference to the names declared in this environment.
 	public Map<String, ParseTreeNode> mNames;
 
-    public Map<String, ParseTreeNode> mimports;
-
-	public String packagename;
+  public Map<String, ParseTreeNode> mImports;
 
     // A reference to the child environments of this environment
 	public List<Environment> mChildrenEnvironments;
@@ -34,10 +32,9 @@ public class Environment {
 		mScope = scope;
 		mName = name;
 		if(parent==null) {
-			mimports = new HashMap<>();
-		}
-		else {
-			mimports=parent.mimports;
+			mImports = new HashMap<>();
+		} else {
+			mImports=parent.mImports;
 		}
 		mNames = new HashMap<>();
 		mChildrenEnvironments = new ArrayList<>();

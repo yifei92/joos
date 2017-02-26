@@ -7,19 +7,40 @@ import joos.exceptions.TypeLinkingException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class EnvironmentBuilder {
 	
 	/**
 	 * Builds the environment tree using the given parse trees for each joos file.
 	 */
-	public static Environment build (List<ParseTreeNode> parseTrees) throws TypeLinkingException {
-		Environment rootEnvironment = new Environment(null, null, null);
+	public static Map<String, Environment> build (List<ParseTreeNode> parseTrees) throws TypeLinkingException {
+		Map<String, Environment> packageMap = new HashMap<String, Environment>();
 		for (ParseTreeNode parseTree : parseTrees) {
-			traverse(rootEnvironment, parseTree);
+			ParseTreeNode packageDeclNode = findNodeWithTokenType(parseTree, TokenType.PACKAGE_DECLARATION);
+			ParseTreeNode classOrInterfaceNode = findNodeWithTokenType(parseTree, TokenType.CLASS_DECLARATION);
+			if (classOrInterfaceNode == null) {
+				classOrInterfaceNode = findNodeWithTokenType(parseTree, TokenType.INTERFACE_DECLARATION);
+			}
+
+			String classOrInterfaceName = getClassOrInterfaceName(classOrInterfaceNode);
+			String packageMapKey = classOrInterfaceName; // default package
+			if (packageDeclNode != null) {
+				String packageName = getPackageName(packageDeclNode);
+				packageMapKey = packageName + "." + classOrInterfaceName;
+			}
+			if (packageMap.containsKey(packageMapKey)) {
+				throw new TypeLinkingException(packageMapKey + " already exists");
+			} else {
+				// create a new environment for this new block
+				Environment classOrInterfaceEnvironment  = new Environment(null, classOrInterfaceNode, classOrInterfaceName);
+				traverse(classOrInterfaceEnvironment, parseTree);
+				packageMap.put(packageMapKey, classOrInterfaceEnvironment);
+			}
 		}
 		// Return a root environment that containst the environment trees for all the parse trees
-		return rootEnvironment;
+		return packageMap;
 	}
 
 	/**
@@ -30,52 +51,26 @@ public class EnvironmentBuilder {
 		if (node == null) return; 
 		Environment nextEnvironment = environment;
 		switch (node.token.getType()) {
-			case PACKAGE_DECLARATION:
-				ParseTreeNode namenode=node.children.get(0);
-				String PackageFullName="";
-				for(int i=0;i<namenode.children.size();i++){
-					PackageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
-				}
-				if(environment.packagename!=null){
-					throw new TypeLinkingException("already have a package name");
-				}
-				else{
-					environment.packagename=PackageFullName;
-				}
-				break;
-            case IMPORT_DECLARATION:
-				PackageFullName = "";
+      case IMPORT_DECLARATION:
+				String packageFullName = "";
+				ParseTreeNode namenode;				
 				if(node.children.get(0).token.getType()==TokenType.ABSTRACT.SINGLE_TYPE_IMPORT_DECLARATION){
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
-						PackageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
+						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
 					}
 				}
 				else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
-						PackageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
+						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
 					}
 				}
-				if(environment.mimports.containsKey(PackageFullName)){
-					throw new TypeLinkingException("package name appare twice");
+				if(environment.mImports.containsKey(packageFullName)){
+					throw new TypeLinkingException("Import already exists");
 				}
-                environment.mimports.put(PackageFullName,node);
-                break;
-			case INTERFACE_DECLARATION: // fall through
-			case CLASS_DECLARATION: 
-				// create a new environment for this new block
-				String typename=((TerminalToken)node.children.get(2).token).getRawValue();
-				if(environment.packagename==null){
-					environment.packagename=typename;
-				}
-				else{
-					environment.packagename=environment.packagename+"."+typename;
-				}
-				Environment newEnvironment  = new Environment(environment, node, getClassOrInterfaceName(node));
-				environment.mChildrenEnvironments.add(newEnvironment);
-				nextEnvironment = newEnvironment;
-				break;
+        environment.mImports.put(packageFullName,node);
+        break;
 			case VARIABLE_DECLARATOR:
 				ParseTreeNode identifierNode = findNodeWithTokenType(node, TokenType.IDENTIFIER);
 				environment.mNames.put(
@@ -114,8 +109,8 @@ public class EnvironmentBuilder {
 				ParseTreeNode elseStatementNode = findNodeWithTokenType(node, elseStatementTokenType);
 				// Create new environments for both the if and else statements
 				Environment ifEnvironment  = new Environment(environment, ifStatementNode, null);
-				environment.mChildrenEnvironments.add(ifEnvironment);
 				Environment elseEnvironment  = new Environment(environment, elseStatementNode, null);
+				environment.mChildrenEnvironments.add(ifEnvironment);
 				environment.mChildrenEnvironments.add(elseEnvironment);
 				// Traverse the if and else statement nodes with their own environments
 				traverse(ifEnvironment, ifStatementNode);
@@ -155,6 +150,15 @@ public class EnvironmentBuilder {
 				traverse(nextEnvironment, child);
 			}
 		}
+	}
+
+	private static String getPackageName(ParseTreeNode packageDeclNode) {
+		ParseTreeNode nameNode = findNodeWithTokenType(packageDeclNode, TokenType.NAME);
+		String packageFullName="";
+		for(ParseTreeNode child : nameNode.children){
+			packageFullName+=((TerminalToken)child.token).getRawValue();
+		}
+		return packageFullName;
 	}
 
 	private static void findFormalParameters(ParseTreeNode node, List<ParseTreeNode> paramVarNodes) {

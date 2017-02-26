@@ -14,6 +14,7 @@ import joos.environment.EnvironmentBuilder;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class Main {
 
@@ -50,10 +51,10 @@ public class Main {
 				parseTrees.add(parseTree);
 			}
 			System.out.println("Building environment");
-			Environment environment = EnvironmentBuilder.build(parseTrees);
-			environment.print();
-			for (ParseTreeNode parseTree : parseTrees) {
-				parseTree.printWithEnvironments(environment, parseTree);
+			Map<String, Environment> packageMap = EnvironmentBuilder.build(parseTrees);
+			for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
+			    entry.getValue().print();
+			    System.out.println("");
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

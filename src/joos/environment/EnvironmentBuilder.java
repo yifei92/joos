@@ -15,7 +15,7 @@ public class EnvironmentBuilder {
 	/**
 	 * Builds the environment tree using the given parse trees for each joos file.
 	 */
-	public static Map<String, Environment> build (List<ParseTreeNode> parseTrees) throws TypeLinkingException {
+	public static Map<String, Environment> build (List<ParseTreeNode> parseTrees,Map<String,ParseTreeNode> treeMap) throws TypeLinkingException {
 		Map<String, Environment> packageMap = new HashMap<String, Environment>();
 		for (ParseTreeNode parseTree : parseTrees) {
 			ParseTreeNode packageDeclNode = findNodeWithTokenType(parseTree, TokenType.PACKAGE_DECLARATION);
@@ -40,6 +40,7 @@ public class EnvironmentBuilder {
 				}
 				traverse(classOrInterfaceEnvironment, parseTree);
 				packageMap.put(packageMapKey, classOrInterfaceEnvironment);
+				treeMap.put(packageMapKey,parseTree);
 			}
 		}
 		// Return a root environment that containst the environment trees for all the parse trees

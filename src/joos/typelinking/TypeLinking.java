@@ -142,8 +142,10 @@ public class TypeLinking {
                 break;
             default:
         }
-        for (ParseTreeNode child : current.children) {
-            check(root,child, environment,PackageMap);
+        if(current.children!=null) {
+            for (ParseTreeNode child : current.children) {
+                check(root, child, environment, PackageMap);
+            }
         }
         return;
     }

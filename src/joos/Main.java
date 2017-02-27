@@ -8,13 +8,12 @@ import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
 import joos.parser.Parser;
 import joos.scanner.Scanner;
+import joos.typelinking.TypeLinking;
 import joos.weeder.Weeder;
 import joos.environment.Environment;
 import joos.environment.EnvironmentBuilder;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
+
+import java.util.*;
 
 public class Main {
 
@@ -46,11 +45,16 @@ public class Main {
 				astBuilder.convert(parseTree);
 				parseTrees.add(parseTree);
 			}
-			Map<String, Environment> packageMap = EnvironmentBuilder.build(parseTrees);
+			Map<String, ParseTreeNode> treeMap= new HashMap<>();
+			Map<String, Environment> packageMap = EnvironmentBuilder.build(parseTrees,treeMap);
 			/*for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
 			    entry.getValue().print();
 			    System.out.println("");
 			}*/
+			for(String key : treeMap.keySet()){
+				TypeLinking typeLinking=new TypeLinking();
+				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap);
+			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

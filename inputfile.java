@@ -8,12 +8,13 @@ package a.b.c;
 public class inputfile{
 
     public int i;
-
+    
     public constr(int j){   
         i = j;
         int x;
         int k;
         for(k = 0 ; k < 10 ; k = k+1) {
+            int x;
             int s = 0;
             while(k < i) {
                 boolean blah = true;

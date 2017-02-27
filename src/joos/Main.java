@@ -18,9 +18,6 @@ import java.util.Map;
 
 public class Main {
 
-	static boolean a() {
-		return false;
-	}
 	public static void main(String[] args) {
 		String programString = null;
 

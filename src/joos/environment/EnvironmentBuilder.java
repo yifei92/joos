@@ -77,9 +77,19 @@ public class EnvironmentBuilder {
         break;
 			case VARIABLE_DECLARATOR:
 				ParseTreeNode identifierNode = findNodeWithTokenType(node, TokenType.IDENTIFIER);
-				environment.mVariableDeclarations.put(
-					((TerminalToken) identifierNode.token).getRawValue(),
-					identifierNode);
+				String variableName = ((TerminalToken) identifierNode.token).getRawValue();
+				// Make sure that no two variables in a class have the same name
+				if (environment.mScope.token.getType() == TokenType.CLASS_DECLARATION &&
+						environment.mVariableDeclarations.containsKey(variableName)) {
+					throw new TypeLinkingException(
+						"Variable " + variableName + " has already been declared in class " + environment.mName);
+				} else if(checkForLocalVariableDuplicates(environment, variableName)) {
+					throw new TypeLinkingException(
+						"Variable " + variableName + " has already been declared in this method");
+
+				}else {
+					environment.mVariableDeclarations.put(variableName, identifierNode);
+				}
 				break;
 			case CONSTRUCTOR_DECLARATION: // fall through
 			case ABSTRACT_METHOD_DECLARATION: // fall through
@@ -153,6 +163,24 @@ public class EnvironmentBuilder {
 			for (ParseTreeNode child : node.children) {
 				traverse(nextEnvironment, child);
 			}
+		}
+	}
+
+	/**
+	 * Checks the current method environment for duplicate variable names in overlapping scopes
+	 */
+	private static boolean checkForLocalVariableDuplicates(
+		Environment currentEnvironment,
+		String variableName) {
+		TokenType currentScopeType = currentEnvironment.mScope.token.getType();
+		if (currentScopeType != TokenType.CLASS_DECLARATION && currentScopeType != TokenType.INTERFACE_DECLARATION) {
+			if (currentEnvironment.mVariableDeclarations.containsKey(variableName)) {
+				return true;
+			} else {
+				return checkForLocalVariableDuplicates(currentEnvironment.mParent, variableName);
+			}
+		} else {
+			return false;
 		}
 	}
 

@@ -14,9 +14,10 @@ public class Je_12_Fields_StaticNonStatic {
     public static int a = 2;
     
     public Je_12_Fields_StaticNonStatic() {
+      
     }
     
     public static int test() {
-	return 123;
+      return 123;
     }
 }

@@ -35,6 +35,9 @@ public class EnvironmentBuilder {
 			} else {
 				// create a new environment for this new block
 				Environment classOrInterfaceEnvironment  = new Environment(null, classOrInterfaceNode, classOrInterfaceName);
+				if(packageDeclNode!=null){
+					classOrInterfaceEnvironment.PackageName=getPackageName(packageDeclNode);
+				}
 				traverse(classOrInterfaceEnvironment, parseTree);
 				packageMap.put(packageMapKey, classOrInterfaceEnvironment);
 			}
@@ -59,20 +62,20 @@ public class EnvironmentBuilder {
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
 					}
-					if(environment.mSingleImports.containsKey(packageFullName)||environment.mOnDemandeImports.containsKey(packageFullName)){
+					if(environment.mSingleImports.contains(packageFullName)||environment.mOnDemandeImports.contains(packageFullName)){
 						throw new TypeLinkingException("Import already exists");
 					}
-					environment.mSingleImports.put(packageFullName,node);
+					environment.mSingleImports.add(packageFullName);
 				}
 				else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
 					}
-					if(environment.mSingleImports.containsKey(packageFullName)||environment.mOnDemandeImports.containsKey(packageFullName)){
+					if(environment.mSingleImports.contains(packageFullName)||environment.mOnDemandeImports.contains(packageFullName)){
 						throw new TypeLinkingException("Import already exists");
 					}
-					environment.mOnDemandeImports.put(packageFullName,node);
+					environment.mOnDemandeImports.add(packageFullName);
 				}
         break;
 			case VARIABLE_DECLARATOR:

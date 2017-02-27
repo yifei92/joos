@@ -1,0 +1,19 @@
+#!/bin/bash
+chmod 777 buildscript
+./buildscript
+echo "Running A2 tests"
+for filename in test/a2/*.java; do 
+  printf "Test $filename\n"
+  ./joosc $filename
+  printf "\n\n"
+done
+for directory in test/a2/*/; do 
+  printf "Test $directory\n"
+  params=""
+  for f in $(find $directory -name '*.java'); do
+    chmod 777 $f
+    params="$params $f";
+  done
+  ./joosc $params
+  printf "\n\n"
+done

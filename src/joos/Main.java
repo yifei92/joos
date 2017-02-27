@@ -35,7 +35,6 @@ public class Main {
 				Parser parser = new Parser();
 				Weeder weeder = new Weeder();
 				ASTBuilder astBuilder = new ASTBuilder();
-				System.out.println("Scanning, parsing, weeding file " + joosFile.mFilePath);
 				ParseTreeNode parseTree = null;
 				List<TerminalToken> tokens = scanner.scan(joosFile.mProgram);
 				/*for (TerminalToken token : tokens) {
@@ -47,12 +46,11 @@ public class Main {
 				astBuilder.convert(parseTree);
 				parseTrees.add(parseTree);
 			}
-			System.out.println("Building environment");
 			Map<String, Environment> packageMap = EnvironmentBuilder.build(parseTrees);
-			for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
+			/*for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
 			    entry.getValue().print();
 			    System.out.println("");
-			}
+			}*/
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

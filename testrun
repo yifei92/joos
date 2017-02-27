@@ -1,9 +1,9 @@
 #!/bin/bash
 chmod 777 buildscript
 ./buildscript
-echo "Build complete. Running tests >>>>>>>>>>>>>>>>>>>>>>"
-for filename in test/*; do 
+echo "Running A1 tests"
+for filename in test/a1/*; do 
   printf "Test $filename _________________________________\n"
-  java -jar joosc.jar $filename
+  ./joosc $filename
   printf "\n\n"
 done

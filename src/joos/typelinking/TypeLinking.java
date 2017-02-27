@@ -29,7 +29,7 @@ public class TypeLinking {
                 if(current.children.get(0).children.get(0).token.getType()==TokenType.SIMPLE_NAME){
                     String name=((TerminalToken)current.children.get(0).children.get(0).children.get(0).token).getRawValue();
                     Environment local=findEvironment(environment,root,current);
-                    if(local.mNames.get(name).token.getType()!=TokenType.CLASS_DECLARATION){
+                    if(local.mVariableDeclarations.get(name).token.getType()!=TokenType.CLASS_DECLARATION){
                         throw new TypeLinkingException("cant find refrenced class");
                     }
                 }
@@ -38,7 +38,7 @@ public class TypeLinking {
                 if(current.children.get(0).children.get(0).token.getType()==TokenType.SIMPLE_NAME){
                     String name=((TerminalToken)current.children.get(0).children.get(0).children.get(0).token).getRawValue();
                     Environment local=findEvironment(environment,root,current);
-                    if(local.mNames.get(name).token.getType()!=TokenType.CLASS_DECLARATION){
+                    if(local.mVariableDeclarations.get(name).token.getType()!=TokenType.CLASS_DECLARATION){
                         throw new TypeLinkingException("cant find refrenced interface");
                     }
                 }
@@ -46,14 +46,14 @@ public class TypeLinking {
             case FIELD_ACCESS:
                 String name=((TerminalToken)current.children.get(2).children.get(0).children.get(0).token).getRawValue();
                 Environment local=findEvironment(environment,root,current);
-                if(local.mNames.get(name).token.getType()!=TokenType.VARIABLE_DECLARATOR){
+                if(local.mVariableDeclarations.get(name).token.getType()!=TokenType.VARIABLE_DECLARATOR){
                     throw new TypeLinkingException("cant find refrenced interface");
                 }
                 break;
             case METHOD_INVOCATION:
                 name=((TerminalToken)current.children.get(2).children.get(0).children.get(0).token).getRawValue();
                 local=findEvironment(environment,root,current);
-                if(local.mNames.get(name).token.getType()!=TokenType.METHOD_DECLARATION){
+                if(local.mVariableDeclarations.get(name).token.getType()!=TokenType.METHOD_DECLARATION){
                     throw new TypeLinkingException("cant find refrenced interface");
                 }
                 break;

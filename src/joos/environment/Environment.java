@@ -15,7 +15,7 @@ public class Environment {
 	public final ParseTreeNode mScope;
 
 	// A reference to the names declared in this environment.
-	public Map<String, ParseTreeNode> mNames;
+	public Map<String, ParseTreeNode> mVariableDeclarations;
 
   public Map<String, ParseTreeNode> mImports;
 
@@ -36,7 +36,7 @@ public class Environment {
 		} else {
 			mImports=parent.mImports;
 		}
-		mNames = new HashMap<>();
+		mVariableDeclarations = new HashMap<>();
 		mChildrenEnvironments = new ArrayList<>();
 	}
 
@@ -55,7 +55,7 @@ public class Environment {
 			System.out.print("S: " + (mName == null ? mScope.token.getType() : mName) + " ");
 		}
 		
-		for (String name : mNames.keySet()) {
+		for (String name : mVariableDeclarations.keySet()) {
 			System.out.print("N: " + name + " ");
 		}
 		System.out.println("");

@@ -89,7 +89,7 @@ public class EnvironmentUtils {
 	 * If no name is found in this environment or the parent environments null is returned.
 	 */
 	public static ParseTreeNode containsVariableNameDeclaration(Environment environment, String variableName) {
-		ParseTreeNode variableNameNode = environment.mNames != null ? environment.mNames.get(variableName) : null;
+		ParseTreeNode variableNameNode = environment.mVariableDeclarations != null ? environment.mVariableDeclarations.get(variableName) : null;
 		if (variableNameNode == null && environment.mParent != null) {
 			variableNameNode = containsVariableNameDeclaration(environment.mParent, variableName);
 		}

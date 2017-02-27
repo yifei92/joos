@@ -73,7 +73,7 @@ public class EnvironmentBuilder {
         break;
 			case VARIABLE_DECLARATOR:
 				ParseTreeNode identifierNode = findNodeWithTokenType(node, TokenType.IDENTIFIER);
-				environment.mNames.put(
+				environment.mVariableDeclarations.put(
 					((TerminalToken) identifierNode.token).getRawValue(),
 					identifierNode);
 				break;
@@ -87,7 +87,7 @@ public class EnvironmentBuilder {
 				findFormalParameters(node, paramVarNodes);
 				for (ParseTreeNode paramNode : paramVarNodes) {
 					String name = ((TerminalToken) paramNode.token).getRawValue();
-					methodEnvironment.mNames.put(
+					methodEnvironment.mVariableDeclarations.put(
 						((TerminalToken) paramNode.token).getRawValue(),
 						paramNode);
 				}

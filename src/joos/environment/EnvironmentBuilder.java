@@ -94,6 +94,7 @@ public class EnvironmentBuilder {
 					environment.mVariableDeclarations.put(variableName, identifierNode);
 				}
 				break;
+			case BLOCK: // fall through
 			case CONSTRUCTOR_DECLARATION: // fall through
 			case ABSTRACT_METHOD_DECLARATION: // fall through
 			case METHOD_DECLARATION:

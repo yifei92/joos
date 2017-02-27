@@ -5,1160 +5,1179 @@ Packaging jar file
 COMPLETE!
 Running A2 tests
 Test test/a2/J1_1_Cast_NamedTypeAsVariable.java
-1
+16
 Success
 
 
 Test test/a2/J1_2_Fields_Case.java
-1
+16
 Success
 
 
 Test test/a2/J1_2_Locals_Overlapping_AfterBlock.java
-1
+16
 Success
 
 
 Test test/a2/J1_4_Constructor_DuplicateArrayTypes.java
-1
+16
 Success
 
 
 Test test/a2/J1_4_Constructor_MatchAsSets.java
-1
+16
 Success
 
 
 Test test/a2/J1_4_DuplicateMethodDeclare_MethodNameEqualsConstructorName.java
-1
+16
 Success
 
 
 Test test/a2/J1_4_MethodDeclare_DuplicateArrayTypes.java
-1
+16
 Success
 
 
 Test test/a2/J1_4_Override_FinalOverrideNonFinal.java
-1
+16
 Success
 
 
 Test test/a2/J1_4_Override_PublicOverridesProtected.java
-1
+16
 Success
 
 
 Test test/a2/J1_access_override2.java
-1
+16
 Success
 
 
 Test test/a2/J1_arbitrarylocaldeclaration.java
-1
+16
 Success
 
 
 Test test/a2/J1_assign_Object_to_Object.java
-1
+16
 Success
 
 
 Test test/a2/J1_cast_to_same_type.java
-1
+16
 Success
 
 
 Test test/a2/J1_classextendsobject1.java
-1
+16
 Success
 
 
 Test test/a2/J1_classextendsobject2.java
-1
-Success
+16
+can't find decration forjava.lang.Object
+Error
 
 
 Test test/a2/J1_constructorWithSameNameAsMethod.java
-1
+16
 Success
 
 
 Test test/a2/J1_formalindex.java
-1
+16
 Success
 
 
 Test test/a2/J1_formal_with_same_name_as_field.java
-1
+16
 Success
 
 
 Test test/a2/J1_importName10.java
-1
+16
 Import already exists
 Error
 
 
 Test test/a2/J1_importName11.java
-1
+16
 Success
 
 
 Test test/a2/J1_importName9.java
-1
+16
 Import already exists
 Error
 
 
 Test test/a2/J1_inherited_hashcode.java
-1
+16
 Success
 
 
 Test test/a2/J1_local_duplicate.java
-1
+16
 Success
 
 
 Test test/a2/J1_localvariablescope.java
-1
+16
 Success
 
 
 Test test/a2/J1_noduplicatefield.java
-1
+16
 Success
 
 
 Test test/a2/Je_12_Fields_StaticNonStatic.java
-1
+16
 Variable a has already been declared in class Je_12_Fields_StaticNonStatic
 Error
 
 
 Test test/a2/Je_14_Interface_DuplicateMethodDeclare.java
-1
+16
 Success
 
 
 Test test/a2/Je_14_Interface_SelfDependency_ExtendsItself.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_ConstructorParameter_Duplicate.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_ConstructorParameter_Overlapping.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Fields_DifferentAccess.java
-1
+16
 Variable o has already been declared in class Je_2_Fields_DifferentAccess
 Error
 
 
 Test test/a2/Je_2_Fields_DifferentTypes.java
-1
+16
 Variable foo has already been declared in class Je_2_Fields_DifferentTypes
 Error
 
 
 Test test/a2/Je_2_Fields_MultipleFields.java
-1
+16
 Variable foo has already been declared in class Je_2_Fields_MultipleFields
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_DeeplyNested.java
-1
+16
 Variable a has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_ForInitializer.java
-1
+16
 Variable r has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_InConditionalElse.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Locals_Overlapping_InConditionalThen.java
-1
+16
 Variable r has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_InsideDoubleBlock.java
-1
+16
 Variable r has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_InsideLoop.java
-1
+16
 Variable r has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_InsideNewBlock.java
-1
+16
 Variable r has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_SameLevel.java
-1
+16
 Variable r has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Locals_Overlapping_SameLine.java
-1
+16
 Variable b has already been declared in this method
 Error
 
 
 Test test/a2/Je_2_Parameter_AbstractDeclaredTwice.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Parameter_OverlappingWithLocalInConditional.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Parameter_OverlappingWithLocalInLoop.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Parameter_OverlappingWithLocalInsideNewBlock.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Parameter_OverlappingWithLocal.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Parameter_OverlappingWithLocalNotFirst.java
-1
+16
 Success
 
 
 Test test/a2/Je_2_Parameter_OverlappingWithParameter.java
-1
+16
 Success
 
 
 Test test/a2/Je_3_ImportOnDemand_NonExisting.java
-1
-Success
+16
+unable to find file for reference on demand java.Util
+Error
 
 
 Test test/a2/Je_3_ImportOnDemand_NonExistingPackage_FromPreviousTestcase.java
-1
+16
 Success
 
 
 Test test/a2/Je_3_Resolve_NonExistingSuperclass.java
-1
+16
 Success
 
 
 Test test/a2/Je_3_Resolve_SamePackageAndClassName.java
-1
-Success
+16
+can't find decration forJe_3_Resolve_SamePackageAndClassName.Je_3_Resolve_SamePackageAndClassName
+Error
 
 
 Test test/a2/Je_4_AbstractMethod_Declared.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_DuplicateConstructor_Args.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_DuplicateConstructor_ArrayArgs.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_DuplicateConstructor_NoArgs.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_DuplicateMethodDeclare_Args.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_DuplicateMethodDeclare_ArrayArgs.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_DuplicateMethodDeclare_DifferentReturnTypes.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_DuplicateMethodDeclare_NoArgs.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_ExtendFinal.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_FinalOverride_DifferentReturnTypes.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_FinalOverride_SameSignature.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_ImplementNonInterface_Class.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_ReplaceInstance_FromSuperclass.java
-1
+16
 Success
 
 
 Test test/a2/Je_4_SelfDependency_ExtendsItself.java
-1
+16
 Success
 
 
 Test test/a2/Je_5_Interface_ImplicitReplace_DifferentReturnType.java
-1
+16
 Success
 
 
 Test test/a2/J1_3_ImportOnDemand_DefaultImportInPresenceOfOtherImport/
-2
+17
 Success
 
 
 Test test/a2/J1_3_ImportOnDemand_ProgramDefinedPackage/
-2
+17
 Success
 
 
 Test test/a2/J1_3_InfixResolvesToType/
-2
-Success
+17
+can't find decration forfoo.String.bar.foo
+Error
 
 
 Test test/a2/J1_3_OnDemandImport_NonAmbiguous_Default/
-3
+18
 Success
 
 
 Test test/a2/J1_3_OnDemandImport_NonAmbiguous_SamePackage/
-4
+19
 Success
 
 
 Test test/a2/J1_3_PackageClashWithType_Linked_Mutated/
-3
+18
 Success
 
 
 Test test/a2/J1_3_PackageDecl_MultipleFilesInSamePackage/
-3
+18
 Success
 
 
 Test test/a2/J1_3_PackageDecl_SamePackageAndClassName/
-2
+17
 Success
 
 
 Test test/a2/J1_3_PackageExists_AsPrefix_External/
-1
+16
 Success
 
 
 Test test/a2/J1_3_PackageExists_AsPrefix_Internal/
-2
+17
 Success
 
 
 Test test/a2/J1_3_Resolve_LinkToCorrectPackage/
-4
+19
 Success
 
 
 Test test/a2/J1_3_Resolve_PackagePrefixMatchClassName/
-2
-Success
+17
+can't find decration forMain.B.A
+Error
 
 
 Test test/a2/J1_3_Resolve_SamePackage_External/
-3
+18
 Success
 
 
 Test test/a2/J1_3_SingleTypeImport_ClashWithOnDemand/
-4
+19
 Success
 
 
 Test test/a2/J1_3_SingleTypeImport_ClashWithPackageName/
-4
-Success
+19
+can't find decration forList.A
+Error
 
 
 Test test/a2/J1_3_SingleTypeImport_ImportProgramClass/
-2
+17
 Success
 
 
 Test test/a2/J1_3_SingleTypeImport_ImportSelf/
-2
+17
 Success
 
 
 Test test/a2/J1_3_SingleTypeImport_MultipleFromSamePackage/
-7
+22
 Success
 
 
 Test test/a2/J1_3_SingleTypeImport_MultipleImportsOfSameType/
-2
+17
 Import already exists
 Error
 
 
 Test test/a2/J1_3_SingleTypeImport_NoClash/
-3
+18
 Success
 
 
 Test test/a2/J1_4_AbstractMethod_InheritAbstractFromObject/
-2
+17
 Success
 
 
 Test test/a2/J1_4_AbstractMethod_InheritedFromInterface/
-2
+17
 Success
 
 
 Test test/a2/J1_4_ClassExtendsClass_SameName/
-5
-Success
+20
+can't find decration forjava.util.LinkedList
+Error
 
 
 Test test/a2/J1_4_ClassImplementsInterface_MultipleTimes/
-5
+20
 Success
 
 
 Test test/a2/J1_4_InheritedFields_SameField_TwoWays/
-4
-Success
+19
+can't find decration fororg.omg.CORBA.ARG_IN
+Error
 
 
 Test test/a2/J1_4_InterfaceMethod_FromObject/
-1
+16
 Success
 
 
 Test test/a2/J1_4_PackageClashWithType_Loaded/
-3
+18
 Success
 
 
 Test test/a2/J1_4_PackageClashWithType_NotLoaded/
-2
+17
 Success
 
 
 Test test/a2/J1_4_PackageClashWithType_SingleTypeImport_DefaultPackage/
-3
+18
 Success
 
 
 Test test/a2/J1_4_PackageNameIsClassName_DefaultPackage/
-4
+19
 Success
 
 
 Test test/a2/J1_4_Resolve_NotDefaultPackage/
-3
+18
 Success
 
 
 Test test/a2/J1_4_SingleTypeImport_OnDemandsClash/
-3
+18
 Success
 
 
 Test test/a2/J1_6_ProtectedAccess_StaticMethod_This/
-5
-Success
+20
+can't find decration forA.A
+Error
 
 
 Test test/a2/J1_abstract/
-3
+18
 Success
 
 
 Test test/a2/J1_classimplementsserializable1/
-1
+16
 Success
 
 
 Test test/a2/J1_classimplementsserializable2/
-1
-Success
+16
+can't find decration forjava.io.Serializable
+Error
 
 
 Test test/a2/J1_classimport/
-2
+17
 Success
 
 
 Test test/a2/J1_fields/
-2
+17
 Success
 
 
 Test test/a2/J1_final_method_override1/
-2
+17
 Success
 
 
 Test test/a2/J1_hierachyCheck14/
-3
+18
 Success
 
 
 Test test/a2/J1_hierachyCheck28/
-3
+18
 Success
 
 
 Test test/a2/J1_hierachyCheck29/
-3
+18
 Success
 
 
 Test test/a2/J1_hierachyCheck31/
-4
+19
 Success
 
 
 Test test/a2/J1_implicitsuper/
-3
+18
 Success
 
 
 Test test/a2/J1_importNameLookup1/
-3
+18
 Success
 
 
 Test test/a2/J1_importNameLookup2/
-3
+18
 Success
 
 
 Test test/a2/J1_importNameLookup3/
-3
+18
 Success
 
 
 Test test/a2/J1_importNameLookup4/
-3
+18
 Success
 
 
 Test test/a2/J1_importNameLookup5/
-2
+17
 Success
 
 
 Test test/a2/J1_importNameLookup6/
-3
+18
 Success
 
 
 Test test/a2/J1_importNameLookup7/
-2
+17
 Success
 
 
 Test test/a2/J1_instance_method_hide1/
-2
+17
 Success
 
 
 Test test/a2/J1_interfaceassignable/
-4
-Success
+19
+can't find decration forjava.util.LinkedList
+Error
 
 
 Test test/a2/J1_InterfaceObject/
-4
+19
 Success
 
 
 Test test/a2/J1_name/
-2
+17
 Success
 
 
 Test test/a2/J1_on_demand_imports_clash/
-3
+18
 Success
 
 
 Test test/a2/J1_package/
-2
-Success
+17
+can't find decration fordovs.joos.features.J1_package
+Error
 
 
 Test test/a2/J1_packageimport/
-2
+17
 Success
 
 
 Test test/a2/J1_public_method_protected_override1/
-2
+17
 Success
 
 
 Test test/a2/J1_resolvetype2/
-3
+18
 Success
 
 
 Test test/a2/J1_resolvetype3/
-2
+17
 Success
 
 
 Test test/a2/J1_resolvetype4/
-2
+17
 Success
 
 
 Test test/a2/J1_resolvetype6/
-3
-Success
+18
+can't find decration forjava.util.Date
+Error
 
 
 Test test/a2/J1_samePackage/
-3
-Success
+18
+can't find decration forfoo.Bar
+Error
 
 
 Test test/a2/J1_singleTypeImport/
-5
+20
 Success
 
 
 Test test/a2/J1_singleTypeImportSameTypeMultipleTimes/
-4
+19
 Import already exists
 Error
 
 
 Test test/a2/J1_static_method_override1/
-2
+17
 Success
 
 
 Test test/a2/J1_SubType1/
-2
+17
 Success
 
 
 Test test/a2/J1_SubType2/
-2
+17
 Success
 
 
 Test test/a2/J1_supermethod_override1/
-4
+19
 Success
 
 
 Test test/a2/J1_supermethod_override2/
-4
+19
 Success
 
 
 Test test/a2/J1_supermethod_override3/
-4
+19
 Success
 
 
 Test test/a2/J1_supermethod_override4/
-5
+20
 Success
 
 
 Test test/a2/J1_supermethod_override5/
-5
+20
 Success
 
 
 Test test/a2/J1_supermethod_override6/
-5
+20
 Success
 
 
 Test test/a2/J1_typecheck_assignment/
-3
+18
 Success
 
 
 Test test/a2/J2_3_SingleTypeImport_ImportSelf_Interface/
-2
+17
 Success
 
 
 Test test/a2/J2_4_ImplementsInterface_TwiceByName/
-2
-Success
+17
+can't find decration forfoo.Cloneable
+Error
 
 
 Test test/a2/J2_4_InterfaceExtends_MultipleWays/
-5
+20
 Success
 
 
 Test test/a2/J2_hierachyCheck22/
-5
+20
 Success
 
 
 Test test/a2/J2_hierachyCheck23/
-5
+20
 Success
 
 
 Test test/a2/J2_hierachyCheck24/
-5
+20
 Success
 
 
 Test test/a2/J2_hierachyCheck25/
-5
+20
 Success
 
 
 Test test/a2/J2_Ifaceimplicitabstract/
-3
+18
 Success
 
 
 Test test/a2/J2_Interface1/
-2
+17
 Success
 
 
 Test test/a2/J2_Interface10/
-2
+17
 Success
 
 
 Test test/a2/J2_Interface11/
-4
+19
 Success
 
 
 Test test/a2/J2_Interface2/
-2
+17
 Success
 
 
 Test test/a2/J2_Interface3/
-2
+17
 Success
 
 
 Test test/a2/J2_Interface6/
-3
+18
 Success
 
 
 Test test/a2/J2_Interface7/
-4
+19
 Success
 
 
 Test test/a2/J2_Interface8/
-4
+19
 Success
 
 
 Test test/a2/J2_Interface9/
-3
+18
 Success
 
 
 Test test/a2/J2_interface_omitted_abstract/
-2
+17
 Success
 
 
 Test test/a2/Je_13_Interface_SingleImport_ClashWithClass/
-2
+17
 Success
 
 
 Test test/a2/Je_14_Interface_DeclaresToString_DifferentReturnType/
-2
+17
 Success
 
 
 Test test/a2/Je_14_Interface_DeclaresToString_ThrowsConflict/
-2
+17
 Success
 
 
 Test test/a2/Je_14_Interface_ImplicitPublicMethod_ProtectedOverride/
-2
+17
 Success
 
 
 Test test/a2/Je_14_Interface_SelfDependency_CyclicExtend/
-3
+18
 Success
 
 
 Test test/a2/Je_2_DuplicateType/
-3
+18
 foo.Bar already exists
 Error
 
 
 Test test/a2/Je_3_ImportOnDemand_ClashWithImplicitImport/
-2
+17
 Success
 
 
 Test test/a2/Je_3_ImportOnDemand_ClassInMultiplePackages/
-3
+18
 Success
 
 
 Test test/a2/Je_3_ImportOnDemand_ClassNameAsPackage/
-2
+17
 Success
 
 
 Test test/a2/Je_3_ImportOnDemand_PackagePrefixExists/
-2
-Success
+17
+unable to find file for reference on demand java.util.foo
+Error
 
 
 Test test/a2/Je_3_PackageClashWithType_Explicit/
-3
+18
 Success
 
 
 Test test/a2/Je_3_PackageClashWithType_Linked/
-2
+17
 Success
 
 
 Test test/a2/Je_3_PackageClashWithType_SingleTypeImport/
-2
+17
 Success
 
 
 Test test/a2/Je_3_PackageExists_AlmostPrefix_External/
-1
+16
 Success
 
 
 Test test/a2/Je_3_PackageExists_AlmostPrefix_Internal/
-2
+17
 Success
 
 
 Test test/a2/Je_3_PackageNameIsClassName/
-3
+18
 Success
 
 
 Test test/a2/Je_3_PackageNameIsClassName_External/
-5
+20
 Success
 
 
 Test test/a2/Je_3_PackageNameIsClassName_ExternalPrefix/
-5
+20
 Success
 
 
 Test test/a2/Je_3_PackageNameIsClassName_Prefix/
-3
+18
 Success
 
 
 Test test/a2/Je_3_Resolve_ImplicitJavaIO/
-1
+16
 Success
 
 
 Test test/a2/Je_3_Resolve_ImportDifferentFromSamePackage/
-4
+19
 Success
 
 
 Test test/a2/Je_3_Resolve_LinkToCorrectPackage/
-3
+18
 Success
 
 
 Test test/a2/Je_3_Resolve_MissingImport/
-4
+19
 Success
 
 
 Test test/a2/Je_3_SingleTypeImport_ClashWithClass/
-5
+20
 Success
 
 
 Test test/a2/Je_3_SingleTypeImport_ClashWithClass_InPackage/
-5
+20
 Success
 
 
 Test test/a2/Je_3_SingleTypeImport_ClashWithEachOther/
-5
+20
 Success
 
 
 Test test/a2/Je_3_SingleTypeImport_ClashWithEachOther_MultipleImports/
-5
+20
 Success
 
 
 Test test/a2/Je_3_SingleTypeImport_ClashWithInterface/
-5
+20
 Success
 
 
 Test test/a2/Je_3_SingleTypeImport_NonExistingPackage/
-2
+17
 Success
 
 
 Test test/a2/Je_3_SingleTypeImport_NonExistingType/
-2
+17
 Success
 
 
 Test test/a2/Je_3_UndefinedType_DefaultPackageNotVisible/
-2
+17
 Success
 
 
 Test test/a2/Je_4_AbstractMethod_AbstractObjectMethods/
-2
+17
 Success
 
 
 Test test/a2/Je_4_AbstractMethod_InheritFromInterface_1/
-2
+17
 Success
 
 
 Test test/a2/Je_4_AbstractMethod_InheritFromInterface_2/
-2
+17
 Success
 
 
 Test test/a2/Je_4_AbstractMethod_InheritFromSuperclass/
-1
+16
 Success
 
 
 Test test/a2/Je_4_AbstractMethod_InheritFromSuperclassInterface/
-3
+18
 Success
 
 
 Test test/a2/Je_4_AbstractMethod_InheritFromSuperInterface/
-6
+21
 Success
 
 
 Test test/a2/Je_4_AbstractMethod_NotAllImplemented/
-2
+17
 Success
 
 
 Test test/a2/Je_4_ClassExtendsCyclicClass/
-4
+19
 Success
 
 
 Test test/a2/Je_4_ExtendNonClass/
-1
+16
 Success
 
 
 Test test/a2/Je_4_FinalHide/
-3
+18
 Success
 
 
 Test test/a2/Je_4_Hide_DifferentReturnTypes/
-2
+17
 Success
 
 
 Test test/a2/Je_4_ImplementNonInterface_InterfaceAndClass/
-1
+16
 Success
 
 
 Test test/a2/Je_4_ImplementTwice_QualifiedName/
-2
-Success
+17
+can't find decration forjava.io.Serializable
+Error
 
 
 Test test/a2/Je_4_ImplementTwice_SimpleName/
-2
+17
 Success
 
 
 Test test/a2/Je_4_InheritShadowsNonabstract/
-4
+19
 Success
 
 
 Test test/a2/Je_4_InterfaceExtendsCyclicInterface/
-4
+19
 Success
 
 
 Test test/a2/Je_4_Interface_FinalMethodFromObject/
-3
+18
 Success
 
 
 Test test/a2/Je_4_Override_DifferentReturnTypes_AbstractFromSuperclassAndInterface/
-3
+18
 Success
 
 
 Test test/a2/Je_4_Override_DifferentReturnTypesFromInterface/
-2
+17
 Success
 
 
 Test test/a2/Je_4_Override_DifferentReturnTypes_FromSuperclassAndInterface/
-3
+18
 Success
 
 
 Test test/a2/Je_4_Override_DifferentReturnTypes_FromSuperclassAndInterface_NonVoid/
-3
+18
 Success
 
 
 Test test/a2/Je_4_Override_DifferentReturnTypes_TwoInterfaces/
-3
+18
 Success
 
 
 Test test/a2/Je_4_ProtectedHide_FromSuperclass/
-2
+17
 Success
 
 
 Test test/a2/Je_4_ProtectedOverride_Abstract/
-2
+17
 Success
 
 
 Test test/a2/Je_4_ProtectedOverride_DifferentThrows/
-2
+17
 Parsing error at token 'throws'
 Error
 
 
 Test test/a2/Je_4_ProtectedOverride_Exception_Clone/
-2
-Success
+17
+can't find decration forjavax.naming.Name
+Error
 
 
 Test test/a2/Je_4_ProtectedOverride_FromInterface/
-2
+17
 Success
 
 
 Test test/a2/Je_4_ProtectedOverride_FromSuperclass/
-2
+17
 Success
 
 
 Test test/a2/Je_4_ProtectedOverride_FromSuperclassAndInterface/
-3
+18
 Success
 
 
 Test test/a2/Je_4_ProtectedOverride_TwoVersionsFromSuperclass/
-4
-Success
+19
+can't find decration forjava.util.Iterator
+Error
 
 
 Test test/a2/Je_4_ReplaceStatic_FromSuperclass/
-2
+17
 Success
 
 
 Test test/a2/Je_4_ReplaceStatic_FromSuperclass_DifferentReturnTypes/
-2
+17
 Success
 
 
 Test test/a2/Je_4_Resolve_DefaultPackage/
-3
+18
 Success
 
 
 Test test/a2/Je_4_SelfDependency_CircularExtends_1/
-5
+20
 Success
 
 
 Test test/a2/Je_4_SelfDependency_CircularExtends_2/
-5
+20
 Success
 
 

@@ -60,7 +60,7 @@ public class EnvironmentBuilder {
 				if(node.children.get(0).token.getType()==TokenType.ABSTRACT.SINGLE_TYPE_IMPORT_DECLARATION){
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
-						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
+						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
 					}
 					if(environment.mSingleImports.contains(packageFullName)||environment.mOnDemandeImports.contains(packageFullName)){
 						throw new TypeLinkingException("Import already exists");
@@ -70,7 +70,7 @@ public class EnvironmentBuilder {
 				else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
-						packageFullName+=((TerminalToken)namenode.children.get(0).children.get(i).token).getRawValue();
+						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
 					}
 					if(environment.mSingleImports.contains(packageFullName)||environment.mOnDemandeImports.contains(packageFullName)){
 						throw new TypeLinkingException("Import already exists");

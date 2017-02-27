@@ -42,7 +42,7 @@ public class Main {
 				System.out.println("");*/
 				parseTree = parser.parse(tokens);
 				weeder.weed(parseTree, joosFile.getFileName());
-				astBuilder.convert(parseTree).print();
+				astBuilder.convert(parseTree);
 				parseTrees.add(parseTree);
 			}
 			Map<String, ParseTreeNode> treeMap= new HashMap<>();

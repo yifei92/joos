@@ -6,6 +6,7 @@ import joos.commons.TokenType;
 import joos.environment.Environment;
 import joos.exceptions.TypeLinkingException;
 
+
 import java.util.Map;
 
 import static joos.environment.EnvironmentBuilder.getClassOrInterfaceName;
@@ -23,17 +24,26 @@ public class TypeLinking {
         switch (current.token.getType()) {
             case INTERFACE_DECLARATION:
             case CLASS_DECLARATION:
-            case TYPE_DECLARATION:
+            //case TYPE_DECLARATION:
                 String name=getClassOrInterfaceName(current);
+                for(String packagename : PackageMap.keySet()){
+                    if(packagename.startsWith(name)&&packagename.length()>name.length()){
+                        throw  new TypeLinkingException("type name same prefix as package");
+                    }
+                }
                 for(String key:environment.mSingleImports){
                     if(key.substring(key.lastIndexOf("."),key.length()).equals(name)){
                         throw new TypeLinkingException("type same name as an import");
                     }
+                    if(!PackageMap.containsKey(key)){
+                        throw  new TypeLinkingException("unable to find file for reference "+key);
+                    }
                 }
-                boolean find=false;
+
                 for(String importondemand:environment.mOnDemandeImports){
+                    boolean find=false;
                     for(String packagename:PackageMap.keySet()){
-                        if(packagename.contains(importondemand)){
+                        if(packagename.startsWith(importondemand)&&packagename.length()>importondemand.length()&&packagename.charAt(importondemand.length())=='.'){
                             find=true;
                         }
                     }
@@ -48,7 +58,7 @@ public class TypeLinking {
                     if(name.equals(environment.mName)){
                         break;
                     }
-                    find=false;
+                    Boolean find=false;
                     for(String key:environment.mSingleImports){
                         if(key.substring(key.lastIndexOf("."),key.length()).equals(name)){
                             if(find){
@@ -86,7 +96,7 @@ public class TypeLinking {
                     for(ParseTreeNode child:current.children.get(0).children.get(0).children){
                         name+=((TerminalToken)child.token).getRawValue();
                     }
-                    if(!environment.mOnDemandeImports.contains(name)){
+                    if(!PackageMap.containsKey(name)){
                         throw new TypeLinkingException("can't find decration for"+name);
                     }
                 }
@@ -97,7 +107,7 @@ public class TypeLinking {
                     if(name.equals(environment.mName)){
                         break;
                     }
-                    find=false;
+                    Boolean find=false;
                     for(String key:environment.mSingleImports){
                         if(key.substring(key.lastIndexOf("."),key.length()).equals(name)){
                             if(find){
@@ -135,7 +145,7 @@ public class TypeLinking {
                     for(ParseTreeNode child:current.children.get(0).children.get(0).children){
                         name+=((TerminalToken)child.token).getRawValue();
                     }
-                    if(!environment.mOnDemandeImports.contains(name)){
+                    if(!PackageMap.containsKey(name)){
                         throw new TypeLinkingException("can't find decration for"+name);
                     }
                 }

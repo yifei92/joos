@@ -63,23 +63,17 @@ public class EnvironmentBuilder {
 		switch (node.token.getType()) {
       case IMPORT_DECLARATION:
 				String packageFullName = "";
-				ParseTreeNode namenode;				
-				if(node.children.get(0).token.getType()==TokenType.ABSTRACT.SINGLE_TYPE_IMPORT_DECLARATION){
+				ParseTreeNode namenode;
+				if(node.children.get(0).token.getType()==TokenType.SINGLE_TYPE_IMPORT_DECLARATION){
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
-					}
-					if(environment.mSingleImports.contains(packageFullName)||environment.mOnDemandeImports.contains(packageFullName)){
-						throw new TypeLinkingException("Import already exists");
 					}
 					environment.mSingleImports.add(packageFullName);
 				} else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
-					}
-					if(environment.mSingleImports.contains(packageFullName)||environment.mOnDemandeImports.contains(packageFullName)){
-						throw new TypeLinkingException("Import already exists");
 					}
 					environment.mOnDemandeImports.add(packageFullName);
 				}

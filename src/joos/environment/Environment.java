@@ -37,6 +37,7 @@ public class Environment {
 		if(parent==null) {
 			mSingleImports = new ArrayList<>();
 			mOnDemandeImports = new ArrayList<>();
+			mOnDemandeImports.add("java.lang");
 		} else {
 			mSingleImports=parent.mSingleImports;
 			mOnDemandeImports=parent.mOnDemandeImports;

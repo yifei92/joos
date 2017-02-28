@@ -46,11 +46,11 @@ public class Main {
 			/*for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
 			    entry.getValue().print();
 			    System.out.println("");
-			}
+			}*/
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();
-				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap);
-			}*/
+				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap,key);
+			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

@@ -69,13 +69,27 @@ public class EnvironmentBuilder {
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
 					}
-					environment.mSingleImports.add(packageFullName);
+					if(!environment.mSingleImports.contains(packageFullName)) {
+						for(String singleimport : environment.mSingleImports){
+							if(singleimport.substring(singleimport.lastIndexOf(".")+1,singleimport.length()).equals(packageFullName.substring(packageFullName.lastIndexOf(".")+1,packageFullName.length()))){
+								throw new TypeLinkingException("single import clash");
+							}
+						}
+						environment.mSingleImports.add(packageFullName);
+					}
 				} else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
 					}
-					environment.mOnDemandeImports.add(packageFullName);
+					if(!environment.mOnDemandeImports.contains(packageFullName)) {
+						for(String ondemandimport : environment.mOnDemandeImports){
+							if(ondemandimport.substring(ondemandimport.lastIndexOf(".")+1,ondemandimport.length()).equals(packageFullName.substring(packageFullName.lastIndexOf(".")+1,packageFullName.length()))){
+								throw new TypeLinkingException("on demand import clash");
+							}
+						}
+						environment.mOnDemandeImports.add(packageFullName);
+					}
 				}
         break;
 			case VARIABLE_DECLARATOR:

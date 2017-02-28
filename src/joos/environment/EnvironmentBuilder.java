@@ -38,7 +38,7 @@ public class EnvironmentBuilder {
 				if(packageDeclNode!=null){
 					classOrInterfaceEnvironment.PackageName=getPackageName(packageDeclNode);
 				}
-				traverse(classOrInterfaceEnvironment, parseTree);
+				traverse(classOrInterfaceEnvironment, parseTree, 0);
 				packageMap.put(packageMapKey, classOrInterfaceEnvironment);
 				treeMap.put(packageMapKey, parseTree);
 			}
@@ -51,9 +51,15 @@ public class EnvironmentBuilder {
 	 * Traverses the parse tree and adds new child environments (with appropriate scopes and parents)
 	 * as well as new names the given environment.
 	 */
-	private static void traverse (final Environment environment, final ParseTreeNode node) throws TypeLinkingException {
+	private static void traverse (final Environment environment, final ParseTreeNode node, int count) throws TypeLinkingException {
 		if (node == null) return; 
 		Environment nextEnvironment = environment;
+
+		for (int i = 0 ; i < count ; i++) {
+			//System.out.print(" ");
+		}
+		//System.out.println(node.token.getType());
+
 		switch (node.token.getType()) {
       case IMPORT_DECLARATION:
 				String packageFullName = "";
@@ -105,9 +111,14 @@ public class EnvironmentBuilder {
 				findFormalParameters(node, paramVarNodes);
 				for (ParseTreeNode paramNode : paramVarNodes) {
 					String name = ((TerminalToken) paramNode.token).getRawValue();
-					methodEnvironment.mVariableDeclarations.put(
-						((TerminalToken) paramNode.token).getRawValue(),
-						paramNode);
+					if (methodEnvironment.mVariableDeclarations.containsKey(name)) {
+						throw new TypeLinkingException(
+							"Variable " + name + " already declared in this constructor");
+					} else {
+						methodEnvironment.mVariableDeclarations.put(
+							((TerminalToken) paramNode.token).getRawValue(),
+							paramNode);
+					}
 				}
 				nextEnvironment = methodEnvironment;
 				break;
@@ -116,7 +127,7 @@ public class EnvironmentBuilder {
 				// create a new environment for this new block
 				Environment thenEnvironment  = new Environment(environment, statementNode, null);
 				environment.mChildrenEnvironments.add(thenEnvironment);
-				traverse(thenEnvironment, statementNode);
+				traverse(thenEnvironment, statementNode, count + 1);
 				return;
 			case IF_THEN_ELSE_STATEMENT: // fall through
 			case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
@@ -131,8 +142,8 @@ public class EnvironmentBuilder {
 				environment.mChildrenEnvironments.add(ifEnvironment);
 				environment.mChildrenEnvironments.add(elseEnvironment);
 				// Traverse the if and else statement nodes with their own environments
-				traverse(ifEnvironment, ifStatementNode);
-				traverse(elseEnvironment, elseStatementNode);
+				traverse(ifEnvironment, ifStatementNode, count + 1);
+				traverse(elseEnvironment, elseStatementNode, count + 1);
 				return;
 			case WHILE_STATEMENT: // fall through
 			case WHILE_STATEMENT_NO_SHORT_IF:
@@ -144,7 +155,7 @@ public class EnvironmentBuilder {
 				Environment statementEnvironment  = new Environment(environment, loopContentsNode, null);
 				environment.mChildrenEnvironments.add(statementEnvironment);
 				// Traverse the loop contents node with its own environment
-				traverse(statementEnvironment, loopContentsNode);
+				traverse(statementEnvironment, loopContentsNode, count + 1);
 				return;
 			case FOR_STATEMENT: // fall through
 			case FOR_STATEMENT_NO_SHORT_IF:
@@ -159,14 +170,14 @@ public class EnvironmentBuilder {
 				Environment forLoopEnvironment  = new Environment(environment, forLoopContentsNode, null);
 				environment.mChildrenEnvironments.add(forLoopEnvironment);
 				// Traverse the loop contents node and init node with its the forLoopEnvironment
-				traverse(forLoopEnvironment, forLoopContentsNode);
-				traverse(forLoopEnvironment, forLoopInitNode);
+				traverse(forLoopEnvironment, forLoopContentsNode, count + 1);
+				traverse(forLoopEnvironment, forLoopInitNode, count + 1);
 				return;
 		}
 
 		if (node.children != null) {
 			for (ParseTreeNode child : node.children) {
-				traverse(nextEnvironment, child);
+				traverse(nextEnvironment, child, count + 1);
 			}
 		}
 	}
@@ -200,13 +211,13 @@ public class EnvironmentBuilder {
 
 	private static void findFormalParameters(ParseTreeNode node, List<ParseTreeNode> paramVarNodes) {
 		if (node.token.getType() == TokenType.FORMAL_PARAMETER) {
-			ParseTreeNode paramIdentifierNode = findNodeWithTokenType(node, TokenType.IDENTIFIER);
+			ParseTreeNode paramIdentifierNode = findImmediateNodeWithTokenType(node, TokenType.IDENTIFIER);
 			if (paramIdentifierNode != null) {
 				paramVarNodes.add(paramIdentifierNode);
 			} else {
 				System.out.println("Error, FORMAL_PARAMETER with no identifier");
 			}
-		} else if (node.children != null && node.children.size() > 0) {
+		} else if (node.children != null) {
 			for (ParseTreeNode child : node.children) {
 				findFormalParameters(child, paramVarNodes);
 			}

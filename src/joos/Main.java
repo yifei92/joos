@@ -12,6 +12,7 @@ import joos.typelinking.TypeLinking;
 import joos.weeder.Weeder;
 import joos.environment.Environment;
 import joos.environment.EnvironmentBuilder;
+import joos.hierarchychecking.HierarchyChecking;
 
 import java.util.*;
 
@@ -43,6 +44,9 @@ public class Main {
 			}
 			Map<String, ParseTreeNode> treeMap= new HashMap<>();
 			Map<String, Environment> packageMap = EnvironmentBuilder.build(parseTrees, treeMap);
+			for (Environment environment : packageMap.values()) {
+				HierarchyChecking.check(environment, packageMap);
+			}
 			/*for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
 			    entry.getValue().print();
 			    System.out.println("");

@@ -158,16 +158,6 @@ public class EnvironmentUtils {
 						names.add(name);
 						list.add(extendedEnvironment);
 					}
-					// for (ParseTreeNode node : environment.mScope.children.get(3).children.get(0).children.get(0).children) {
-					// 	if (node.token.getType() == TokenType.EXTENDS || node.token.getType() == TokenType.COMMA) continue;
-					// 	Environment extendedEnvironment = getEnvironmentFromName(environment, node, packageMap);
-					// 	String name = extendedEnvironment.PackageName + "." + extendedEnvironment.mName;
-					// 	if (names.contains(name)) {
-					// 		throw new InvalidSyntaxException("An interface must not be repeated an extends clause of an interface.");
-					// 	}
-					// 	names.add(name);
-					// 	list.add(extendedEnvironment);
-					// }
 					return list;
 				}
 		}
@@ -211,7 +201,7 @@ public class EnvironmentUtils {
     return null;
   }
 
-	public static String getFullQualifiedName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) {
+	public static String getFullQualifiedName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		String identifier;
 		switch (name.token.getType()) {
 			case TYPE:
@@ -242,10 +232,13 @@ public class EnvironmentUtils {
 				identifier = ((TerminalToken)name.token).getRawValue();
 				break;
 			default:
-				return null;
+				throw new InvalidSyntaxException("Invalid node passed");
+		}
+		if (packageMap.containsKey(identifier)) {
+			return identifier;
 		}
 		for (String importName : environment.mSingleImports) {
-			if (importName.length() >= identifier.length() && importName.substring(importName.length() - identifier.length()) == identifier) {
+			if (importName.length() >= identifier.length() && importName.substring(importName.length() - identifier.length()).equals(identifier)) {
 				return importName;
 			}
 		}
@@ -260,10 +253,10 @@ public class EnvironmentUtils {
 		}
 		String localName = environment.PackageName + "." + identifier;
 		if (packageMap.containsKey(localName)) return localName;
-		return null;
+		throw new InvalidSyntaxException("Qualified Name not found");
 	}
 
-	public static Environment getEnvironmentFromName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) {
+	public static Environment getEnvironmentFromName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return packageMap.get(getFullQualifiedName(environment, name, packageMap));
 	}
 

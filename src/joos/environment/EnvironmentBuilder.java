@@ -40,7 +40,7 @@ public class EnvironmentBuilder {
 				}
 				traverse(classOrInterfaceEnvironment, parseTree);
 				packageMap.put(packageMapKey, classOrInterfaceEnvironment);
-				treeMap.put(packageMapKey,parseTree);
+				treeMap.put(packageMapKey, parseTree);
 			}
 		}
 		// Return a root environment that containst the environment trees for all the parse trees
@@ -64,8 +64,7 @@ public class EnvironmentBuilder {
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
 					}
 					environment.mSingleImports.add(packageFullName);
-				}
-				else{
+				} else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
@@ -85,7 +84,7 @@ public class EnvironmentBuilder {
 					throw new TypeLinkingException(
 						"Variable " + variableName + " has already been declared in this method");
 
-				}else {
+				} else {
 					environment.mVariableDeclarations.put(variableName, identifierNode);
 				}
 				break;
@@ -107,7 +106,7 @@ public class EnvironmentBuilder {
 				nextEnvironment = methodEnvironment;
 				break;
 			case IF_THEN_STATEMENT:
-				ParseTreeNode statementNode = findNodeWithTokenType(node, TokenType.STATEMENT);
+				ParseTreeNode statementNode = findImmediateNodeWithTokenType(node, TokenType.STATEMENT);
 				// create a new environment for this new block
 				Environment thenEnvironment  = new Environment(environment, statementNode, null);
 				environment.mChildrenEnvironments.add(thenEnvironment);
@@ -116,10 +115,10 @@ public class EnvironmentBuilder {
 			case IF_THEN_ELSE_STATEMENT: // fall through
 			case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
 				// get the child node for the statement after the if
-				ParseTreeNode ifStatementNode = findNodeWithTokenType(node, TokenType.STATEMENT_NO_SHORT_IF);
+				ParseTreeNode ifStatementNode = findImmediateNodeWithTokenType(node, TokenType.STATEMENT_NO_SHORT_IF);
 				// get the child node for the statement after the else
 				TokenType elseStatementTokenType = node.token.getType() == TokenType.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF ? TokenType.STATEMENT_NO_SHORT_IF : TokenType.STATEMENT;
-				ParseTreeNode elseStatementNode = findNodeWithTokenType(node, elseStatementTokenType);
+				ParseTreeNode elseStatementNode = findImmediateNodeWithTokenType(node, elseStatementTokenType);
 				// Create new environments for both the if and else statements
 				Environment ifEnvironment  = new Environment(environment, ifStatementNode, null);
 				Environment elseEnvironment  = new Environment(environment, elseStatementNode, null);
@@ -134,7 +133,7 @@ public class EnvironmentBuilder {
 				// get the tokentype for the loop contents node
 				TokenType loopContentsTokenType = node.token.getType() == TokenType.WHILE_STATEMENT_NO_SHORT_IF ? TokenType.STATEMENT_NO_SHORT_IF : TokenType.STATEMENT;
 				// get the loop contents node
-				ParseTreeNode loopContentsNode = findNodeWithTokenType(node, loopContentsTokenType);
+				ParseTreeNode loopContentsNode = findImmediateNodeWithTokenType(node, loopContentsTokenType);
 				// create a new environment for the loop contents node
 				Environment statementEnvironment  = new Environment(environment, loopContentsNode, null);
 				environment.mChildrenEnvironments.add(statementEnvironment);
@@ -146,7 +145,7 @@ public class EnvironmentBuilder {
 				// get the tokentype for the loop contents node
 				TokenType forLoopContentsTokenType = node.token.getType() == TokenType.FOR_STATEMENT_NO_SHORT_IF ? TokenType.STATEMENT_NO_SHORT_IF : TokenType.STATEMENT;
 				// get the loop contents node
-				ParseTreeNode forLoopContentsNode = findNodeWithTokenType(node, forLoopContentsTokenType);
+				ParseTreeNode forLoopContentsNode = findImmediateNodeWithTokenType(node, forLoopContentsTokenType);
 				// get the loop initialization node
 				ParseTreeNode forLoopInitNode = findNodeWithTokenType(node, TokenType.FOR_INIT);
 
@@ -158,6 +157,7 @@ public class EnvironmentBuilder {
 				traverse(forLoopEnvironment, forLoopInitNode);
 				return;
 		}
+
 		if (node.children != null) {
 			for (ParseTreeNode child : node.children) {
 				traverse(nextEnvironment, child);
@@ -166,7 +166,7 @@ public class EnvironmentBuilder {
 	}
 
 	/**
-	 * Checks the current method environment for duplicate variable names in overlapping scopes
+	 * Checks the current method environment for duplicate variable names in overlappingpes
 	 */
 	private static boolean checkForLocalVariableDuplicates(
 		Environment currentEnvironment,
@@ -212,7 +212,7 @@ public class EnvironmentBuilder {
 	 * Traverses the given root node's children for the first TokenType node and returns it.
 	 * null otherwise
 	 */
-	private static ParseTreeNode findNodeWithTokenType(ParseTreeNode root, TokenType type) {
+	private static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
 		if (root == null) {
 			return null;
 		}
@@ -230,7 +230,17 @@ public class EnvironmentBuilder {
 		return null;
 	}
 
-	public static String getClassOrInterfaceName(ParseTreeNode classOrInterfaceNode) {
+	private static ParseTreeNode findImmediateNodeWithTokenType(final ParseTreeNode node, final TokenType type) {
+		if (node.token.getType() == type) return node;
+		if (node.children != null) {
+			for (ParseTreeNode child : node.children) {
+				if (child.token.getType() == type) return child;
+			}
+		}
+		return null;
+	}
+
+	public static String getClassOrInterfaceName(final ParseTreeNode classOrInterfaceNode) {
 		for (ParseTreeNode child : classOrInterfaceNode.children) {
 			if (child.token.getType() == TokenType.IDENTIFIER) {
 				return ((TerminalToken) child.token).getRawValue();
@@ -239,7 +249,7 @@ public class EnvironmentBuilder {
 		return null;
 	}
 
-	private static String getMethodName(ParseTreeNode methodNode) {
+	private static String getMethodName(final ParseTreeNode methodNode) {
 		ParseTreeNode methodDeclaratorNode = findNodeWithTokenType(methodNode, TokenType.CONSTRUCTOR_DECLARATOR);
 		if (methodDeclaratorNode == null) {
 			methodDeclaratorNode = findNodeWithTokenType(methodNode, TokenType.METHOD_DECLARATOR);

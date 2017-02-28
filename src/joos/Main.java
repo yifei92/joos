@@ -36,25 +36,21 @@ public class Main {
 				ASTBuilder astBuilder = new ASTBuilder();
 				ParseTreeNode parseTree = null;
 				List<TerminalToken> tokens = scanner.scan(joosFile.mProgram);
-				/*for (TerminalToken token : tokens) {
-					System.out.print(token.getRawValue() + " ");
-				}
-				System.out.println("");*/
 				parseTree = parser.parse(tokens);
 				weeder.weed(parseTree, joosFile.getFileName());
 				astBuilder.convert(parseTree);
 				parseTrees.add(parseTree);
 			}
 			Map<String, ParseTreeNode> treeMap= new HashMap<>();
-			Map<String, Environment> packageMap = EnvironmentBuilder.build(parseTrees,treeMap);
+			Map<String, Environment> packageMap = EnvironmentBuilder.build(parseTrees, treeMap);
 			/*for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
 			    entry.getValue().print();
 			    System.out.println("");
-			}*/
+			}
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();
 				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap);
-			}
+			}*/
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

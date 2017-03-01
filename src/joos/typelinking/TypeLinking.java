@@ -26,9 +26,15 @@ public class TypeLinking {
             case CLASS_DECLARATION:
             //case TYPE_DECLARATION:
                 String name=getClassOrInterfaceName(current);
-                if(!currentpackage.equals(name)&&currentpackage.startsWith(name)){
-                    //throw  new TypeLinkingException("type name same prefix as package");
+                if(currentpackage.contains(".")) {
+                    for (String packagename : PackageMap.keySet()) {
+                        if (packagename.startsWith(currentpackage) && !packagename.equals(currentpackage)&&packagename.contains(".")) {
+                            System.out.println(packagename + "  " + currentpackage);
+                            throw new TypeLinkingException("type same name as package name prefix");
+                        }
+                    }
                 }
+
 
                 for(String key:environment.mSingleImports){
                     if(key.equals(currentpackage)){
@@ -38,7 +44,7 @@ public class TypeLinking {
                         throw new TypeLinkingException("type same name as an import");
                     }
                     if(key.startsWith(name)){
-                        throw new TypeLinkingException("type same name as package name prifix");
+                        throw new TypeLinkingException("type same name as package name prefix");
                     }
                     if(!PackageMap.containsKey(key)){
                         throw  new TypeLinkingException("unable to find file for reference "+key);
@@ -56,10 +62,11 @@ public class TypeLinking {
                         throw  new TypeLinkingException("unable to find file for reference on demand "+importondemand);
                     }
 
-                    if(importondemand.startsWith(name)){
-                        throw new TypeLinkingException("type same name as package name prifix");
+                    if(importondemand.startsWith(name)&&!importondemand.equals(currentpackage.substring(0,currentpackage.lastIndexOf('.')))){
+                        throw new TypeLinkingException("type same name as package name prefix");
                     }
                 }
+
                 break;
             case CLASS_OR_INTERFACE_TYPE:
             //case CLASS_TYPE:
@@ -110,8 +117,26 @@ public class TypeLinking {
 
                 else{
                     name="";
-                    for(ParseTreeNode child:current.children.get(0).children){
-                        name+=((TerminalToken)child.token).getRawValue();
+                    for(int i=0;i<current.children.get(0).children.size();i++){
+                        String currentpackagename="";
+                        if(currentpackage.contains(".")){
+                            currentpackagename=currentpackage.substring(0,currentpackage.lastIndexOf(".")+1);
+                        }
+                        name+=((TerminalToken)current.children.get(0).children.get(i).token).getRawValue();
+                        if(i%2==0&&i<current.children.get(0).children.size()-1) {
+                            for (String packagename : PackageMap.keySet()) {
+                                if (packagename.startsWith(currentpackagename+name) &&(packagename.contains(".")==currentpackagename.contains("."))) {
+                                    System.out.println(name+"  "+packagename);
+                                    throw new TypeLinkingException("full qualifed name prefix of another package");
+                                }
+                            }
+                            for(String singleimprot : environment.mSingleImports){
+                                if(singleimprot.equals(name)){
+                                    System.out.println(name+" "+singleimprot);
+                                    throw new TypeLinkingException("full qualifed name prefix of another package imported");
+                                }
+                            }
+                        }
                     }
                     if(!PackageMap.containsKey(name)){
                         throw new TypeLinkingException("can't find decration for"+name);

@@ -60,7 +60,9 @@ public class Main {
 			/*for (Environment environment : packageMap.values()) {
 				Disambiguation.linkNames(environment, packageMap);
 			}*/
-			TypeChecker.check(treeMap, packageMap);
+			for (Environment environment : packageMap.values()) {
+				TypeChecker.check(environment, packageMap);
+			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

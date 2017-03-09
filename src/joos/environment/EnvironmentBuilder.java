@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class EnvironmentBuilder {
-	
+
 	/**
 	 * Builds the environment tree using the given parse trees for each joos file.
 	 */
@@ -52,7 +52,7 @@ public class EnvironmentBuilder {
 	 * as well as new names the given environment.
 	 */
 	private static void traverse (final Environment environment, final ParseTreeNode node, int count) throws TypeLinkingException {
-		if (node == null) return; 
+		if (node == null) return;
 		Environment nextEnvironment = environment;
 
 		for (int i = 0 ; i < count ; i++) {
@@ -69,13 +69,27 @@ public class EnvironmentBuilder {
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
 					}
-					environment.mSingleImports.add(packageFullName);
+					if(!environment.mSingleImports.contains(packageFullName)) {
+						for(String singleimport : environment.mSingleImports){
+							if(singleimport.substring(singleimport.lastIndexOf(".")+1,singleimport.length()).equals(packageFullName.substring(packageFullName.lastIndexOf(".")+1,packageFullName.length()))){
+								throw new TypeLinkingException("single import clash");
+							}
+						}
+						environment.mSingleImports.add(packageFullName);
+					}
 				} else{
 					namenode=node.children.get(0).children.get(1);
 					for(int i=0;i<namenode.children.size();i++){
 						packageFullName+=((TerminalToken)namenode.children.get(i).token).getRawValue();
 					}
-					environment.mOnDemandeImports.add(packageFullName);
+					if(!environment.mOnDemandeImports.contains(packageFullName)) {
+						for(String ondemandimport : environment.mOnDemandeImports){
+							if(ondemandimport.substring(ondemandimport.lastIndexOf(".")+1,ondemandimport.length()).equals(packageFullName.substring(packageFullName.lastIndexOf(".")+1,packageFullName.length()))){
+								throw new TypeLinkingException("on demand import clash");
+							}
+						}
+						environment.mOnDemandeImports.add(packageFullName);
+					}
 				}
         break;
 			case VARIABLE_DECLARATOR:
@@ -215,7 +229,7 @@ public class EnvironmentBuilder {
 			for (ParseTreeNode child : node.children) {
 				findFormalParameters(child, paramVarNodes);
 			}
-		} 
+		}
 		return;
 	}
 
@@ -223,7 +237,7 @@ public class EnvironmentBuilder {
 	 * Traverses the given root node's children for the first TokenType node and returns it.
 	 * null otherwise
 	 */
-	private static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
+	public static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
 		if (root == null) {
 			return null;
 		}

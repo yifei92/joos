@@ -1,5 +1,6 @@
 package joos.environment;
 
+import joos.exceptions.InvalidSyntaxException;
 import joos.commons.ParseTreeNode;
 import joos.commons.TokenType;
 import joos.commons.TerminalToken;
@@ -120,13 +121,16 @@ public class EnvironmentUtils {
 		return null;
 	}
 
-	public static List<Environment> getExtendedEnvironments(Environment environment, Map<String, Environment> packageMap) {
+	public static List<Environment> getExtendedEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		if (environment.mScope == null) return null;
 		EnvironmentType type = getEnvironmentType(environment);
 		List<Environment> list = new ArrayList();
 		switch (type) {
 			case CLASS:
 				if (environment.mScope.children.get(3).children.size() == 0) {
+					if (!(environment.PackageName + "." + environment.mName).equals("java.lang.Object")) {
+						list.add(packageMap.get("java.lang.Object"));
+					}
 					return list;
 				} else {
 					list.add(getEnvironmentFromName(environment, environment.mScope.children.get(3).children.get(0).children.get(1), packageMap));
@@ -136,8 +140,23 @@ public class EnvironmentUtils {
 				if (environment.mScope.children.get(3).children.size() == 0) {
 					return list;
 				} else {
-					for (ParseTreeNode node : environment.mScope.children.get(3).children.get(0).children.get(0).children) {
-						list.add(getEnvironmentFromName(environment, node, packageMap));
+					Set<String> names = new HashSet();
+					ParseTreeNode n = environment.mScope.children.get(3).children.get(0);
+					while(n != null) {
+						Environment extendedEnvironment;
+						if (n.children.size() == 2) {
+							extendedEnvironment = getEnvironmentFromName(environment, n.children.get(1), packageMap);
+							n = null;
+						} else {
+							extendedEnvironment = getEnvironmentFromName(environment, n.children.get(2), packageMap);
+							n = n.children.get(0);
+						}
+						String name = extendedEnvironment.PackageName + "." + extendedEnvironment.mName;
+						if (names.contains(name)) {
+							throw new InvalidSyntaxException("An interface must not be repeated an extends clause of an interface.");
+						}
+						names.add(name);
+						list.add(extendedEnvironment);
 					}
 					return list;
 				}
@@ -145,7 +164,7 @@ public class EnvironmentUtils {
 		return null;
 	}
 
-	public static List<Environment> getImplementedEnvironments(Environment environment, Map<String, Environment> packageMap) {
+	public static List<Environment> getImplementedEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		if (environment.mScope == null) return null;
 		EnvironmentType type = getEnvironmentType(environment);
 		List<Environment> list = new ArrayList();
@@ -154,8 +173,16 @@ public class EnvironmentUtils {
 				if (environment.mScope.children.get(4).children.size() == 0) {
 					return list;
 				} else {
+					Set<String> names = new HashSet();
 					for (ParseTreeNode node : environment.mScope.children.get(4).children.get(0).children.get(1).children) {
-						list.add(getEnvironmentFromName(environment, node, packageMap));
+						if (node.token.getType() == TokenType.COMMA) continue;
+						Environment extendedEnvironment = getEnvironmentFromName(environment, node, packageMap);
+						String name = extendedEnvironment.PackageName + "." + extendedEnvironment.mName;
+						if (names.contains(name)) {
+							throw new InvalidSyntaxException("An interface must not be repeated an implements clause of a class.");
+						}
+						names.add(name);
+						list.add(extendedEnvironment);
 					}
 					return list;
 				}
@@ -174,7 +201,7 @@ public class EnvironmentUtils {
     return null;
   }
 
-	public static String getFullQualifiedName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) {
+	public static String getFullQualifiedName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		String identifier;
 		switch (name.token.getType()) {
 			case TYPE:
@@ -205,26 +232,31 @@ public class EnvironmentUtils {
 				identifier = ((TerminalToken)name.token).getRawValue();
 				break;
 			default:
-				return null;
+				throw new InvalidSyntaxException("Invalid node passed");
+		}
+		if (packageMap.containsKey(identifier)) {
+			return identifier;
 		}
 		for (String importName : environment.mSingleImports) {
-			if (importName.length() >= identifier.length() && importName.substring(importName.length() - identifier.length()) == identifier) {
+			if (importName.length() >= identifier.length() && importName.substring(importName.length() - identifier.length()).equals(identifier)) {
 				return importName;
 			}
 		}
 		for (String importName : environment.mOnDemandeImports) {
 			for (String packageName : packageMap.keySet()) {
 				if (packageName.length() >= importName.length() && packageName.substring(0, importName.length()).equals(importName)) {
-					if (packageMap.get(packageName).mName == identifier) {
+					if (packageMap.get(packageName).mName.equals(identifier)) {
 						return packageName;
 					}
 				}
 			}
 		}
-		return null;
+		String localName = environment.PackageName + "." + identifier;
+		if (packageMap.containsKey(localName)) return localName;
+		throw new InvalidSyntaxException("Qualified Name not found");
 	}
 
-	public static Environment getEnvironmentFromName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) {
+	public static Environment getEnvironmentFromName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return packageMap.get(getFullQualifiedName(environment, name, packageMap));
 	}
 

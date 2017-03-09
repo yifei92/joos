@@ -7,7 +7,7 @@ import joos.exceptions.InvalidSyntaxException;
 
 public class TypeChecker {
 
-  static public void check(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+  static public void check(Map<String, ParseTreeNode> parseTreeMap, Map<String, Environment> environmentMap) throws InvalidSyntaxException {
 
   }
 }

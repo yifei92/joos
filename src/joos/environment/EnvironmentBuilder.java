@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class EnvironmentBuilder {
-	
+
 	/**
 	 * Builds the environment tree using the given parse trees for each joos file.
 	 */
@@ -52,7 +52,7 @@ public class EnvironmentBuilder {
 	 * as well as new names the given environment.
 	 */
 	private static void traverse (final Environment environment, final ParseTreeNode node, int count) throws TypeLinkingException {
-		if (node == null) return; 
+		if (node == null) return;
 		Environment nextEnvironment = environment;
 
 		for (int i = 0 ; i < count ; i++) {
@@ -229,7 +229,7 @@ public class EnvironmentBuilder {
 			for (ParseTreeNode child : node.children) {
 				findFormalParameters(child, paramVarNodes);
 			}
-		} 
+		}
 		return;
 	}
 
@@ -237,7 +237,7 @@ public class EnvironmentBuilder {
 	 * Traverses the given root node's children for the first TokenType node and returns it.
 	 * null otherwise
 	 */
-	private static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
+	public static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
 		if (root == null) {
 			return null;
 		}

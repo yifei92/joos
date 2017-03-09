@@ -17,6 +17,8 @@ public class Environment {
 	// A reference to the names declared in this environment.
 	public Map<String, ParseTreeNode> mVariableDeclarations;
 
+	public Map<String, String> mVariableToType;
+
   public List<String> mSingleImports;
 	public List<String> mOnDemandeImports;
 
@@ -55,13 +57,13 @@ public class Environment {
 		for (int i = 0; i < depth; i++) {
 			System.out.print("  ");
 		}
-		
+
 		if (mScope == null) {
 			System.out.print("S: root ");
 		} else {
 			System.out.print("S: " + (mName == null ? mScope.token.getType() : mName) + " ");
 		}
-		
+
 		for (String name : mVariableDeclarations.keySet()) {
 			System.out.print("N: " + name + " ");
 		}

@@ -1,0 +1,55 @@
+#!/bin/bash
+chmod 777 buildscript
+./buildscript
+
+javafiles=""
+for f in $(find test/java -name '*.java'); do
+  chmod 777 $f
+  javafiles="$javafiles $f";
+done
+
+echo "Running A3 tests"
+for filename in test/a3/*.java; do 
+  if [ $# -eq 1 ]
+    then
+      if [ $filename == $1 ]
+        then
+        printf "Test $filename\n"
+        filename="$filename $javafiles"
+        ./joosc $filename
+        printf "\n\n"
+      fi
+  else
+    printf "Test $filename\n"
+    filename="$filename $javafiles"
+    ./joosc $filename
+    printf "\n\n"
+  fi
+done
+for directory in test/a3/*/; do 
+  if [ $# -eq 1 ]
+    then
+      if [ $directory == $1 ]
+        then
+        printf "Test $directory\n"
+        params=""
+        for f in $(find $directory -name '*.java'); do
+          chmod 777 $f
+          params="$params $f";
+        done
+        params="$params $javafiles"
+        ./joosc $params
+        printf "\n\n"
+      fi
+  else
+    printf "Test $directory\n"
+    params=""
+    for f in $(find $directory -name '*.java'); do
+      chmod 777 $f
+      params="$params $f";
+    done
+    params="$params $javafiles"
+    ./joosc $params
+    printf "\n\n"
+  fi
+done

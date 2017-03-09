@@ -13,7 +13,8 @@ import joos.weeder.Weeder;
 import joos.environment.Environment;
 import joos.environment.EnvironmentBuilder;
 import joos.hierarchychecking.HierarchyChecking;
-import joos.disambiguation.Disambiguation;
+//import joos.disambiguation.Disambiguation;
+import joos.typechecking.TypeChecker;
 
 import java.util.*;
 
@@ -56,8 +57,11 @@ public class Main {
 				TypeLinking typeLinking=new TypeLinking();
 				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap,key);
 			}
-			for (Environment environment : packageMap.values()) {
+			/*for (Environment environment : packageMap.values()) {
 				Disambiguation.linkNames(environment, packageMap);
+			}*/
+			for (Environment environment : packageMap.values()) {
+				TypeChecker.check(environment, packageMap);
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

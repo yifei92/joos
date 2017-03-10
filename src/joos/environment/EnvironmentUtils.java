@@ -123,7 +123,7 @@ public class EnvironmentUtils {
 		List<Environment> environments = new ArrayList<>();
 		for (ParseTreeNode instantiationNode : instantiationNodes) {
 			ParseTreeNode classTypeNode = findImmediateNodeWithTokenType(instantiationNode, TokenType.CLASS_TYPE);
-			environments.add(getEnvironmentFromName(environment, classTypeNode, packageMap));
+			environments.add(getEnvironmentFromTypeNode(environment, classTypeNode, packageMap));
 		}
 		return environments;
 	}

@@ -65,4 +65,12 @@ public class ParseTreeNode {
 			}
 		}
 	}
+	//helper funtion
+	static public String getfullnamefromnamenode(ParseTreeNode namenode){
+		String name="";
+		for(ParseTreeNode child : namenode.children){
+			name+= ((TerminalToken)child.token).getRawValue();
+		}
+		return name;
+	}
 }

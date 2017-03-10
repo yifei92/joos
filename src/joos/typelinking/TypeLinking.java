@@ -143,63 +143,9 @@ public class TypeLinking {
                     }
                 }
                 break;
-            /*
-            case INTERFACE_TYPE:
-                if(current.children.get(0).children.get(0).children.size()==1){
-                    name=((TerminalToken)current.children.get(0).children.get(0).children.get(0).token).getRawValue();
-                    if(name.equals(environment.mName)){
-                        break;
-                    }
-                    Boolean find=false;
-                    for(String key:environment.mSingleImports){
-                        if(key.substring(key.lastIndexOf("."),key.length()).equals(name)){
-                            if(find){
-                                throw new TypeLinkingException("type already import by another packege");
-                            }
-                            else{
-                                find=true;
-                            }
-                        }
-                    }
-                    if(find){
-                        break;
-                    }
-                    String packgequalifedName=null;
-                    if(!environment.PackageName.equals("")){
-                        packgequalifedName=environment.PackageName+"."+name;
-                    }
-                    else{
-                        packgequalifedName=name;
-                    }
-                    if(PackageMap.containsKey(packgequalifedName)){
-                        break;
-                    }
-                    for(String key:environment.mOnDemandeImports){
-                        if(PackageMap.containsKey(key+"."+name)){
-                            if(find){
-                                throw new TypeLinkingException("type already import by another packege");
-                            }
-                            else{
-                                find=true;
-                            }
-                        }
-                    }
-                    if(!find){
-                        throw new TypeLinkingException("unable to find reference to type "+name);
-                    }
-                    break;
-                }
-                else{
-                    name="";
-                    for(ParseTreeNode child:current.children.get(0).children.get(0).children){
-                        name+=((TerminalToken)child.token).getRawValue();
-                    }
-                    if(!PackageMap.containsKey(name)){
-                        throw new TypeLinkingException("can't find decration for"+name);
-                    }
-                }
-                break;
-                */
+            case METHOD_INVOCATION:
+                name=ParseTreeNode.getfullnamefromnamenode(current.children.get(0));
+
             default:
         }
         if(current.children!=null) {

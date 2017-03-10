@@ -11,4 +11,13 @@ public class Type {
 	public Type(String s){
 		name=s;
 	}
+	public Boolean equals(String s){
+		return this.name.equals(s);
+	}
+
+	public Boolean equals(Type t){
+		return this.name.equals(t.name);
+	}
+
+
 }

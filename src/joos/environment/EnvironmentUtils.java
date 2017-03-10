@@ -303,6 +303,11 @@ public class EnvironmentUtils {
 		return getFullQualifiedNameFromTypeName(environment, identifier, packageMap);
 	}
 
+
+	public static Environment getEnvironmentFromTypeName(Environment environment, String name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		return packageMap.get(getFullQualifiedNameFromTypeName(environment, name, packageMap));
+	}
+
 	public static Environment getEnvironmentFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return packageMap.get(getFullQualifiedNameFromTypeNode(environment, name, packageMap));
 	}

@@ -1,13 +1,14 @@
 package joos.environment;
 
-import joos.commons.ParseTreeNode;
-import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
-import joos.commons.Type;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import joos.commons.MethodSignature;
+import joos.commons.ParseTreeNode;
 import joos.commons.TokenType;
+import joos.commons.Type;
 
 public class Environment {
 	public enum EnvironmentType {ROOT, PACKAGE, CLASS, INTERFACE, CONSTRUCTOR, METHOD, ABSTRACT_METHOD, BLOCK};
@@ -27,6 +28,7 @@ public class Environment {
 	public List<Environment> mImplementedEnvironments;
 	public Set<TokenType> mModifiers;
 	public EnvironmentType mType;
+	public Map<String, Map<List<String>, MethodSignature>> mMethodSignatures;
 
   public List<String> mSingleImports;
 	public List<String> mOnDemandeImports;

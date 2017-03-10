@@ -1,11 +1,12 @@
 // PARSER_WEEDER
 public class J1_1_Cast_MultipleCastOfSameValue_1{
-    public static int i = this.i;
     public J1_1_Cast_MultipleCastOfSameValue_1 () {}
 
     public static int test() {
       int a;
-      i = this.i;
+      a = 10;
+      J1_1_Cast_MultipleCastOfSameValue_1 j = new J1_1_Cast_MultipleCastOfSameValue_1();
+      j.test();
       return 123;
     }
 

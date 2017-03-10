@@ -502,7 +502,8 @@ Success
 
 Test test/a3/J1_sideeffects_obj3.java
 16
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J1_StaticField_AccessFromClass.java
@@ -612,7 +613,8 @@ Success
 
 Test test/a3/J2_5_ForwardReference_StaticField.java
 16
-Success
+Name cannot be resolved
+Error
 
 
 Test test/a3/J2_backwardsStaticFieldRef.java
@@ -657,7 +659,8 @@ Success
 
 Test test/a3/J2_static_shared.java
 16
-Success
+Name cannot be resolved
+Error
 
 
 Test test/a3/Je_16_ClosestMatch_Array.java
@@ -1311,7 +1314,8 @@ Success
 
 Test test/a3/J1_6_ProtectedAccess_InstanceField_This/
 20
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceField_ThisVar/
@@ -1406,17 +1410,20 @@ Success
 
 Test test/a3/J1_interfaceassignable/
 19
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J1_interface_null/
 19
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J1_InterfaceObject/
 19
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J1_NamedCast2/
@@ -1436,7 +1443,8 @@ Success
 
 Test test/a3/J1_ProtectedAccess1/
 17
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J1_ProtectedAccess2/
@@ -1467,17 +1475,20 @@ Success
 
 Test test/a3/J2_6_ProtectedAccess_StaticField_Sub/
 20
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J2_6_ProtectedAccess_StaticField_Super/
 20
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/J2_6_ProtectedAccess_StaticField_This/
 20
-Success
+Name cannot be resolved
+Error
 
 
 Test test/a3/J2_implicitStaticMethod/
@@ -1492,12 +1503,14 @@ Success
 
 Test test/a3/J2_ProtectedAccess3/
 17
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/Je_16_ProtectedAccess_StaticField_Sub_DeclaredInSub/
 20
-Success
+Qualified Name not found
+Error
 
 
 Test test/a3/Je_3_Resolve_LinkToCorrectPackage/

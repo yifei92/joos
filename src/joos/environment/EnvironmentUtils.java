@@ -129,6 +129,19 @@ public class EnvironmentUtils {
 	}
 
 	/**
+	 * Returns the list of environments that have been referenced in the given environment
+	 */
+	public static List<Environment> getAllReferencedEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		List<ParseTreeNode> referenceNodes = new ArrayList<>();
+		findNodesWithTokenType(environment.mScope, TokenType.CLASS_OR_INTERFACE_TYPE, referenceNodes);
+		List<Environment> environments = new ArrayList<>();
+		for (ParseTreeNode referenceNode : referenceNodes) {
+			environments.add(getEnvironmentFromTypeNode(environment, referenceNode, packageMap));
+		}
+		return environments;
+	}
+
+	/**
 	 * Traverses the given root node's children for the first TokenType node and returns it.
 	 * null otherwise
 	 */

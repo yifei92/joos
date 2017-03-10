@@ -19,32 +19,6 @@ GOAL
               CLASS_BODY_DECLARATIONS_OPT
                 CLASS_BODY_DECLARATIONS
                   CLASS_BODY_DECLARATION
-                    CLASS_MEMBER_DECLARATION
-                      FIELD_DECLARATION
-                        MODIFIERS
-                          MODIFIER
-                            PUBLIC
-                          MODIFIER
-                            STATIC
-                        TYPE
-                          PRIMITIVE_TYPE
-                            NUMERIC_TYPE
-                              INTEGRAL_TYPE
-                                INT
-                        VARIABLE_DECLARATORS
-                          VARIABLE_DECLARATOR
-                            IDENTIFIER
-                            ASSIGN
-                            VARIABLE_INITIALIZER
-                              EXPRESSION
-                                FIELD_ACCESS
-                                  PRIMARY
-                                    PRIMARY_NO_NEW_ARRAY
-                                      THIS
-                                  DOT
-                                  IDENTIFIER
-                        SEMICOLON
-                  CLASS_BODY_DECLARATION
                     CONSTRUCTOR_DECLARATION
                       MODIFIERS_OPT
                         MODIFIERS
@@ -108,12 +82,46 @@ GOAL
                                             ASSIGNMENT_OPERATOR
                                               ASSIGN
                                             ASSIGNMENT_EXPRESSION
-                                              FIELD_ACCESS
-                                                PRIMARY
-                                                  PRIMARY_NO_NEW_ARRAY
-                                                    THIS
-                                                DOT
-                                                IDENTIFIER
+                                              LITERAL
+                                                INTEGER_LITERAL
+                                        SEMICOLON
+                                BLOCK_STATEMENT
+                                  LOCAL_VARIABLE_DECLARATION_STATEMENT
+                                    LOCAL_VARIABLE_DECLARATION
+                                      TYPE
+                                        REFERENCE_TYPE
+                                          CLASS_OR_INTERFACE_TYPE
+                                            NAME
+                                              IDENTIFIER
+                                      VARIABLE_DECLARATORS
+                                        VARIABLE_DECLARATOR
+                                          IDENTIFIER
+                                          ASSIGN
+                                          VARIABLE_INITIALIZER
+                                            EXPRESSION
+                                              CLASS_INSTANCE_CREATION_EXPRESSION
+                                                NEW
+                                                CLASS_TYPE
+                                                  CLASS_OR_INTERFACE_TYPE
+                                                    NAME
+                                                      IDENTIFIER
+                                                OPEN_BR
+                                                ARGUMENT_LIST_OPT
+                                                CLOSE_BR
+                                    SEMICOLON
+                                BLOCK_STATEMENT
+                                  STATEMENT
+                                    STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT
+                                      EXPRESSION_STATEMENT
+                                        STATEMENT_EXPRESSION
+                                          METHOD_INVOCATION
+                                            NAME
+                                              IDENTIFIER
+                                              DOT
+                                              IDENTIFIER
+                                            OPEN_BR
+                                            ARGUMENT_LIST_OPT
+                                            CLOSE_BR
                                         SEMICOLON
                                 BLOCK_STATEMENT
                                   STATEMENT

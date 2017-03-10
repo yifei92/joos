@@ -25,6 +25,7 @@ public class TypeChecker {
       case CLASS: {
         checkForAbstractClassInstantiation(environment, packageMap);
         checkForBitwiseOpts(environment);
+        checkForProtectedAccess(environment);
         break;
       }
       case INTERFACE: {
@@ -110,6 +111,7 @@ public class TypeChecker {
     }
   }
 
+  // Check that the implicit this variable is not accessed in a static method or in the initializer of a static field.
   private static void checkForThisFromStaticMethod(Environment methodEnvironment) throws InvalidSyntaxException {
     Set<TokenType> modifiers = getEnvironmentModifiers(methodEnvironment);
     if (modifiers.contains(TokenType.STATIC)) {
@@ -119,5 +121,12 @@ public class TypeChecker {
         throw new InvalidSyntaxException("Error! Cannot reference \"this\" in static method " + methodEnvironment.mName);
       }
     }
+  }
+
+  //Check that all accesses of protected fields, methods and constructors are in 
+  //a subtype of the type declaring the entity being accessed, or in the same 
+  //package as that type.
+  private static void checkForProtectedAccess(Environment classEnvironment) {
+    //List<Environment> referencedEnvironments = getAllReferencedEnvironments(classEnvironment);
   }
 }

@@ -7,13 +7,13 @@ import java.util.Map;
 import joos.commons.ParseTreeNode;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
+import static joos.environment.EnvironmentUtils.getEnvironmentType;
+import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
 import joos.commons.Type;
 import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
-import static joos.environment.EnvironmentBuilder.findNodeWithTokenType;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
-import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
 import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
 

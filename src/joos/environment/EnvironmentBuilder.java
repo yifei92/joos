@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import static joos.environment.EnvironmentUtils.findImmediateNodeWithTokenType;
+import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
 
 public class EnvironmentBuilder {
 
@@ -92,8 +94,9 @@ public class EnvironmentBuilder {
 					}
 				}
         break;
-			case VARIABLE_DECLARATOR:
-				ParseTreeNode identifierNode = findNodeWithTokenType(node, TokenType.IDENTIFIER);
+      case LOCAL_VARIABLE_DECLARATION: {
+      	ParseTreeNode variableDeclarator = findNodeWithTokenType(node, TokenType.VARIABLE_DECLARATOR);
+      	ParseTreeNode identifierNode = findNodeWithTokenType(variableDeclarator, TokenType.IDENTIFIER);
 				String variableName = ((TerminalToken) identifierNode.token).getRawValue();
 				// Make sure that no two variables in a class have the same name
 				if (environment.mScope.token.getType() == TokenType.CLASS_DECLARATION &&
@@ -105,9 +108,28 @@ public class EnvironmentBuilder {
 						"Variable " + variableName + " has already been declared in this method");
 
 				} else {
-					environment.mVariableDeclarations.put(variableName, identifierNode);
+					environment.mVariableDeclarations.put(variableName, variableDeclarator);
+				}
+      	break;
+      }
+			case FIELD_DECLARATION: {
+      	ParseTreeNode fieldDeclaration = findNodeWithTokenType(node, TokenType.FIELD_DECLARATION);
+				ParseTreeNode identifierNode = findNodeWithTokenType(fieldDeclaration, TokenType.IDENTIFIER);
+				String variableName = ((TerminalToken) identifierNode.token).getRawValue();
+				// Make sure that no two variables in a class have the same name
+				if (environment.mScope.token.getType() == TokenType.CLASS_DECLARATION &&
+						environment.mVariableDeclarations.containsKey(variableName)) {
+					throw new TypeLinkingException(
+						"Variable " + variableName + " has already been declared in class " + environment.mName);
+				} else if(checkForLocalVariableDuplicates(environment, variableName)) {
+					throw new TypeLinkingException(
+						"Variable " + variableName + " has already been declared in this method");
+
+				} else {
+					environment.mVariableDeclarations.put(variableName, fieldDeclaration);
 				}
 				break;
+			}
 			case BLOCK: // fall through
 			case CONSTRUCTOR_DECLARATION: // fall through
 			case ABSTRACT_METHOD_DECLARATION: // fall through
@@ -231,38 +253,6 @@ public class EnvironmentBuilder {
 			}
 		}
 		return;
-	}
-
-	/**
-	 * Traverses the given root node's children for the first TokenType node and returns it.
-	 * null otherwise
-	 */
-	public static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
-		if (root == null) {
-			return null;
-		}
-		if (root.token.getType() == type) {
-			return root;
-		}
-		if (root.children != null) {
-			for (ParseTreeNode child : root.children) {
-				ParseTreeNode nodeWithTokenType = findNodeWithTokenType(child, type);
-				if (nodeWithTokenType != null) {
-					return nodeWithTokenType;
-				}
-			}
-		}
-		return null;
-	}
-
-	private static ParseTreeNode findImmediateNodeWithTokenType(final ParseTreeNode node, final TokenType type) {
-		if (node.token.getType() == type) return node;
-		if (node.children != null) {
-			for (ParseTreeNode child : node.children) {
-				if (child.token.getType() == type) return child;
-			}
-		}
-		return null;
 	}
 
 	public static String getClassOrInterfaceName(final ParseTreeNode classOrInterfaceNode) {

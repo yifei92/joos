@@ -98,6 +98,86 @@ public class EnvironmentUtils {
 		return environment.mType;
 	}
 
+	/**
+	 * Returns true if the given environment contains a constructor or is itself a constructor
+	 */
+	public static boolean containsConstructor(Environment environment) {
+		if (getEnvironmentType(environment) == EnvironmentType.CONSTRUCTOR) {
+			return true;
+		}
+		for (Environment child : environment.mChildrenEnvironments) {
+			if (getEnvironmentType(child) == EnvironmentType.CONSTRUCTOR) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns a list of all of the Environments of all the instantiations within the given
+	 * Environment's scope
+	 */
+	public static List<Environment> getAllInstantiationEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		List<ParseTreeNode> instantiationNodes = new ArrayList<>();
+		findNodesWithTokenType(environment.mScope, TokenType.CLASS_INSTANCE_CREATION_EXPRESSION, instantiationNodes);
+		List<Environment> environments = new ArrayList<>();
+		for (ParseTreeNode instantiationNode : instantiationNodes) {
+			ParseTreeNode classTypeNode = findImmediateNodeWithTokenType(instantiationNode, TokenType.CLASS_TYPE);
+			environments.add(getEnvironmentFromTypeNode(environment, classTypeNode, packageMap));
+		}
+		return environments;
+	}
+
+	/**
+	 * Traverses the given root node's children for the first TokenType node and returns it.
+	 * null otherwise
+	 */
+	public static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
+		if (root == null) {
+			return null;
+		}
+		if (root.token.getType() == type) {
+			return root;
+		}
+		if (root.children != null) {
+			for (ParseTreeNode child : root.children) {
+				ParseTreeNode nodeWithTokenType = findNodeWithTokenType(child, type);
+				if (nodeWithTokenType != null) {
+					return nodeWithTokenType;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static ParseTreeNode findImmediateNodeWithTokenType(final ParseTreeNode node, final TokenType type) {
+		if (node.token.getType() == type) return node;
+		if (node.children != null) {
+			for (ParseTreeNode child : node.children) {
+				if (child.token.getType() == type) return child;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds all child nodes of the given root of TokenType type and adds them to the given nodes list.
+	 */
+	public static void findNodesWithTokenType(final ParseTreeNode root, final TokenType type, final List<ParseTreeNode> nodes) {
+		if (root == null) {
+			return;
+		}
+		if (root.token.getType() == type) {
+			nodes.add(root);
+			return;
+		}
+		if (root.children != null) {
+			for (ParseTreeNode child : root.children) {
+				findNodesWithTokenType(child, type, nodes);
+			}
+		}
+	}
+
 	public static Set<TokenType> getEnvironmentModifiers(Environment environment) {
 		if (environment.mModifiers != null) return environment.mModifiers;
 		if (environment.mScope == null) return null;
@@ -310,18 +390,5 @@ public class EnvironmentUtils {
 
 	public static Environment getEnvironmentFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return packageMap.get(getFullQualifiedNameFromTypeNode(environment, name, packageMap));
-	}
-
-	/**
-	 * Looks in the given environment for whether or not the given variable name is declared in it.
-	 * If the name does not exist in the current environment we recursively search all parent environments.
-	 * If no name is found in this environment or the parent environments null is returned.
-	 */
-	public static ParseTreeNode containsVariableNameDeclaration(Environment environment, String variableName) {
-		ParseTreeNode variableNameNode = environment.mVariableDeclarations != null ? environment.mVariableDeclarations.get(variableName) : null;
-		if (variableNameNode == null && environment.mParent != null) {
-			variableNameNode = containsVariableNameDeclaration(environment.mParent, variableName);
-		}
-		return variableNameNode;
 	}
 }

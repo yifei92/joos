@@ -3,1227 +3,1647 @@ Build directory exists
 Compiling java files
 Packaging jar file
 COMPLETE!
-Running A2 tests
-Test test/a2/J1_1_Cast_NamedTypeAsVariable.java
+Running A3 tests
+Test test/a3/J1_5_AmbiguousName_FieldVsType_Initializer.java
 16
 Success
 
 
-Test test/a2/J1_2_Fields_Case.java
+Test test/a3/J1_5_AmbiguousName_FieldVsType.java
 16
 Success
 
 
-Test test/a2/J1_2_Locals_Overlapping_AfterBlock.java
+Test test/a3/J1_5_AmbiguousName_LocalVsField.java
 16
 Success
 
 
-Test test/a2/J1_4_Constructor_DuplicateArrayTypes.java
+Test test/a3/J1_5_AmbiguousName_LocalVsField_SameLine.java
 16
 Success
 
 
-Test test/a2/J1_4_Constructor_MatchAsSets.java
+Test test/a3/J1_5_AmbiguousName_LocalVsType.java
 16
 Success
 
 
-Test test/a2/J1_4_DuplicateMethodDeclare_MethodNameEqualsConstructorName.java
+Test test/a3/J1_5_ForwardReference_ArrayLength.java
 16
 Success
 
 
-Test test/a2/J1_4_MethodDeclare_DuplicateArrayTypes.java
+Test test/a3/J1_5_ForwardReference_EqualInfix.java
+16
+Variable J1_5_ForwardReference_EqualInfix has already been declared in class J1_5_ForwardReference_EqualInfix
+Error
+
+
+Test test/a3/J1_5_ForwardReference_ExplicitThis_InAssignment.java
 16
 Success
 
 
-Test test/a2/J1_4_Override_FinalOverrideNonFinal.java
+Test test/a3/J1_5_ForwardReference_SameLine.java
 16
 Success
 
 
-Test test/a2/J1_4_Override_PublicOverridesProtected.java
+Test test/a3/J1_6_Assignable_Object_ObjectArray.java
 16
 Success
 
 
-Test test/a2/J1_access_override2.java
+Test test/a3/J1_6_AssignmentInArrayLength.java
 16
 Success
 
 
-Test test/a2/J1_arbitrarylocaldeclaration.java
+Test test/a3/J1_6_AssignmentInNotArrayLength.java
 16
 Success
 
 
-Test test/a2/J1_assign_Object_to_Object.java
+Test test/a3/J1_6_StaticMethodCall_ThisInArg.java
 16
 Success
 
 
-Test test/a2/J1_cast_to_same_type.java
+Test test/a3/J1_A_ConcatInSimpleInvoke.java
 16
 Success
 
 
-Test test/a2/J1_classextendsobject1.java
+Test test/a3/J1_A_ConcatInStaticInvoke.java
 16
 Success
 
 
-Test test/a2/J1_classextendsobject2.java
+Test test/a3/J1_ArrayAccess_Cast.java
 16
 Success
 
 
-Test test/a2/J1_constructorWithSameNameAsMethod.java
+Test test/a3/J1_arrayAccess.java
 16
 Success
 
 
-Test test/a2/J1_formalindex.java
+Test test/a3/J1_ArrayAccess_MethodInvocation.java
 16
 Success
 
 
-Test test/a2/J1_formal_with_same_name_as_field.java
+Test test/a3/J1_ArrayCast.java
 16
 Success
 
 
-Test test/a2/J1_importName10.java
+Test test/a3/J1_arrayinstanceof1.java
 16
 Success
 
 
-Test test/a2/J1_importName11.java
+Test test/a3/J1_arrayinstanceof2.java
 16
 Success
 
 
-Test test/a2/J1_importName9.java
+Test test/a3/J1_ArrayInterfaces.java
 16
 Success
 
 
-Test test/a2/J1_inherited_hashcode.java
+Test test/a3/J1_array.java
 16
 Success
 
 
-Test test/a2/J1_local_duplicate.java
+Test test/a3/J1_arraylength.java
 16
 Success
 
 
-Test test/a2/J1_localvariablescope.java
+Test test/a3/J1_assign_Object_to_Object.java
 16
 Success
 
 
-Test test/a2/J1_noduplicatefield.java
+Test test/a3/J1_backwardRef.java
 16
 Success
 
 
-Test test/a2/Je_12_Fields_StaticNonStatic.java
-16
-Variable a has already been declared in class Je_12_Fields_StaticNonStatic
-Error
-
-
-Test test/a2/Je_14_Interface_DuplicateMethodDeclare.java
-16
-A class must not declare two methods with the same signature.
-Error
-
-
-Test test/a2/Je_14_Interface_SelfDependency_ExtendsItself.java
-16
-The hierarchy must be acyclic.
-Error
-
-
-Test test/a2/Je_2_ConstructorParameter_Duplicate.java
-16
-Variable f already declared in this constructor
-Error
-
-
-Test test/a2/Je_2_ConstructorParameter_Overlapping.java
-16
-Variable o has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Fields_DifferentAccess.java
-16
-Variable o has already been declared in class Je_2_Fields_DifferentAccess
-Error
-
-
-Test test/a2/Je_2_Fields_DifferentTypes.java
-16
-Variable foo has already been declared in class Je_2_Fields_DifferentTypes
-Error
-
-
-Test test/a2/Je_2_Fields_MultipleFields.java
-16
-Variable foo has already been declared in class Je_2_Fields_MultipleFields
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_DeeplyNested.java
-16
-Variable a has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_ForInitializer.java
-16
-Variable r has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_InConditionalElse.java
-16
-Variable r has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_InConditionalThen.java
-16
-Variable r has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_InsideDoubleBlock.java
-16
-Variable r has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_InsideLoop.java
-16
-Variable r has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_InsideNewBlock.java
-16
-Variable r has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_SameLevel.java
-16
-Variable r has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Locals_Overlapping_SameLine.java
-16
-Variable b has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Parameter_AbstractDeclaredTwice.java
-16
-Variable x already declared in this constructor
-Error
-
-
-Test test/a2/Je_2_Parameter_OverlappingWithLocalInConditional.java
-16
-Variable o has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Parameter_OverlappingWithLocalInLoop.java
-16
-Variable o has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Parameter_OverlappingWithLocalInsideNewBlock.java
-16
-Variable o has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Parameter_OverlappingWithLocal.java
-16
-Variable o has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Parameter_OverlappingWithLocalNotFirst.java
-16
-Variable o has already been declared in this method
-Error
-
-
-Test test/a2/Je_2_Parameter_OverlappingWithParameter.java
-16
-Variable o already declared in this constructor
-Error
-
-
-Test test/a2/Je_3_ImportOnDemand_NonExisting.java
+Test test/a3/J1_backwardsFieldRef.java
 16
 Success
 
 
-Test test/a2/Je_3_ImportOnDemand_NonExistingPackage_FromPreviousTestcase.java
+Test test/a3/J1_BigByteInit.java
 16
 Success
 
 
-Test test/a2/Je_3_Resolve_NonExistingSuperclass.java
-16
-Qualified Name not found
-Error
-
-
-Test test/a2/Je_3_Resolve_SamePackageAndClassName.java
+Test test/a3/J1_BigCharCharInit.java
 16
 Success
 
 
-Test test/a2/Je_4_AbstractMethod_Declared.java
+Test test/a3/J1_BigShortFromByteInit.java
 16
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_DuplicateConstructor_Args.java
-16
-A class must not declare two constructors with the same parameter types.
-Error
-
-
-Test test/a2/Je_4_DuplicateConstructor_ArrayArgs.java
-16
-A class must not declare two constructors with the same parameter types.
-Error
-
-
-Test test/a2/Je_4_DuplicateConstructor_NoArgs.java
-16
-A class must not declare two constructors with the same parameter types.
-Error
-
-
-Test test/a2/Je_4_DuplicateMethodDeclare_Args.java
-16
-A class must not declare two methods with the same signature.
-Error
-
-
-Test test/a2/Je_4_DuplicateMethodDeclare_ArrayArgs.java
-16
-A class must not declare two methods with the same signature.
-Error
-
-
-Test test/a2/Je_4_DuplicateMethodDeclare_DifferentReturnTypes.java
-16
-A class must not declare two methods with the same signature.
-Error
-
-
-Test test/a2/Je_4_DuplicateMethodDeclare_NoArgs.java
-16
-A class must not declare two methods with the same signature.
-Error
-
-
-Test test/a2/Je_4_ExtendFinal.java
-16
-A class must not extend a final class.
-Error
-
-
-Test test/a2/Je_4_FinalOverride_DifferentReturnTypes.java
-16
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_FinalOverride_SameSignature.java
-16
-A method must not replace a final method.
-Error
-
-
-Test test/a2/Je_4_ImplementNonInterface_Class.java
-16
-A class must not implement a class.
-Error
-
-
-Test test/a2/Je_4_ReplaceInstance_FromSuperclass.java
-16
-A static method must not replace a nonstatic method.
-Error
-
-
-Test test/a2/Je_4_SelfDependency_ExtendsItself.java
-16
-The hierarchy must be acyclic.
-Error
-
-
-Test test/a2/Je_5_Interface_ImplicitReplace_DifferentReturnType.java
-16
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/J1_3_ImportOnDemand_DefaultImportInPresenceOfOtherImport/
-17
 Success
 
 
-Test test/a2/J1_3_ImportOnDemand_ProgramDefinedPackage/
-17
+Test test/a3/J1_BigShortInit.java
+16
 Success
 
 
-Test test/a2/J1_3_InfixResolvesToType/
-17
+Test test/a3/J1_boolean.java
+16
 Success
 
 
-Test test/a2/J1_3_OnDemandImport_NonAmbiguous_Default/
-18
+Test test/a3/J1_booleanliterals.java
+16
 Success
 
 
-Test test/a2/J1_3_OnDemandImport_NonAmbiguous_SamePackage/
+Test test/a3/J1_ByteCast.java
+16
+Success
+
+
+Test test/a3/J1_ByteCharInit2.java
+16
+Success
+
+
+Test test/a3/J1_ByteInit.java
+16
+Success
+
+
+Test test/a3/J1_byte.java
+16
+Success
+
+
+Test test/a3/J1_callstaticmethods.java
+16
+Success
+
+
+Test test/a3/J1_castarrayaccess.java
+16
+Success
+
+
+Test test/a3/J1_castMultiple1.java
+16
+Success
+
+
+Test test/a3/J1_castMultiple2.java
+16
+Success
+
+
+Test test/a3/J1_castMultiple.java
+16
+Success
+
+
+Test test/a3/J1_castprimarymethodinvocation.java
+16
+Success
+
+
+Test test/a3/J1_castthis.java
+16
+Success
+
+
+Test test/a3/J1_cast_to_same_type.java
+16
+Success
+
+
+Test test/a3/J1_CharCast.java
+16
+Success
+
+
+Test test/a3/J1_CharCharInit1.java
+16
+Success
+
+
+Test test/a3/J1_closestMatchConstructor1.java
+16
+Success
+
+
+Test test/a3/J1_ClosestMatchMultiplePath1.java
+16
+Success
+
+
+Test test/a3/J1_ClosestMatchMultiplePath2.java
+16
+Success
+
+
+Test test/a3/J1_ClosestMethod2.java
+16
+Success
+
+
+Test test/a3/J1_ClosestMethod3.java
+16
+Success
+
+
+Test test/a3/J1_ClosestMethod4.java
+16
+Success
+
+
+Test test/a3/J1_constructoroverloading.java
+16
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromParExp.java
+16
+Success
+
+
+Test test/a3/J1_fieldinit2.java
+16
+Success
+
+
+Test test/a3/J1_fieldinit_forward_ref2.java
+16
+Success
+
+
+Test test/a3/J1_fieldinit_forward_ref.java
+16
+Success
+
+
+Test test/a3/J1_fieldinit.java
+16
+Success
+
+
+Test test/a3/J1_fieldInOwnInit.java
+16
+Success
+
+
+Test test/a3/J1_fieldOwnInit1.java
+16
+Success
+
+
+Test test/a3/J1_fieldOwnInit2.java
+16
+Success
+
+
+Test test/a3/J1_FieldRestrictionDuringInit.java
+16
+Success
+
+
+Test test/a3/J1_formalindex.java
+16
+Success
+
+
+Test test/a3/J1_formal_with_same_name_as_field.java
+16
+Success
+
+
+Test test/a3/J1_forwardfield1.java
+16
+Success
+
+
+Test test/a3/J1_forwardfield2.java
+16
+Success
+
+
+Test test/a3/J1_good_dot.java
+16
+Success
+
+
+Test test/a3/J1_implicitstringconcatenation.java
+16
+Success
+
+
+Test test/a3/J1_implicitthisforfields.java
+16
+Success
+
+
+Test test/a3/J1_implicitthisformethods.java
+16
+Success
+
+
+Test test/a3/J1_instanceof_array2.java
+16
+Success
+
+
+Test test/a3/J1_instanceof_array.java
+16
+Success
+
+
+Test test/a3/J1_instanceof.java
+16
+Success
+
+
+Test test/a3/J1_instanceof_string.java
+16
+Success
+
+
+Test test/a3/J1_int.java
+16
+Success
+
+
+Test test/a3/J1_intstringadd.java
+16
+Success
+
+
+Test test/a3/J1_length_field_not_array.java
+16
+Success
+
+
+Test test/a3/J1_localDeclAccess.java
+16
+Success
+
+
+Test test/a3/J1_methodInvocationQualified.java
+16
+Success
+
+
+Test test/a3/J1_methodoverloading.java
+16
+Success
+
+
+Test test/a3/J1_methodWithArgList.java
+16
+Success
+
+
+Test test/a3/J1_namelinking3.java
+16
+Success
+
+
+Test test/a3/J1_nestedblocks.java
+16
+Success
+
+
+Test test/a3/J1_nestedcast.java
+16
+Success
+
+
+Test test/a3/J1_nonthisfieldaccess.java
+16
+Success
+
+
+Test test/a3/J1_nullinstanceof1.java
+16
+Success
+
+
+Test test/a3/J1_OneByteByteCast.java
+16
+Success
+
+
+Test test/a3/J1_OneByteCharCast.java
+16
+Success
+
+
+Test test/a3/J1_OneByteIntCast.java
+16
+Success
+
+
+Test test/a3/J1_OneByteShortCast.java
+16
+Success
+
+
+Test test/a3/J1_primitivecasts.java
+16
+Success
+
+
+Test test/a3/J1_referencecasts.java
+16
+Success
+
+
+Test test/a3/J1_samestaticinvoketwice.java
+16
+Success
+
+
+Test test/a3/J1_ShortCast.java
+16
+Success
+
+
+Test test/a3/J1_ShortCharInit2.java
+16
+Success
+
+
+Test test/a3/J1_ShortFromByteInit.java
+16
+Success
+
+
+Test test/a3/J1_ShortInit.java
+16
+Success
+
+
+Test test/a3/J1_short.java
+16
+Success
+
+
+Test test/a3/J1_sideeffects_obj3.java
+16
+Success
+
+
+Test test/a3/J1_StaticField_AccessFromClass.java
+16
+Success
+
+
+Test test/a3/J1_staticMethodInvocation.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_array.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_constructor_invocation.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_equality.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_expstm.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_if1.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_if2.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof1.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof2.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof3.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof4.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof5.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof6.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof7.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_instanceof.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_plus.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_return.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_static_invocation1.java
+16
+Success
+
+
+Test test/a3/J1_typecheck_while.java
+16
+Success
+
+
+Test test/a3/J1_wrapper_classes_eq.java
+16
+Success
+
+
+Test test/a3/J2_5_ForwardReference_StaticField.java
+16
+Success
+
+
+Test test/a3/J2_backwardsStaticFieldRef.java
+16
+Success
+
+
+Test test/a3/J2_exactMatchConstructor3.java
+16
+Success
+
+
+Test test/a3/J2_fieldinit_forward_ref.java
+16
+Success
+
+
+Test test/a3/J2_forwardRef.java
+16
+Success
+
+
+Test test/a3/J2_static_decl.java
+16
+Success
+
+
+Test test/a3/J2_staticField2.java
+16
+Success
+
+
+Test test/a3/J2_staticFieldDecl.java
+16
+Success
+
+
+Test test/a3/J2_staticField.java
+16
+Success
+
+
+Test test/a3/J2_static_shared.java
+16
+Success
+
+
+Test test/a3/Je_16_ClosestMatch_Array.java
+16
+Success
+
+
+Test test/a3/Je_16_ClosestMatch_Constructor_NoClosestMatch_This.java
+16
+Parsing error at token '('
+Error
+
+
+Test test/a3/Je_16_IncDec_Final_ArrayLengthDec.java
+16
+Parsing error at token '--'
+Error
+
+
+Test test/a3/Je_16_IncDec_Final_ArrayLengthInc.java
+16
+Parsing error at token '++'
+Error
+
+
+Test test/a3/Je_16_IncDec_Final_PostDec.java
+16
+Parsing error at token '--'
+Error
+
+
+Test test/a3/Je_16_IncDec_Final_PostInc.java
+16
+Parsing error at token '++'
+Error
+
+
+Test test/a3/Je_16_IncDec_Final_PreDec.java
+16
+Parsing error at token '--'
+Error
+
+
+Test test/a3/Je_16_IncDec_Final_PreInc.java
+16
+Parsing error at token '++'
+Error
+
+
+Test test/a3/Je_16_IncDec_StringPostDec.java
+16
+Parsing error at token '--'
+Error
+
+
+Test test/a3/Je_16_IncDec_StringPostInc.java
+16
+Parsing error at token '++'
+Error
+
+
+Test test/a3/Je_16_IncDec_StringPreDec.java
+16
+Parsing error at token '--'
+Error
+
+
+Test test/a3/Je_16_IncDec_StringPreInc.java
+16
+Parsing error at token '++'
+Error
+
+
+Test test/a3/Je_16_MethodPresent_WrongName_Array.java
+16
+Success
+
+
+Test test/a3/Je_16_MultiArrayCreation_Assign_1.java
+16
+Parsing error at token '2'
+Error
+
+
+Test test/a3/Je_16_MultiArrayCreation_Null.java
+16
+Parsing error at token '['
+Error
+
+
+Test test/a3/Je_16_StaticThis_StaticFieldInitializer.java
+16
+Success
+
+
+Test test/a3/Je_16_SuperThis_InvalidSuperParameter.java
+16
+Parsing error at token 'super'
+Error
+
+
+Test test/a3/Je_16_SuperThis_InvalidThisParameter.java
+16
+Parsing error at token '('
+Error
+
+
+Test test/a3/Je_1_Cast_NamedCastNegativeint.java
+16
+Success
+
+
+Test test/a3/Je_1_Complement_OfIntLiteral.java
+16
+Success
+
+
+Test test/a3/Je_1_Dot_ParenthesizedType_Field.java
+16
+Success
+
+
+Test test/a3/Je_1_Dot_ParenthesizedType_Method.java
+16
+Success
+
+
+Test test/a3/Je_1_InstanceOf_Primitive.java
+16
+Parsing error at token ')'
+Error
+
+
+Test test/a3/Je_1_MethodInvocation_Primitive.java
+16
+Success
+
+
+Test test/a3/Je_2_Cast_NegativeComplexExpressionToNamedType.java
+16
+Success
+
+
+Test test/a3/Je_2_Cast_NegativeToNamedType.java
+16
+Success
+
+
+Test test/a3/Je_2_Cast_NegativeToQualifiedNamedType.java
+16
+Success
+
+
+Test test/a3/Je_2_For_LocalVarInUpdate.java
+16
+Success
+
+
+Test test/a3/Je_5_AmbiguousInvoke_LocalInOwnInitializer.java
+16
+Success
+
+
+Test test/a3/Je_5_AmbiguousInvoke_Static_TypeNonExisting.java
+16
+Success
+
+
+Test test/a3/Je_5_AmbiguousName_FieldVsType_Initializer.java
+16
+Success
+
+
+Test test/a3/Je_5_AmbiguousName_Local_UseBeforeDeclare.java
+16
+Success
+
+
+Test test/a3/Je_5_AmbiguousName_NoDeclaration.java
+16
+Success
+
+
+Test test/a3/Je_5_AmbiguousName_SamePackageAndClassName.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_ArrayLength.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_FieldDeclaredLater_ComplexExp.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_FieldDeclaredLater.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ComplexExpression.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_Direct.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ReadAfterAssignment.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_RightSideOfAssignment.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_InAssignment.java
+16
+Success
+
+
+Test test/a3/Je_5_ForwardReference_MethodCall.java
+16
+Success
+
+
+Test test/a3/Je_6_ArrayLength_Invoke.java
+16
+Success
+
+
+Test test/a3/Je_6_Array_NonNumericIndex.java
+16
+Success
+
+
+Test test/a3/Je_6_Array_NullTypeIndex.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Array_Object.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_byteArray_intArray.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_byte_char.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_byte_int.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Cast_intArray_int.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_char_byte_1.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_char_byte_2.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_char_int.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Condition.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Condition_SimpleType.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Condition_While.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Instanceof_Result.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Instanceof_SimpleType.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Instanceof_SimpleTypeOfSimpleType.java
+16
+Parsing error at token ')'
+Error
+
+
+Test test/a3/Je_6_Assignable_intArray_byteArray.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_intArray_int.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_int_intArray.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_int_null.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_NamedCastOfComplement.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_NonstaticField.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_RefType_RefTypeArray.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_ResultTypeOfAssignment.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_ReturnInElse.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Return_ToSubType.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Return_VoidInVoidMethod.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_Return_Void.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_short_char.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_short_int.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_ToSubtype_FieldInit.java
+16
+Success
+
+
+Test test/a3/Je_6_Assignable_ValueReturn_InConstructor.java
+16
+Success
+
+
+Test test/a3/Je_6_BinopExp_LogicalBitwise.java
+16
+Error! Detected bitwise operation!
+Error
+
+
+Test test/a3/Je_6_ClosestMatch_ArrayTypes.java
+16
+Success
+
+
+Test test/a3/Je_6_ClosestMatch_Constructor_NoClosestMatch_SimpleTypes.java
+16
+Success
+
+
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_1.java
+16
+Success
+
+
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_2.java
+16
+Success
+
+
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_3.java
+16
+Success
+
+
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_SimpleTypes.java
+16
+Success
+
+
+Test test/a3/Je_6_ConstructorPresent_ArgumentTypeMismatch.java
+16
+Success
+
+
+Test test/a3/Je_6_ConstructorPresent_IllegalConversion.java
+16
+Success
+
+
+Test test/a3/Je_6_ConstructorPresent_MultipleArgumentsOneMismatch.java
+16
+Success
+
+
+Test test/a3/Je_6_ConstructorPresent_SameLastArg.java
+16
+Success
+
+
+Test test/a3/Je_6_ConstructorPresent_TooFewArguments.java
+16
+Success
+
+
+Test test/a3/Je_6_ConstructorPresent_TooManyArguments.java
+16
+Success
+
+
+Test test/a3/Je_6_Constructor_WrongName.java
+16
+Constructor name JE_6_CONSTRUCTOR_WRONGNAME must be the same as class name Je_6_Constructor_WrongName
+Error
+
+
+Test test/a3/Je_6_Equality_int.java
+16
+Success
+
+
+Test test/a3/Je_6_Equality_int_NamedType.java
+16
+Success
+
+
+Test test/a3/Je_6_Equality_StringInteger.java
+16
+Success
+
+
+Test test/a3/Je_6_Equality_Void.java
+16
+Success
+
+
+Test test/a3/Je_6_Expression_StringConcat_Void.java
+16
+Success
+
+
+Test test/a3/Je_6_FinalField_ArrayLength.java
+16
+Success
+
+
+Test test/a3/Je_6_For_NullInCondition.java
+16
+Success
+
+
+Test test/a3/Je_6_InstanceOf_Primitive_1.java
+16
+Parsing error at token ';'
+Error
+
+
+Test test/a3/Je_6_InstanceOf_Primitive_2.java
+16
+Parsing error at token ';'
+Error
+
+
+Test test/a3/Je_6_InstanceOf_Primitive_3.java
+16
+Success
+
+
+Test test/a3/Je_6_InstantiateAbstract.java
+16
+abstract Number is being instantiated!
+Error
+
+
+Test test/a3/Je_6_InstantiateInterface.java
+16
+Success
+
+
+Test test/a3/Je_6_MethodInvocation_NonJoos_ReturnType.java
+16
+unable to find reference to type Long
+Error
+
+
+Test test/a3/Je_6_MethodPresent_ArgumentTypeMismatch.java
+16
+Success
+
+
+Test test/a3/Je_6_MethodPresent_IllegalConversion.java
+16
+Success
+
+
+Test test/a3/Je_6_MethodPresent_MultipleArgumentsOneMismatch.java
+16
+Success
+
+
+Test test/a3/Je_6_MethodPresent_Nonstatic_SameLastArg.java
+16
+Success
+
+
+Test test/a3/Je_6_MethodPresent_Static_SameLastArg.java
+16
+Success
+
+
+Test test/a3/Je_6_MethodPresent_TooFewArguments.java
+16
+Success
+
+
+Test test/a3/Je_6_MethodPresent_TooManyArguments.java
+16
+Success
+
+
+Test test/a3/Je_6_NonStaticAccessToStatic_Field.java
+16
+Success
+
+
+Test test/a3/Je_6_NonStaticAccessToStatic_Method.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticAccessToNontatic_Field.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticAccessToNontatic_Method.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticThis_AfterStaticInvoke.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticThis_InvokeNonstatic_Implicit.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticThis_InvokeNonStatic.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticThis_InvokeStatic.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticThis_NonStaticField_ImplicitThis.java
+16
+Success
+
+
+Test test/a3/Je_6_StaticThis_NonstaticField.java
+16
+Success
+
+
+Test test/a3/Je_6_StringMinus.java
+16
+Success
+
+
+Test test/a3/Je_BadConstructorName.java
+16
+Constructor name AnotherConstructorName must be the same as class name Je_BadConstructorName
+Error
+
+
+Test test/a3/J1_5_AmbiguousName_DefaultPackageNotVisible/
 19
 Success
 
 
-Test test/a2/J1_3_PackageClashWithType_Linked_Mutated/
-18
-Success
-
-
-Test test/a2/J1_3_PackageDecl_MultipleFilesInSamePackage/
-18
-Success
-
-
-Test test/a2/J1_3_PackageDecl_SamePackageAndClassName/
-17
-Success
-
-
-Test test/a2/J1_3_PackageExists_AsPrefix_External/
-16
-Success
-
-
-Test test/a2/J1_3_PackageExists_AsPrefix_Internal/
-17
-Success
-
-
-Test test/a2/J1_3_Resolve_LinkToCorrectPackage/
-19
-Success
-
-
-Test test/a2/J1_3_Resolve_PackagePrefixMatchClassName/
-17
-Success
-
-
-Test test/a2/J1_3_Resolve_SamePackage_External/
-18
-Success
-
-
-Test test/a2/J1_3_SingleTypeImport_ClashWithOnDemand/
-19
-Success
-
-
-Test test/a2/J1_3_SingleTypeImport_ClashWithPackageName/
-19
-Success
-
-
-Test test/a2/J1_3_SingleTypeImport_ImportProgramClass/
-17
-Success
-
-
-Test test/a2/J1_3_SingleTypeImport_ImportSelf/
-17
-Success
-
-
-Test test/a2/J1_3_SingleTypeImport_MultipleFromSamePackage/
-22
-Success
-
-
-Test test/a2/J1_3_SingleTypeImport_MultipleImportsOfSameType/
-17
-Success
-
-
-Test test/a2/J1_3_SingleTypeImport_NoClash/
-18
-Success
-
-
-Test test/a2/J1_4_AbstractMethod_InheritAbstractFromObject/
-17
-Success
-
-
-Test test/a2/J1_4_AbstractMethod_InheritedFromInterface/
-17
-Success
-
-
-Test test/a2/J1_4_ClassExtendsClass_SameName/
+Test test/a3/J1_6_ProtectedAccess_ImplicitSuper/
 20
 Success
 
 
-Test test/a2/J1_4_ClassImplementsInterface_MultipleTimes/
+Test test/a3/J1_6_ProtectedAccess_InstanceField_SubVar/
 20
 Success
 
 
-Test test/a2/J1_4_InheritedFields_SameField_TwoWays/
-19
+Test test/a3/J1_6_ProtectedAccess_InstanceField_This/
+20
 Success
 
 
-Test test/a2/J1_4_InterfaceMethod_FromObject/
+Test test/a3/J1_6_ProtectedAccess_InstanceField_ThisVar/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceMethod_SubVar/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceMethod_This/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceMethod_ThisVar/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_StaticMethod_Sub/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_StaticMethod_Super/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_StaticMethod_This/
+20
+Success
+
+
+Test test/a3/J1_accessstaticfield/
+17
+Success
+
+
+Test test/a3/J1_ambiguousInvoke/
+17
+Success
+
+
+Test test/a3/J1_ArrayCast1/
+17
+Success
+
+
+Test test/a3/J1_ArrayCast2/
+17
+Success
+
+
+Test test/a3/J1_ArrayCast3/
+17
+Success
+
+
+Test test/a3/J1_ArrayCast4/
+17
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromArray/
+17
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromLit/
 16
 Success
 
 
-Test test/a2/J1_4_PackageClashWithType_Loaded/
-18
-Success
-
-
-Test test/a2/J1_4_PackageClashWithType_NotLoaded/
+Test test/a3/J1_evalMethodInvocationFromMethod/
 17
 Success
 
 
-Test test/a2/J1_4_PackageClashWithType_SingleTypeImport_DefaultPackage/
-18
+Test test/a3/J1_evalMethodInvocationFromObject/
+17
 Success
 
 
-Test test/a2/J1_4_PackageNameIsClassName_DefaultPackage/
+Test test/a3/J1_evalMethodInvocationFromThis/
+17
+Success
+
+
+Test test/a3/J1_interfaceassignable/
 19
 Success
 
 
-Test test/a2/J1_4_Resolve_NotDefaultPackage/
-18
+Test test/a3/J1_interface_null/
+19
 Success
 
 
-Test test/a2/J1_4_SingleTypeImport_OnDemandsClash/
-18
+Test test/a3/J1_InterfaceObject/
+19
 Success
 
 
-Test test/a2/J1_6_ProtectedAccess_StaticMethod_This/
+Test test/a3/J1_NamedCast2/
+17
+Success
+
+
+Test test/a3/J1_NamedCast3/
+17
+Success
+
+
+Test test/a3/J1_NamedCast4/
+17
+Success
+
+
+Test test/a3/J1_ProtectedAccess1/
+17
+Success
+
+
+Test test/a3/J1_ProtectedAccess2/
+17
+Success
+
+
+Test test/a3/J1_ProtectedAccess4/
+17
+Success
+
+
+Test test/a3/J1_supermethod_override11/
 20
-Success
-
-
-Test test/a2/J1_abstract/
-18
-Success
-
-
-Test test/a2/J1_classimplementsserializable1/
-16
-Success
-
-
-Test test/a2/J1_classimplementsserializable2/
-16
-Success
-
-
-Test test/a2/J1_classimport/
-17
-Success
-
-
-Test test/a2/J1_fields/
-17
-Success
-
-
-Test test/a2/J1_final_method_override1/
-17
-Success
-
-
-Test test/a2/J1_hierachyCheck14/
-18
-Success
-
-
-Test test/a2/J1_hierachyCheck28/
-18
-Success
-
-
-Test test/a2/J1_hierachyCheck29/
-18
-Success
-
-
-Test test/a2/J1_hierachyCheck31/
-19
-Success
-
-
-Test test/a2/J1_implicitsuper/
-18
-Success
-
-
-Test test/a2/J1_importNameLookup1/
-18
-Success
-
-
-Test test/a2/J1_importNameLookup2/
-18
-Success
-
-
-Test test/a2/J1_importNameLookup3/
-18
-Success
-
-
-Test test/a2/J1_importNameLookup4/
-18
-Success
-
-
-Test test/a2/J1_importNameLookup5/
-17
-Success
-
-
-Test test/a2/J1_importNameLookup6/
-18
-Success
-
-
-Test test/a2/J1_importNameLookup7/
-17
-Success
-
-
-Test test/a2/J1_instance_method_hide1/
-17
-Success
-
-
-Test test/a2/J1_interfaceassignable/
-19
-Success
-
-
-Test test/a2/J1_InterfaceObject/
-19
-Success
-
-
-Test test/a2/J1_name/
-17
-Success
-
-
-Test test/a2/J1_on_demand_imports_clash/
-18
-Success
-
-
-Test test/a2/J1_package/
-17
-Success
-
-
-Test test/a2/J1_packageimport/
-17
-Success
-
-
-Test test/a2/J1_public_method_protected_override1/
-17
-Success
-
-
-Test test/a2/J1_resolvetype2/
-18
-Success
-
-
-Test test/a2/J1_resolvetype3/
-17
-Success
-
-
-Test test/a2/J1_resolvetype4/
-17
-Success
-
-
-Test test/a2/J1_resolvetype6/
-18
-Success
-
-
-Test test/a2/J1_samePackage/
-18
-Success
-
-
-Test test/a2/J1_singleTypeImport/
-20
-Success
-
-
-Test test/a2/J1_singleTypeImportSameTypeMultipleTimes/
-19
-Success
-
-
-Test test/a2/J1_static_method_override1/
-17
-Success
-
-
-Test test/a2/J1_SubType1/
-17
-Success
-
-
-Test test/a2/J1_SubType2/
-17
-Success
-
-
-Test test/a2/J1_supermethod_override1/
-19
-Success
-
-
-Test test/a2/J1_supermethod_override2/
-19
-Success
-
-
-Test test/a2/J1_supermethod_override3/
-19
-Success
-
-
-Test test/a2/J1_supermethod_override4/
-20
-Success
-
-
-Test test/a2/J1_supermethod_override5/
-20
-Success
-
-
-Test test/a2/J1_supermethod_override6/
-20
-Success
-
-
-Test test/a2/J1_typecheck_assignment/
-18
-Success
-
-
-Test test/a2/J2_3_SingleTypeImport_ImportSelf_Interface/
-17
-Success
-
-
-Test test/a2/J2_4_ImplementsInterface_TwiceByName/
-17
-Success
-
-
-Test test/a2/J2_4_InterfaceExtends_MultipleWays/
-20
-A method must not replace a final method.
-Error
-
-
-Test test/a2/J2_hierachyCheck22/
-20
-Success
-
-
-Test test/a2/J2_hierachyCheck23/
-20
-Success
-
-
-Test test/a2/J2_hierachyCheck24/
-20
-Success
-
-
-Test test/a2/J2_hierachyCheck25/
-20
-Success
-
-
-Test test/a2/J2_Ifaceimplicitabstract/
-18
-Success
-
-
-Test test/a2/J2_Interface1/
-17
-Success
-
-
-Test test/a2/J2_Interface10/
-17
-Success
-
-
-Test test/a2/J2_Interface11/
-19
-Success
-
-
-Test test/a2/J2_Interface2/
-17
-Success
-
-
-Test test/a2/J2_Interface3/
-17
-Success
-
-
-Test test/a2/J2_Interface6/
-18
-Success
-
-
-Test test/a2/J2_Interface7/
-19
-Success
-
-
-Test test/a2/J2_Interface8/
-19
-Success
-
-
-Test test/a2/J2_Interface9/
-18
-Success
-
-
-Test test/a2/J2_interface_omitted_abstract/
-17
-Success
-
-
-Test test/a2/Je_13_Interface_SingleImport_ClashWithClass/
-17
-Success
-
-
-Test test/a2/Je_14_Interface_DeclaresToString_DifferentReturnType/
-17
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_14_Interface_DeclaresToString_ThrowsConflict/
-17
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_14_Interface_ImplicitPublicMethod_ProtectedOverride/
-17
 A protected method must not replace a public method.
 Error
 
 
-Test test/a2/Je_14_Interface_SelfDependency_CyclicExtend/
+Test test/a3/J1_typecheck_assignment/
 18
-The hierarchy must be acyclic.
+Success
+
+
+Test test/a3/J2_6_AmbiguousName_StaticFieldAccess/
+17
+Success
+
+
+Test test/a3/J2_6_ProtectedAccess_StaticField_Sub/
+20
+Success
+
+
+Test test/a3/J2_6_ProtectedAccess_StaticField_Super/
+20
+Success
+
+
+Test test/a3/J2_6_ProtectedAccess_StaticField_This/
+20
+Success
+
+
+Test test/a3/J2_implicitStaticMethod/
+17
+Success
+
+
+Test test/a3/J2_interfaces/
+17
+Success
+
+
+Test test/a3/J2_ProtectedAccess3/
+17
+Success
+
+
+Test test/a3/Je_16_ProtectedAccess_StaticField_Sub_DeclaredInSub/
+20
+Success
+
+
+Test test/a3/Je_3_Resolve_LinkToCorrectPackage/
+18
+Success
+
+
+Test test/a3/Je_5_AmbiguousName_DefaultPackageNotVisible/
+17
+Success
+
+
+Test test/a3/Je_5_AmbiguousName_LinkToFirstFound/
+18
+fields must have a access modifier
 Error
 
 
-Test test/a2/Je_2_DuplicateType/
-18
-foo.Bar already exists
-Error
-
-
-Test test/a2/Je_3_ImportOnDemand_ClashWithImplicitImport/
+Test test/a3/Je_6_Assignable_ToSubtype/
 17
 Success
 
 
-Test test/a2/Je_3_ImportOnDemand_ClassInMultiplePackages/
-18
-Success
-
-
-Test test/a2/Je_3_ImportOnDemand_ClassNameAsPackage/
+Test test/a3/Je_6_Assignable_ToSubtype_DeclInit/
 17
 Success
 
 
-Test test/a2/Je_3_ImportOnDemand_PackagePrefixExists/
-17
-Success
-
-
-Test test/a2/Je_3_PackageClashWithType_Explicit/
+Test test/a3/Je_6_ClosestMatch_Constructor_NoClosestMatch/
 18
 Success
 
 
-Test test/a2/Je_3_PackageClashWithType_Linked/
+Test test/a3/Je_6_ConstructorPresent_PresentInSubclass/
 17
 Success
 
 
-Test test/a2/Je_3_PackageClashWithType_SingleTypeImport/
+Test test/a3/Je_6_ConstructorPresent_Super_NoDefault/
 17
 Success
 
 
-Test test/a2/Je_3_PackageExists_AlmostPrefix_External/
+Test test/a3/Je_6_MethodPresent_PresentInSubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ClassCreation_Sub/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ClassCreation_Super/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Constructor/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_External/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_External/
+18
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_Internal/
+18
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_SubDeclare_SubVar/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_SuperVar/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SubDeclare_SubVar/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SuperVar/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotBySubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotInSubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotBySubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotInSubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_StaticMethod_Sub_DeclaredInSub/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_SuperConstructor_NewExp/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_TwoSubtypes/
+18
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotBySubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotInSubclass/
+17
+Success
+
+
+Test test/a3/Je_AccessToStaticFieldWithImplicitThis/
 16
-Success
-
-
-Test test/a2/Je_3_PackageExists_AlmostPrefix_Internal/
-17
-Success
-
-
-Test test/a2/Je_3_PackageNameIsClassName/
-18
-Success
-
-
-Test test/a2/Je_3_PackageNameIsClassName_External/
-20
-Success
-
-
-Test test/a2/Je_3_PackageNameIsClassName_ExternalPrefix/
-20
-Success
-
-
-Test test/a2/Je_3_PackageNameIsClassName_Prefix/
-18
-Success
-
-
-Test test/a2/Je_3_Resolve_ImplicitJavaIO/
-16
-Qualified Name not found
-Error
-
-
-Test test/a2/Je_3_Resolve_ImportDifferentFromSamePackage/
-19
-Success
-
-
-Test test/a2/Je_3_Resolve_LinkToCorrectPackage/
-18
-Qualified Name not found
-Error
-
-
-Test test/a2/Je_3_Resolve_MissingImport/
-19
-Success
-
-
-Test test/a2/Je_3_SingleTypeImport_ClashWithClass/
-20
-A class must not implement a class.
-Error
-
-
-Test test/a2/Je_3_SingleTypeImport_ClashWithClass_InPackage/
-20
-Success
-
-
-Test test/a2/Je_3_SingleTypeImport_ClashWithEachOther/
-20
-Success
-
-
-Test test/a2/Je_3_SingleTypeImport_ClashWithEachOther_MultipleImports/
-20
-Success
-
-
-Test test/a2/Je_3_SingleTypeImport_ClashWithInterface/
-20
-Success
-
-
-Test test/a2/Je_3_SingleTypeImport_NonExistingPackage/
-17
-Success
-
-
-Test test/a2/Je_3_SingleTypeImport_NonExistingType/
-17
-Success
-
-
-Test test/a2/Je_3_UndefinedType_DefaultPackageNotVisible/
-17
-Success
-
-
-Test test/a2/Je_4_AbstractMethod_AbstractObjectMethods/
-17
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_AbstractMethod_InheritFromInterface_1/
-17
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_AbstractMethod_InheritFromInterface_2/
-17
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_AbstractMethod_InheritFromSuperclass/
-16
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_AbstractMethod_InheritFromSuperclassInterface/
-18
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_AbstractMethod_InheritFromSuperInterface/
-21
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_AbstractMethod_NotAllImplemented/
-17
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_ClassExtendsCyclicClass/
-19
-The hierarchy must be acyclic.
-Error
-
-
-Test test/a2/Je_4_ExtendNonClass/
-16
-A class must not extend an interface.
-Error
-
-
-Test test/a2/Je_4_FinalHide/
-18
-A method must not replace a final method.
-Error
-
-
-Test test/a2/Je_4_Hide_DifferentReturnTypes/
-17
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_ImplementNonInterface_InterfaceAndClass/
-16
-A class must not implement a class.
-Error
-
-
-Test test/a2/Je_4_ImplementTwice_QualifiedName/
-17
-An interface must not be repeated an implements clause of a class.
-Error
-
-
-Test test/a2/Je_4_ImplementTwice_SimpleName/
-17
-An interface must not be repeated an implements clause of a class.
-Error
-
-
-Test test/a2/Je_4_InheritShadowsNonabstract/
-19
-A class that contains (declares or inherits) any abstract methods must be abstract.
-Error
-
-
-Test test/a2/Je_4_InterfaceExtendsCyclicInterface/
-19
-The hierarchy must be acyclic.
-Error
-
-
-Test test/a2/Je_4_Interface_FinalMethodFromObject/
-18
-A method must not replace a final method.
-Error
-
-
-Test test/a2/Je_4_Override_DifferentReturnTypes_AbstractFromSuperclassAndInterface/
-18
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_Override_DifferentReturnTypesFromInterface/
-17
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_Override_DifferentReturnTypes_FromSuperclassAndInterface/
-18
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_Override_DifferentReturnTypes_FromSuperclassAndInterface_NonVoid/
-18
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_Override_DifferentReturnTypes_TwoInterfaces/
-18
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_ProtectedHide_FromSuperclass/
-17
-A protected method must not replace a public method.
-Error
-
-
-Test test/a2/Je_4_ProtectedOverride_Abstract/
-17
-A protected method must not replace a public method.
-Error
-
-
-Test test/a2/Je_4_ProtectedOverride_DifferentThrows/
-17
-Parsing error at token 'throws'
-Error
-
-
-Test test/a2/Je_4_ProtectedOverride_Exception_Clone/
-17
-A protected method must not replace a public method.
-Error
-
-
-Test test/a2/Je_4_ProtectedOverride_FromInterface/
-17
-A protected method must not replace a public method.
-Error
-
-
-Test test/a2/Je_4_ProtectedOverride_FromSuperclass/
-17
-A protected method must not replace a public method.
-Error
-
-
-Test test/a2/Je_4_ProtectedOverride_FromSuperclassAndInterface/
-18
-A protected method must not replace a public method.
-Error
-
-
-Test test/a2/Je_4_ProtectedOverride_TwoVersionsFromSuperclass/
-19
-A protected method must not replace a public method.
-Error
-
-
-Test test/a2/Je_4_ReplaceStatic_FromSuperclass/
-17
-A nonstatic method must not replace a static method.
-Error
-
-
-Test test/a2/Je_4_ReplaceStatic_FromSuperclass_DifferentReturnTypes/
-17
-A class or interface must not contain (declare or inherit) two methods with the same signature but different return types
-Error
-
-
-Test test/a2/Je_4_Resolve_DefaultPackage/
-18
-Success
-
-
-Test test/a2/Je_4_SelfDependency_CircularExtends_1/
-20
-The hierarchy must be acyclic.
-Error
-
-
-Test test/a2/Je_4_SelfDependency_CircularExtends_2/
-20
-The hierarchy must be acyclic.
+fields must have a access modifier
 Error
 
 

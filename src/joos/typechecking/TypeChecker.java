@@ -1,6 +1,7 @@
 package joos.typechecking;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 import joos.commons.ParseTreeNode;
@@ -14,6 +15,7 @@ import static joos.environment.EnvironmentUtils.containsConstructor;
 import static joos.environment.EnvironmentUtils.getEnvironmentModifiers;
 import static joos.environment.EnvironmentUtils.findNodesWithTokenType;
 import static joos.environment.EnvironmentUtils.getAllInstantiationEnvironments;
+import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
 
 public class TypeChecker {
 
@@ -86,7 +88,36 @@ public class TypeChecker {
   }
 
   // Check that the implicit this variable is not accessed in a static method or in the initializer of a static field.
-  private static void checkForThisFromStatic() throws InvalidSyntaxException {
+  private static void checkForThisFromStaticField(Environment classEnvironment) throws InvalidSyntaxException {
+    if (classEnvironment.mVariableDeclarations != null && classEnvironment.mVariableDeclarations.size() > 0) {
+      for (ParseTreeNode variableDeclaration : classEnvironment.mVariableDeclarations.values()) {
+        List<ParseTreeNode> modifiers = new ArrayList<>();
+        findNodesWithTokenType(variableDeclaration, TokenType.MODIFIER, modifiers);
+        if (modifiers.size() > 0) {
+          for(ParseTreeNode modifier: modifiers) {
+            if (modifier.children.get(0).token.getType() == TokenType.STATIC) {
+              // we have a static field declaration. 
+              // check if its assigment references this
+              List<ParseTreeNode> thisNodes = new ArrayList<>();
+              findNodesWithTokenType(variableDeclaration, TokenType.THIS, thisNodes);
+              if (thisNodes.size() > 0) {
+                throw new InvalidSyntaxException("Error! Cannot reference \"this\" in static field declaration");
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
+  private static void checkForThisFromStaticMethod(Environment methodEnvironment) throws InvalidSyntaxException {
+    Set<TokenType> modifiers = getEnvironmentModifiers(methodEnvironment);
+    if (modifiers.contains(TokenType.STATIC)) {
+      List<ParseTreeNode> thisNodes = new ArrayList<>();
+      findNodesWithTokenType(methodEnvironment.mScope, TokenType.THIS, thisNodes);
+      if (thisNodes.size() > 0) {
+        throw new InvalidSyntaxException("Error! Cannot reference \"this\" in static method " + methodEnvironment.mName);
+      }
+    }
   }
 }

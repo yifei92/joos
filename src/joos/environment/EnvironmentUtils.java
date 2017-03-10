@@ -121,6 +121,28 @@ public class EnvironmentUtils {
 		return environments;
 	}
 
+	/**
+	 * Traverses the given root node's children for the first TokenType node and returns it.
+	 * null otherwise
+	 */
+	public static ParseTreeNode findNodeWithTokenType(final ParseTreeNode root, final TokenType type) {
+		if (root == null) {
+			return null;
+		}
+		if (root.token.getType() == type) {
+			return root;
+		}
+		if (root.children != null) {
+			for (ParseTreeNode child : root.children) {
+				ParseTreeNode nodeWithTokenType = findNodeWithTokenType(child, type);
+				if (nodeWithTokenType != null) {
+					return nodeWithTokenType;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public static ParseTreeNode findImmediateNodeWithTokenType(final ParseTreeNode node, final TokenType type) {
 		if (node.token.getType() == type) return node;
 		if (node.children != null) {
@@ -316,18 +338,5 @@ public class EnvironmentUtils {
 
 	public static Environment getEnvironmentFromName(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return packageMap.get(getFullQualifiedName(environment, name, packageMap));
-	}
-
-	/**
-	 * Looks in the given environment for whether or not the given variable name is declared in it.
-	 * If the name does not exist in the current environment we recursively search all parent environments.
-	 * If no name is found in this environment or the parent environments null is returned.
-	 */
-	public static ParseTreeNode containsVariableNameDeclaration(Environment environment, String variableName) {
-		ParseTreeNode variableNameNode = environment.mVariableDeclarations != null ? environment.mVariableDeclarations.get(variableName) : null;
-		if (variableNameNode == null && environment.mParent != null) {
-			variableNameNode = containsVariableNameDeclaration(environment.mParent, variableName);
-		}
-		return variableNameNode;
 	}
 }

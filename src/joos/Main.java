@@ -53,6 +53,11 @@ public class Main {
 			    entry.getValue().print();
 			    System.out.println("");
 			}*/
+			for (String key : treeMap.keySet()) {
+				if (key.contains("J1_1_Cast_MultipleCastOfSameValue_1")) {
+					treeMap.get(key).print();
+				}
+			}
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();
 				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap,key);

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import static joos.environment.EnvironmentUtils.findImmediateNodeWithTokenType;
 
 public class EnvironmentBuilder {
 
@@ -250,16 +251,6 @@ public class EnvironmentBuilder {
 				if (nodeWithTokenType != null) {
 					return nodeWithTokenType;
 				}
-			}
-		}
-		return null;
-	}
-
-	private static ParseTreeNode findImmediateNodeWithTokenType(final ParseTreeNode node, final TokenType type) {
-		if (node.token.getType() == type) return node;
-		if (node.children != null) {
-			for (ParseTreeNode child : node.children) {
-				if (child.token.getType() == type) return child;
 			}
 		}
 		return null;

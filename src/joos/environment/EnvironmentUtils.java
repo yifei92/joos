@@ -91,6 +91,64 @@ public class EnvironmentUtils {
 		return EnvironmentType.BLOCK;
 	}
 
+	/**
+	 * Returns true if the given environment contains a constructor or is itself a constructor
+	 */
+	public static boolean containsConstructor(Environment environment) {
+		if (getEnvironmentType(environment) == EnvironmentType.CONSTRUCTOR) {
+			return true;
+		}
+		for (Environment child : environment.mChildrenEnvironments) {
+			if (getEnvironmentType(child) == EnvironmentType.CONSTRUCTOR) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns a list of all of the Environments of all the instantiations within the given
+	 * Environment's scope
+	 */
+	public static List<Environment> getAllInstantiationEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		List<ParseTreeNode> instantiationNodes = new ArrayList<>();
+		findNodesWithTokenType(environment.mScope, TokenType.CLASS_INSTANCE_CREATION_EXPRESSION, instantiationNodes);
+		List<Environment> environments = new ArrayList<>();
+		for (ParseTreeNode instantiationNode : instantiationNodes) {
+			ParseTreeNode classTypeNode = findImmediateNodeWithTokenType(instantiationNode, TokenType.CLASS_TYPE);
+			environments.add(getEnvironmentFromName(environment, classTypeNode, packageMap));
+		}
+		return environments;
+	}
+
+	public static ParseTreeNode findImmediateNodeWithTokenType(final ParseTreeNode node, final TokenType type) {
+		if (node.token.getType() == type) return node;
+		if (node.children != null) {
+			for (ParseTreeNode child : node.children) {
+				if (child.token.getType() == type) return child;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds all child nodes of the given root of TokenType type and adds them to the given nodes list.
+	 */
+	public static void findNodesWithTokenType(final ParseTreeNode root, final TokenType type, final List<ParseTreeNode> nodes) {
+		if (root == null) {
+			return;
+		}
+		if (root.token.getType() == type) {
+			nodes.add(root);
+			return;
+		}
+		if (root.children != null) {
+			for (ParseTreeNode child : root.children) {
+				findNodesWithTokenType(child, type, nodes);
+			}
+		}
+	}
+
 	public static Set<TokenType> getEnvironmentModifiers(Environment environment) {
 		if (environment.mScope == null) return null;
 		switch (environment.mScope.token.getType()) {

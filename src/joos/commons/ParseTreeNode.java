@@ -10,6 +10,8 @@ public class ParseTreeNode {
 	public final List<ParseTreeNode> children;
 	public final Token token;
 	public Type type;
+	public String name;
+	public boolean primitive = false;
 
 	public ParseTreeNode(Token token) {
 		this.token = token;

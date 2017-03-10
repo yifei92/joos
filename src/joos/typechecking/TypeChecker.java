@@ -3,7 +3,7 @@ package joos.typechecking;
 import java.util.Map;
 import joos.commons.ParseTreeNode;
 import joos.environment.Environment;
-import joos.environment.EnvironmentUtils.EnvironmentType;
+import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 

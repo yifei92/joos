@@ -2,11 +2,15 @@ package joos.environment;
 
 import joos.commons.ParseTreeNode;
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
-import java.util.Map;;
+import java.util.Map;
 import java.util.HashMap;
+import joos.commons.Type;
+import joos.commons.TokenType;
 
 public class Environment {
+	public enum EnvironmentType {ROOT, PACKAGE, CLASS, INTERFACE, CONSTRUCTOR, METHOD, ABSTRACT_METHOD, BLOCK};
 
 	public final String mName;
 	// A reference to the parent environment
@@ -17,7 +21,12 @@ public class Environment {
 	// A reference to the names declared in this environment.
 	public Map<String, ParseTreeNode> mVariableDeclarations;
 
-	public Map<String, String> mVariableToType;
+	public Map<String, Type> mVariableToType;
+
+	public List<Environment> mExtendedEnvironments;
+	public List<Environment> mImplementedEnvironments;
+	public Set<TokenType> mModifiers;
+	public EnvironmentType mType;
 
   public List<String> mSingleImports;
 	public List<String> mOnDemandeImports;

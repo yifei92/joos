@@ -5,6 +5,8 @@ import joos.environment.Environment;
 import joos.exceptions.InvalidSyntaxException;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
+import joos.environment.Environment.EnvironmentType;
+import joos.commons.Type;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentBuilder.findNodeWithTokenType;
 
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 
 public class Disambiguation {
 
-  
+
 
   public static Environment getType(Environment environment, String name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     return null;
@@ -135,7 +137,9 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String type = getFullNameFromNameNode(param.children.get(0));
+              String typeName = getFullNameFromNameNode(param.children.get(0));
+              Type type = new Type(typeName);
+              type.decl = param;
               environment.mVariableToType.put(name, type);
             }
           }
@@ -151,20 +155,26 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String type = getFullNameFromNameNode(param.children.get(0));
+              String typeName = getFullNameFromNameNode(param.children.get(0));
+              Type type = new Type(typeName);
+              type.decl = param;
               environment.mVariableToType.put(name, type);
             }
           }
           break;
         } else {
           String name = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
-          String type = getFullNameFromNameNode(node.children.get(0).children.get(1));
+          String typeName = getFullNameFromNameNode(node.children.get(0).children.get(1));
+          Type type = new Type(typeName);
+          type.decl = node.children.get(0);
           environment.mVariableToType.put(name, type);
           return;
         }
       }
       case FIELD_DECLARATION: {
-        String type = getFullNameFromNameNode(node.children.get(1));
+        String typeName = getFullNameFromNameNode(node.children.get(1));
+        Type type = new Type(typeName);
+        type.decl = node;
         for (ParseTreeNode child : node.children.get(2).children) {
           String name = ((TerminalToken)findNodeWithTokenType(child, TokenType.IDENTIFIER).token).getRawValue();
           environment.mVariableToType.put(name, type);
@@ -172,7 +182,9 @@ public class Disambiguation {
         return;
       }
       case LOCAL_VARIABLE_DECLARATION: {
-        String type = getFullNameFromNameNode(node.children.get(0));
+        String typeName = getFullNameFromNameNode(node.children.get(0));
+        Type type = new Type(typeName);
+        type.decl = node;
         for (ParseTreeNode child : node.children.get(1).children) {
           String name = ((TerminalToken)findNodeWithTokenType(child, TokenType.IDENTIFIER).token).getRawValue();
           environment.mVariableToType.put(name, type);
@@ -189,37 +201,93 @@ public class Disambiguation {
     }
   }
 
-  static List<String> getAllNames(ParseTreeNode node) {
-    List<String> list = new ArrayList();
-    switch (node.token.getType()) {
-      case IMPORT_DECLARATION:
-			case VARIABLE_DECLARATOR:
-			case BLOCK: // fall through
-			case CONSTRUCTOR_DECLARATION: // fall through
-			case ABSTRACT_METHOD_DECLARATION: // fall through
-			case METHOD_DECLARATION:
-			case IF_THEN_STATEMENT:
-			case IF_THEN_ELSE_STATEMENT: // fall through
-			case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
-			case WHILE_STATEMENT: // fall through
-			case WHILE_STATEMENT_NO_SHORT_IF:
-			case FOR_STATEMENT: // fall through
-			case FOR_STATEMENT_NO_SHORT_IF:
-      case INTERFACES:
-      case SUPER_CLAUSE:
-        return list;
-      case NAME:
-        list.add(getFullNameFromNameNode(node));
-        return list;
-      default:
-        if (node.children != null) {
-          for (ParseTreeNode child : node.children) {
-            list.addAll(getAllNames(child));
-          }
-        }
-        return list;
-    }
-  }
+  // static void linkName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap) {
+  //   String name = getFullNameFromNameNode(node);
+  //   int dotIndex = name.indexOf('.');
+  //   String prefix;
+  //   if (dotIndex != -1) {
+  //     prefix = name.substring(0, name.indexOf('.'));
+  //   } else {
+  //     prefix = name;
+  //   }
+  //   Environment env = environment;
+  //   do {
+  //     if (env.mVariableDeclarations.containsKey(prefix)) {
+  //       node.type = env.mVariableToType.get(prefix);
+  //       return;
+  //     }
+  //     for (Environment child : env.mChildrenEnvironments) {
+  //       switch (getEnvironmentType(child)) {
+  //         case METHOD:
+  //           if (child.mName.equals(name)) {
+  //             // DO SOMETHING COOL
+  //           }
+  //       }
+  //     }
+  //     env = env.mParent;
+  //   } while (env != null);
+  //   Environment typeEnvironment = getEnvironmentFromName(prefix, environment, packageMap);
+  //   if (typeEnvironment == null) {
+  //     System.out.println(name);
+  //     for (String packageName : packageMap.keySet()) {
+  //       // System.out.println(packageName);
+  //       if (name.length() >= packageName.length() && name.substring(0, packageName.length()).equals(packageName)) {
+  //         typeEnvironment = packageMap.get(packageName);
+  //         dotIndex = name.indexOf('.', packageName.length());
+  //       }
+  //     }
+  //   }
+  //   if (typeEnvironment != null && dotIndex == -1) {
+  //     //this shouldnt happen
+  //   }
+  //   if (typeEnvironment != null && dotIndex != -1) {
+  //     int secondDotIndex = name.indexOf('.', dotIndex);
+  //     String nextName;
+  //     if (secondDotIndex == -1) {
+  //       nextName = name.substring(dotIndex, secondDotIndex);
+  //     } else {
+  //       nextName = name.substring(dotIndex);
+  //     }
+  //     if (typeEnvironment.mVariableDeclarations.containsKey(nextName)) {
+  //       node.type = typeEnvironment.mVariableToType.get(nextName);
+  //     }
+  //   }
+  //   throw new InvalidSyntaxException("Name cannot be resolved");
+  // }
+
+  // static void linkAllNames(ParseTreeNode node) {
+  //   List<String> list = new ArrayList();
+  //   switch (node.token.getType()) {
+  //     case IMPORT_DECLARATION:
+	// 		case VARIABLE_DECLARATOR:
+	// 		case BLOCK: // fall through
+	// 		case CONSTRUCTOR_DECLARATION: // fall through
+	// 		case ABSTRACT_METHOD_DECLARATION: // fall through
+	// 		case METHOD_DECLARATION:
+	// 		case IF_THEN_STATEMENT:
+	// 		case IF_THEN_ELSE_STATEMENT: // fall through
+	// 		case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
+	// 		case WHILE_STATEMENT: // fall through
+	// 		case WHILE_STATEMENT_NO_SHORT_IF:
+	// 		case FOR_STATEMENT: // fall through
+	// 		case FOR_STATEMENT_NO_SHORT_IF:
+  //     case INTERFACES:
+  //     case SUPER_CLAUSE:
+  //       return list;
+  //     case NAME:
+  //       list.add(getFullNameFromNameNode(node));
+  //       return list;
+  //     default:
+  //       if (node.children != null) {
+  //         for (ParseTreeNode child : node.children) {
+  //           list.addAll(getAllNames(child));
+  //         }
+  //       }
+  //       return list;
+  //   }
+  // }
+
+  public static List<String> getAllNames(ParseTreeNode environment) { return null; }
 
   public static String getFullNameFromNameNode(ParseTreeNode name) {
 		switch (name.token.getType()) {

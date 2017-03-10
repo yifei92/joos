@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 import joos.commons.ParseTreeNode;
 import joos.environment.Environment;
-import joos.environment.EnvironmentUtils.EnvironmentType;
+import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
 import joos.commons.TokenType;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;

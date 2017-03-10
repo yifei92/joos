@@ -1,21 +1,22 @@
 package joos.hierarchychecking;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import joos.exceptions.InvalidSyntaxException;
+import joos.commons.MethodSignature;
 import joos.commons.ParseTreeNode;
 import joos.commons.TokenType;
 import joos.environment.Environment;
-import joos.environment.EnvironmentUtils.EnvironmentType;
-import static joos.environment.EnvironmentUtils.getEnvironmentType;
+import joos.environment.Environment.EnvironmentType;
+import joos.exceptions.InvalidSyntaxException;
 import static joos.environment.EnvironmentUtils.getEnvironmentModifiers;
-import static joos.environment.EnvironmentUtils.getFullQualifiedName;
+import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
+import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeNode;
 import static joos.environment.EnvironmentUtils.getImplementedEnvironments;
 
 public class HierarchyChecking {
@@ -94,6 +95,7 @@ public class HierarchyChecking {
   }
 
   private static Map<String, Map<List<String>, MethodSignature>> getAllMethodSignatures(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (environment.mMethodSignatures != null) return environment.mMethodSignatures;
     EnvironmentType type = getEnvironmentType(environment);
     switch(type) {
       case CLASS:
@@ -221,12 +223,12 @@ public class HierarchyChecking {
     if (declarator.children.get(2).children.size() > 0) {
       for (ParseTreeNode parameter : declarator.children.get(2).children.get(0).children) {
         if (parameter.token.getType() == TokenType.COMMA) continue;
-        parameterTypes.add(getFullQualifiedName(environment, parameter.children.get(0), packageMap));
+        parameterTypes.add(getFullQualifiedNameFromTypeNode(environment, parameter.children.get(0), packageMap));
       }
     }
     ParseTreeNode typeNode = environment.mScope.children.get(0).children.get(1);
-    String type = typeNode.token.getType() == TokenType.VOID ? "void" : getFullQualifiedName(environment, typeNode, packageMap);
-    Set<TokenType> modifiers = getEnvironmentModifiers(environment);
+    String type = typeNode.token.getType() == TokenType.VOID ? "void" : getFullQualifiedNameFromTypeNode(environment, typeNode, packageMap);
+    Set<TokenType> modifiers = new HashSet(getEnvironmentModifiers(environment));
     if (getEnvironmentType(environment) == EnvironmentType.ABSTRACT_METHOD) modifiers.add(TokenType.ABSTRACT);
     return new MethodSignature(environment.mName, type, parameterTypes, modifiers, origin);
   }
@@ -238,24 +240,9 @@ public class HierarchyChecking {
     if (declarator.children.get(2).children.size() > 0) {
       for (ParseTreeNode parameter : declarator.children.get(2).children.get(0).children) {
         if (parameter.token.getType() == TokenType.COMMA) continue;
-        parameterTypes.add(getFullQualifiedName(environment, parameter.children.get(0), packageMap));
+        parameterTypes.add(getFullQualifiedNameFromTypeNode(environment, parameter.children.get(0), packageMap));
       }
     }
     return parameterTypes;
-  }
-}
-
-class MethodSignature {
-  public String name;
-  public String type;
-  public List<String> parameterTypes;
-  public Set<TokenType> modifiers;
-  public String origin;
-  public MethodSignature(String name, String type, List<String> parameterTypes, Set<TokenType> modifiers, String origin) {
-    this.name = name;
-    this.type = type;
-    this.parameterTypes = parameterTypes;
-    this.modifiers = modifiers;
-    this.origin = origin;
   }
 }

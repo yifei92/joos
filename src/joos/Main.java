@@ -55,7 +55,7 @@ public class Main {
 			    System.out.println("");
 			}*/
 			for (String key : treeMap.keySet()) {
-				if (key.contains("J1_1_Cast_MultipleCastOfSameValue_1")) {
+				if (key.contains("J1_5_AmbiguousName_LocalVsField")) {
 					treeMap.get(key).print();
 				}
 			}

@@ -299,8 +299,6 @@ public class TypeCheckingEvaluator {
 						}
 					}
 				}
-				System.out.println(typedef.name+"  "+typeenviroment.mName);
-				System.out.println(typedef.name+"  "+parameterTyps.get(0));
 				MethodSignature methodSignature=typeenviroment.findMethodSignature(PackageMap,new MethodSignature(typeenviroment.mName,null,parameterTyps,null,null));
 				if(methodSignature==null) {
 					throw new TypeLinkingException("cant find constructor");

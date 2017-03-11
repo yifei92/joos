@@ -74,15 +74,19 @@ public class Environment {
 	 */
 	public MethodSignature findMethodSignature(Map<String, Environment> packageMap, MethodSignature partialSignature) throws InvalidSyntaxException {
 		if (mName.equals(partialSignature.name)) {
-			List<String> constructorParamTypes = getConstructorSignature(packageMap);
-			if (constructorParamTypes != null) {
-				if(constructorParamTypes.equals(partialSignature.parameterTypes)) {
-					return new MethodSignature(
-						partialSignature.name,
-						partialSignature.name,
-						partialSignature.parameterTypes,
-						null,
-						null);
+			for (Environment child : mChildrenEnvironments) {
+				if (EnvironmentUtils.getEnvironmentType(child) == EnvironmentType.CONSTRUCTOR) {
+					List<String> constructorParamTypes = child.getConstructorSignature(packageMap);
+					if (constructorParamTypes != null) {
+						if(constructorParamTypes.equals(partialSignature.parameterTypes)) {
+							return new MethodSignature(
+								partialSignature.name,
+								partialSignature.name,
+								partialSignature.parameterTypes,
+								null,
+								null);
+						}
+					}
 				}
 			}
 		}

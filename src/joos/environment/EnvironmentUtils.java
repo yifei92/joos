@@ -439,6 +439,7 @@ public class EnvironmentUtils {
 			if (isArrayType) return localName + "[]";
 			return localName;
 		}
+		System.out.println(identifier);
 		throw new InvalidSyntaxException("Qualified Name not found");
 	}
 

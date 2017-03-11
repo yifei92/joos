@@ -68,6 +68,40 @@ public class Environment {
 		mChildrenEnvironments = new ArrayList<>();
 	}
 
+	/**
+	 * If the method signature exists within this class or is a method in a parent class then the full method 
+	 * signature will be returned. Null otherwise
+	 */
+	public MethodSignature findMethodSignature(Map<String, Environment> packageMap, MethodSignature partialSignature) throws InvalidSyntaxException {
+		if (mName.equals(partialSignature.name)) {
+			List<String> constructorParamTypes = getConstructorSignature(packageMap);
+			if(constructorParamTypes.equals(partialSignature.parameterTypes)) {
+				return new MethodSignature(
+					partialSignature.name,
+					partialSignature.name,
+					partialSignature.parameterTypes,
+					null,
+					null);
+			}
+		}
+		Map<String, Map<List<String>, MethodSignature>> methodSignatures = getMethodSignatures(packageMap);	
+		Map<List<String>, MethodSignature> things = methodSignatures.get(partialSignature.name);
+		if (things != null) {
+			MethodSignature methSig = things.get(partialSignature.parameterTypes);
+			if(methSig != null) {
+				return methSig;
+			}
+		}
+		List<Environment> extendedEnvironments = EnvironmentUtils.getExtendedEnvironments(this, packageMap);
+		for (Environment env : extendedEnvironments) {
+			MethodSignature methsig = env.findMethodSignature(packageMap, partialSignature);
+			if (methsig != null) {
+				return methsig;
+			}
+		}
+		return null;
+	}
+
 	public Map<String, Map<List<String>, MethodSignature>> getMethodSignatures(Map<String, Environment> packageMap) throws InvalidSyntaxException  {
 		if (mMethodSignatures == null) {
 			mMethodSignatures = getAllMethodSignatures(this, packageMap);

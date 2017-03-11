@@ -22,7 +22,7 @@ public class TypeCheckingEvaluator {
 	private String returntype;
 	private ParseTreeNode root;
 
-	public Type check(ParseTreeNode currentnode,Map<String, Environment> PackageMap,Environment current) throws TypeLinkingException {
+	public Type check(ParseTreeNode currentnode,Map<String, Environment> PackageMap,Environment current) throws TypeLinkingException, InvalidSyntaxException {
 		switch (currentnode.token.getType()) {
 			case STRING_LITERAL:
 				return new Type("String");
@@ -211,7 +211,7 @@ public class TypeCheckingEvaluator {
 					String Fullname=fullnameFromnamenode(currentnode.children.get(0));
 					String classname=Fullname.substring(0,Fullname.lastIndexOf(".")-1);
 					String methodname=Fullname.substring(Fullname.lastIndexOf(".")-1, Fullname.length());
-					MethodSignature m=PackageMap.get(classname).mMethodSignatures.get(methodname).get(parameterTyps);
+					MethodSignature m=PackageMap.get(classname).getMethodSignatures(PackageMap).get(methodname).get(parameterTyps);
 					return new Type(m.type);
 				}
 				if(currentnode.children.get(4).children!=null)
@@ -221,7 +221,7 @@ public class TypeCheckingEvaluator {
 						}
 					}
 				String methodname=((TerminalToken)currentnode.children.get(2).token).getRawValue();
-				MethodSignature m=PackageMap.get(check(currentnode.children.get(0), PackageMap,current).name).mMethodSignatures.get(methodname).get(parameterTyps);
+				MethodSignature m=PackageMap.get(check(currentnode.children.get(0), PackageMap,current).name).getMethodSignatures(PackageMap).get(methodname).get(parameterTyps);
 				return new Type(m.type);
 
 			case ARRAY_ACCESS:
@@ -300,7 +300,7 @@ public class TypeCheckingEvaluator {
 					}
 				}
 				System.out.println(typedef.name+"  "+typeenviroment.mName);
-				if(typeenviroment.mMethodSignatures.get(typedef.name).get(parameterTyps)==null){
+				if(typeenviroment.getMethodSignatures(PackageMap).get(typedef.name).get(parameterTyps)==null){
 					throw new TypeLinkingException("cant find constructor");
 				};
 				return typedef;

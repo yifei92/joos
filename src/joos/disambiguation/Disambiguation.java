@@ -13,6 +13,7 @@ import joos.commons.Type;
 import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
+import joos.typechecking.TypeChecker;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
 import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
@@ -133,8 +134,10 @@ public class Disambiguation {
       case POSTFIX_EXPRESSION:
       case LEFT_HAND_SIDE:
       case ARRAY_ACCESS:
-        if (node.children.get(0).token.getType() == TokenType.NAME) {
-          linkName(environment, node.children.get(0), packageMap);
+        ParseTreeNode nameNode = node.children.get(0);
+        if (nameNode.token.getType() == TokenType.NAME) {
+          linkName(environment, nameNode, packageMap);
+          TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
         }
       default:
         break;

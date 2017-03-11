@@ -15,6 +15,45 @@ import java.util.HashSet;
 public class EnvironmentUtils {
 
 	/**
+	 * Returns the class environment that has the declaration for the given declarationNode (of token type FIELD_DECLARATION)
+	 */
+	public static Environment getEnvironmentForFieldDeclaration(ParseTreeNode declarationNode, Map<String, Environment> packageMap) {
+		for (Environment environment : packageMap.values()) {
+			if (environment.mVariableDeclarations != null &&
+					environment.mVariableDeclarations.values().contains(declarationNode)) {
+				return environment;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the method environment for the given method declarationNode
+	 */
+	public static Environment getEnvironmentForMethodDeclaration(ParseTreeNode declarationNode, Map<String, Environment> packageMap) {
+		for (Environment environment : packageMap.values()) {
+			Environment env = searchEnvironmentTreeForMethodEnvironment(declarationNode, environment);
+			if (env != null) {
+				return env;
+			}
+		}
+		return null;
+	}
+
+	private static Environment searchEnvironmentTreeForMethodEnvironment(ParseTreeNode methodDeclaration, Environment environment) {
+		if (environment.mScope == methodDeclaration) {
+			return environment;
+		}
+		for (Environment child : environment.mChildrenEnvironments) {
+			Environment env = searchEnvironmentTreeForMethodEnvironment(methodDeclaration, child);
+			if (env != null) {
+				return env;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Given the root node from the environment tree and the root node of the parse tree and a node that we want to find the
 	 * environment of
 	 * returns the environment that node is part of.
@@ -272,6 +311,16 @@ public class EnvironmentUtils {
 				}
 		}
 		return null;
+	}
+
+	/**
+	 * Move up the given environment tree until we reach a class environment
+	 */
+	public static Environment moveUpToClassEnvironment(Environment environment) {
+		if (environment.mType == EnvironmentType.CLASS) {
+			return environment;
+		}
+		return moveUpToClassEnvironment(environment.mParent);
 	}
 
 	public static List<Environment> getImplementedEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {

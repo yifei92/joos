@@ -332,12 +332,14 @@ Success
 
 Test test/a3/J1_forwardfield1.java
 16
-Success
+Protected J1_forwardfield1 is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_forwardfield2.java
 16
-Success
+Protected J1_forwardfield2 is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_good_dot.java
@@ -352,7 +354,8 @@ Success
 
 Test test/a3/J1_implicitthisforfields.java
 16
-Success
+Protected J1_implicitthisforfields is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_implicitthisformethods.java
@@ -1365,22 +1368,26 @@ Success
 
 Test test/a3/J1_ArrayCast1/
 17
-Success
+Protected A is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_ArrayCast2/
 17
-Success
+Protected A is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_ArrayCast3/
 17
-Success
+Protected A is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_ArrayCast4/
 17
-Success
+Protected A is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_evalMethodInvocationFromArray/
@@ -1428,17 +1435,20 @@ Error
 
 Test test/a3/J1_NamedCast2/
 17
-Success
+Protected A is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_NamedCast3/
 17
-Success
+Protected A is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_NamedCast4/
 17
-Success
+Protected A is protected and cannot be referenced from 
+Error
 
 
 Test test/a3/J1_ProtectedAccess1/

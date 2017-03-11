@@ -8,6 +8,7 @@ import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
 import joos.parser.Parser;
 import joos.scanner.Scanner;
+import joos.typechecking.TypeCheckingEvaluator;
 import joos.typelinking.TypeLinking;
 import joos.weeder.Weeder;
 import joos.environment.Environment;

@@ -134,8 +134,15 @@ public class Disambiguation {
       case POSTFIX_EXPRESSION:
       case LEFT_HAND_SIDE:
       case ARRAY_ACCESS:
-        ParseTreeNode nameNode = node.children.get(0);
-        if (nameNode.token.getType() == TokenType.NAME) {
+      case RETURN:
+        ParseTreeNode nameNode = node.children != null ? node.children.get(0) : null;
+        if (node.token.getType() == TokenType.RETURN) {
+          ParseTreeNode returnNameNode = findNodeWithTokenType(node, TokenType.NAME);
+          if (returnNameNode != null) {
+            nameNode = returnNameNode;
+          }
+        }
+        if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
           linkName(environment, nameNode, packageMap);
           TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
         }

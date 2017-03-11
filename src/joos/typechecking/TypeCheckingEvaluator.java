@@ -114,7 +114,7 @@ public class TypeCheckingEvaluator {
 				if(left.equals("short")&&right.equals("Byte")){
 					return null;
 				}
-				if(left.equals("int")&&right.equals("char")){
+				if(left.equals("Int")&&right.equals("char")){
 					return null;
 				}
 				Environment leftenv=PackageMap.get(left);
@@ -299,6 +299,7 @@ public class TypeCheckingEvaluator {
 						}
 					}
 				}
+				System.out.println(typeenviroment.mName+ " "+parameterTyps.get(0));
 				MethodSignature methodSignature=typeenviroment.findMethodSignature(PackageMap,new MethodSignature(typeenviroment.mName,null,parameterTyps,null,null));
 				if(methodSignature==null) {
 					throw new TypeLinkingException("cant find constructor");

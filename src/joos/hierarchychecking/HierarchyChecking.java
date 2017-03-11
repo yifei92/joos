@@ -52,7 +52,7 @@ public class HierarchyChecking {
         for (Environment childEnvironment : environment.mChildrenEnvironments) {
           EnvironmentType childType = getEnvironmentType(childEnvironment);
           if (childType == EnvironmentType.CONSTRUCTOR) {
-            List<String> constructorSignature = getConstructorSignature(childEnvironment, packageMap);
+            List<String> constructorSignature = childEnvironment.getConstructorSignature(packageMap);
             if (constructorSignatures.contains(constructorSignature)) {
               throw new InvalidSyntaxException("A class must not declare two constructors with the same parameter types.");
             }
@@ -92,18 +92,5 @@ public class HierarchyChecking {
         checkCyclicity(implementedEnvironment, new HashSet(names), packageMap);
       }
     }
-  }
-
-  private static List<String> getConstructorSignature(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    if (getEnvironmentType(environment) != EnvironmentType.CONSTRUCTOR) return null;
-    ParseTreeNode declarator = environment.mScope.children.get(1);
-    List<String> parameterTypes = new ArrayList();
-    if (declarator.children.get(2).children.size() > 0) {
-      for (ParseTreeNode parameter : declarator.children.get(2).children.get(0).children) {
-        if (parameter.token.getType() == TokenType.COMMA) continue;
-        parameterTypes.add(getFullQualifiedNameFromTypeNode(environment, parameter.children.get(0), packageMap));
-      }
-    }
-    return parameterTypes;
   }
 }

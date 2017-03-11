@@ -75,6 +75,23 @@ public class Environment {
 		return mMethodSignatures;
 	}
 
+	public List<String> getConstructorSignature(Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		return sGetConstructorSignature(this, packageMap);
+	}
+
+  private static List<String> sGetConstructorSignature(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (getEnvironmentType(environment) != EnvironmentType.CONSTRUCTOR) return null;
+    ParseTreeNode declarator = environment.mScope.children.get(1);
+    List<String> parameterTypes = new ArrayList();
+    if (declarator.children.get(2).children.size() > 0) {
+      for (ParseTreeNode parameter : declarator.children.get(2).children.get(0).children) {
+        if (parameter.token.getType() == TokenType.COMMA) continue;
+        parameterTypes.add(getFullQualifiedNameFromTypeNode(environment, parameter.children.get(0), packageMap));
+      }
+    }
+    return parameterTypes;
+  }
+
 	private static Map<String, Map<List<String>, MethodSignature>> getAllMethodSignatures(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if (environment.mMethodSignatures != null) return environment.mMethodSignatures;
     EnvironmentType type = getEnvironmentType(environment);

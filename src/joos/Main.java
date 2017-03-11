@@ -55,9 +55,7 @@ public class Main {
 			    System.out.println("");
 			}*/
 			for (String key : treeMap.keySet()) {
-				if (key.contains("J1_5_AmbiguousName_LocalVsField")) {
-					treeMap.get(key).print();
-				}
+				//treeMap.get(key).print();
 			}
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();
@@ -70,8 +68,8 @@ public class Main {
 				TypeChecker.check(environment, packageMap);
 			}
 			for(String key : treeMap.keySet()){
-				TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
-				typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
+				//TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
+				//typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

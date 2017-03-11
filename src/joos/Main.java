@@ -68,8 +68,8 @@ public class Main {
 				TypeChecker.check(environment, packageMap);
 			}
 			for(String key : treeMap.keySet()){
-				//TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
-				//typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
+				TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
+				typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

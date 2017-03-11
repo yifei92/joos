@@ -300,9 +300,11 @@ public class TypeCheckingEvaluator {
 					}
 				}
 				System.out.println(typedef.name+"  "+typeenviroment.mName);
-				if(typeenviroment.getMethodSignatures(PackageMap).get(typedef.name).get(parameterTyps)==null){
+				System.out.println(typedef.name+"  "+parameterTyps.get(0));
+				MethodSignature methodSignature=typeenviroment.findMethodSignature(PackageMap,new MethodSignature(typeenviroment.mName,null,parameterTyps,null,null));
+				if(methodSignature==null) {
 					throw new TypeLinkingException("cant find constructor");
-				};
+				}
 				return typedef;
 			case ARRAY_CREATION_EXPRESSION:
 				return new Type(check(currentnode.children.get(0), PackageMap, current).name+"[]");

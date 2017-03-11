@@ -28,15 +28,15 @@ public class TypeCheckingEvaluator {
 				return new Type("String");
 			case INT:
 			case INTEGER_LITERAL:
-				return new Type("Int");
+				return new Type("int");
 			case SHORT:
-				return new Type("Short");
+				return new Type("short");
 			case BYTE:
-				return new Type("Byte");
+				return new Type("byte");
 			case CHAR:
-				return new Type("Char");
+				return new Type("char");
 			case BOOLEAN:
-				return new Type("Boolean");
+				return new Type("boolean");
 			case THIS:
 				return new Type(current.mName);
 			case INCLUSIVE_OR_EXPRESSION:
@@ -44,7 +44,7 @@ public class TypeCheckingEvaluator {
 			case CONDITIONAL_AND_EXPRESSION:
 			case CONDITIONAL_OR_EXPRESSION:
 				if(currentnode.children.size()>1){
-					if(check(currentnode.children.get(0),PackageMap,current).equals("Boolean") && check(currentnode.children.get(2),PackageMap,current).equals("Boolean") ){
+					if(check(currentnode.children.get(0),PackageMap,current).equals("boolean") && check(currentnode.children.get(2),PackageMap,current).equals("boolean") ){
 						return check(currentnode.children.get(0),PackageMap,current);
 					}
 					else{
@@ -58,7 +58,7 @@ public class TypeCheckingEvaluator {
 			case MULTIPLICATIVE_EXPRESSION:
 				if(currentnode.children.size()>1){
 					if(check(currentnode.children.get(0),PackageMap,current).equals("String")){
-						if(!check(currentnode.children.get(2),PackageMap,current).equals("NULL")){
+						if(!check(currentnode.children.get(2),PackageMap,current).equals("null")){
 							return check(currentnode.children.get(0),PackageMap,current);
 						}
 						else{
@@ -66,7 +66,7 @@ public class TypeCheckingEvaluator {
 						}
 					}
 					if(check(currentnode.children.get(2),PackageMap,current).equals("String")){
-						if(!check(currentnode.children.get(0),PackageMap,current).equals("NULL")){
+						if(!check(currentnode.children.get(0),PackageMap,current).equals("null")){
 							return check(currentnode.children.get(2),PackageMap,current);
 						}
 						else{
@@ -74,7 +74,7 @@ public class TypeCheckingEvaluator {
 						}
 					}
 					if(isnumicType(check(currentnode.children.get(0),PackageMap,current)) && isnumicType(check(currentnode.children.get(2),PackageMap,current))){
-						return new Type("Int");
+						return new Type("int");
 					}
 					else{
 						throw new TypeLinkingException("and expression has non boolean input");
@@ -86,13 +86,13 @@ public class TypeCheckingEvaluator {
 			case IF_THEN_STATEMENT:
 			case WHILE_STATEMENT:
 			case WHILE_STATEMENT_NO_SHORT_IF:
-				if(!check(currentnode.children.get(2),PackageMap,current).equals("Boolean")){
+				if(!check(currentnode.children.get(2),PackageMap,current).equals("boolean")){
 					throw new TypeLinkingException("if condition does not evaluate to boolean");
 				}
 				return check(currentnode.children.get(4),PackageMap,current);
 
 			case IF_THEN_ELSE_STATEMENT:
-				if(!check(currentnode.children.get(2),PackageMap,current).equals("Boolean")){
+				if(!check(currentnode.children.get(2),PackageMap,current).equals("boolean")){
 					throw new TypeLinkingException("if condition does not evaluate to boolean");
 				}
 				check(currentnode.children.get(4),PackageMap,current);
@@ -100,7 +100,7 @@ public class TypeCheckingEvaluator {
 
 			case FOR_STATEMENT:
 			case FOR_STATEMENT_NO_SHORT_IF:
-				if(!check(currentnode.children.get(4),PackageMap,current).equals("Boolean")){
+				if(!check(currentnode.children.get(4),PackageMap,current).equals("boolean")){
 					throw new TypeLinkingException("for condition does not evaluate to boolean");
 				}
 				return check(currentnode.children.get(8),PackageMap,current);
@@ -111,10 +111,10 @@ public class TypeCheckingEvaluator {
 				if(left.equals(right)){
 					return null;
 				}
-				if(left.equals("short")&&right.equals("Byte")){
+				if(left.equals("short")&&right.equals("byte")){
 					return null;
 				}
-				if(left.equals("Int")&&right.equals("char")){
+				if(left.equals("int")&&right.equals("char")){
 					return null;
 				}
 				Environment leftenv=PackageMap.get(left);
@@ -133,7 +133,7 @@ public class TypeCheckingEvaluator {
 					return left;
 				}
 				if(isnumicType(left)&&isnumicType(right)){
-					return new Type("Int");
+					return new Type("int");
 				}
 				 leftenv=PackageMap.get(left);
 				Environment rightenv=PackageMap.get(right);
@@ -201,8 +201,8 @@ public class TypeCheckingEvaluator {
 			case METHOD_INVOCATION:
 				List<String> parameterTyps=new ArrayList<>();
 				if(currentnode.children.size()==4) {
-					if(currentnode.children.get(2).children!=null) {
-						for (ParseTreeNode parameter : currentnode.children.get(2).children.get(0).children) {
+					if(currentnode.children.get(2).children!=null&&currentnode.children.get(2).children.size()>0) {
+						for (ParseTreeNode parameter : currentnode.children.get(2).children) {
 							if (parameter.token.getType() != TokenType.COMMA) {
 								parameterTyps.add(check(parameter, PackageMap, current).name);
 							}
@@ -241,7 +241,7 @@ public class TypeCheckingEvaluator {
 
 			case EXPRESSION_OPT:
 				if(currentnode.children==null){
-					return new Type("Void");
+					return new Type("void");
 				}
 				else{
 					return  check(currentnode.children.get(0),PackageMap,current);
@@ -264,7 +264,7 @@ public class TypeCheckingEvaluator {
 					returntype =check(currentnode.children.get(1).children.get(0),PackageMap,current).name;
 				}
 				else{
-					returntype = "Void";
+					returntype = "void";
 				}
 			return null;
 
@@ -371,7 +371,7 @@ public class TypeCheckingEvaluator {
 	}
 
 	Boolean isnumicType(Type t){
-		if(t.equals("Int")||t.equals("Short")||t.equals("Byte")||t.equals("Char")){
+		if(t.equals("int")||t.equals("short")||t.equals("byte")||t.equals("char")){
 			return true;
 		}
 		else{

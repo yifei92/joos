@@ -47,12 +47,12 @@ public class HierarchyChecking {
           }
           interfaceNames.add(qualifiedName);
         }
-        getAllMethodSignatures(environment, packageMap);
+        environment.getMethodSignatures(packageMap);
         Set<List<String>> constructorSignatures = new HashSet();
         for (Environment childEnvironment : environment.mChildrenEnvironments) {
           EnvironmentType childType = getEnvironmentType(childEnvironment);
           if (childType == EnvironmentType.CONSTRUCTOR) {
-            List<String> constructorSignature = getConstructorSignature(childEnvironment, packageMap);
+            List<String> constructorSignature = childEnvironment.getConstructorSignature(packageMap);
             if (constructorSignatures.contains(constructorSignature)) {
               throw new InvalidSyntaxException("A class must not declare two constructors with the same parameter types.");
             }
@@ -69,7 +69,7 @@ public class HierarchyChecking {
             throw new InvalidSyntaxException("An interface must not extend a class.");
           }
         }
-        getAllMethodSignatures(environment, packageMap);
+        environment.getMethodSignatures(packageMap);
         break;
       }
     }
@@ -92,157 +92,5 @@ public class HierarchyChecking {
         checkCyclicity(implementedEnvironment, new HashSet(names), packageMap);
       }
     }
-  }
-
-  private static Map<String, Map<List<String>, MethodSignature>> getAllMethodSignatures(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    if (environment.mMethodSignatures != null) return environment.mMethodSignatures;
-    EnvironmentType type = getEnvironmentType(environment);
-    switch(type) {
-      case CLASS:
-      case INTERFACE:
-        Map<String, Map<List<String>, MethodSignature>> methodSignatures = new HashMap();
-        for (Environment childEnvironment : environment.mChildrenEnvironments) {
-          EnvironmentType childType = getEnvironmentType(childEnvironment);
-          if (childType == EnvironmentType.METHOD || childType == EnvironmentType.ABSTRACT_METHOD) {
-            MethodSignature methodSignature = getMethodSignature(childEnvironment, packageMap, environment.mName + "." + environment.PackageName);
-            if (methodSignatures.containsKey(methodSignature.name)) {
-              if (methodSignatures.get(methodSignature.name).containsKey(methodSignature.parameterTypes)) {
-                throw new InvalidSyntaxException("A class must not declare two methods with the same signature.");
-              }
-            } else {
-              methodSignatures.put(methodSignature.name, new HashMap());
-            }
-            methodSignatures.get(methodSignature.name).put(methodSignature.parameterTypes, methodSignature);
-          }
-        }
-
-        List<Environment> extendedEnvironments = getExtendedEnvironments(environment, packageMap);
-        if (type == EnvironmentType.INTERFACE && extendedEnvironments.size() == 0) {
-          Map<String, Map<List<String>, MethodSignature>> extendedSignatures = getAllMethodSignatures(packageMap.get("java.lang.Object"), packageMap);
-          for (String name : extendedSignatures.keySet()) {
-            for (List<String> parameterTypes : extendedSignatures.get(name).keySet()) {
-              MethodSignature extendedSignature = extendedSignatures.get(name).get(parameterTypes);
-              extendedSignature.modifiers.add(TokenType.ABSTRACT);
-              if (methodSignatures.containsKey(name)) {
-                if (methodSignatures.get(name).containsKey(parameterTypes)) {
-                  MethodSignature methodSignature = methodSignatures.get(name).get(parameterTypes);
-                  if (!methodSignature.type.equals(extendedSignature.type)) {
-                    throw new InvalidSyntaxException("A class or interface must not contain (declare or inherit) two methods with the same signature but different return types");
-                  }
-                } else {
-                  methodSignatures.get(name).put(parameterTypes, extendedSignatures.get(name).get(parameterTypes));
-                }
-              } else {
-                methodSignatures.put(name, new HashMap());
-                methodSignatures.get(name).put(parameterTypes, extendedSignatures.get(name).get(parameterTypes));
-              }
-            }
-          }
-        }
-
-        for (Environment extendedEnvironment : extendedEnvironments) {
-          Map<String, Map<List<String>, MethodSignature>> extendedSignatures = getAllMethodSignatures(extendedEnvironment, packageMap);
-          for (String name : extendedSignatures.keySet()) {
-            for (List<String> parameterTypes : extendedSignatures.get(name).keySet()) {
-              MethodSignature extendedSignature = extendedSignatures.get(name).get(parameterTypes);
-              if (methodSignatures.containsKey(name)) {
-                if (methodSignatures.get(name).containsKey(parameterTypes)) {
-                  MethodSignature methodSignature = methodSignatures.get(name).get(parameterTypes);
-                  if (!methodSignature.type.equals(extendedSignature.type)) {
-                    throw new InvalidSyntaxException("A class or interface must not contain (declare or inherit) two methods with the same signature but different return types");
-                  }
-                  if (!methodSignature.modifiers.contains(TokenType.STATIC) && extendedSignature.modifiers.contains(TokenType.STATIC)) {
-                    throw new InvalidSyntaxException("A nonstatic method must not replace a static method.");
-                  }
-                  if (methodSignature.modifiers.contains(TokenType.STATIC) && !extendedSignature.modifiers.contains(TokenType.STATIC)) {
-                    throw new InvalidSyntaxException("A static method must not replace a nonstatic method.");
-                  }
-                  if (methodSignature.modifiers.contains(TokenType.PROTECTED) && extendedSignature.modifiers.contains(TokenType.PUBLIC)) {
-                    throw new InvalidSyntaxException("A protected method must not replace a public method.");
-                  }
-                  if (extendedSignature.modifiers.contains(TokenType.FINAL) && !extendedSignature.origin.equals(methodSignature.origin)) {
-                    throw new InvalidSyntaxException("A method must not replace a final method.");
-                  }
-                } else {
-                  methodSignatures.get(name).put(parameterTypes, extendedSignatures.get(name).get(parameterTypes));
-                }
-              } else {
-                methodSignatures.put(name, new HashMap());
-                methodSignatures.get(name).put(parameterTypes, extendedSignatures.get(name).get(parameterTypes));
-              }
-            }
-          }
-        }
-
-        List<Environment> implementedEnvironments = getImplementedEnvironments(environment, packageMap);
-        if (implementedEnvironments != null) {
-          for (Environment implementedEnvironment : implementedEnvironments) {
-            Map<String, Map<List<String>, MethodSignature>> implementedSignatures = getAllMethodSignatures(implementedEnvironment, packageMap);
-            for (String name : implementedSignatures.keySet()) {
-              for (List<String> parameterTypes : implementedSignatures.get(name).keySet()) {
-                MethodSignature implementedSignature = implementedSignatures.get(name).get(parameterTypes);
-                if (methodSignatures.containsKey(name)) {
-                  if (methodSignatures.get(name).containsKey(parameterTypes)) {
-                    MethodSignature methodSignature = methodSignatures.get(name).get(parameterTypes);
-                    if (!methodSignature.type.equals(implementedSignature.type)) {
-                      throw new InvalidSyntaxException("A class or interface must not contain (declare or inherit) two methods with the same signature but different return types");
-                    }
-                    if (methodSignature.modifiers.contains(TokenType.PROTECTED) && implementedSignature.modifiers.contains(TokenType.PUBLIC)) {
-                      throw new InvalidSyntaxException("A protected method must not replace a public method.");
-                    }
-                  } else {
-                    methodSignatures.get(name).put(parameterTypes, implementedSignatures.get(name).get(parameterTypes));
-                  }
-                } else {
-                  methodSignatures.put(name, new HashMap());
-                  methodSignatures.get(name).put(parameterTypes, implementedSignatures.get(name).get(parameterTypes));
-                }
-              }
-            }
-          }
-        }
-
-        if (type == EnvironmentType.CLASS && !getEnvironmentModifiers(environment).contains(TokenType.ABSTRACT)) {
-          for (String name : methodSignatures.keySet()) {
-            for (List<String> parameterTypes : methodSignatures.get(name).keySet()) {
-              MethodSignature methodSignature = methodSignatures.get(name).get(parameterTypes);
-              if (methodSignature.modifiers.contains(TokenType.ABSTRACT)) {
-                throw new InvalidSyntaxException("A class that contains (declares or inherits) any abstract methods must be abstract.");
-              }
-            }
-          }
-        }
-        return methodSignatures;
-    }
-    return null;
-  }
-
-  private static MethodSignature getMethodSignature(Environment environment, Map<String, Environment> packageMap, String origin) throws InvalidSyntaxException {
-    ParseTreeNode declarator = environment.mScope.children.get(0).children.get(2);
-    List<String> parameterTypes = new ArrayList();
-    if (declarator.children.get(2).children.size() > 0) {
-      for (ParseTreeNode parameter : declarator.children.get(2).children.get(0).children) {
-        if (parameter.token.getType() == TokenType.COMMA) continue;
-        parameterTypes.add(getFullQualifiedNameFromTypeNode(environment, parameter.children.get(0), packageMap));
-      }
-    }
-    ParseTreeNode typeNode = environment.mScope.children.get(0).children.get(1);
-    String type = typeNode.token.getType() == TokenType.VOID ? "void" : getFullQualifiedNameFromTypeNode(environment, typeNode, packageMap);
-    Set<TokenType> modifiers = new HashSet(getEnvironmentModifiers(environment));
-    if (getEnvironmentType(environment) == EnvironmentType.ABSTRACT_METHOD) modifiers.add(TokenType.ABSTRACT);
-    return new MethodSignature(environment.mName, type, parameterTypes, modifiers, origin);
-  }
-
-  private static List<String> getConstructorSignature(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    if (getEnvironmentType(environment) != EnvironmentType.CONSTRUCTOR) return null;
-    ParseTreeNode declarator = environment.mScope.children.get(1);
-    List<String> parameterTypes = new ArrayList();
-    if (declarator.children.get(2).children.size() > 0) {
-      for (ParseTreeNode parameter : declarator.children.get(2).children.get(0).children) {
-        if (parameter.token.getType() == TokenType.COMMA) continue;
-        parameterTypes.add(getFullQualifiedNameFromTypeNode(environment, parameter.children.get(0), packageMap));
-      }
-    }
-    return parameterTypes;
   }
 }

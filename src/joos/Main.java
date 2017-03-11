@@ -55,9 +55,7 @@ public class Main {
 			    System.out.println("");
 			}*/
 			for (String key : treeMap.keySet()) {
-				if (key.contains("J1_5_AmbiguousName_LocalVsField")) {
-					treeMap.get(key).print();
-				}
+				//treeMap.get(key).print();
 			}
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();

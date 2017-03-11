@@ -1,5 +1,6 @@
 package joos.environment;
 
+import java.util.HashMap;
 import joos.exceptions.InvalidSyntaxException;
 import joos.commons.ParseTreeNode;
 import joos.commons.TokenType;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import joos.commons.MethodSignature;
 
 public class EnvironmentUtils {
 

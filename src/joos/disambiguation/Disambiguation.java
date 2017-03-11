@@ -134,7 +134,7 @@ public class Disambiguation {
       case POSTFIX_EXPRESSION:
       case LEFT_HAND_SIDE:
       case ARRAY_ACCESS:
-      case RETURN:
+      case RETURN_STATEMENT:
         ParseTreeNode nameNode = node.children != null ? node.children.get(0) : null;
         if (node.token.getType() == TokenType.RETURN) {
           ParseTreeNode returnNameNode = findNodeWithTokenType(node, TokenType.NAME);

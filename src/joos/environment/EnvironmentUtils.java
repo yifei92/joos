@@ -201,7 +201,7 @@ public class EnvironmentUtils {
 		}
 		return null;
 	}
-	
+
 	public static ParseTreeNode findImmediateNodeWithTokenType(final ParseTreeNode node, final TokenType type) {
 		if (node.token.getType() == type) return node;
 		if (node.children != null) {
@@ -274,6 +274,7 @@ public class EnvironmentUtils {
 			case CLASS:
 				if (environment.mScope.children.get(3).children.size() == 0) {
 					if (!(environment.PackageName + "." + environment.mName).equals("java.lang.Object")) {
+						if (!packageMap.containsKey("java.lang.Object")) throw new InvalidSyntaxException("java.lang.Object not found!");
 						list.add(packageMap.get("java.lang.Object"));
 					}
 					environment.mExtendedEnvironments = list;

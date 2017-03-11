@@ -6,7 +6,7 @@ public class J1_5_AmbiguousName_FieldVsType {
 	public J1_5_AmbiguousName_FieldVsType() {}
 	
 	public int method() {
-		return J1_5_AmbiguousName_FieldVsType.intValue(); // <- should disambiguate to the field and not the type.
+		return J1_5_AmbiguousName_FieldVsType.intValue();
 	}
 	
 	public static int intValue() {

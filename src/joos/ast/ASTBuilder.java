@@ -43,10 +43,10 @@ public class ASTBuilder {
 			case SHIFT_EXPRESSION:
 			case UNARY_EXPRESSION:
 			case UNARY_EXPRESSION_NOT_PLUS_MINUS:
-			//case POSTFIX_EXPRESSION:
+			case POSTFIX_EXPRESSION:
 				if (parseTree.children.size() == 1) {
 					ParseTreeNode current = parseTree.children.get(0);
-					while ((current.children.size() == 1) && current.children.get(0).children!=null) {
+					while ((current.children.size() == 1) && current.children.get(0).children!=null&&current.token.getType()!=TokenType.NAME ) {
 						current=current.children.get(0);
 					}
 					parseTree.children.clear();
@@ -188,6 +188,9 @@ public class ASTBuilder {
 						current=current.children.get(0).children.get(0);
 					}
 					parseTree.children.add(0,current.children.get(0).children.get(0).children.get(0));
+				}
+				if(parseTree.children.get(0).token.getType()==TokenType.QUALIFIED_NAME||parseTree.token.getType()==TokenType.QUALIFIED_NAME){
+					System.out.println("this should not happen");
 				}
 			default:
 		}

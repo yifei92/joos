@@ -30,6 +30,7 @@ public class Environment {
 	public EnvironmentType mType;
 	public Map<String, Map<List<String>, MethodSignature>> mMethodSignatures;
 
+
   public List<String> mSingleImports;
 	public List<String> mOnDemandeImports;
 

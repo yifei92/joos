@@ -8,6 +8,7 @@ import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
 import joos.parser.Parser;
 import joos.scanner.Scanner;
+import joos.typechecking.TypeCheckingEvaluator;
 import joos.typelinking.TypeLinking;
 import joos.weeder.Weeder;
 import joos.environment.Environment;
@@ -67,6 +68,10 @@ public class Main {
 			}
 			for (Environment environment : packageMap.values()) {
 				TypeChecker.check(environment, packageMap);
+			}
+			for(String key : treeMap.keySet()){
+				TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
+				typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

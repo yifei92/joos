@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static joos.environment.EnvironmentUtils.findEvironment;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeNode;
 
 /**
@@ -19,9 +20,10 @@ import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeNode;
  */
 public class TypeCheckingEvaluator {
 	private String returntype;
+	private ParseTreeNode root;
 
-	public Type check(ParseTreeNode root,Map<String, Environment> PackageMap,Environment current) throws TypeLinkingException {
-		switch (root.token.getType()) {
+	public Type check(ParseTreeNode currentnode,Map<String, Environment> PackageMap,Environment current) throws TypeLinkingException {
+		switch (currentnode.token.getType()) {
 			case STRING_LITERAL:
 				return new Type("String");
 			case INT:
@@ -41,37 +43,37 @@ public class TypeCheckingEvaluator {
 			case AND_EXPRESSION:
 			case CONDITIONAL_AND_EXPRESSION:
 			case CONDITIONAL_OR_EXPRESSION:
-				if(root.children.size()>1){
-					if(check(root.children.get(0),PackageMap,current).equals("Boolean") && check(root.children.get(2),PackageMap,current).equals("Boolean") ){
-						return check(root.children.get(0),PackageMap,current);
+				if(currentnode.children.size()>1){
+					if(check(currentnode.children.get(0),PackageMap,current).equals("Boolean") && check(currentnode.children.get(2),PackageMap,current).equals("Boolean") ){
+						return check(currentnode.children.get(0),PackageMap,current);
 					}
 					else{
 						throw new TypeLinkingException("and expression has non boolean input");
 					}
 				}
 				else {
-					return check(root.children.get(0),PackageMap,current);
+					return check(currentnode.children.get(0),PackageMap,current);
 				}
 			case ADDITIVE_EXPRESSION:
 			case MULTIPLICATIVE_EXPRESSION:
-				if(root.children.size()>1){
-					if(check(root.children.get(0),PackageMap,current).equals("String")){
-						if(!check(root.children.get(2),PackageMap,current).equals("NULL")){
-							return check(root.children.get(0),PackageMap,current);
+				if(currentnode.children.size()>1){
+					if(check(currentnode.children.get(0),PackageMap,current).equals("String")){
+						if(!check(currentnode.children.get(2),PackageMap,current).equals("NULL")){
+							return check(currentnode.children.get(0),PackageMap,current);
 						}
 						else{
 							throw new TypeLinkingException("fail string concation");
 						}
 					}
-					if(check(root.children.get(2),PackageMap,current).equals("String")){
-						if(!check(root.children.get(0),PackageMap,current).equals("NULL")){
-							return check(root.children.get(2),PackageMap,current);
+					if(check(currentnode.children.get(2),PackageMap,current).equals("String")){
+						if(!check(currentnode.children.get(0),PackageMap,current).equals("NULL")){
+							return check(currentnode.children.get(2),PackageMap,current);
 						}
 						else{
 							throw new TypeLinkingException("fail string concation");
 						}
 					}
-					if(isnumicType(check(root.children.get(0),PackageMap,current)) && isnumicType(check(root.children.get(2),PackageMap,current))){
+					if(isnumicType(check(currentnode.children.get(0),PackageMap,current)) && isnumicType(check(currentnode.children.get(2),PackageMap,current))){
 						return new Type("Int");
 					}
 					else{
@@ -79,33 +81,33 @@ public class TypeCheckingEvaluator {
 					}
 				}
 				else {
-					return check(root.children.get(0),PackageMap,current);
+					return check(currentnode.children.get(0),PackageMap,current);
 				}
 			case IF_THEN_STATEMENT:
 			case WHILE_STATEMENT:
 			case WHILE_STATEMENT_NO_SHORT_IF:
-				if(!check(root.children.get(2),PackageMap,current).equals("Boolean")){
+				if(!check(currentnode.children.get(2),PackageMap,current).equals("Boolean")){
 					throw new TypeLinkingException("if condition does not evaluate to boolean");
 				}
-				return check(root.children.get(4),PackageMap,current);
+				return check(currentnode.children.get(4),PackageMap,current);
 
 			case IF_THEN_ELSE_STATEMENT:
-				if(!check(root.children.get(2),PackageMap,current).equals("Boolean")){
+				if(!check(currentnode.children.get(2),PackageMap,current).equals("Boolean")){
 					throw new TypeLinkingException("if condition does not evaluate to boolean");
 				}
-				check(root.children.get(4),PackageMap,current);
-				return check(root.children.get(4),PackageMap,current);
+				check(currentnode.children.get(4),PackageMap,current);
+				return check(currentnode.children.get(4),PackageMap,current);
 
 			case FOR_STATEMENT:
 			case FOR_STATEMENT_NO_SHORT_IF:
-				if(!check(root.children.get(4),PackageMap,current).equals("Boolean")){
+				if(!check(currentnode.children.get(4),PackageMap,current).equals("Boolean")){
 					throw new TypeLinkingException("for condition does not evaluate to boolean");
 				}
-				return check(root.children.get(8),PackageMap,current);
+				return check(currentnode.children.get(8),PackageMap,current);
 
 			case ASSIGNMENT:
-				Type left=check(root.children.get(0),PackageMap,current);
-				Type right=check(root.children.get(2),PackageMap,current);
+				Type left=check(currentnode.children.get(0),PackageMap,current);
+				Type right=check(currentnode.children.get(2),PackageMap,current);
 				if(left.equals(right)){
 					return null;
 				}
@@ -125,8 +127,8 @@ public class TypeCheckingEvaluator {
 				}
 				return null;
 			case CAST_EXPRESSION:
-				left=check(root.children.get(0),PackageMap,current);
-				right=check(root.children.get(2),PackageMap,current);
+				left=check(currentnode.children.get(0),PackageMap,current);
+				right=check(currentnode.children.get(2),PackageMap,current);
 				if(left.equals(right)){
 					return left;
 				}
@@ -144,8 +146,8 @@ public class TypeCheckingEvaluator {
 				}
 				return left;
 			case EQUALITY_EXPRESSION:
-				left=check(root.children.get(0),PackageMap,current);
-				right=check(root.children.get(2),PackageMap,current);
+				left=check(currentnode.children.get(0),PackageMap,current);
+				right=check(currentnode.children.get(2),PackageMap,current);
 				if(left.equals(right)){
 					return new Type("boolean");
 				}
@@ -161,93 +163,105 @@ public class TypeCheckingEvaluator {
 				return new Type("boolean");
 
 			case RELATIONAL_EXPRESSION:
-				if(root.children.size()>1){
-					if(root.children.get(1).token.getType()==TokenType.INSTANCEOF){
+				if(currentnode.children.size()>1){
+					if(currentnode.children.get(1).token.getType()==TokenType.INSTANCEOF){
 						return new Type("boolean");
 					}
-					if(isnumicType(check(root.children.get(0),PackageMap,current))&& isnumicType(check(root.children.get(2),PackageMap,current)) ){
-						return check(root.children.get(0),PackageMap,current);
+					if(isnumicType(check(currentnode.children.get(0),PackageMap,current))&& isnumicType(check(currentnode.children.get(2),PackageMap,current)) ){
+						return check(currentnode.children.get(0),PackageMap,current);
 					}
 					else{
-						throw new TypeLinkingException("comparison expression has non numeric input "+current.mName);
+						//throw new TypeLinkingException("comparison expression has non numeric input "+current.mName);
+						return null;
 					}
 				}
 				else {
-					return check(root.children.get(0),PackageMap,current);
+					return check(currentnode.children.get(0),PackageMap,current);
 				}
 
 			case RETURN_STATEMENT:
-				if(!check(root.children.get(1),PackageMap,current).equals(returntype)){
+				if(!check(currentnode.children.get(1),PackageMap,current).equals(returntype)){
 					throw new TypeLinkingException("return type does match method declation");
 				}
 			return null;
 
 			case NAME:
-				return new Type(fullnameFromnamenode(root));
+				/*
+				String fullname=fullnameFromnamenode(currentnode);
+				Environment local=findEvironment(current,root,currentnode);
+				if(local.mVariableToType.get(fullname)!=null) {
+					return local.mVariableToType.get(fullname);
+				}
+				*/
+				if(currentnode.type==null){
+					System.out.println("NAME type null");
+				}
+				System.out.print(currentnode.type);
+				return currentnode.type;
 			case METHOD_INVOCATION:
 				List<String> parameterTyps=new ArrayList<>();
-				if(root.children.size()==4) {
-					if(root.children.get(2).children!=null) {
-						for (ParseTreeNode parameter : root.children.get(2).children.get(0).children) {
+				if(currentnode.children.size()==4) {
+					if(currentnode.children.get(2).children!=null) {
+						for (ParseTreeNode parameter : currentnode.children.get(2).children.get(0).children) {
 							if (parameter.token.getType() != TokenType.COMMA) {
 								parameterTyps.add(check(parameter, PackageMap, current).name);
 							}
 						}
 					}
-					String Fullname=fullnameFromnamenode(root.children.get(0));
+					String Fullname=fullnameFromnamenode(currentnode.children.get(0));
 					String classname=Fullname.substring(0,Fullname.lastIndexOf(".")-1);
 					String methodname=Fullname.substring(Fullname.lastIndexOf(".")-1, Fullname.length());
 					MethodSignature m=PackageMap.get(classname).mMethodSignatures.get(methodname).get(parameterTyps);
 					return new Type(m.type);
 				}
-				if(root.children.get(4).children!=null)
-					for (ParseTreeNode parameter:root.children.get(4).children.get(0).children){
+				if(currentnode.children.get(4).children!=null)
+					for (ParseTreeNode parameter:currentnode.children.get(4).children.get(0).children){
 						if(parameter.token.getType()!=TokenType.COMMA) {
 							parameterTyps.add(check(parameter, PackageMap,current).name);
 						}
 					}
-				String methodname=((TerminalToken)root.children.get(2).token).getRawValue();
-				MethodSignature m=PackageMap.get(check(root.children.get(0), PackageMap,current).name).mMethodSignatures.get(methodname).get(parameterTyps);
+				String methodname=((TerminalToken)currentnode.children.get(2).token).getRawValue();
+				MethodSignature m=PackageMap.get(check(currentnode.children.get(0), PackageMap,current).name).mMethodSignatures.get(methodname).get(parameterTyps);
 				return new Type(m.type);
 
 			case ARRAY_ACCESS:
-				if(!isnumicType(check(root.children.get(2),PackageMap,current))){
+				if(!isnumicType(check(currentnode.children.get(2),PackageMap,current))){
 					throw new TypeLinkingException("index must be numeric");
 				}
-				return check(root.children.get(0),PackageMap,current);
+				return check(currentnode.children.get(0),PackageMap,current);
 
 			case FIELD_ACCESS:
-				Environment Typecalled=PackageMap.get(check(root.children.get(0),PackageMap,current).name);
-				return Typecalled.mVariableToType.get(((TerminalToken)root.children.get(1).token).getRawValue());
+				Environment Typecalled=PackageMap.get(check(currentnode.children.get(0),PackageMap,current).name);
+				return Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(1).token).getRawValue());
 			case PRIMARY_NO_NEW_ARRAY:
-				if (root.children.size()>1){
-					return  check(root.children.get(1),PackageMap,current);
+				if (currentnode.children.size()>1){
+					return  check(currentnode.children.get(1),PackageMap,current);
 				}
-				return  check(root.children.get(0),PackageMap,current);
+				return  check(currentnode.children.get(0),PackageMap,current);
 
 			case EXPRESSION_OPT:
-				if(root.children==null){
+				if(currentnode.children==null){
 					return new Type("Void");
 				}
 				else{
-					return  check(root.children.get(0),PackageMap,current);
+					return  check(currentnode.children.get(0),PackageMap,current);
 				}
 			case CLASS_BODY_DECLARATIONS:
 			case BLOCK_STATEMENTS:
-				for(ParseTreeNode child: root.children){
+				for(ParseTreeNode child: currentnode.children){
 					check(child,PackageMap,current);
 				}
 				return null;
 
 			case BLOCK_STATEMENTS_OPT:
 			case INTERFACE_MEMBER_DECLARATIONS_OPT:
-				if(root.children!=null&&root.children.size()>0){
-					return check(root.children.get(0),PackageMap,current);
+				if(currentnode.children!=null&&currentnode.children.size()>0){
+					return check(currentnode.children.get(0),PackageMap,current);
 				}
 				return null;
 			case METHOD_HEADER:
-				if(root.children.get(1).token.getType()== TokenType.TYPE){
-					returntype =check(root.children.get(1).children.get(0),PackageMap,current).name;
+				if(currentnode.children.get(1).token.getType()== TokenType.TYPE){
+					returntype =check(currentnode.children.get(1).children.get(0),PackageMap,current).name;
 				}
 				else{
 					returntype = "Void";
@@ -255,55 +269,57 @@ public class TypeCheckingEvaluator {
 			return null;
 
 			case LOCAL_VARIABLE_DECLARATION:
-				Type Typedef=check(root.children.get(0),PackageMap,current);
-				Type initilization=check(root.children.get(1),PackageMap,current);
+				Type Typedef=check(currentnode.children.get(0),PackageMap,current);
+				Type initilization=check(currentnode.children.get(1),PackageMap,current);
 				if(!Typedef.equals(initilization)){
 					throw new TypeLinkingException("inilize with wrong type");
 				}
 				return null;
 			case FIELD_DECLARATION:
-				Typedef=check(root.children.get(1),PackageMap,current);
-				initilization=check(root.children.get(2),PackageMap,current);
+				Typedef=check(currentnode.children.get(1),PackageMap,current);
+				initilization=check(currentnode.children.get(2),PackageMap,current);
 				if(!Typedef.equals(initilization)){
 					throw new TypeLinkingException("inilize with wrong type");
 				}
 				return null;
 			case CLASS_INSTANCE_CREATION_EXPRESSION:
-				Type typedef=check(root.children.get(1),PackageMap,current);
+				Type typedef=check(currentnode.children.get(1),PackageMap,current);
+
 				Environment typeenviroment;
 				try {
-					typeenviroment=getEnvironmentFromTypeNode(current,root.children.get(1).children.get(0),PackageMap);
+					typeenviroment=getEnvironmentFromTypeNode(current,currentnode.children.get(1).children.get(0),PackageMap);
 				} catch (InvalidSyntaxException e) {
 					throw new TypeLinkingException("cannot find constractor");
 				}
 				parameterTyps =new ArrayList<>();
-				if(root.children.get(3).children!=null) {
-					for (ParseTreeNode parameter : root.children.get(3).children.get(0).children) {
+				if(currentnode.children.get(3).children!=null) {
+					for (ParseTreeNode parameter : currentnode.children.get(3).children.get(0).children) {
 						if (parameter.token.getType() != TokenType.COMMA) {
 							parameterTyps.add(check(parameter, PackageMap, current).name);
 						}
 					}
 				}
+				System.out.println(typedef.name+"  "+typeenviroment.mName);
 				if(typeenviroment.mMethodSignatures.get(typedef.name).get(parameterTyps)==null){
 					throw new TypeLinkingException("cant find constructor");
 				};
 				return typedef;
 			case ARRAY_CREATION_EXPRESSION:
-				return new Type(check(root.children.get(0), PackageMap, current).name+"[]");
+				return new Type(check(currentnode.children.get(0), PackageMap, current).name+"[]");
 			case METHOD_DECLARATION:
-				check(root.children.get(0),PackageMap,current);
-				return check(root.children.get(1),PackageMap,current);
+				check(currentnode.children.get(0),PackageMap,current);
+				return check(currentnode.children.get(1),PackageMap,current);
 			case SEMICOLON:
 			case MODIFIERS_OPT:
-				if(root.children.get(100).equals(null))
+				if(currentnode.children.get(100).equals(null))
 				return null;
 			case METHOD_BODY:
-					if (root.children.get(0).token.getType()==TokenType.BLOCK){
-						return check(root.children.get(0),PackageMap,current);
+					if (currentnode.children.get(0).token.getType()==TokenType.BLOCK){
+						return check(currentnode.children.get(0),PackageMap,current);
 					}
 				return null;
 			case CLASS_OR_INTERFACE_TYPE:
-				return root.type;
+				return currentnode.type;
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
 			case TYPE:
@@ -331,22 +347,24 @@ public class TypeCheckingEvaluator {
 			case TYPE_DECLARATIONS:
 			case CLASS_BODY_DECLARATIONS_OPT:
 			case TYPE_DECLARATION:    //weird semi Colum case
-				return check(root.children.get(0),PackageMap,current);
-			case COMPILATION_UNIT:
+				return check(currentnode.children.get(0),PackageMap,current);
 			case CONSTRUCTOR_DECLARATION:
 			case VARIABLE_DECLARATOR:
-				return check(root.children.get(2),PackageMap,current);
+				return check(currentnode.children.get(2),PackageMap,current);
 			case CLASS_DECLARATION:
-				return check(root.children.get(5),PackageMap,current);
+				return check(currentnode.children.get(5),PackageMap,current);
 			case INTERFACE_DECLARATION:
-				return check(root.children.get(4),PackageMap,current);
+				return check(currentnode.children.get(4),PackageMap,current);
 			case BLOCK:
 			case CLASS_BODY:
 			case CONSTRUCTOR_BODY:
 			case INTERFACE_BODY:
-				return check(root.children.get(1),PackageMap,current);
+				return check(currentnode.children.get(1),PackageMap,current);
+			case COMPILATION_UNIT:
+				root=currentnode;
+				return check(currentnode.children.get(2),PackageMap,current);
 			default:
-				System.out.println(root.token.getType());
+				System.out.println(currentnode.token.getType());
 				return null;
 		}
 	}

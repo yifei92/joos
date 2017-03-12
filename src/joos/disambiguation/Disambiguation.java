@@ -98,16 +98,16 @@ public class Disambiguation {
           }
           break;
         } else {
-          String name = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
-          String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0).children.get(1),packageMap);
-          Type type = new Type(typeName);
-          type.decl = node.children.get(0);
-          environment.mVariableToType.put(name, type);
+          // String name = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
+          // String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0).children.get(1),packageMap);
+          // Type type = new Type(typeName);
+          // type.decl = node.children.get(0);
+          // environment.mVariableToType.put(name, type);
           return;
         }
       }
       case FIELD_DECLARATION: {
-        String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0),packageMap);
+        String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(1),packageMap);
         Type type = new Type(typeName);
         type.decl = node;
         for (ParseTreeNode child : node.children.get(2).children) {

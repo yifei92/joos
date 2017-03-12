@@ -159,6 +159,7 @@ public class Disambiguation {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             linkName(environment, nameNode, packageMap);
+            System.out.println(nameNode.type.name);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
           }
         }
@@ -186,6 +187,7 @@ public class Disambiguation {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             linkName(environment, nameNode, packageMap);
+            System.out.println(nameNode.type.name);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
           }
         }

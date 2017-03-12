@@ -68,6 +68,9 @@ public class Environment {
 		mChildrenEnvironments = new ArrayList<>();
 	}
 
+  /**
+   * Given a field name returns whether or not this field in this environment is static
+   */
   public boolean isFieldStatic(String name) {
     ParseTreeNode variableDeclaration = mVariableDeclarations.get(name);
     if (variableDeclaration == null) {

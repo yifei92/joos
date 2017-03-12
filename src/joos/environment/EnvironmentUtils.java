@@ -443,7 +443,10 @@ public class EnvironmentUtils {
 	}
 
 	public static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-		return getFullQualifiedNameFromTypeNode(environment, name, packageMap, new Ref(), new Ref());
+		Ref<Boolean> isArray = new Ref();
+		String q = getFullQualifiedNameFromTypeNode(environment, name, packageMap, new Ref(), isArray);
+		if (isArray.ref) return q + "[]";
+		return q;
 	}
 
 

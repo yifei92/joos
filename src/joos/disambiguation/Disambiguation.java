@@ -159,10 +159,11 @@ public class Disambiguation {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             linkName(environment, nameNode, packageMap);
-            System.out.println(nameNode.type.name);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
+            return;
           }
         }
+        break;
       case POSTFIX_EXPRESSION:
       case LEFT_HAND_SIDE:
       case EXPRESSION:
@@ -180,6 +181,7 @@ public class Disambiguation {
       case ADDITIVE_EXPRESSION:
       case MULTIPLICATIVE_EXPRESSION:
       case UNARY_EXPRESSION_NOT_PLUS_MINUS:
+      case UNARY_EXPRESSION:
       case ARGUMENT_LIST:
       case PRIMARY:
       case PRIMARY_NO_NEW_ARRAY:
@@ -187,8 +189,8 @@ public class Disambiguation {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             linkName(environment, nameNode, packageMap);
-            System.out.println(nameNode.type.name);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
+            return;
           }
         }
         break;

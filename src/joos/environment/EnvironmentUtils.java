@@ -1,18 +1,15 @@
 package joos.environment;
 
 import java.util.HashMap;
+
+import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
-import joos.commons.ParseTreeNode;
-import joos.commons.TokenType;
-import joos.commons.TerminalToken;
-import joos.commons.Token;
 import joos.environment.Environment.EnvironmentType;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-import joos.commons.MethodSignature;
 
 public class EnvironmentUtils {
 
@@ -457,4 +454,27 @@ public class EnvironmentUtils {
 	public static Environment getEnvironmentFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return packageMap.get(getFullQualifiedNameFromTypeNode(environment, name, packageMap));
 	}
+
+	/**
+	 * Looks in the given environment for whether or not the given variable name is declared in it.
+	 * If the name does not exist in the current environment we recursively search all parent environments.
+	 * If no name is found in this environment or the parent environments null is returned.
+	 */
+	public static ParseTreeNode containsVariableNameDeclaration(Environment environment, String variableName) {
+		ParseTreeNode variableNameNode = environment.mVariableDeclarations != null ? environment.mVariableDeclarations.get(variableName) : null;
+		if (variableNameNode == null && environment.mParent != null) {
+			variableNameNode = containsVariableNameDeclaration(environment.mParent, variableName);
+		}
+		return variableNameNode;
+	}
+
+	public static Type getVaribaleType(Environment environment, String variableName){
+		Type variableType = environment.mVariableToType != null ? environment.mVariableToType.get(variableName) : null;
+		if (variableType == null && environment.mParent != null) {
+			variableType = getVaribaleType(environment.mParent, variableName);
+		}
+		return variableType;
+	}
+
+
 }

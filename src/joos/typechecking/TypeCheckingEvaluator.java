@@ -211,7 +211,7 @@ public class TypeCheckingEvaluator {
 				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("Void"))){
 					return null;
 				}
-				throw new TypeLinkingException("return type does match method declation "+ret.name+ " "+ returntype);
+				throw new TypeLinkingException("return type does match method declation "+ret.name+ " return type "+ returntype);
 
 			case NAME:
 				if(currentnode.type==null){
@@ -272,12 +272,14 @@ public class TypeCheckingEvaluator {
 				if(!isnumicType(check(currentnode.children.get(2),PackageMap,rootenv))){
 					throw new TypeLinkingException("index must be numeric");
 				}
-				return check(currentnode.children.get(0),PackageMap,rootenv);
+				Type arraytype=check(currentnode.children.get(0),PackageMap,rootenv);
+				return new Type(arraytype.name.substring(0,arraytype.name.length()-2));
 
 			case FIELD_ACCESS:
 				primary=check(currentnode.children.get(0),PackageMap,rootenv);
 				Environment Typecalled=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap);
-				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(1).token).getRawValue());
+				System.out.println(Typecalled.mName+" "+((TerminalToken)currentnode.children.get(2).token).getRawValue());
+				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(2).token).getRawValue());
 				if(field==null){
 					throw new TypeLinkingException("unable to find field");
 				}
@@ -311,6 +313,8 @@ public class TypeCheckingEvaluator {
 			case METHOD_HEADER:
 				if(currentnode.children.get(1).token.getType()== TokenType.TYPE){
 					returntype =check(currentnode.children.get(1).children.get(0),PackageMap,rootenv).name;
+					System.out.println("populate return "+returntype);
+					System.out.println(((TerminalToken)currentnode.children.get(2).children.get(0).token).getRawValue());
 				}
 				else{
 					returntype = "void";
@@ -344,7 +348,7 @@ public class TypeCheckingEvaluator {
 				try {
 					typeenviroment=getEnvironmentFromTypeNode(rootenv,currentnode.children.get(1).children.get(0),PackageMap);
 				} catch (InvalidSyntaxException e) {
-					throw new TypeLinkingException("cannot find constractor");
+					throw new TypeLinkingException("cannot find constractor 1");
 				}
 				parameterTyps =new ArrayList<>();
 				if(currentnode.children.get(3).children!=null&&currentnode.children.get(3).children.size()>0) {
@@ -354,9 +358,12 @@ public class TypeCheckingEvaluator {
 						}
 					}
 				}
-				MethodSignature methodSignature=typeenviroment.findMethodSignature(PackageMap,new MethodSignature(typeenviroment.mName,null,parameterTyps,null,null));
+				MethodSignature methodSignature=typeenviroment.getConstructorSignature(PackageMap,new MethodSignature(typeenviroment.mName,null,parameterTyps,null,null));
+				if(typeenviroment.mName.equals("String")) {
+					System.out.println("find constructor " + typeenviroment.mMethodSignatures.keySet());
+				}
 				if(methodSignature==null) {
-					throw new TypeLinkingException("cant find constructor");
+					throw new TypeLinkingException("cant find constructor 2");
 				}
 				return typedef;
 			case UNARY_EXPRESSION_NOT_PLUS_MINUS:
@@ -399,6 +406,7 @@ public class TypeCheckingEvaluator {
 
 			case ARRAY_TYPE:
 				Type element=check(currentnode.children.get(0), PackageMap, rootenv);
+				System.out.println("array type "+element.name);
 				return new Type(element.name+"[]");
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:

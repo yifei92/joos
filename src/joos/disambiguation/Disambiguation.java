@@ -10,6 +10,7 @@ import joos.commons.TokenType;
 import joos.commons.Type;
 import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
+import joos.environment.EnvironmentUtils;
 import joos.exceptions.InvalidSyntaxException;
 import joos.typechecking.TypeChecker;
 import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
@@ -21,14 +22,14 @@ import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
 
 public class Disambiguation {
 
-  public static void linkAllTypes(Environment environment) throws InvalidSyntaxException {
+  public static void linkAllTypes(Environment environment,Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if (environment.mVariableToType == null) {
       environment.mVariableToType = new HashMap();
-      linkTypes(environment, environment.mScope);
+      linkTypes(environment, environment.mScope, packageMap);
     }
     if (environment.mChildrenEnvironments != null) {
       for (Environment child : environment.mChildrenEnvironments) {
-        linkAllTypes(child);
+        linkAllTypes(child,packageMap);
       }
     }
   }
@@ -41,7 +42,7 @@ public class Disambiguation {
     }
   }
 
-  static void linkTypes(Environment environment, ParseTreeNode node) {
+  static void linkTypes(Environment environment, ParseTreeNode node,Map<String, Environment> packageMap) throws InvalidSyntaxException {
     switch (node.token.getType()) {
 			case BLOCK: // fall through
       case ABSTRACT_METHOD_DECLARATION:
@@ -59,7 +60,7 @@ public class Disambiguation {
         if (node.children != null) {
           for (ParseTreeNode child : node.children) {
             if (child.token.getType() != TokenType.STATEMENT) {
-              linkTypes(environment, child);
+              linkTypes(environment, child,packageMap);
             }
           }
         }
@@ -71,7 +72,7 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String typeName = getFullQualifiedNameFromTypeNode(param.children.get(0));
+              String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,param.children.get(0),packageMap);
               Type type = new Type(typeName);
               type.decl = param;
               environment.mVariableToType.put(name, type);
@@ -89,7 +90,7 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String typeName = getFullQualifiedNameFromTypeNode(param.children.get(0));
+              String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,param.children.get(0),packageMap);
               Type type = new Type(typeName);
               type.decl = param;
               environment.mVariableToType.put(name, type);
@@ -98,7 +99,7 @@ public class Disambiguation {
           break;
         } else {
           String name = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
-          String typeName = getFullQualifiedNameFromTypeNode(node.children.get(0).children.get(1));
+          String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0).children.get(1),packageMap);
           Type type = new Type(typeName);
           type.decl = node.children.get(0);
           environment.mVariableToType.put(name, type);
@@ -106,7 +107,7 @@ public class Disambiguation {
         }
       }
       case FIELD_DECLARATION: {
-        String typeName = getFullQualifiedNameFromTypeNode(node.children.get(1));
+        String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0),packageMap);
         Type type = new Type(typeName);
         type.decl = node;
         for (ParseTreeNode child : node.children.get(2).children) {
@@ -116,7 +117,7 @@ public class Disambiguation {
         return;
       }
       case LOCAL_VARIABLE_DECLARATION: {
-        String typeName = getFullQualifiedNameFromTypeNode(node.children.get(0));
+        String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0),packageMap);
         Type type = new Type(typeName);
         type.decl = node;
         for (ParseTreeNode child : node.children.get(1).children) {
@@ -130,7 +131,7 @@ public class Disambiguation {
     }
     if (node.children != null) {
       for (ParseTreeNode child : node.children) {
-        linkTypes(environment, child);
+        linkTypes(environment, child,packageMap);
       }
     }
   }

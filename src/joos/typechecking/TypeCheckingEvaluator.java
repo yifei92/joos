@@ -39,9 +39,13 @@ public class TypeCheckingEvaluator {
 			case CHAR_LITERAL_WITH_QUOTES:
 				return new Type("char");
 			case BOOLEAN:
+			case BOOLEAN_LITERAL:
 				return new Type("boolean");
+			case NULL_LITERAL:
+				return new Type("null");
 			case THIS:
-				return new Type(rootenv.mName);
+				System.out.println(rootenv.PackageName);
+				return new Type(rootenv.PackageName+"."+rootenv.mName);
 			case INCLUSIVE_OR_EXPRESSION:
 			case AND_EXPRESSION:
 			case CONDITIONAL_AND_EXPRESSION:
@@ -121,13 +125,9 @@ public class TypeCheckingEvaluator {
 				if(left.equals("int")&&right.equals("char")){
 					return null;
 				}
-				Environment leftenv=PackageMap.get(left);
-				try {
-					if(!EnvironmentUtils.getImplementedEnvironments(leftenv,PackageMap).contains(right)){
-						throw new TypeLinkingException("cannot cast "+left+" to "+right);
-					}
-				} catch (InvalidSyntaxException e) {
-					throw new TypeLinkingException("cannot cast "+left+" to "+right);
+				System.out.print(rootenv.mName+"  "+left.name+"  "+right.name);
+				if(!assignable(left.name,right.name,PackageMap)){
+					throw new TypeLinkingException("cannot cast "+left.name+" to "+right.name);
 				}
 				return null;
 			case CAST_EXPRESSION:
@@ -140,14 +140,8 @@ public class TypeCheckingEvaluator {
 					if (isnumicType(left) && isnumicType(right)) {
 						return new Type("int");
 					}
-					leftenv = PackageMap.get(left);
-					Environment rightenv = PackageMap.get(right);
-					try {
-						if (!(EnvironmentUtils.getImplementedEnvironments(leftenv, PackageMap).contains(right) || EnvironmentUtils.getImplementedEnvironments(rightenv, PackageMap).contains(left))) {
-							throw new TypeLinkingException("cannot cast " + left + " to " + right);
-						}
-					} catch (InvalidSyntaxException e) {
-						throw new TypeLinkingException("cannot cast " + left + " to " + right);
+					if (!assignable(left.name,right.name,PackageMap) || !assignable(right.name,left.name,PackageMap)) {
+						throw new TypeLinkingException("cannot cast 1" + left.name + " to " + right.name);
 					}
 					return left;
 				}
@@ -161,14 +155,8 @@ public class TypeCheckingEvaluator {
 					if (isnumicType(left) && isnumicType(right)) {
 						return new Type("int");
 					}
-					leftenv = PackageMap.get(left);
-					Environment rightenv = PackageMap.get(right);
-					try {
-						if (!(EnvironmentUtils.getImplementedEnvironments(leftenv, PackageMap).contains(right) || EnvironmentUtils.getImplementedEnvironments(rightenv, PackageMap).contains(left))) {
-							throw new TypeLinkingException("cannot cast " + left + " to " + right);
-						}
-					} catch (InvalidSyntaxException e) {
-						throw new TypeLinkingException("cannot cast " + left + " to " + right);
+					if (!assignable(left.name,right.name,PackageMap) || !assignable(right.name,left.name,PackageMap))  {
+						throw new TypeLinkingException("cannot cast 2" + left.name + " to " + right.name);
 					}
 					return left;
 				}
@@ -183,15 +171,9 @@ public class TypeCheckingEvaluator {
 				if (isnumicType(left) && isnumicType(right)) {
 					return new Type("int");
 				}
-				leftenv = PackageMap.get(left);
-				Environment rightenv = PackageMap.get(right);
-				try {
-					if (!(EnvironmentUtils.getImplementedEnvironments(leftenv, PackageMap).contains(right) || EnvironmentUtils.getImplementedEnvironments(rightenv, PackageMap).contains(left))) {
-						throw new TypeLinkingException("cannot cast " + left + " to " + right);
+					if (!assignable(left.name,right.name,PackageMap) || !assignable(right.name,left.name,PackageMap))  {
+						throw new TypeLinkingException("cannot cast 3" + left.name + " to " + right.name);
 					}
-				} catch (InvalidSyntaxException e) {
-					throw new TypeLinkingException("cannot cast " + left + " to " + right);
-				}
 				return left;
 			case EQUALITY_EXPRESSION:
 				if(currentnode.children.size()==1){
@@ -201,15 +183,10 @@ public class TypeCheckingEvaluator {
 				right=check(currentnode.children.get(2),PackageMap,rootenv);
 				if(left.equals(right)){
 					return new Type("boolean");
-				}
-				leftenv=PackageMap.get(left);
-				rightenv=PackageMap.get(right);
-				try {
-					if(!(EnvironmentUtils.getImplementedEnvironments(leftenv,PackageMap).contains(right)||EnvironmentUtils.getImplementedEnvironments(rightenv,PackageMap).contains(left))){
-						throw new TypeLinkingException("cannot cast "+left+" to "+right);
-					}
-				} catch (InvalidSyntaxException e) {
-					throw new TypeLinkingException("cannot cast "+left+" to "+right);
+				};
+				if (!assignable(left.name,right.name,PackageMap) || !assignable(right.name,left.name,PackageMap)) {
+					throw new TypeLinkingException(rootenv.mName+"cannot cast equality " + left.name + " to " + right.name);
+					//System.out.println(currentnode.children.get(10000).name);
 				}
 				return new Type("boolean");
 
@@ -222,8 +199,7 @@ public class TypeCheckingEvaluator {
 						return new Type("boolean");
 					}
 					else{
-						//throw new TypeLinkingException("comparison expression has non numeric input "+current.mName);
-						return null;
+						throw new TypeLinkingException("comparison expression has non numeric input");
 					}
 				}
 				else {
@@ -231,15 +207,16 @@ public class TypeCheckingEvaluator {
 				}
 
 			case RETURN_STATEMENT:
-				if(!check(currentnode.children.get(1),PackageMap,rootenv).equals(returntype)){
-					System.out.println(check(currentnode.children.get(1),PackageMap,rootenv).name+  "   "+returntype);
-					throw new TypeLinkingException("return type does match method declation");
+				Type ret=check(currentnode.children.get(1),PackageMap,rootenv);
+				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("Void"))){
+					return null;
 				}
-			return null;
+				throw new TypeLinkingException("return type does match method declation "+ret.name+ " "+ returntype);
 
 			case NAME:
 				if(currentnode.type==null){
 					System.out.println(rootenv.mName+" "+fullnameFromnamenode(currentnode)+" NAME type null");
+					return new Type("char");
 				}
 				System.out.println("name type resolve to "+fullnameFromnamenode(currentnode)+"  "+currentnode.type.name);
 				return currentnode.type;
@@ -344,16 +321,22 @@ public class TypeCheckingEvaluator {
 				Type Typedef=check(currentnode.children.get(0),PackageMap,rootenv);
 				Type initilization=check(currentnode.children.get(1),PackageMap,rootenv);
 				if(!Typedef.equals(initilization)){
-					throw new TypeLinkingException("inilize with wrong type");
+					throw new TypeLinkingException("local variableinilize with wrong type");
 				}
 				return null;
 			case FIELD_DECLARATION:
 				Typedef=check(currentnode.children.get(1),PackageMap,rootenv);
 				initilization=check(currentnode.children.get(2),PackageMap,rootenv);
-				if(!Typedef.equals(initilization)){
-					throw new TypeLinkingException("inilize with wrong type");
+				if(initilization==null){
+					return null;
 				}
-				return null;
+				if(Typedef.equals(initilization)){
+					return null;
+				}
+				if(isnumicType(Typedef)&&isnumicType(initilization)) {
+					return null;
+				}
+				throw new TypeLinkingException("field inilize with wrong type "+Typedef.name+initilization.name);
 			case CLASS_INSTANCE_CREATION_EXPRESSION:
 				Type typedef=check(currentnode.children.get(1),PackageMap,rootenv);
 
@@ -376,8 +359,17 @@ public class TypeCheckingEvaluator {
 					throw new TypeLinkingException("cant find constructor");
 				}
 				return typedef;
+			case UNARY_EXPRESSION_NOT_PLUS_MINUS:
+				if(currentnode.children.size()==1){
+					return check(currentnode.children.get(0),PackageMap,rootenv);
+				}
+				Type booType=check(currentnode.children.get(1),PackageMap,rootenv);
+				if(!booType.equals("boolean")&&!booType.equals("Boolean")){
+					throw new TypeLinkingException("bool not operator on no boolean type "+booType.name);
+				}
+				return booType;
 			case ARRAY_CREATION_EXPRESSION:
-				return new Type(check(currentnode.children.get(0), PackageMap, rootenv).name+"[]");
+				return new Type(check(currentnode.children.get(1), PackageMap, rootenv).name+"[]");
 			case METHOD_DECLARATION:
 				check(currentnode.children.get(0),PackageMap,rootenv);
 				return check(currentnode.children.get(1),PackageMap,rootenv);
@@ -399,6 +391,15 @@ public class TypeCheckingEvaluator {
 				else {
 					return check(currentnode.children.get(1), PackageMap, rootenv);
 				}
+			case	VARIABLE_DECLARATOR:
+				if(currentnode.children.size()==1){
+					return null;
+				}
+				return check(currentnode.children.get(2), PackageMap, rootenv);
+
+			case ARRAY_TYPE:
+				Type element=check(currentnode.children.get(0), PackageMap, rootenv);
+				return new Type(element.name+"[]");
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
 			case TYPE:
@@ -406,6 +407,7 @@ public class TypeCheckingEvaluator {
 			case VARIABLE_DECLARATORS:
 			case LOCAL_VARIABLE_DECLARATION_STATEMENT:
 			case STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT:
+			case STATEMENT_NO_SHORT_IF:
 			case INTEGRAL_TYPE:
 			case NUMERIC_TYPE:
 			case PRIMITIVE_TYPE:
@@ -430,7 +432,6 @@ public class TypeCheckingEvaluator {
 			case TYPE_DECLARATION:    //weird semi Colum case
 				return check(currentnode.children.get(0),PackageMap,rootenv);
 			case CONSTRUCTOR_DECLARATION:
-			case VARIABLE_DECLARATOR:
 				return check(currentnode.children.get(2),PackageMap,rootenv);
 			case CLASS_DECLARATION:
 				return check(currentnode.children.get(5),PackageMap,rootenv);
@@ -451,7 +452,7 @@ public class TypeCheckingEvaluator {
 		}
 	}
 
-	Boolean isnumicType(Type t){
+	boolean isnumicType(Type t){
 		if(t.equals("int")||t.equals("short")||t.equals("byte")||t.equals("char")){
 			return true;
 		}
@@ -465,5 +466,20 @@ public class TypeCheckingEvaluator {
 			name+=((TerminalToken)child.token).getRawValue();
 		}
 		return name;
+	}
+
+	boolean assignable(String parent,String child,Map<String, Environment> PackageMap){
+		if(parent.contains("[]")&&child.contains("[]")){
+			return assignable(parent.substring(0,parent.length()-2),child.substring(0,child.length()-2),PackageMap);
+		}
+		Environment childenv=PackageMap.get(child);
+		Environment parentenv=PackageMap.get(parent);
+		boolean returnboo=false;
+		try {
+			returnboo=childenv.extendsEnvironment(parentenv,PackageMap);
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+		}
+		return returnboo;
 	}
 }

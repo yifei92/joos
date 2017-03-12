@@ -68,6 +68,26 @@ public class Environment {
 		mChildrenEnvironments = new ArrayList<>();
 	}
 
+  /**
+   * Returns true if this environment is a child of the given environment
+   */
+  public boolean extendsEnvironment(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (this == environment) {
+      return true;
+    }
+    List<Environment> directParents = EnvironmentUtils.getExtendedEnvironments(this, packageMap);
+    if (directParents != null) {
+      boolean doesExtend = false;
+      for (Environment parent : directParents) {
+        doesExtend = parent.extendsEnvironment(environment, packageMap);
+        if (doesExtend) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 	/**
 	 * If the method signature exists within this class or is a method in a parent class then the full method 
 	 * signature will be returned. Null otherwise

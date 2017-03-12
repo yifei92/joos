@@ -35,7 +35,7 @@ public class Environment {
 	public List<Environment> mImplementedEnvironments;
 	public Set<TokenType> mModifiers;
 	public EnvironmentType mType;
-	private Map<String, Map<List<String>, MethodSignature>> mMethodSignatures;
+  private Map<String, Map<List<String>, MethodSignature>> mMethodSignatures;
 
 
   public List<String> mSingleImports;

@@ -1,18 +1,15 @@
 package joos.environment;
 
 import java.util.HashMap;
+
+import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
-import joos.commons.ParseTreeNode;
-import joos.commons.TokenType;
-import joos.commons.TerminalToken;
-import joos.commons.Token;
 import joos.environment.Environment.EnvironmentType;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-import joos.commons.MethodSignature;
 
 public class EnvironmentUtils {
 
@@ -445,6 +442,7 @@ public class EnvironmentUtils {
 
 	public static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		String identifier = getNameFromTypeNode(name);
+		System.out.println(name.token.getType());
 		if (name.primitive) return identifier;
 		return getFullQualifiedNameFromTypeName(environment, identifier, packageMap);
 	}
@@ -470,4 +468,14 @@ public class EnvironmentUtils {
 		}
 		return variableNameNode;
 	}
+
+	public static Type getVaribaleType(Environment environment, String variableName){
+		Type variableType = environment.mVariableToType != null ? environment.mVariableToType.get(variableName) : null;
+		if (variableType == null && environment.mParent != null) {
+			variableType = getVaribaleType(environment.mParent, variableName);
+		}
+		return variableType;
+	}
+
+
 }

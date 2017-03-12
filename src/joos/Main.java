@@ -62,7 +62,7 @@ public class Main {
 				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap,key);
 			}
 			for (Environment environment : packageMap.values()) {
-				Disambiguation.linkAllTypes(environment);
+				Disambiguation.linkAllTypes(environment,packageMap);
 			}
 			for (Environment environment : packageMap.values()) {
 				Disambiguation.linkAllNames(environment, packageMap);

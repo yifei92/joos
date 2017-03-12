@@ -206,29 +206,50 @@ public class Disambiguation {
     }
   }
 
-  static void linkName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    String name = getNameFromTypeNode(node);
+  private static boolean linkNameToVariable(Environment environment, String name, ParseTreeNode node, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    System.out.println(name);
     int dotIndex = name.indexOf('.');
     String prefix;
     if (dotIndex != -1) {
-      prefix = name.substring(0, name.indexOf('.'));
+      prefix = name.substring(0, dotIndex);
     } else {
       prefix = name;
     }
-    Environment env = environment;
-    do {
-      if (env.mVariableToType.containsKey(prefix)) {
-        node.type = env.mVariableToType.get(prefix);
-        return;
-      }
-      if (getEnvironmentType(env) == EnvironmentType.CLASS) {
-        List<Environment> extendedEnvs = getExtendedEnvironments(env, packageMap);
-        if (extendedEnvs != null && extendedEnvs.size() > 0) {
-          env = extendedEnvs.get(0);
+    if (environment.mVariableToType.containsKey(prefix)) {
+      Type type = environment.mVariableToType.get(prefix);
+      if (dotIndex == -1) {
+        node.type = type;
+        return true;
+      } else {
+        if (packageMap.containsKey(type.name)) {
+          if (linkNameToVariable(packageMap.get(type.name), name.substring(dotIndex + 1), node, packageMap)) {
+            return true;
+          }
         }
       }
-      env = env.mParent;
-    } while (env != null);
+    }
+    switch (getEnvironmentType(environment)) {
+      case CLASS:
+        for (Environment extendedEnvironment : getExtendedEnvironments(environment, packageMap)) {
+          if (linkNameToVariable(extendedEnvironment, name, node, packageMap)) return true;
+        }
+        break;
+      default:
+      if (linkNameToVariable(environment.mParent, name, node, packageMap)) return true;
+    }
+    return false;
+  }
+
+  static void linkName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    String name = getNameFromTypeNode(node);
+    if (linkNameToVariable(environment, name, node, packageMap)) return;
+    int dotIndex = name.indexOf('.');
+    String prefix;
+    if (dotIndex != -1) {
+      prefix = name.substring(0, dotIndex);
+    } else {
+      prefix = name;
+    }
     Environment typeEnvironment = getEnvironmentFromTypeName(environment, prefix, packageMap);
     if (typeEnvironment == null) {
       for (String packageName : packageMap.keySet()) {
@@ -243,17 +264,7 @@ public class Disambiguation {
       return;
     }
     if (typeEnvironment != null && dotIndex != -1) {
-      int secondDotIndex = name.indexOf('.', dotIndex);
-      String nextName;
-      if (secondDotIndex == -1) {
-        nextName = name.substring(dotIndex, secondDotIndex);
-      } else {
-        nextName = name.substring(dotIndex);
-      }
-      if (typeEnvironment.mVariableToType.containsKey(nextName)) {
-        node.type = typeEnvironment.mVariableToType.get(nextName);
-        return;
-      }
+      if (linkNameToVariable(typeEnvironment, name.substring(dotIndex), node, packageMap)) return;
     }
     System.out.println(name);
     throw new InvalidSyntaxException("Name cannot be resolved");

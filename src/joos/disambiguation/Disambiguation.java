@@ -160,6 +160,7 @@ public class Disambiguation {
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             linkName(environment, nameNode, packageMap);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
+            linkNames(environment, node.children.get(2), packageMap);
             return;
           }
         }
@@ -277,7 +278,6 @@ public class Disambiguation {
     if (typeEnvironment != null && dotIndex != -1) {
       if (linkNameToVariable(typeEnvironment, name.substring(dotIndex), node, packageMap)) return;
     }
-    System.out.println(name);
-    throw new InvalidSyntaxException("Name cannot be resolved");
+    throw new InvalidSyntaxException("Name \"" + name + "\" cannot be resolved");
   }
 }

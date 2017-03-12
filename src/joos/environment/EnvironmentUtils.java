@@ -481,11 +481,11 @@ public class EnvironmentUtils {
 		if (isArray.ref) {
 			Type subType;
 			if (isPrimitive.ref) {
-				subType = Type.newPrimitive(typeName + "[]", node);
+				subType = Type.newPrimitive(typeName, node);
 			} else {
-				subType = Type.newObject(typeName + "[]", getEnvironmentFromTypeName(environment, typeName, packageMap), node);
+				subType = Type.newObject(typeName, getEnvironmentFromTypeName(environment, typeName, packageMap), node);
 			}
-			return Type.newArray(typeName, subType, node);
+			return Type.newArray(typeName + "[]", subType, node);
 		} else {
 			if (isPrimitive.ref) {
 				return Type.newPrimitive(typeName, node);

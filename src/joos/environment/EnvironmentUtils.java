@@ -442,7 +442,6 @@ public class EnvironmentUtils {
 
 	public static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		String identifier = getNameFromTypeNode(name);
-		System.out.println(name.token.getType());
 		if (name.primitive) return identifier;
 		return getFullQualifiedNameFromTypeName(environment, identifier, packageMap);
 	}

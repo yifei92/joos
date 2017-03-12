@@ -69,6 +69,17 @@ public class Environment {
 	}
 
   /**
+   * Given a field name returns whether or not this field in this environment is static
+   */
+  public boolean isFieldStatic(String name) {
+    ParseTreeNode variableDeclaration = mVariableDeclarations.get(name);
+    if (variableDeclaration == null) {
+      return false;
+    }
+    return EnvironmentUtils.getAllModifiers(variableDeclaration).contains(TokenType.STATIC);
+  }
+
+  /**
    * Returns true if this environment is a child of the given environment
    */
   public boolean extendsEnvironment(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {

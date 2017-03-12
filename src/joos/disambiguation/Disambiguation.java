@@ -71,7 +71,7 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String typeName = getNameFromTypeNode(param.children.get(0));
+              String typeName = getFullQualifiedNameFromTypeNode(param.children.get(0));
               Type type = new Type(typeName);
               type.decl = param;
               environment.mVariableToType.put(name, type);
@@ -89,7 +89,7 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String typeName = getNameFromTypeNode(param.children.get(0));
+              String typeName = getFullQualifiedNameFromTypeNode(param.children.get(0));
               Type type = new Type(typeName);
               type.decl = param;
               environment.mVariableToType.put(name, type);
@@ -98,7 +98,7 @@ public class Disambiguation {
           break;
         } else {
           String name = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
-          String typeName = getNameFromTypeNode(node.children.get(0).children.get(1));
+          String typeName = getFullQualifiedNameFromTypeNode(node.children.get(0).children.get(1));
           Type type = new Type(typeName);
           type.decl = node.children.get(0);
           environment.mVariableToType.put(name, type);
@@ -106,7 +106,7 @@ public class Disambiguation {
         }
       }
       case FIELD_DECLARATION: {
-        String typeName = getNameFromTypeNode(node.children.get(1));
+        String typeName = getFullQualifiedNameFromTypeNode(node.children.get(1));
         Type type = new Type(typeName);
         type.decl = node;
         for (ParseTreeNode child : node.children.get(2).children) {
@@ -116,7 +116,7 @@ public class Disambiguation {
         return;
       }
       case LOCAL_VARIABLE_DECLARATION: {
-        String typeName = getNameFromTypeNode(node.children.get(0));
+        String typeName = getFullQualifiedNameFromTypeNode(node.children.get(0));
         Type type = new Type(typeName);
         type.decl = node;
         for (ParseTreeNode child : node.children.get(1).children) {

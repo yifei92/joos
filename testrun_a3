@@ -3,7 +3,7 @@ chmod 777 buildscript
 ./buildscript
 
 javafiles=""
-for f in $(find test/java -name '*.java'); do
+for f in $(find test/java2 -name '*.java'); do
   chmod 777 $f
   javafiles="$javafiles $f";
 done

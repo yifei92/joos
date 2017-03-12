@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 import static joos.environment.EnvironmentUtils.findImmediateNodeWithTokenType;
 import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
+import static joos.environment.EnvironmentUtils.findNodesWithTokenType;
 
 public class EnvironmentBuilder {
 
@@ -113,20 +114,23 @@ public class EnvironmentBuilder {
       	break;
       }
 			case FIELD_DECLARATION: {
-      	ParseTreeNode fieldDeclaration = findNodeWithTokenType(node, TokenType.FIELD_DECLARATION);
-				ParseTreeNode identifierNode = findNodeWithTokenType(fieldDeclaration, TokenType.IDENTIFIER);
-				String variableName = ((TerminalToken) identifierNode.token).getRawValue();
-				// Make sure that no two variables in a class have the same name
-				if (environment.mScope.token.getType() == TokenType.CLASS_DECLARATION &&
-						environment.mVariableDeclarations.containsKey(variableName)) {
-					throw new TypeLinkingException(
-						"Variable " + variableName + " has already been declared in class " + environment.mName);
-				} else if(checkForLocalVariableDuplicates(environment, variableName)) {
-					throw new TypeLinkingException(
-						"Variable " + variableName + " has already been declared in this method");
+      	List<ParseTreeNode> variableDeclarators = new ArrayList<>();
+      	findNodesWithTokenType(node, TokenType.VARIABLE_DECLARATOR, variableDeclarators);
+				for (ParseTreeNode variableDeclarator: variableDeclarators) {
+					ParseTreeNode identifierNode = findNodeWithTokenType(variableDeclarator, TokenType.IDENTIFIER);
+					String variableName = ((TerminalToken) identifierNode.token).getRawValue();
+					// Make sure that no two variables in a class have the same name
+					if (environment.mScope.token.getType() == TokenType.CLASS_DECLARATION &&
+							environment.mVariableDeclarations.containsKey(variableName)) {
+						throw new TypeLinkingException(
+							"Variable " + variableName + " has already been declared in class " + environment.mName);
+					} else if(checkForLocalVariableDuplicates(environment, variableName)) {
+						throw new TypeLinkingException(
+							"Variable " + variableName + " has already been declared in this method");
 
-				} else {
-					environment.mVariableDeclarations.put(variableName, fieldDeclaration);
+					} else {
+						environment.mVariableDeclarations.put(variableName, node);
+					}
 				}
 				break;
 			}

@@ -7,16 +7,16 @@ import java.util.Map;
 import joos.commons.ParseTreeNode;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
-import static joos.environment.EnvironmentUtils.getEnvironmentType;
-import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
 import joos.commons.Type;
 import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
 import joos.typechecking.TypeChecker;
-import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeName;
+import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
+import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
+import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeName;
 import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
 
 public class Disambiguation {

@@ -68,6 +68,14 @@ public class Environment {
 		mChildrenEnvironments = new ArrayList<>();
 	}
 
+  public boolean isFieldStatic(String name) {
+    ParseTreeNode variableDeclaration = mVariableDeclarations.get(name);
+    if (variableDeclaration == null) {
+      return false;
+    }
+    return EnvironmentUtils.getAllModifiers(variableDeclaration).contains(TokenType.STATIC);
+  }
+
   /**
    * Returns true if this environment is a child of the given environment
    */

@@ -212,6 +212,25 @@ public class EnvironmentUtils {
 	}
 
 	/**
+	 * Searches all children of the given node for the TokenType.MOFIFIER nodes and returns a list
+	 * of modifiers.
+	 */
+	public static Set<TokenType> getAllModifiers(ParseTreeNode node) {
+		Set<TokenType> modifiers = new HashSet<TokenType>();
+		if (node != null) {
+			List<ParseTreeNode> modifierNodes = new ArrayList<>();
+			findNodesWithTokenType(node, TokenType.MODIFIER, modifierNodes);
+			if (modifierNodes != null) {
+				for (ParseTreeNode modifierNode: modifierNodes) {
+					modifiers.add(modifierNode.children.get(0).token.getType());
+				}
+			}	
+			return null;
+		}
+		return modifiers;
+	}
+
+	/**
 	 * Finds all child nodes of the given root of TokenType type and adds them to the given nodes list.
 	 */
 	public static void findNodesWithTokenType(final ParseTreeNode root, final TokenType type, final List<ParseTreeNode> nodes) {

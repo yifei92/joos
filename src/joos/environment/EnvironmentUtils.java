@@ -364,23 +364,28 @@ public class EnvironmentUtils {
   }
 
 	public static String getNameFromTypeNode(ParseTreeNode name) {
-		if (name.name != null) return name.name;
+		return getNameFromTypeNode(name, new Ref(), new Ref());
+	}
+
+	private static String getNameFromTypeNode(ParseTreeNode name, Ref<Boolean> isPrimitive, Ref<Boolean> isArray) {
+		isArray.ref = false;
+		isPrimitive.ref = false;
+		// if (name.name != null) return name.name;
 		switch (name.token.getType()) {
 			case TYPE:
 			case REFERENCE_TYPE:
 			case CLASS_OR_INTERFACE_TYPE:
 			case CLASS_TYPE:
 			case INTERFACE_TYPE:
-				name.name = getNameFromTypeNode(name.children.get(0));
-				name.primitive = name.children.get(0).primitive;
+				name.name = getNameFromTypeNode(name.children.get(0), isPrimitive, isArray);
 				return name.name;
 			case PRIMITIVE_TYPE:
-				name.primitive = true;
 				name.name = getFirstTerminal(name).getRawValue();
+				isPrimitive.ref = true;
 				return name.name;
 			case ARRAY_TYPE:
-				name.name = getNameFromTypeNode(name.children.get(0)) + "[]";
-				name.primitive = name.children.get(0).primitive;
+				name.name = getNameFromTypeNode(name.children.get(0), isPrimitive, isArray);
+				isArray.ref = true;
 				return name.name;
 			case NAME:
 				if (name.children.size() > 1) {
@@ -406,18 +411,11 @@ public class EnvironmentUtils {
   }
 
 	public static String getFullQualifiedNameFromTypeName(Environment environment, String identifier, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-		boolean isArrayType = false;
-		if (identifier.length() > 2 && identifier.substring(identifier.length() - 2).equals("[]")) {
-			isArrayType = true;
-			identifier = identifier.substring(0, identifier.length() - 2);
-		}
 		if (packageMap.containsKey(identifier)) {
-			if (isArrayType) return identifier + "[]";
 			return identifier;
 		}
 		for (String importName : environment.mSingleImports) {
 			if (importName.length() >= identifier.length() && importName.substring(importName.length() - identifier.length()).equals(identifier)) {
-				if (isArrayType) return importName + "[]";
 				return importName;
 			}
 		}
@@ -425,7 +423,6 @@ public class EnvironmentUtils {
 			for (String packageName : packageMap.keySet()) {
 				if (packageName.length() >= importName.length() && packageName.substring(0, importName.length()).equals(importName)) {
 					if (packageMap.get(packageName).mName.equals(identifier)) {
-						if (isArrayType) return packageName + "[]";
 						return packageName;
 					}
 				}
@@ -433,17 +430,20 @@ public class EnvironmentUtils {
 		}
 		String localName = environment.PackageName + "." + identifier;
 		if (packageMap.containsKey(localName)) {
-			if (isArrayType) return localName + "[]";
 			return localName;
 		}
 		System.out.println(identifier);
 		throw new InvalidSyntaxException("Qualified Name not found");
 	}
 
-	public static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-		String identifier = getNameFromTypeNode(name);
-		if (name.primitive) return identifier;
+	private static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap, Ref<Boolean> isPrimitive, Ref<Boolean> isArray) throws InvalidSyntaxException {
+		String identifier = getNameFromTypeNode(name, isPrimitive, isArray);
+		if (isPrimitive.ref) return identifier;
 		return getFullQualifiedNameFromTypeName(environment, identifier, packageMap);
+	}
+
+	public static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		return getFullQualifiedNameFromTypeNode(environment, name, packageMap, new Ref(), new Ref());
 	}
 
 
@@ -453,6 +453,27 @@ public class EnvironmentUtils {
 
 	public static Environment getEnvironmentFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return packageMap.get(getFullQualifiedNameFromTypeNode(environment, name, packageMap));
+	}
+
+	public static Type getTypeFromTypeNode(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		Ref<Boolean> isPrimitive = new Ref();
+		Ref<Boolean> isArray = new Ref();
+		String typeName = getFullQualifiedNameFromTypeNode(environment, node, packageMap, isPrimitive, isArray);
+		if (isArray.ref) {
+			Type subType;
+			if (isPrimitive.ref) {
+				subType = Type.newPrimitive(typeName, node);
+			} else {
+				subType = Type.newObject(typeName, getEnvironmentFromTypeName(environment, typeName, packageMap), node);
+			}
+			return Type.newArray(typeName, subType, node);
+		} else {
+			if (isPrimitive.ref) {
+				return Type.newPrimitive(typeName, node);
+			} else {
+				return Type.newObject(typeName, getEnvironmentFromTypeName(environment, typeName, packageMap), node);
+			}
+		}
 	}
 
 	/**

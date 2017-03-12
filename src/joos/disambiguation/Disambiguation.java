@@ -8,6 +8,7 @@ import joos.commons.ParseTreeNode;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
 import joos.commons.Type;
+import joos.commons.Type.TypeType;
 import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.environment.EnvironmentUtils;
@@ -19,6 +20,7 @@ import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
 import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeName;
 import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
+import static joos.environment.EnvironmentUtils.getTypeFromTypeNode;
 
 public class Disambiguation {
 
@@ -72,9 +74,7 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,param.children.get(0),packageMap);
-              Type type = new Type(typeName);
-              type.decl = param;
+              Type type = getTypeFromTypeNode(environment, param.children.get(0), packageMap);
               environment.mVariableToType.put(name, type);
             }
           }
@@ -90,9 +90,7 @@ public class Disambiguation {
             for (ParseTreeNode param : params.children.get(0).children) {
               if (param.token.getType() == TokenType.COMMA) continue;
               String name = ((TerminalToken)findNodeWithTokenType(param.children.get(1), TokenType.IDENTIFIER).token).getRawValue();
-              String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,param.children.get(0),packageMap);
-              Type type = new Type(typeName);
-              type.decl = param;
+              Type type = getTypeFromTypeNode(environment, param.children.get(0), packageMap);
               environment.mVariableToType.put(name, type);
             }
           }
@@ -107,9 +105,7 @@ public class Disambiguation {
         }
       }
       case FIELD_DECLARATION: {
-        String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(1),packageMap);
-        Type type = new Type(typeName);
-        type.decl = node;
+        Type type = getTypeFromTypeNode(environment, node.children.get(1), packageMap);
         for (ParseTreeNode child : node.children.get(2).children) {
           String name = ((TerminalToken)findNodeWithTokenType(child, TokenType.IDENTIFIER).token).getRawValue();
           environment.mVariableToType.put(name, type);
@@ -117,9 +113,7 @@ public class Disambiguation {
         return;
       }
       case LOCAL_VARIABLE_DECLARATION: {
-        String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0),packageMap);
-        Type type = new Type(typeName);
-        type.decl = node;
+        Type type = getTypeFromTypeNode(environment, node.children.get(0), packageMap);
         for (ParseTreeNode child : node.children.get(1).children) {
           String name = ((TerminalToken)findNodeWithTokenType(child, TokenType.IDENTIFIER).token).getRawValue();
           environment.mVariableToType.put(name, type);
@@ -207,7 +201,6 @@ public class Disambiguation {
   }
 
   private static boolean linkNameToVariable(Environment environment, String name, ParseTreeNode node, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    System.out.println(name);
     int dotIndex = name.indexOf('.');
     String prefix;
     if (dotIndex != -1) {
@@ -221,9 +214,23 @@ public class Disambiguation {
         node.type = type;
         return true;
       } else {
-        if (packageMap.containsKey(type.name)) {
-          if (linkNameToVariable(packageMap.get(type.name), name.substring(dotIndex + 1), node, packageMap)) {
+        if (type.type == TypeType.ARRAY) {
+          int secondDotIndex = name.indexOf('.', dotIndex + 1);
+          if (secondDotIndex == -1) {
+            String nextName = name.substring(dotIndex + 1);
+            if (nextName.equals("length")) {
+              node.type = Type.newPrimitive("int", null);
+              return true;
+            }
+          }
+          if (linkNameToVariable(packageMap.get("java.lang.Object"), name.substring(dotIndex + 1), node, packageMap)) {
             return true;
+          }
+        } else {
+          if (packageMap.containsKey(type.name)) {
+            if (linkNameToVariable(packageMap.get(type.name), name.substring(dotIndex + 1), node, packageMap)) {
+              return true;
+            }
           }
         }
       }

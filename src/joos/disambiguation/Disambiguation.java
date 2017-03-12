@@ -148,8 +148,7 @@ public class Disambiguation {
       case FOR_STATEMENT_NO_SHORT_IF:
         if (node.children != null) {
           for (ParseTreeNode child : node.children) {
-            System.out.println(child.token.getType());
-            if (child.token.getType() != TokenType.STATEMENT) {
+            if (child.token.getType() != TokenType.STATEMENT && child.token.getType() != TokenType.STATEMENT_NO_SHORT_IF) {
               linkNames(environment, child, packageMap);
             }
           }
@@ -190,7 +189,6 @@ public class Disambiguation {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             linkName(environment, nameNode, packageMap);
-            System.out.println(nameNode.type.name + " " + nameNode.name);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
             return;
           }

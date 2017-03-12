@@ -26,7 +26,8 @@ public class TypeCheckingEvaluator {
 	public Type check(ParseTreeNode currentnode,Map<String, Environment> PackageMap,Environment rootenv) throws TypeLinkingException, InvalidSyntaxException {
 		switch (currentnode.token.getType()) {
 			case STRING_LITERAL:
-				return new Type("String");
+			case STRING_LITERAL_WITH_QUOTES:
+				return new Type("java.lang.String");
 			case INT:
 			case INTEGER_LITERAL:
 				return new Type("int");
@@ -58,7 +59,7 @@ public class TypeCheckingEvaluator {
 			case ADDITIVE_EXPRESSION:
 			case MULTIPLICATIVE_EXPRESSION:
 				if(currentnode.children.size()>1){
-					if(check(currentnode.children.get(0),PackageMap,rootenv).equals("String")){
+					if(check(currentnode.children.get(0),PackageMap,rootenv).equals("java.lang.String")){
 						if(!check(currentnode.children.get(2),PackageMap,rootenv).equals("null")){
 							return check(currentnode.children.get(0),PackageMap,rootenv);
 						}
@@ -66,7 +67,7 @@ public class TypeCheckingEvaluator {
 							throw new TypeLinkingException("fail string concation");
 						}
 					}
-					if(check(currentnode.children.get(2),PackageMap,rootenv).equals("String")){
+					if(check(currentnode.children.get(2),PackageMap,rootenv).equals("java.lang.String")){
 						if(!check(currentnode.children.get(0),PackageMap,rootenv).equals("null")){
 							return check(currentnode.children.get(2),PackageMap,rootenv);
 						}
@@ -102,6 +103,7 @@ public class TypeCheckingEvaluator {
 			case FOR_STATEMENT:
 			case FOR_STATEMENT_NO_SHORT_IF:
 				if(!check(currentnode.children.get(4),PackageMap,rootenv).equals("boolean")){
+					System.out.println(check(currentnode.children.get(4),PackageMap,rootenv).name);
 					throw new TypeLinkingException("for condition does not evaluate to boolean");
 				}
 				return check(currentnode.children.get(8),PackageMap,rootenv);
@@ -147,6 +149,9 @@ public class TypeCheckingEvaluator {
 				}
 				return left;
 			case EQUALITY_EXPRESSION:
+				if(currentnode.children.size()==1){
+					return check(currentnode.children.get(0), PackageMap, rootenv);
+				}
 				left=check(currentnode.children.get(0),PackageMap,rootenv);
 				right=check(currentnode.children.get(2),PackageMap,rootenv);
 				if(left.equals(right)){
@@ -169,7 +174,7 @@ public class TypeCheckingEvaluator {
 						return new Type("boolean");
 					}
 					if(isnumicType(check(currentnode.children.get(0),PackageMap,rootenv))&& isnumicType(check(currentnode.children.get(2),PackageMap,rootenv)) ){
-						return check(currentnode.children.get(0),PackageMap,rootenv);
+						return new Type("boolean");
 					}
 					else{
 						//throw new TypeLinkingException("comparison expression has non numeric input "+current.mName);
@@ -210,23 +215,29 @@ public class TypeCheckingEvaluator {
 						String variable=fullname.substring(0,fullname.lastIndexOf("."));
 						String methodname=fullname.substring(fullname.lastIndexOf(".")+1,fullname.length());
 						Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
-						Type typename=EnvironmentUtils.getVaribaleType(local,variable,PackageMap);
+						Type typename=EnvironmentUtils.getVaribaleType(local,variable);
 						if(typename==null){ //static invoke
 							System.out.println(EnvironmentUtils.findEvironment(rootenv,root,currentnode).mName);
 							m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,variable,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 						}
 						else{
+							System.out.println(typename);
 							m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 						}
 					}
 					else {
+						//parameterTyps.clear();
+						//parameterTyps.add("String");
+						System.out.println(rootenv.mName+"  "+parameterTyps.get(0));
+
 						m = rootenv.findMethodSignature(PackageMap, new MethodSignature(fullname, null, parameterTyps, null, null));
 					}
 					if(m==null){
-						throw new TypeLinkingException("unable to find method "+fullname);
+						throw new TypeLinkingException("unable to find method "+fullname+rootenv.mName);
 					}
 					return new Type(m.type);
 				}
+				System.out.println("method invocation wiht primary");
 				if(currentnode.children.get(4).children!=null)
 					for (ParseTreeNode parameter:currentnode.children.get(4).children.get(0).children){
 						if(parameter.token.getType()!=TokenType.COMMA) {
@@ -368,6 +379,8 @@ public class TypeCheckingEvaluator {
 			case TYPE_DECLARATIONS_OPT:
 			case TYPE_DECLARATIONS:
 			case CLASS_BODY_DECLARATIONS_OPT:
+			case EXPRESSION_STATEMENT:
+			case STATEMENT_EXPRESSION:
 			case TYPE_DECLARATION:    //weird semi Colum case
 				return check(currentnode.children.get(0),PackageMap,rootenv);
 			case CONSTRUCTOR_DECLARATION:

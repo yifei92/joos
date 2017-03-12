@@ -468,28 +468,12 @@ public class EnvironmentUtils {
 		return variableNameNode;
 	}
 
-	public static Type getVaribaleType(Environment environment, String variableName, Map<String, Environment> packageMap){
-		System.out.println("get vaiable type");
-		ParseTreeNode varibledecel=containsVariableNameDeclaration(environment,variableName);
-		if(varibledecel==null){
-			System.out.println("can't find variable type");
-			return null;
+	public static Type getVaribaleType(Environment environment, String variableName){
+		Type variableType = environment.mVariableToType != null ? environment.mVariableToType.get(variableName) : null;
+		if (variableType == null && environment.mParent != null) {
+			variableType = getVaribaleType(environment.mParent, variableName);
 		}
-		System.out.println(varibledecel.token.getType());
-		Environment typedec;
-		try {
-			typedec=getEnvironmentFromTypeNode(environment,varibledecel,packageMap);
-		} catch (InvalidSyntaxException e) {
-			System.out.println("can't find variable type");
-			return null;
-		}
-		if(typedec==null){
-			System.out.println("can't find variable type");
-			return null;
-		}
-
-		Type returnType=new Type(typedec.mName);
-		return returnType;
+		return variableType;
 	}
 
 

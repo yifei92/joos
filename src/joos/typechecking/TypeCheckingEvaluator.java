@@ -36,6 +36,7 @@ public class TypeCheckingEvaluator {
 			case BYTE:
 				return new Type("byte");
 			case CHAR:
+			case CHAR_LITERAL_WITH_QUOTES:
 				return new Type("char");
 			case BOOLEAN:
 				return new Type("boolean");
@@ -130,22 +131,66 @@ public class TypeCheckingEvaluator {
 				}
 				return null;
 			case CAST_EXPRESSION:
-				left=check(currentnode.children.get(0),PackageMap,rootenv);
-				right=check(currentnode.children.get(2),PackageMap,rootenv);
-				if(left.equals(right)){
+				if(currentnode.children.size()==4) {
+					left = check(currentnode.children.get(1), PackageMap, rootenv);
+					right = check(currentnode.children.get(3), PackageMap, rootenv);
+					if (left.equals(right)) {
+						return left;
+					}
+					if (isnumicType(left) && isnumicType(right)) {
+						return new Type("int");
+					}
+					leftenv = PackageMap.get(left);
+					Environment rightenv = PackageMap.get(right);
+					try {
+						if (!(EnvironmentUtils.getImplementedEnvironments(leftenv, PackageMap).contains(right) || EnvironmentUtils.getImplementedEnvironments(rightenv, PackageMap).contains(left))) {
+							throw new TypeLinkingException("cannot cast " + left + " to " + right);
+						}
+					} catch (InvalidSyntaxException e) {
+						throw new TypeLinkingException("cannot cast " + left + " to " + right);
+					}
 					return left;
 				}
-				if(isnumicType(left)&&isnumicType(right)){
+				if(currentnode.children.get(2).token.getType()==TokenType.DIMS){
+					left = check(currentnode.children.get(1), PackageMap, rootenv);
+					left.name=left.name+"[]";
+					right = check(currentnode.children.get(4), PackageMap, rootenv);
+					if (left.equals(right)) {
+						return left;
+					}
+					if (isnumicType(left) && isnumicType(right)) {
+						return new Type("int");
+					}
+					leftenv = PackageMap.get(left);
+					Environment rightenv = PackageMap.get(right);
+					try {
+						if (!(EnvironmentUtils.getImplementedEnvironments(leftenv, PackageMap).contains(right) || EnvironmentUtils.getImplementedEnvironments(rightenv, PackageMap).contains(left))) {
+							throw new TypeLinkingException("cannot cast " + left + " to " + right);
+						}
+					} catch (InvalidSyntaxException e) {
+						throw new TypeLinkingException("cannot cast " + left + " to " + right);
+					}
+					return left;
+				}
+				left = check(currentnode.children.get(1), PackageMap, rootenv);
+				if(currentnode.children.get(3).children!=null&&currentnode.children.get(3).children.size()>0) {
+					left.name = left.name + "[]";
+				}
+				right = check(currentnode.children.get(4), PackageMap, rootenv);
+				if (left.equals(right)) {
+					return left;
+				}
+				if (isnumicType(left) && isnumicType(right)) {
 					return new Type("int");
 				}
-				 leftenv=PackageMap.get(left);
-				Environment rightenv=PackageMap.get(right);
+				leftenv = PackageMap.get(left);
+				Environment rightenv = PackageMap.get(right);
 				try {
-					if(!(EnvironmentUtils.getImplementedEnvironments(leftenv,PackageMap).contains(right)||EnvironmentUtils.getImplementedEnvironments(rightenv,PackageMap).contains(left))){
-						throw new TypeLinkingException("cannot cast "+left+" to "+right);
+					if (!(EnvironmentUtils.getImplementedEnvironments(leftenv, PackageMap).contains(right) || EnvironmentUtils.getImplementedEnvironments(rightenv, PackageMap).contains(left))) {
+						throw new TypeLinkingException("cannot cast " + left + " to " + right);
 					}
 				} catch (InvalidSyntaxException e) {
-					throw new TypeLinkingException("cannot cast "+left+" to "+right);
+					throw new TypeLinkingException("cannot cast " + left + " to " + right);
 				}
 				return left;
 			case EQUALITY_EXPRESSION:
@@ -194,7 +239,7 @@ public class TypeCheckingEvaluator {
 
 			case NAME:
 				if(currentnode.type==null){
-					System.out.println("NAME type null");
+					System.out.println(rootenv.mName+" "+fullnameFromnamenode(currentnode)+" NAME type null");
 				}
 				System.out.println("name type resolve to "+fullnameFromnamenode(currentnode)+"  "+currentnode.type.name);
 				return currentnode.type;
@@ -217,19 +262,13 @@ public class TypeCheckingEvaluator {
 						Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
 						Type typename=EnvironmentUtils.getVaribaleType(local,variable);
 						if(typename==null){ //static invoke
-							System.out.println(EnvironmentUtils.findEvironment(rootenv,root,currentnode).mName);
 							m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,variable,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 						}
 						else{
-							System.out.println(typename);
 							m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 						}
 					}
 					else {
-						//parameterTyps.clear();
-						//parameterTyps.add("String");
-						System.out.println(rootenv.mName+"  "+parameterTyps.get(0));
-
 						m = rootenv.findMethodSignature(PackageMap, new MethodSignature(fullname, null, parameterTyps, null, null));
 					}
 					if(m==null){
@@ -353,6 +392,13 @@ public class TypeCheckingEvaluator {
 				return null;
 			case CLASS_OR_INTERFACE_TYPE:
 				return currentnode.type;
+			case	UNARY_EXPRESSION:
+				if(currentnode.children.size()==1){
+					return check(currentnode.children.get(0), PackageMap, rootenv);
+				}
+				else {
+					return check(currentnode.children.get(1), PackageMap, rootenv);
+				}
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
 			case TYPE:
@@ -399,7 +445,8 @@ public class TypeCheckingEvaluator {
 				root=currentnode;
 				return check(currentnode.children.get(2),PackageMap,rootenv);
 			default:
-				System.out.println(currentnode.token.getType());
+				System.out.println("error forgot "+currentnode.token.getType());
+				System.out.print(currentnode.children.get(1000));
 				return null;
 		}
 	}

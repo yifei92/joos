@@ -148,7 +148,7 @@ public class Disambiguation {
       case FOR_STATEMENT_NO_SHORT_IF:
         if (node.children != null) {
           for (ParseTreeNode child : node.children) {
-            if (child.token.getType() != TokenType.STATEMENT) {
+            if (child.token.getType() != TokenType.STATEMENT && child.token.getType() != TokenType.STATEMENT_NO_SHORT_IF) {
               linkNames(environment, child, packageMap);
             }
           }

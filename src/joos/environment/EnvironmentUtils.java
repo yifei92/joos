@@ -516,5 +516,28 @@ public class EnvironmentUtils {
 		return variableType;
 	}
 
-
+	/**
+	 * Given a class/constructor environment and param types checks is the given class contains a constructor
+	 * with the given types.
+	 */
+	public boolean verifyConstructorSignature(Environment environment, List<String> paramTypes, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+		if (environment == null) {
+			return false;
+		}
+		EnvironmentType type = getEnvironmentType(environment);
+		if (type == EnvironmentType.CONSTRUCTOR) {
+			List<String> constructorParamTypes = environment.getConstructorSignature(packageMap);
+			if (constructorParamTypes.equals(paramTypes)) {
+				return true;
+			}
+		}
+		boolean isVerified = false;
+		for (Environment child : environment.mChildrenEnvironments) {
+			isVerified = verifyConstructorSignature(child, paramTypes, packageMap);
+			if (isVerified) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

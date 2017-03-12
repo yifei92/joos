@@ -1,18 +1,15 @@
 package joos.environment;
 
 import java.util.HashMap;
+
+import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
-import joos.commons.ParseTreeNode;
-import joos.commons.TokenType;
-import joos.commons.TerminalToken;
-import joos.commons.Token;
 import joos.environment.Environment.EnvironmentType;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-import joos.commons.MethodSignature;
 
 public class EnvironmentUtils {
 
@@ -470,4 +467,30 @@ public class EnvironmentUtils {
 		}
 		return variableNameNode;
 	}
+
+	public static Type getVaribaleType(Environment environment, String variableName, Map<String, Environment> packageMap){
+		System.out.println("get vaiable type");
+		ParseTreeNode varibledecel=containsVariableNameDeclaration(environment,variableName);
+		if(varibledecel==null){
+			System.out.println("can't find variable type");
+			return null;
+		}
+		System.out.println(varibledecel.token.getType());
+		Environment typedec;
+		try {
+			typedec=getEnvironmentFromTypeNode(environment,varibledecel,packageMap);
+		} catch (InvalidSyntaxException e) {
+			System.out.println("can't find variable type");
+			return null;
+		}
+		if(typedec==null){
+			System.out.println("can't find variable type");
+			return null;
+		}
+
+		Type returnType=new Type(typedec.mName);
+		return returnType;
+	}
+
+
 }

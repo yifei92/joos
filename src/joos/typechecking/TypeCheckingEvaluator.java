@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static joos.environment.EnvironmentUtils.findEvironment;
+import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeNode;
 
 /**
@@ -181,37 +182,47 @@ public class TypeCheckingEvaluator {
 
 			case RETURN_STATEMENT:
 				if(!check(currentnode.children.get(1),PackageMap,current).equals(returntype)){
+					System.out.println(check(currentnode.children.get(1),PackageMap,current).name+  "   "+returntype);
 					throw new TypeLinkingException("return type does match method declation");
 				}
 			return null;
 
 			case NAME:
-				/*
-				String fullname=fullnameFromnamenode(currentnode);
-				Environment local=findEvironment(current,root,currentnode);
-				if(local.mVariableToType.get(fullname)!=null) {
-					return local.mVariableToType.get(fullname);
-				}
-				*/
 				if(currentnode.type==null){
 					System.out.println("NAME type null");
 				}
-				System.out.print(currentnode.type);
+				System.out.println("name type resolve to "+fullnameFromnamenode(currentnode)+"  "+currentnode.type.name);
 				return currentnode.type;
 			case METHOD_INVOCATION:
 				List<String> parameterTyps=new ArrayList<>();
 				if(currentnode.children.size()==4) {
 					if(currentnode.children.get(2).children!=null&&currentnode.children.get(2).children.size()>0) {
-						for (ParseTreeNode parameter : currentnode.children.get(2).children) {
+						for (ParseTreeNode parameter : currentnode.children.get(2).children.get(0).children) {
 							if (parameter.token.getType() != TokenType.COMMA) {
 								parameterTyps.add(check(parameter, PackageMap, current).name);
 							}
 						}
 					}
-					String Fullname=fullnameFromnamenode(currentnode.children.get(0));
-					String classname=Fullname.substring(0,Fullname.lastIndexOf(".")-1);
-					String methodname=Fullname.substring(Fullname.lastIndexOf(".")-1, Fullname.length());
-					MethodSignature m=PackageMap.get(classname).getMethodSignatures(PackageMap).get(methodname).get(parameterTyps);
+
+					String fullname=fullnameFromnamenode(currentnode.children.get(0));
+					MethodSignature m=null;
+					if(fullname.contains(".")){
+						String variable=fullname.substring(0,fullname.lastIndexOf("."));
+						String methodname=fullname.substring(fullname.lastIndexOf(".")+1,fullname.length());
+						Type typename=EnvironmentUtils.findEvironment(current,root,currentnode).mVariableToType.get(variable);
+						if(typename==null){ //static invoke
+							m=EnvironmentUtils.getEnvironmentFromTypeName(current,variable,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
+						}
+						else{
+							m=EnvironmentUtils.getEnvironmentFromTypeName(current,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
+						}
+					}
+					else {
+						m = current.findMethodSignature(PackageMap, new MethodSignature(fullname, null, parameterTyps, null, null));
+					}
+					if(m==null){
+						throw new TypeLinkingException("unable to find method "+fullname);
+					}
 					return new Type(m.type);
 				}
 				if(currentnode.children.get(4).children!=null)
@@ -221,7 +232,11 @@ public class TypeCheckingEvaluator {
 						}
 					}
 				String methodname=((TerminalToken)currentnode.children.get(2).token).getRawValue();
-				MethodSignature m=PackageMap.get(check(currentnode.children.get(0), PackageMap,current).name).getMethodSignatures(PackageMap).get(methodname).get(parameterTyps);
+				Type primary=check(currentnode.children.get(0),PackageMap,current);
+				MethodSignature m=EnvironmentUtils.getEnvironmentFromTypeName(current,primary.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
+				if(m==null){
+					throw new TypeLinkingException("unable to find method "+methodname);
+				}
 				return new Type(m.type);
 
 			case ARRAY_ACCESS:
@@ -231,8 +246,13 @@ public class TypeCheckingEvaluator {
 				return check(currentnode.children.get(0),PackageMap,current);
 
 			case FIELD_ACCESS:
-				Environment Typecalled=PackageMap.get(check(currentnode.children.get(0),PackageMap,current).name);
-				return Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(1).token).getRawValue());
+				primary=check(currentnode.children.get(0),PackageMap,current);
+				Environment Typecalled=EnvironmentUtils.getEnvironmentFromTypeName(current,primary.name,PackageMap);
+				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(1).token).getRawValue());
+				if(field==null){
+					throw new TypeLinkingException("unable to find field");
+				}
+				return field;
 			case PRIMARY_NO_NEW_ARRAY:
 				if (currentnode.children.size()>1){
 					return  check(currentnode.children.get(1),PackageMap,current);
@@ -292,14 +312,13 @@ public class TypeCheckingEvaluator {
 					throw new TypeLinkingException("cannot find constractor");
 				}
 				parameterTyps =new ArrayList<>();
-				if(currentnode.children.get(3).children!=null) {
+				if(currentnode.children.get(3).children!=null&&currentnode.children.get(3).children.size()>0) {
 					for (ParseTreeNode parameter : currentnode.children.get(3).children.get(0).children) {
 						if (parameter.token.getType() != TokenType.COMMA) {
 							parameterTyps.add(check(parameter, PackageMap, current).name);
 						}
 					}
 				}
-				System.out.println(typeenviroment.mName+ " "+parameterTyps.get(0));
 				MethodSignature methodSignature=typeenviroment.findMethodSignature(PackageMap,new MethodSignature(typeenviroment.mName,null,parameterTyps,null,null));
 				if(methodSignature==null) {
 					throw new TypeLinkingException("cant find constructor");

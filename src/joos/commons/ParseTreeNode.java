@@ -31,9 +31,6 @@ public class ParseTreeNode {
 	public boolean isBefore(ParseTreeNode other) {
 		ParseTreeNode thisTerminalNode = getFirstTerminalNode();
 		ParseTreeNode otherTerminalNode = other.getFirstTerminalNode();
-		System.out.println(((TerminalToken)thisTerminalNode.token).getIndex() + ": " + ((TerminalToken)thisTerminalNode.token).getRawValue());
-		System.out.println(" is before ");
-		System.out.println(((TerminalToken)otherTerminalNode.token).getIndex() + ": " + ((TerminalToken)otherTerminalNode.token).getRawValue());
 		return thisTerminalNode.token.getIndex() < otherTerminalNode.token.getIndex();
 	}
 
@@ -88,6 +85,10 @@ public class ParseTreeNode {
 			System.out.print("  ");
 		}
 		System.out.print(this.token.getType());
+		System.out.print(" ");
+		if (this.token instanceof TerminalToken) {
+			System.out.print(((TerminalToken)this.token).getIndex());
+		}
 		System.out.println();
 		if (this.children != null) {
 			for (ParseTreeNode child : this.children) {

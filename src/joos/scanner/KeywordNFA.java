@@ -19,14 +19,14 @@ import java.util.Arrays;
  */
 public class KeywordNFA extends NFA {
 
-	private final TerminalToken mToken;
+	private final TokenType mTokenType;
 	private final String mLiteral;
 
 	public KeywordNFA(TokenType tokenType) throws Exception {
-		mToken = TerminalToken.getToken(tokenType);
-		mLiteral = mToken.getRawValue();
+		mTokenType = tokenType;
+		mLiteral = TerminalToken.getToken(tokenType).getRawValue();
 		if (mLiteral == null || mLiteral.length() == 0) {
-			throw new Exception("Invalid token " + mToken.mType + " cannot create an NFA.");
+			throw new Exception("Invalid token " + mTokenType + " cannot create an NFA.");
 		}
 	}
 
@@ -57,7 +57,8 @@ public class KeywordNFA extends NFA {
 
 	public List<TerminalToken> getTokens() {
 		List<TerminalToken> tokens = new ArrayList<>();
-		tokens.add(mToken);
+		TerminalToken token = TerminalToken.getToken(mTokenType);
+		tokens.add(token);
 		return tokens;
 	}
 }

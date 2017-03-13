@@ -102,8 +102,8 @@ public class TypeCheckingEvaluator {
 					for (int i = 0; i < currentnode.children.size(); i++) {
 						if (i % 2 == 0) {
 							Type temp = check(currentnode.children.get(i), PackageMap, rootenv);
-							if (isnumicType(temp)) {
-								throw new TypeLinkingException("and expression has bad input");
+							if (!isnumicType(temp)) {
+								throw new TypeLinkingException("multi expression has bad input");
 							}
 						}
 					}

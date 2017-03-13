@@ -224,8 +224,7 @@ public class EnvironmentUtils {
 				for (ParseTreeNode modifierNode: modifierNodes) {
 					modifiers.add(modifierNode.children.get(0).token.getType());
 				}
-			}	
-			return null;
+			}
 		}
 		return modifiers;
 	}

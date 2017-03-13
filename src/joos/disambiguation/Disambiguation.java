@@ -19,10 +19,13 @@ import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
 import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeName;
+import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeNode;
 import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
 import static joos.environment.EnvironmentUtils.getTypeFromTypeNode;
 
 public class Disambiguation {
+
+  static boolean p;
 
   public static void linkAllTypes(Environment environment,Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if (environment.mVariableToType == null) {
@@ -31,7 +34,9 @@ public class Disambiguation {
     }
   }
   public static void linkAllNames(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (environment.mName.equals("J1_castMultiple1")) p = true;
     linkNames(environment, environment.mScope, packageMap);
+    p = false;
   }
 
   static void linkTypes(Environment environment, ParseTreeNode node,Map<String, Environment> packageMap) throws InvalidSyntaxException {
@@ -231,6 +236,11 @@ public class Disambiguation {
           }
         }
         break;
+      case CAST_EXPRESSION:
+        if (node.children.size() == 5) {
+          node.children.get(1).type = new Type(getFullQualifiedNameFromTypeNode(environment, node.children.get(1), packageMap));
+          System.out.println(node.children.get(1).type.name);
+        }
       default:
         break;
     }

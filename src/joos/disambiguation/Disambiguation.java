@@ -171,6 +171,20 @@ public class Disambiguation {
     }
   }
 
+  private static void linkMethodName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    String name = getNameFromTypeNode(node);
+    int dotIndex = name.lastIndexOf('.');
+    if (dotIndex == -1) {
+      Environment env = environment;
+      while (getEnvironmentType(env) != EnvironmentType.CLASS) {
+        env = env.mParent;
+      }
+      node.type = new Type(env.PackageName + "." + env.mName);
+    } else {
+      linkName(environment, node, name.substring(0, dotIndex), packageMap, environment, false);
+    }
+  }
+
   public static void linkNames(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     switch (node.token.getType()) {
 			case BLOCK: // fall through
@@ -229,7 +243,8 @@ public class Disambiguation {
         if (node.children != null) {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
-            linkName(environment, nameNode, packageMap, environment, false);
+            String s = getNameFromTypeNode(nameNode);
+            linkName(environment, nameNode, s, packageMap, environment, false);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
             linkNames(environment, node.children.get(2), packageMap);
             return;
@@ -260,7 +275,8 @@ public class Disambiguation {
         if (node.children != null && node.children.size() == 1) {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
-            linkName(environment, nameNode, packageMap, environment, node.token.getType() == TokenType.LEFT_HAND_SIDE);
+            String s = getNameFromTypeNode(nameNode);
+            linkName(environment, nameNode, s, packageMap, environment, node.token.getType() == TokenType.LEFT_HAND_SIDE);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
             return;
           }
@@ -269,6 +285,11 @@ public class Disambiguation {
       case CAST_EXPRESSION:
         if (node.children.size() == 5) {
           node.children.get(1).type = new Type(getFullQualifiedNameFromTypeNode(environment, node.children.get(1), packageMap));
+        }
+        break;
+      case METHOD_INVOCATION:
+        if (node.children.get(0).token.getType() == TokenType.NAME) {
+          linkMethodName(environment, node.children.get(0), packageMap);
         }
       default:
         break;
@@ -340,9 +361,8 @@ public class Disambiguation {
     }
     return false;
   }
-
-  static void linkName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
-    String name = getNameFromTypeNode(node);
+    
+  static void linkName(Environment environment, ParseTreeNode node, String name, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
     boolean shouldBeStatic = false;
     // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
     if ((EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.METHOD &&
@@ -379,7 +399,7 @@ public class Disambiguation {
       return;
     }
     if (typeEnvironment != null && dotIndex != -1) {
-      if (linkNameToVariable(typeEnvironment, name.substring(dotIndex), node, packageMap, usageEnvironment, true, false, isLeftHandSide)) return;
+      if (linkNameToVariable(typeEnvironment, name.substring(dotIndex + 1), node, packageMap, usageEnvironment, true, false, isLeftHandSide)) return;
     }
     throw new InvalidSyntaxException("Name \"" + name + "\" cannot be resolved");
   }

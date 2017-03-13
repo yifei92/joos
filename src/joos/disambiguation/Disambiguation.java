@@ -386,6 +386,7 @@ public class Disambiguation {
     }
     if (typeEnvironment != null && dotIndex != -1) {
       if (linkNameToVariable(typeEnvironment, name.substring(dotIndex + 1), node, packageMap, usageEnvironment, true, false, isLeftHandSide)) return;
+      System.out.println(node.type.name);
     }
     throw new InvalidSyntaxException("Name \"" + name + "\" cannot be resolved");
   }

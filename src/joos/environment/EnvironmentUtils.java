@@ -523,7 +523,7 @@ public class EnvironmentUtils {
 	 * Given a class/constructor environment and param types checks is the given class contains a constructor
 	 * with the given types.
 	 */
-	public boolean verifyConstructorSignature(Environment environment, List<String> paramTypes, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+	public static boolean verifyConstructorSignature(Environment environment, List<String> paramTypes, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		if (environment == null) {
 			return false;
 		}

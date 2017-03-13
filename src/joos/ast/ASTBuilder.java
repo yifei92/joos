@@ -28,8 +28,8 @@ public class ASTBuilder {
 					ParseTreeNode current = parseTree.children.get(0);
 					parseTree.children.remove(0);
 					while (current.children!=null&&current.children.size() > 1) {
-						parseTree.children.add(0, current.children.get(1));
 						parseTree.children.add(0, current.children.get(2));
+						parseTree.children.add(0, current.children.get(1));
 						current = current.children.get(0);
 					}
 					parseTree.children.add(0, current.children.get(0));
@@ -70,6 +70,7 @@ public class ASTBuilder {
 				}
 				break;
 			case FORMAL_PARAMETER_LIST:
+			case	ARGUMENT_LIST:
 				if (parseTree.children.size() > 1) {
 					ParseTreeNode current = parseTree.children.get(0);
 					parseTree.children.remove(0);

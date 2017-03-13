@@ -361,7 +361,7 @@ public class Disambiguation {
     }
     return false;
   }
-    
+
   static void linkName(Environment environment, ParseTreeNode node, String name, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
     boolean shouldBeStatic = false;
     // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
@@ -393,6 +393,11 @@ public class Disambiguation {
         if (name.length() >= packageName.length() && name.substring(0, packageName.length()).equals(packageName)) {
           typeEnvironment = packageMap.get(packageName);
           dotIndex = name.indexOf('.', packageName.length());
+          if (dotIndex == -1) {
+            prefix = name;
+          } else {
+            prefix = name.substring(0, dotIndex);
+          }
         }
       }
     }

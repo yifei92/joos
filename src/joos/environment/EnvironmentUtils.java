@@ -450,8 +450,7 @@ public class EnvironmentUtils {
 		if (packageMap.containsKey(localName)) {
 			return localName;
 		}
-		System.out.println(identifier);
-		throw new InvalidSyntaxException("Qualified Name not found");
+		throw new InvalidSyntaxException("Qualified Name not found for " + identifier);
 	}
 
 	private static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap, Ref<Boolean> isPrimitive, Ref<Boolean> isArray) throws InvalidSyntaxException {

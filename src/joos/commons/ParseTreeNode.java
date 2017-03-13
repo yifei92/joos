@@ -34,6 +34,25 @@ public class ParseTreeNode {
 		return thisTerminalNode.token.getIndex() < otherTerminalNode.token.getIndex();
 	}
 
+	/**
+	 * Returns true of the given node other is a descendant of this node
+	 */
+	public boolean contains(ParseTreeNode other) {
+		if (this == other) {
+			return true;
+		}
+		boolean contains = false;
+		if (children != null) {
+			for(ParseTreeNode child : children) {
+				contains = child.contains(other);
+				if(contains) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public ParseTreeNode getFirstTerminalNode() {
 		if (token instanceof TerminalToken) {
 			return this;

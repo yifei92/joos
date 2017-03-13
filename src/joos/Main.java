@@ -56,7 +56,8 @@ public class Main {
 			    System.out.println("");
 			}*/
 			for (String key : treeMap.keySet()) {
-				//treeMap.get(key).print();
+				if (key.contains("Je_16_StaticThis_StaticFieldInitializer"))
+					treeMap.get(key).print();
 			}
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();

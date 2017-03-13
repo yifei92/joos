@@ -69,6 +69,22 @@ public class Environment {
 	}
 
   /**
+   * Given a usage node (name node) returns the field declaration in which this usage node was used.
+   * Can only be use in a class environment
+   */
+  public ParseTreeNode findVariableDeclarationForUsage(ParseTreeNode usageNode) {
+    if (EnvironmentUtils.getEnvironmentType(this) != EnvironmentType.CLASS) {
+      System.out.println("findVariableDeclarationForUsage can only be used in a class");
+    }
+    for (ParseTreeNode fieldDeclarationNode: mVariableDeclarations.values()) {
+      if(fieldDeclarationNode.contains(usageNode)) {
+        return fieldDeclarationNode;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Given a field name returns whether or not this field in this environment is static
    */
   public boolean isFieldStatic(String name) {
@@ -288,7 +304,7 @@ public class Environment {
     return null;
   }
 
-  private static MethodSignature getMethodSignature(Environment environment, Map<String, Environment> packageMap, String origin) throws InvalidSyntaxException {
+  public static MethodSignature getMethodSignature(Environment environment, Map<String, Environment> packageMap, String origin) throws InvalidSyntaxException {
     ParseTreeNode declarator = environment.mScope.children.get(0).children.get(2);
     List<String> parameterTypes = new ArrayList();
     if (declarator.children.get(2).children.size() > 0) {

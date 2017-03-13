@@ -503,7 +503,7 @@ public class TypeCheckingEvaluator {
 			case CLASS_DECLARATION:
 				return check(currentnode.children.get(5),PackageMap,rootenv);
 			case INTERFACE_DECLARATION:
-				return check(currentnode.children.get(4),PackageMap,rootenv);
+				return null;
 			case BLOCK:
 			case CLASS_BODY:
 			case CONSTRUCTOR_BODY:

@@ -129,6 +129,8 @@ public class TypeCheckingEvaluator {
 
 			case FOR_STATEMENT:
 			case FOR_STATEMENT_NO_SHORT_IF:
+				check(currentnode.children.get(2),PackageMap,rootenv);
+				check(currentnode.children.get(6),PackageMap,rootenv);
 				Type conditionclause=check(currentnode.children.get(4),PackageMap,rootenv);
 				if(!conditionclause.equals("boolean")&&!conditionclause.equals("void")){
 					System.out.println(check(currentnode.children.get(4),PackageMap,rootenv).name);
@@ -264,13 +266,8 @@ public class TypeCheckingEvaluator {
 						String variable=fullname.substring(0,fullname.lastIndexOf("."));
 						String methodname=fullname.substring(fullname.lastIndexOf(".")+1,fullname.length());
 						Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
-						Type typename=EnvironmentUtils.getVaribaleType(local,variable);
-						if(typename==null){ //static invoke
-							m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,variable,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
-						}
-						else{
-							m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
-						}
+						Type typename=check(currentnode.children.get(0),PackageMap,rootenv);
+						m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 					}
 					else {
 						m = rootenv.findMethodSignature(PackageMap, new MethodSignature(fullname, null, parameterTyps, null, null));
@@ -455,10 +452,25 @@ public class TypeCheckingEvaluator {
 
 			case VARIABLE_INITIALIZER:
 				return check(currentnode.children.get(0),PackageMap,rootenv);
+
+			case STATEMENT_EXPRESSION_LIST:
+				for(int i=0;i<currentnode.children.size();i++){
+					if(i%2==0){
+						check(currentnode.children.get(i), PackageMap, rootenv);
+					}
+				}
+				return null;
+			case FOR_INIT:
+			case FOR_UPDATE_OPT:
+			case FOR_UPDATE:
+				if(currentnode.children.size()==0){
+					return null;
+				}
+				return check(currentnode.children.get(0),PackageMap,rootenv);
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
 			case TYPE:
-
+			case FOR_INIT_OPT:
 			case VARIABLE_DECLARATORS:
 			case LOCAL_VARIABLE_DECLARATION_STATEMENT:
 			case STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT:

@@ -284,6 +284,10 @@ public class TypeCheckingEvaluator {
 
 			case FIELD_ACCESS:
 				primary=check(currentnode.children.get(0),PackageMap,rootenv);
+				System.out.println(primary==null);
+				if(primary.name.contains("[]")&&((TerminalToken)currentnode.children.get(2).token).getRawValue().equals("length")){
+					return new Type("int");
+				}
 				Environment Typecalled=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap);
 				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(2).token).getRawValue());
 				if(field==null){
@@ -506,6 +510,9 @@ public class TypeCheckingEvaluator {
 			return assignable(parent.substring(0,parent.length()-2),child.substring(0,child.length()-2),PackageMap);
 		}
 		if(isnumicType(new Type(parent))&&isnumicType(new Type(child))){
+			return true;
+		}
+		if(parent.equals("java.lang.Object")&&!isnumicType(new Type(child))&&!child.equals("boolean")){
 			return true;
 		}
 		/*

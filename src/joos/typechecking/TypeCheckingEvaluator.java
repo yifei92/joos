@@ -139,18 +139,18 @@ public class TypeCheckingEvaluator {
 				Type left=check(currentnode.children.get(0),PackageMap,rootenv);
 				Type right=check(currentnode.children.get(2),PackageMap,rootenv);
 				if(left.equals(right)){
-					return null;
+					return left;
 				}
 				if(left.equals("short")&&right.equals("byte")){
-					return null;
+					return left;
 				}
 				if(left.equals("int")&&right.equals("char")){
-					return null;
+					return left;
 				}
 				if(!assignable(left.name,right.name,PackageMap)){
 					throw new TypeLinkingException("cannot cast "+left.name+" to "+right.name);
 				}
-				return null;
+				return left;
 			case CAST_EXPRESSION:
 				if(currentnode.children.size()==4) {
 					left = check(currentnode.children.get(1), PackageMap, rootenv);

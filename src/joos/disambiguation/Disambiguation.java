@@ -239,7 +239,6 @@ public class Disambiguation {
       case CAST_EXPRESSION:
         if (node.children.size() == 5) {
           node.children.get(1).type = new Type(getFullQualifiedNameFromTypeNode(environment, node.children.get(1), packageMap));
-          System.out.println(node.children.get(1).type.name);
         }
       default:
         break;

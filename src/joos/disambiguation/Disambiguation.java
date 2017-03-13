@@ -327,7 +327,6 @@ public class Disambiguation {
         }
       }
     }
-    if (environment.mVariableDeclarations.containsKey(prefix))System.out.println(environment.mVariableDeclarations.get(prefix).isBefore(node));
     switch (getEnvironmentType(environment)) {
       case CLASS:
         for (Environment extendedEnvironment : getExtendedEnvironments(environment, packageMap)) {

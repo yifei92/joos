@@ -1,6 +1,7 @@
 package joos.commons;
 
 import joos.commons.Token;
+import joos.commons.TerminalToken;
 import joos.environment.Environment;
 import joos.environment.EnvironmentUtils;
 import java.util.List;
@@ -30,6 +31,9 @@ public class ParseTreeNode {
 	public boolean isBefore(ParseTreeNode other) {
 		ParseTreeNode thisTerminalNode = getFirstTerminalNode();
 		ParseTreeNode otherTerminalNode = other.getFirstTerminalNode();
+		System.out.println(((TerminalToken)thisTerminalNode.token).getIndex() + ": " + ((TerminalToken)thisTerminalNode.token).getRawValue());
+		System.out.println(" is before ");
+		System.out.println(((TerminalToken)otherTerminalNode.token).getIndex() + ": " + ((TerminalToken)otherTerminalNode.token).getRawValue());
 		return thisTerminalNode.token.getIndex() < otherTerminalNode.token.getIndex();
 	}
 

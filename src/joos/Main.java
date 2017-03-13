@@ -40,6 +40,7 @@ public class Main {
 				ASTBuilder astBuilder = new ASTBuilder();
 				ParseTreeNode parseTree = null;
 				List<TerminalToken> tokens = scanner.scan(joosFile.mProgram);
+				Scanner.orderTokens(tokens);
 				parseTree = parser.parse(tokens);
 				weeder.weed(parseTree, joosFile.getFileName());
 				astBuilder.convert(parseTree);

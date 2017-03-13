@@ -33,6 +33,12 @@ public class NonterminalToken implements Token {
     return mTokens.get(tokenType);
   }
 
+  public int getIndex() {
+    return -1;
+  }
+
+  public void setIndex(int index) {} 
+
   private static void generateTokens() {
     mTokens = new HashMap();
     mTokens.put(TokenType.GOAL, new NonterminalToken(TokenType.GOAL));

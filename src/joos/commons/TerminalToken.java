@@ -10,6 +10,7 @@ import joos.commons.Token;
 public class TerminalToken implements Token {
 	public final TokenType mType;
 	public String mRawValue;
+	private int mIndex;
 
 	private TerminalToken(TokenType type, String rawValue) {
 		mType = type;
@@ -27,6 +28,14 @@ public class TerminalToken implements Token {
 	public TokenType getType() {
 		return mType;
 	}
+
+  public int getIndex() {
+  	return mIndex;
+  }
+
+  public void setIndex(int index) {
+  	mIndex = index;
+  }
 
 	private static Map<TokenType, TerminalToken> mTokens = null;
 

@@ -539,20 +539,46 @@ public class TypeCheckingEvaluator {
 		if(parent.contains("[]")&&child.contains("[]")){
 			return assignable(parent.substring(0,parent.length()-2),child.substring(0,child.length()-2),PackageMap);
 		}
+		/*
 		if(isnumicType(new Type(parent))&&isnumicType(new Type(child))){
 			return true;
 		}
+		*/
 		if(parent.equals("java.lang.Object")&&!isnumicType(new Type(child))&&!child.equals("boolean")){
 			return true;
 		}
-		/*
+
 		if(parent.equals("short")&&child.equals("byte")){
 			return true;
 		}
 		if(parent.equals("int")&&child.equals("char")){
 			return true;
 		}
-		*/
+		if(parent.equals("char")&&child.equals("int")){
+			return true;
+		}
+		if(parent.equals("int")&&child.equals("short")){
+			return true;
+		}
+		if(parent.equals("int")&&child.equals("byte")){
+			return true;
+		}
+		if(parent.equals("char")&&child.equals("short")){
+			return true;
+		}
+		if(parent.equals("char")&&child.equals("byte")){
+			return true;
+		}
+		if(parent.equals("byte")&&child.equals("int")){
+			return true;
+		}
+		if(parent.equals("short")&&child.equals("int")){
+			return true;
+		}
+		if(isnumicType(new Type(parent))&&isnumicType(new Type(child))){
+			System.out.println("assign fail "+parent+"  "+child);
+			return true;
+		}
 		if((parent.equals("java.lang.Cloneable")||parent.equals("java.io.Serializable"))&&child.contains("[]")){
 			return true;
 		}

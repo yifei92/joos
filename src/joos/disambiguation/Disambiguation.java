@@ -229,7 +229,7 @@ public class Disambiguation {
         if (node.children != null) {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
-            linkName(environment, nameNode, packageMap, environment);
+            linkName(environment, nameNode, packageMap, environment, false);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
             linkNames(environment, node.children.get(2), packageMap);
             return;
@@ -260,7 +260,7 @@ public class Disambiguation {
         if (node.children != null && node.children.size() == 1) {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
-            linkName(environment, nameNode, packageMap, environment);
+            linkName(environment, nameNode, packageMap, environment, node.token.getType() == TokenType.LEFT_HAND_SIDE);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
             return;
           }
@@ -280,7 +280,7 @@ public class Disambiguation {
     }
   }
 
-  private static boolean linkNameToVariable(Environment environment, String name, ParseTreeNode node, Map<String, Environment> packageMap, Environment usageEnvironment, boolean shouldBeStatic, boolean isFirstScope) throws InvalidSyntaxException {
+  private static boolean linkNameToVariable(Environment environment, String name, ParseTreeNode node, Map<String, Environment> packageMap, Environment usageEnvironment, boolean shouldBeStatic, boolean isFirstScope, boolean isLeftHandSide) throws InvalidSyntaxException {
     int dotIndex = name.indexOf('.');
     String prefix;
     if (dotIndex != -1) {
@@ -292,6 +292,7 @@ public class Disambiguation {
       environment.mVariableDeclarations.containsKey(prefix) &&
       (
         !isFirstScope ||
+        isLeftHandSide ||
         (getEnvironmentType(environment) == EnvironmentType.CLASS && getEnvironmentType(usageEnvironment) != EnvironmentType.CLASS) ||
         environment.mVariableDeclarations.get(prefix).isBefore(node)
       )
@@ -316,12 +317,12 @@ public class Disambiguation {
               return true;
             }
           }
-          if (linkNameToVariable(packageMap.get("java.lang.Object"), name.substring(dotIndex + 1), node, packageMap, usageEnvironment, false, false)) {
+          if (linkNameToVariable(packageMap.get("java.lang.Object"), name.substring(dotIndex + 1), node, packageMap, usageEnvironment, false, false, isLeftHandSide)) {
             return true;
           }
         } else {
           if (packageMap.containsKey(type.name)) {
-            if (linkNameToVariable(packageMap.get(type.name), name.substring(dotIndex + 1), node, packageMap, usageEnvironment, false, false)) {
+            if (linkNameToVariable(packageMap.get(type.name), name.substring(dotIndex + 1), node, packageMap, usageEnvironment, false, false, isLeftHandSide)) {
               return true;
             }
           }
@@ -331,18 +332,18 @@ public class Disambiguation {
     switch (getEnvironmentType(environment)) {
       case CLASS:
         for (Environment extendedEnvironment : getExtendedEnvironments(environment, packageMap)) {
-          if (linkNameToVariable(extendedEnvironment, name, node, packageMap, usageEnvironment, shouldBeStatic, isFirstScope)) return true;
+          if (linkNameToVariable(extendedEnvironment, name, node, packageMap, usageEnvironment, shouldBeStatic, isFirstScope, isLeftHandSide)) return true;
         }
         break;
       default:
-      if (linkNameToVariable(environment.mParent, name, node, packageMap, usageEnvironment, shouldBeStatic, isFirstScope)) return true;
+      if (linkNameToVariable(environment.mParent, name, node, packageMap, usageEnvironment, shouldBeStatic, isFirstScope, isLeftHandSide)) return true;
     }
     return false;
   }
 
-  static void linkName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap, Environment usageEnvironment) throws InvalidSyntaxException {
+  static void linkName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
     String name = getNameFromTypeNode(node);
-    if (linkNameToVariable(environment, name, node, packageMap, usageEnvironment, false, true)) return;
+    if (linkNameToVariable(environment, name, node, packageMap, usageEnvironment, false, true, isLeftHandSide)) return;
     int dotIndex = name.indexOf('.');
     String prefix;
     if (dotIndex != -1) {
@@ -364,7 +365,7 @@ public class Disambiguation {
       return;
     }
     if (typeEnvironment != null && dotIndex != -1) {
-      if (linkNameToVariable(typeEnvironment, name.substring(dotIndex), node, packageMap, usageEnvironment, true, false)) return;
+      if (linkNameToVariable(typeEnvironment, name.substring(dotIndex), node, packageMap, usageEnvironment, true, false, isLeftHandSide)) return;
     }
     throw new InvalidSyntaxException("Name \"" + name + "\" cannot be resolved");
   }

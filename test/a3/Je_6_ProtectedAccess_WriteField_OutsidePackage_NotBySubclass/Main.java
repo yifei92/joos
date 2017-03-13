@@ -24,7 +24,7 @@ public class Main extends p.A {
     }
 
     public void access() {
-	p.A a = this;
-	a.f = 3; // compile time error
+    	p.A a = this;
+    	a.f = 3; // compile time error
     }
 }

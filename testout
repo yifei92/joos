@@ -6,34 +6,56 @@ COMPLETE!
 Running A3 tests
 Test test/a3/J1_5_AmbiguousName_FieldVsType_Initializer.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_5_AmbiguousName_FieldVsType.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_5_AmbiguousName_LocalVsField.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_5_AmbiguousName_LocalVsField_SameLine.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_5_AmbiguousName_LocalVsType.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_5_ForwardReference_ArrayLength.java
 16
-a
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_5_ForwardReference_EqualInfix.java
@@ -45,273 +67,427 @@ Error
 
 Test test/a3/J1_5_ForwardReference_ExplicitThis_InAssignment.java
 16
-foo
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_5_ForwardReference_SameLine.java
 16
-a
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_6_Assignable_Object_ObjectArray.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_6_AssignmentInArrayLength.java
 16
-local variableinilize with wrong type
-Error
+true
 
 
 Test test/a3/J1_6_AssignmentInNotArrayLength.java
 16
-local variableinilize with wrong type
-Error
+true
 
 
 Test test/a3/J1_6_StaticMethodCall_ThisInArg.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_A_ConcatInSimpleInvoke.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_A_ConcatInStaticInvoke.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ArrayAccess_Cast.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_arrayAccess.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ArrayAccess_MethodInvocation.java
 16
-J1_ArrayAccess_MethodInvocation Integer NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ArrayCast.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_arrayinstanceof1.java
 16
-J1_arrayinstanceof1 String NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_arrayinstanceof2.java
 16
-J1_arrayinstanceof2 String NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ArrayInterfaces.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/J1_array.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_arraylength.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_assign_Object_to_Object.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_backwardRef.java
 16
-a
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_backwardsFieldRef.java
 16
-field2
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_BigByteInit.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_BigCharCharInit.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_BigShortFromByteInit.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_BigShortInit.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_boolean.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_booleanliterals.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ByteCast.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ByteCharInit2.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ByteInit.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_byte.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_callstaticmethods.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_castarrayaccess.java
 16
-J1_castarrayaccess String NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_castMultiple1.java
 16
-J1_castMultiple1 J1_castMultiple1 NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_castMultiple2.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_castMultiple.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_castprimarymethodinvocation.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_castthis.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_cast_to_same_type.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_CharCast.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_CharCharInit1.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_closestMatchConstructor1.java
 16
+false
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ClosestMatchMultiplePath1.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ClosestMatchMultiplePath2.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ClosestMethod2.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ClosestMethod3.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ClosestMethod4.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_constructoroverloading.java
 16
-.J1_constructoroverloading
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_evalMethodInvocationFromParExp.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_fieldinit2.java
@@ -330,54 +506,73 @@ Error
 
 Test test/a3/J1_fieldinit_forward_ref.java
 16
-i
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_fieldinit.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_fieldInOwnInit.java
 16
-f
-Qualified Name not found
-Error
 
 
 Test test/a3/J1_fieldOwnInit1.java
 16
-f
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_fieldOwnInit2.java
 16
-f
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_FieldRestrictionDuringInit.java
 16
-j
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_formalindex.java
 16
-.J1_formalindex
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_formal_with_same_name_as_field.java
 16
-field inilize with wrong type Stringjava.lang.String
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_forwardfield1.java
@@ -389,6 +584,11 @@ Error
 
 Test test/a3/J1_forwardfield2.java
 16
+false
+false
+false
+false
+false
 Success
 
 
@@ -400,73 +600,120 @@ Error
 
 Test test/a3/J1_implicitstringconcatenation.java
 16
-local variableinilize with wrong type
+System.out
+Qualified Name not found
 Error
 
 
 Test test/a3/J1_implicitthisforfields.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_implicitthisformethods.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_instanceof_array2.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_instanceof_array.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_instanceof.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_instanceof_string.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_int.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_intstringadd.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/J1_length_field_not_array.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_localDeclAccess.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_methodInvocationQualified.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_methodoverloading.java
 16
-.J1_methodoverloading
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_methodWithArgList.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -479,94 +726,153 @@ Error
 
 Test test/a3/J1_nestedblocks.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_nestedcast.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_nonthisfieldaccess.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_nullinstanceof1.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_OneByteByteCast.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_OneByteCharCast.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_OneByteIntCast.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_OneByteShortCast.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_primitivecasts.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_referencecasts.java
 16
-.J1_referencecasts
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_samestaticinvoketwice.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ShortCast.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_ShortCharInit2.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ShortFromByteInit.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ShortInit.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_short.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_sideeffects_obj3.java
 16
-field inilize with wrong type J1_sideeffects_obj3null
-Error
+false
 
 
 Test test/a3/J1_StaticField_AccessFromClass.java
@@ -577,103 +883,175 @@ Error
 
 Test test/a3/J1_staticMethodInvocation.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_array.java
 16
-J1_typecheck_array String NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_typecheck_constructor_invocation.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_equality.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_expstm.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_typecheck_if1.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_if2.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof1.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof2.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof3.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof4.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof5.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof6.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof7.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_instanceof.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_plus.java
 16
-local variableinilize with wrong type
+fail string concation
 Error
 
 
 Test test/a3/J1_typecheck_return.java
 16
+false
+false
+false
+false
 
 
 Test test/a3/J1_typecheck_static_invocation1.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_typecheck_while.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_wrapper_classes_eq.java
 16
-local variableinilize with wrong type
+Short  int
+cant find constructor 2
 Error
 
 
@@ -691,9 +1069,12 @@ Error
 
 Test test/a3/J2_exactMatchConstructor3.java
 16
-J2_exactMatchConstructor3  Object
-cant find constructor 2
-Error
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J2_fieldinit_forward_ref.java
@@ -740,9 +1121,11 @@ Error
 
 Test test/a3/Je_16_ClosestMatch_Array.java
 16
-Je_16_ClosestMatch_Array Cloneable NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_16_ClosestMatch_Constructor_NoClosestMatch_This.java
@@ -832,9 +1215,11 @@ Error
 
 Test test/a3/Je_16_StaticThis_StaticFieldInitializer.java
 16
-i
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_16_SuperThis_InvalidSuperParameter.java
@@ -863,11 +1248,18 @@ Error
 
 Test test/a3/Je_1_Dot_ParenthesizedType_Field.java
 16
+false
+false
+false
+false
+false
 Success
 
 
 Test test/a3/Je_1_Dot_ParenthesizedType_Method.java
 16
+unable to find method getProperties
+Error
 
 
 Test test/a3/Je_1_InstanceOf_Primitive.java
@@ -878,6 +1270,10 @@ Error
 
 Test test/a3/Je_1_MethodInvocation_Primitive.java
 16
+false
+false
+false
+false
 int
 Qualified Name not found
 Error
@@ -911,6 +1307,10 @@ Error
 
 Test test/a3/Je_5_AmbiguousInvoke_LocalInOwnInitializer.java
 16
+false
+false
+false
+false
 int
 Qualified Name not found
 Error
@@ -925,6 +1325,10 @@ Error
 
 Test test/a3/Je_5_AmbiguousName_FieldVsType_Initializer.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -972,107 +1376,149 @@ Error
 
 Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ComplexExpression.java
 16
-f
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_Direct.java
 16
-err
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ReadAfterAssignment.java
 16
-a
-Qualified Name not found
-Error
+false
+false
+false
+false
 
 
 Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_RightSideOfAssignment.java
 16
-doop
-Qualified Name not found
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_5_ForwardReference_InAssignment.java
 16
-a
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_5_ForwardReference_MethodCall.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/Je_6_ArrayLength_Invoke.java
 16
+a.length
+Qualified Name not found
+Error
 
 
 Test test/a3/Je_6_Array_NonNumericIndex.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/Je_6_Array_NullTypeIndex.java
 16
-Je_6_Array_NullTypeIndex Object NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_Array_Object.java
 16
-Je_6_Assignable_Array_Object Object NAME type null
 local variableinilize with wrong type
 Error
 
 
 Test test/a3/Je_6_Assignable_byteArray_intArray.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_byte_char.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_byte_int.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_Cast_intArray_int.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
 
 
 Test test/a3/Je_6_Assignable_char_byte_1.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_char_byte_2.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_char_int.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_Condition.java
@@ -1093,12 +1539,14 @@ Error
 
 Test test/a3/Je_6_Assignable_Instanceof_Result.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/Je_6_Assignable_Instanceof_SimpleType.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -1110,26 +1558,28 @@ Error
 
 Test test/a3/Je_6_Assignable_intArray_byteArray.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_intArray_int.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/Je_6_Assignable_int_intArray.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/Je_6_Assignable_int_null.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_NamedCastOfComplement.java
@@ -1140,37 +1590,38 @@ Error
 
 Test test/a3/Je_6_Assignable_NonstaticField.java
 16
-.Je_6_Assignable_NonstaticField
-Qualified Name not found
-Error
+false
 
 
 Test test/a3/Je_6_Assignable_RefType_RefTypeArray.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/Je_6_Assignable_ResultTypeOfAssignment.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/Je_6_Assignable_ReturnInElse.java
 16
-return type does match method declation java.lang.String return type String
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_Return_ToSubType.java
 16
-return type does match method declation Object return type String
+return type does match method declation java.lang.Object return type java.lang.String
 Error
 
 
 Test test/a3/Je_6_Assignable_Return_VoidInVoidMethod.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -1182,24 +1633,34 @@ Error
 
 Test test/a3/Je_6_Assignable_short_char.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_short_int.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_Assignable_ToSubtype_FieldInit.java
 16
-field inilize with wrong type StringObject
+field inilize with wrong type java.lang.Stringjava.lang.Object
 Error
 
 
 Test test/a3/Je_6_Assignable_ValueReturn_InConstructor.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -1297,8 +1758,6 @@ Error
 
 Test test/a3/Je_6_Equality_int.java
 16
-local variableinilize with wrong type
-Error
 
 
 Test test/a3/Je_6_Equality_int_NamedType.java
@@ -1309,21 +1768,34 @@ Error
 
 Test test/a3/Je_6_Equality_StringInteger.java
 16
-local variableinilize with wrong type
+Je_6_Equality_StringIntegercannot cast equality java.lang.String to java.lang.Integer
 Error
 
 
 Test test/a3/Je_6_Equality_Void.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/Je_6_Expression_StringConcat_Void.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_FinalField_ArrayLength.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -1348,6 +1820,10 @@ Error
 
 Test test/a3/Je_6_InstanceOf_Primitive_3.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -1417,6 +1893,10 @@ Error
 
 Test test/a3/Je_6_NonStaticAccessToStatic_Method.java
 16
+false
+false
+false
+false
 Success
 
 
@@ -1428,45 +1908,76 @@ Error
 
 Test test/a3/Je_6_StaticAccessToNontatic_Method.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/Je_6_StaticThis_AfterStaticInvoke.java
 16
-.Je_6_StaticThis_AfterStaticInvoke
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_StaticThis_InvokeNonstatic_Implicit.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/Je_6_StaticThis_InvokeNonStatic.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_StaticThis_InvokeStatic.java
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_StaticThis_NonStaticField_ImplicitThis.java
 16
+false
+false
+false
+false
 Success
 
 
 Test test/a3/Je_6_StaticThis_NonstaticField.java
 16
-.Je_6_StaticThis_NonstaticField
-Qualified Name not found
-Error
+false
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_6_StringMinus.java
 16
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/Je_BadConstructorName.java
@@ -1477,56 +1988,100 @@ Error
 
 Test test/a3/J1_5_AmbiguousName_DefaultPackageNotVisible/
 19
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_ImplicitSuper/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceField_SubVar/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceField_This/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceField_ThisVar/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceMethod_SubVar/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceMethod_This/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceMethod_ThisVar/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_StaticMethod_Sub/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_StaticMethod_Super/
 20
+false
+false
+false
+false
 Success
 
 
 Test test/a3/J1_6_ProtectedAccess_StaticMethod_This/
 20
+false
+false
+false
+false
 Success
 
 
@@ -1546,53 +2101,83 @@ Error
 
 Test test/a3/J1_ArrayCast1/
 17
-Main A NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ArrayCast2/
 17
-Main Main NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ArrayCast3/
 17
-Main A NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ArrayCast4/
 17
-Main A NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_evalMethodInvocationFromArray/
 17
-Main J1_evalMethodInvocation NAME type null
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_evalMethodInvocationFromLit/
 16
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_evalMethodInvocationFromMethod/
 17
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_evalMethodInvocationFromObject/
 17
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_evalMethodInvocationFromThis/
 17
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_interfaceassignable/
@@ -1614,27 +2199,388 @@ error forgot INTERFACE_MEMBER_DECLARATIONS
 
 Test test/a3/J1_NamedCast2/
 17
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_NamedCast3/
 17
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_NamedCast4/
 17
-local variableinilize with wrong type
-Error
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ProtectedAccess1/
 17
+false
+false
+false
+false
+false
+unable to find field
+Error
 
 
 Test test/a3/J1_ProtectedAccess2/
 17
+false
+false
+false
+false
+Success
 
 
 Test test/a3/J1_ProtectedAccess4/
 17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/J1_supermethod_override11/
+20
+A protected method must not replace a public method.
+Error
+
+
+Test test/a3/J1_typecheck_assignment/
+18
+false
+false
+false
+false
+false
+false
+true
+
+
+Test test/a3/J2_6_AmbiguousName_StaticFieldAccess/
+17
+a
+Qualified Name not found
+Error
+
+
+Test test/a3/J2_6_ProtectedAccess_StaticField_Sub/
+20
+D
+Qualified Name not found
+Error
+
+
+Test test/a3/J2_6_ProtectedAccess_StaticField_Super/
+20
+A
+Qualified Name not found
+Error
+
+
+Test test/a3/J2_6_ProtectedAccess_StaticField_This/
+20
+Name "C.staticField" cannot be resolved
+Error
+
+
+Test test/a3/J2_implicitStaticMethod/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/J2_interfaces/
+17
+false
+false
+false
+false
+cannot cast 1J2_interface to Main
+Error
+
+
+Test test/a3/J2_ProtectedAccess3/
+17
+p
+Qualified Name not found
+Error
+
+
+Test test/a3/Je_16_ProtectedAccess_StaticField_Sub_DeclaredInSub/
+20
+D
+Qualified Name not found
+Error
+
+
+Test test/a3/Je_3_Resolve_LinkToCorrectPackage/
+18
+Zoo
+Qualified Name not found
+Error
+
+
+Test test/a3/Je_5_AmbiguousName_DefaultPackageNotVisible/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_5_AmbiguousName_LinkToFirstFound/
+18
+fields must have a access modifier
+Error
+
+
+Test test/a3/Je_6_Assignable_ToSubtype/
+17
+false
+false
+false
+false
+cannot cast Main to java.lang.Thread
+Error
+
+
+Test test/a3/Je_6_Assignable_ToSubtype_DeclInit/
+17
+false
+false
+false
+false
+local variableinilize with wrong type
+Error
+
+
+Test test/a3/Je_6_ClosestMatch_Constructor_NoClosestMatch/
+18
+error forgot INTERFACE_MEMBER_DECLARATIONS
+
+
+Test test/a3/Je_6_ConstructorPresent_PresentInSubclass/
+17
+false
+false
+false
+false
+A  java.lang.String
+cant find constructor 2
+Error
+
+
+Test test/a3/Je_6_ConstructorPresent_Super_NoDefault/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_MethodPresent_PresentInSubclass/
+17
+false
+false
+false
+false
+unable to find method testMain
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_ClassCreation_Sub/
+20
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ClassCreation_Super/
+20
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Constructor/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_External/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_External/
+18
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_Internal/
+18
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_SubDeclare_SubVar/
+20
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_SuperVar/
+20
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SubDeclare_SubVar/
+20
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SuperVar/
+20
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotBySubclass/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotInSubclass/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotBySubclass/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotInSubclass/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_StaticMethod_Sub_DeclaredInSub/
+20
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_SuperConstructor_NewExp/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_TwoSubtypes/
+18
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotBySubclass/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotInSubclass/
+17
+false
+false
+false
+false
+Success
+
+
+Test test/a3/Je_AccessToStaticFieldWithImplicitThis/
+16
+fields must have a access modifier
+Error
+
+

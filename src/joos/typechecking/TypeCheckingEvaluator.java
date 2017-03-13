@@ -67,32 +67,47 @@ public class TypeCheckingEvaluator {
 					return check(currentnode.children.get(0),PackageMap,rootenv);
 				}
 			case ADDITIVE_EXPRESSION:
-			case MULTIPLICATIVE_EXPRESSION:
-				if(currentnode.children.size()>1){
-					Type left=check(currentnode.children.get(0),PackageMap,rootenv);
-					Type right=check(currentnode.children.get(2),PackageMap,rootenv);
-					if(left.equals("java.lang.String")){
-						if(!right.equals("null")){
-							return left;
-						}
-						else{
-							throw new TypeLinkingException("fail string concation");
-						}
-					}
-					if(right.equals("java.lang.String")){
-						if(!left.equals("null")){
-							return right;
-						}
-						else{
-							throw new TypeLinkingException("fail string concation");
+				if(currentnode.children.size()>1) {
+					boolean numeric=true;
+					boolean findstring=false;
+					for (int i = 0; i < currentnode.children.size(); i++) {
+						if (i % 2 == 0) {
+							Type temp = check(currentnode.children.get(i), PackageMap, rootenv);
+							if (isnumicType(temp)) {
+								continue;
+							}
+							numeric=false;
+							if(temp.equals("java.lang.String")){
+								findstring=true;
+							}
 						}
 					}
-					if(isnumicType(left) && isnumicType(right)){
+					if(numeric) {
 						return new Type("int");
 					}
 					else{
-						throw new TypeLinkingException("and expression has non boolean input");
+						if(findstring){
+							return new Type("java.lang.String");
+						}
+						else {
+							throw new TypeLinkingException("string concatenate without string");
+						}
 					}
+				}
+				else {
+					return check(currentnode.children.get(0),PackageMap,rootenv);
+				}
+			case MULTIPLICATIVE_EXPRESSION:
+				if(currentnode.children.size()>1) {
+					for (int i = 0; i < currentnode.children.size(); i++) {
+						if (i % 2 == 0) {
+							Type temp = check(currentnode.children.get(i), PackageMap, rootenv);
+							if (isnumicType(temp)) {
+								throw new TypeLinkingException("and expression has bad input");
+							}
+						}
+					}
+					return new Type("int");
 				}
 				else {
 					return check(currentnode.children.get(0),PackageMap,rootenv);
@@ -284,7 +299,6 @@ public class TypeCheckingEvaluator {
 
 			case FIELD_ACCESS:
 				primary=check(currentnode.children.get(0),PackageMap,rootenv);
-				System.out.println(primary==null);
 				if(primary.name.contains("[]")&&((TerminalToken)currentnode.children.get(2).token).getRawValue().equals("length")){
 					return new Type("int");
 				}

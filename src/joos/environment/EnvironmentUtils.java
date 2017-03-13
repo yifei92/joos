@@ -462,7 +462,10 @@ public class EnvironmentUtils {
 	}
 
 	public static String getFullQualifiedNameFromTypeNode(Environment environment, ParseTreeNode name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-		return getFullQualifiedNameFromTypeNode(environment, name, packageMap, new Ref(), new Ref());
+		Ref<Boolean> isArray = new Ref();
+		String q = getFullQualifiedNameFromTypeNode(environment, name, packageMap, new Ref(), isArray);
+		if (isArray.ref) return q + "[]";
+		return q;
 	}
 
 
@@ -520,7 +523,7 @@ public class EnvironmentUtils {
 	 * Given a class/constructor environment and param types checks is the given class contains a constructor
 	 * with the given types.
 	 */
-	public boolean verifyConstructorSignature(Environment environment, List<String> paramTypes, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+	public static boolean verifyConstructorSignature(Environment environment, List<String> paramTypes, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		if (environment == null) {
 			return false;
 		}

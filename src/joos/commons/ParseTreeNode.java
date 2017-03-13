@@ -23,6 +23,32 @@ public class ParseTreeNode {
 		this.children = children;
 	}
 
+	/**
+	 * Returns true if the first terminal node that is a child of this node is before
+	 * the first terminal node of the other node
+	 */
+	public boolean isBefore(ParseTreeNode other) {
+		ParseTreeNode thisTerminalNode = getFirstTerminalNode();
+		ParseTreeNode otherTerminalNode = other.getFirstTerminalNode();
+		return thisTerminalNode.token.getIndex() < otherTerminalNode.token.getIndex();
+	}
+
+	public ParseTreeNode getFirstTerminalNode() {
+		if (token instanceof TerminalToken) {
+			return this;
+		}
+		if (children != null) {
+			ParseTreeNode firstTerminalNode = null;
+			for (ParseTreeNode child: children) {
+				firstTerminalNode = child.getFirstTerminalNode();
+				if (firstTerminalNode != null) {
+					return firstTerminalNode;
+				} 
+			}
+		}
+		return null;
+	}
+
 	public void print() {
 		this.print(0);
 	}

@@ -177,4 +177,10 @@ public class Scanner {
 		tokens.add(TerminalToken.getToken(TokenType.EOF));
 		return tokens;
 	}
+
+	public static void orderTokens(List<TerminalToken> tokens) {
+		for (int i = 0 ; i < tokens.size() ; i++) {
+			tokens.get(i).setIndex(i);
+		}
+	}
 }

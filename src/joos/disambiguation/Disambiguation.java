@@ -29,19 +29,9 @@ public class Disambiguation {
       environment.mVariableToType = new HashMap();
       linkTypes(environment, environment.mScope, packageMap);
     }
-    if (environment.mChildrenEnvironments != null) {
-      for (Environment child : environment.mChildrenEnvironments) {
-        linkAllTypes(child,packageMap);
-      }
-    }
   }
   public static void linkAllNames(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     linkNames(environment, environment.mScope, packageMap);
-    if (environment.mChildrenEnvironments != null) {
-      for (Environment child : environment.mChildrenEnvironments) {
-        linkAllNames(child, packageMap);
-      }
-    }
   }
 
   static void linkTypes(Environment environment, ParseTreeNode node,Map<String, Environment> packageMap) throws InvalidSyntaxException {
@@ -50,8 +40,18 @@ public class Disambiguation {
       case ABSTRACT_METHOD_DECLARATION:
         if (environment.mScope == node) {
           break;
+        } else {
+          for (Environment child : environment.mChildrenEnvironments) {
+            if (child.mScope == node) {
+              if (child.mVariableToType == null) {
+                child.mVariableToType = new HashMap();
+                linkTypes(child, node, packageMap);
+              }
+              return;
+            }
+          }
         }
-        return;
+        break;
       case IF_THEN_STATEMENT:
       case IF_THEN_ELSE_STATEMENT:
       case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
@@ -61,12 +61,20 @@ public class Disambiguation {
       case FOR_STATEMENT_NO_SHORT_IF:
         if (node.children != null) {
           for (ParseTreeNode child : node.children) {
-            if (child.token.getType() != TokenType.STATEMENT) {
-              linkTypes(environment, child,packageMap);
+            if (child.token.getType() == TokenType.STATEMENT || child.token.getType() == TokenType.STATEMENT_NO_SHORT_IF) {
+              for (Environment childEnv : environment.mChildrenEnvironments) {
+                if (childEnv.mScope == child) {
+                  if (childEnv.mVariableToType == null) {
+                    childEnv.mVariableToType = new HashMap();
+                    linkTypes(childEnv, node, packageMap);
+                  }
+                  return;
+                }
+              }
             }
           }
         }
-        return;
+        break;
       case CONSTRUCTOR_DECLARATION: {
         if (environment.mScope == node) {
           ParseTreeNode params = node.children.get(1).children.get(2);
@@ -80,8 +88,17 @@ public class Disambiguation {
           }
           break;
         } else {
-          return;
+          for (Environment child : environment.mChildrenEnvironments) {
+            if (child.mScope == node) {
+              if (child.mVariableToType == null) {
+                child.mVariableToType = new HashMap();
+                linkTypes(child, node, packageMap);
+              }
+              return;
+            }
+          }
         }
+        break;
       }
       case METHOD_DECLARATION: {
         if (environment.mScope == node) {
@@ -96,13 +113,17 @@ public class Disambiguation {
           }
           break;
         } else {
-          // String name = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
-          // String typeName = EnvironmentUtils.getFullQualifiedNameFromTypeNode(environment,node.children.get(0).children.get(1),packageMap);
-          // Type type = new Type(typeName);
-          // type.decl = node.children.get(0);
-          // environment.mVariableToType.put(name, type);
-          return;
+          for (Environment child : environment.mChildrenEnvironments) {
+            if (child.mScope == node) {
+              if (child.mVariableToType == null) {
+                child.mVariableToType = new HashMap();
+                linkTypes(child, node, packageMap);
+              }
+              return;
+            }
+          }
         }
+        break;
       }
       case FIELD_DECLARATION: {
         Type type = getTypeFromTypeNode(environment, node.children.get(1), packageMap);
@@ -136,8 +157,18 @@ public class Disambiguation {
       case ABSTRACT_METHOD_DECLARATION:
       case CONSTRUCTOR_DECLARATION:
       case METHOD_DECLARATION:
+        if (environment.mScope == node) {
+          break;
+        } else {
+          for (Environment child : environment.mChildrenEnvironments) {
+            if (child.mScope == node) {
+              linkNames(child, node, packageMap);
+              return;
+            }
+          }
+        }
+        break;
       case REFERENCE_TYPE:
-        if (node == environment.mScope) break;
         return;
       case IF_THEN_STATEMENT:
       case IF_THEN_ELSE_STATEMENT:
@@ -148,12 +179,17 @@ public class Disambiguation {
       case FOR_STATEMENT_NO_SHORT_IF:
         if (node.children != null) {
           for (ParseTreeNode child : node.children) {
-            if (child.token.getType() != TokenType.STATEMENT && child.token.getType() != TokenType.STATEMENT_NO_SHORT_IF) {
-              linkNames(environment, child, packageMap);
+            if (child.token.getType() == TokenType.STATEMENT || child.token.getType() == TokenType.STATEMENT_NO_SHORT_IF) {
+              for (Environment childEnv : environment.mChildrenEnvironments) {
+                if (childEnv.mScope == child) {
+                  linkNames(childEnv, node, packageMap);
+                  return;
+                }
+              }
             }
           }
         }
-        return;
+        break;
       case ARRAY_ACCESS:
         if (node.children != null) {
           ParseTreeNode nameNode = node.children.get(0);

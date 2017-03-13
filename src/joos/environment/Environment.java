@@ -100,7 +100,7 @@ public class Environment {
   }
 
 	/**
-	 * If the method signature exists within this class or is a method in a parent class then the full method 
+	 * If the method signature exists within this class or is a method in a parent class then the full method
 	 * signature will be returned. Null otherwise
 	 */
 	public MethodSignature findMethodSignature(Map<String, Environment> packageMap, MethodSignature partialSignature) throws InvalidSyntaxException {
@@ -121,7 +121,7 @@ public class Environment {
 				}
 			}
 		}
-		Map<String, Map<List<String>, MethodSignature>> methodSignatures = getMethodSignatures(packageMap);	
+		Map<String, Map<List<String>, MethodSignature>> methodSignatures = getMethodSignatures(packageMap);
 		if (methodSignatures != null) {
 			Map<List<String>, MethodSignature> things = methodSignatures.get(partialSignature.name);
 			if (things != null) {
@@ -186,7 +186,6 @@ public class Environment {
             methodSignatures.get(methodSignature.name).put(methodSignature.parameterTypes, methodSignature);
           }
         }
-
         List<Environment> extendedEnvironments = getExtendedEnvironments(environment, packageMap);
         if (type == EnvironmentType.INTERFACE && extendedEnvironments.size() == 0) {
           Map<String, Map<List<String>, MethodSignature>> extendedSignatures = getAllMethodSignatures(packageMap.get("java.lang.Object"), packageMap);
@@ -258,7 +257,7 @@ public class Environment {
                     if (!methodSignature.type.equals(implementedSignature.type)) {
                       throw new InvalidSyntaxException("A class or interface must not contain (declare or inherit) two methods with the same signature but different return types");
                     }
-                    if (methodSignature.modifiers.contains(TokenType.PROTECTED) && implementedSignature.modifiers.contains(TokenType.PUBLIC)) {
+                    if (!getEnvironmentModifiers(environment).contains(TokenType.ABSTRACT) && methodSignature.modifiers.contains(TokenType.PROTECTED) && implementedSignature.modifiers.contains(TokenType.PUBLIC)) {
                       throw new InvalidSyntaxException("A protected method must not replace a public method.");
                     }
                   } else {

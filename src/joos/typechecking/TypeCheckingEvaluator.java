@@ -1,7 +1,11 @@
 package joos.typechecking;
 
 
+import jdk.nashorn.internal.ir.Terminal;
+import jdk.nashorn.internal.ir.TernaryNode;
+import jdk.nashorn.internal.parser.*;
 import joos.commons.*;
+import joos.commons.TokenType;
 import joos.environment.Environment;
 import joos.environment.EnvironmentUtils;
 import joos.exceptions.InvalidSyntaxException;
@@ -12,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static joos.environment.EnvironmentUtils.findEvironment;
-import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
-import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeNode;
+import static joos.environment.EnvironmentUtils.*;
 
 /**
  * Created by yifei on 09/03/17.
@@ -28,8 +30,8 @@ public class TypeCheckingEvaluator {
 			case STRING_LITERAL:
 			case STRING_LITERAL_WITH_QUOTES:
 				return new Type("java.lang.String");
-			case INT:
 			case INTEGER_LITERAL:
+			case INT:
 				return new Type("int");
 			case SHORT:
 				return new Type("short");
@@ -44,6 +46,10 @@ public class TypeCheckingEvaluator {
 			case NULL_LITERAL:
 				return new Type("null");
 			case THIS:
+				if(rootenv.PackageName.equals(""))
+				{
+					return new Type(rootenv.mName);
+				}
 				return new Type(rootenv.PackageName+"."+rootenv.mName);
 			case INCLUSIVE_OR_EXPRESSION:
 			case AND_EXPRESSION:
@@ -126,7 +132,6 @@ public class TypeCheckingEvaluator {
 				if(left.equals("int")&&right.equals("char")){
 					return null;
 				}
-				System.out.print(rootenv.mName+"  "+left.name+"  "+right.name);
 				if(!assignable(left.name,right.name,PackageMap)){
 					throw new TypeLinkingException("cannot cast "+left.name+" to "+right.name);
 				}
@@ -162,7 +167,7 @@ public class TypeCheckingEvaluator {
 					return left;
 				}
 				left = check(currentnode.children.get(1), PackageMap, rootenv);
-				if(currentnode.children.get(3).children!=null&&currentnode.children.get(3).children.size()>0) {
+				if(currentnode.children.get(2).children!=null&&currentnode.children.get(2).children.size()>0) {
 					left.name = left.name + "[]";
 				}
 				right = check(currentnode.children.get(4), PackageMap, rootenv);
@@ -219,6 +224,7 @@ public class TypeCheckingEvaluator {
 			case NAME:
 				if(currentnode.type==null){
 					System.out.println(rootenv.mName+" "+fullnameFromnamenode(currentnode)+" NAME type null");
+					currentnode.children.get(100).equals(null);
 					return new Type("char");
 				}
 				return currentnode.type;
@@ -255,7 +261,7 @@ public class TypeCheckingEvaluator {
 					}
 					return new Type(m.type);
 				}
-				if(currentnode.children.get(4).children!=null)
+				if(currentnode.children.get(4).children!=null&&currentnode.children.get(4).children.size()>0)
 					for (ParseTreeNode parameter:currentnode.children.get(4).children.get(0).children){
 						if(parameter.token.getType()!=TokenType.COMMA) {
 							parameterTyps.add(check(parameter, PackageMap,rootenv).name);
@@ -320,12 +326,27 @@ public class TypeCheckingEvaluator {
 			return null;
 
 			case LOCAL_VARIABLE_DECLARATION:
-				Type Typedef=check(currentnode.children.get(0),PackageMap,rootenv);
-				Type initilization=check(currentnode.children.get(1),PackageMap,rootenv);
-				if(!Typedef.equals(initilization)){
-					throw new TypeLinkingException("local variableinilize with wrong type");
+				ParseTreeNode arraynode=EnvironmentUtils.findNodeWithTokenType(currentnode.children.get(0),TokenType.ARRAY_TYPE);
+				Type Typedef;
+				if(arraynode!=null) {
+					arraynode=EnvironmentUtils.findNodeWithTokenType(currentnode.children.get(0),TokenType.NAME);
 				}
-				return null;
+				if(arraynode!=null){
+					Typedef=new Type(getFullQualifiedNameFromTypeName(rootenv,fullnameFromnamenode(arraynode),PackageMap)+"[]");
+				}else{
+					Typedef=check(currentnode.children.get(0),PackageMap,rootenv);
+				}
+				Type initilization=check(currentnode.children.get(1),PackageMap,rootenv);
+				if(!Typedef.equals("null")&&initilization.equals("null")){
+					return null;
+				}
+				if(Typedef.equals(initilization)){
+					return null;
+				}
+				if(assignable(Typedef.name,initilization.name,PackageMap)){
+					return null;
+				}
+				throw new TypeLinkingException("local variableinilize with wrong type");
 			case FIELD_DECLARATION:
 				Typedef=check(currentnode.children.get(1),PackageMap,rootenv);
 				initilization=check(currentnode.children.get(2),PackageMap,rootenv);
@@ -335,7 +356,10 @@ public class TypeCheckingEvaluator {
 				if(Typedef.equals(initilization)){
 					return null;
 				}
-				if(isnumicType(Typedef)&&isnumicType(initilization)) {
+				if(!Typedef.equals("null")&&initilization.equals("null")) {
+					return null;
+				}
+				if(assignable(Typedef.name,initilization.name,PackageMap)) {
 					return null;
 				}
 				throw new TypeLinkingException("field inilize with wrong type "+Typedef.name+initilization.name);
@@ -386,6 +410,9 @@ public class TypeCheckingEvaluator {
 					}
 				return null;
 			case CLASS_OR_INTERFACE_TYPE:
+				if(!currentnode.type.name.contains(".")) {
+					return new Type(EnvironmentUtils.getFullQualifiedNameFromTypeName(rootenv, currentnode.type.name, PackageMap));
+				}
 				return currentnode.type;
 			case	UNARY_EXPRESSION:
 				if(currentnode.children.size()==1){
@@ -404,10 +431,12 @@ public class TypeCheckingEvaluator {
 				Type element=check(currentnode.children.get(0), PackageMap, rootenv);
 				return new Type(element.name+"[]");
 
+			case VARIABLE_INITIALIZER:
+				return check(currentnode.children.get(0),PackageMap,rootenv);
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
 			case TYPE:
-			case VARIABLE_INITIALIZER:
+
 			case VARIABLE_DECLARATORS:
 			case LOCAL_VARIABLE_DECLARATION_STATEMENT:
 			case STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT:
@@ -476,6 +505,21 @@ public class TypeCheckingEvaluator {
 		if(parent.contains("[]")&&child.contains("[]")){
 			return assignable(parent.substring(0,parent.length()-2),child.substring(0,child.length()-2),PackageMap);
 		}
+		if(isnumicType(new Type(parent))&&isnumicType(new Type(child))){
+			return true;
+		}
+		/*
+		if(parent.equals("short")&&child.equals("byte")){
+			return true;
+		}
+		if(parent.equals("int")&&child.equals("char")){
+			return true;
+		}
+		*/
+		if(!parent.equals("null")&&child.equals("null")){
+			return true;
+		}
+
 		Environment childenv=PackageMap.get(child);
 		Environment parentenv=PackageMap.get(parent);
 		boolean returnboo=false;

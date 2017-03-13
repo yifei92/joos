@@ -343,7 +343,21 @@ public class Disambiguation {
 
   static void linkName(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
     String name = getNameFromTypeNode(node);
-    if (linkNameToVariable(environment, name, node, packageMap, usageEnvironment, false, true, isLeftHandSide)) return;
+    boolean shouldBeStatic = false;
+    // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
+    if ((EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.METHOD &&
+        environment.getMethodSignature(environment, packageMap, "").modifiers.contains(TokenType.STATIC))) {
+      shouldBeStatic = true;
+    }
+    if (EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.CLASS) {
+      ParseTreeNode fieldDeclarationNode = environment.findVariableDeclarationForUsage(node);
+      if (fieldDeclarationNode != null) {
+        if (findNodeWithTokenType(fieldDeclarationNode, TokenType.STATIC) != null) {
+          shouldBeStatic = true;
+        }
+      }
+    }
+    if (linkNameToVariable(environment, name, node, packageMap, usageEnvironment, shouldBeStatic, true, isLeftHandSide)) return;
     int dotIndex = name.indexOf('.');
     String prefix;
     if (dotIndex != -1) {

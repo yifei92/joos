@@ -385,8 +385,10 @@ public class Disambiguation {
     } else {
       prefix = name;
     }
-    Environment typeEnvironment = getEnvironmentFromTypeName(environment, prefix, packageMap);
-    if (typeEnvironment == null) {
+    Environment typeEnvironment = null;
+    try {
+      typeEnvironment = getEnvironmentFromTypeName(environment, prefix, packageMap);
+    } catch (InvalidSyntaxException e) {
       for (String packageName : packageMap.keySet()) {
         if (name.length() >= packageName.length() && name.substring(0, packageName.length()).equals(packageName)) {
           typeEnvironment = packageMap.get(packageName);

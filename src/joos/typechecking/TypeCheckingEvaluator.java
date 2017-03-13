@@ -22,7 +22,7 @@ import static joos.environment.EnvironmentUtils.*;
  * Created by yifei on 09/03/17.
  */
 public class TypeCheckingEvaluator {
-	private String returntype;
+	private String returntype="";
 	private ParseTreeNode root;
 
 	public Type check(ParseTreeNode currentnode,Map<String, Environment> PackageMap,Environment rootenv) throws TypeLinkingException, InvalidSyntaxException {
@@ -129,7 +129,8 @@ public class TypeCheckingEvaluator {
 
 			case FOR_STATEMENT:
 			case FOR_STATEMENT_NO_SHORT_IF:
-				if(!check(currentnode.children.get(4),PackageMap,rootenv).equals("boolean")){
+				Type conditionclause=check(currentnode.children.get(4),PackageMap,rootenv);
+				if(!conditionclause.equals("boolean")&&!conditionclause.equals("void")){
 					System.out.println(check(currentnode.children.get(4),PackageMap,rootenv).name);
 					throw new TypeLinkingException("for condition does not evaluate to boolean");
 				}
@@ -231,7 +232,10 @@ public class TypeCheckingEvaluator {
 
 			case RETURN_STATEMENT:
 				Type ret=check(currentnode.children.get(1),PackageMap,rootenv);
-				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("Void"))){
+				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("void"))){
+					return null;
+				}
+				if(assignable(returntype,ret.name,PackageMap)){
 					return null;
 				}
 				throw new TypeLinkingException("return type does match method declation "+ret.name+ " return type "+ returntype);
@@ -315,7 +319,7 @@ public class TypeCheckingEvaluator {
 				return  check(currentnode.children.get(0),PackageMap,rootenv);
 
 			case EXPRESSION_OPT:
-				if(currentnode.children==null){
+				if(currentnode.children==null||currentnode.children.size()==0){
 					return new Type("void");
 				}
 				else{
@@ -537,6 +541,9 @@ public class TypeCheckingEvaluator {
 			return true;
 		}
 		*/
+		if((parent.equals("java.lang.Cloneable")||parent.equals("java.io.Serializable"))&&child.contains("[]")){
+			return true;
+		}
 		if(!parent.equals("null")&&child.equals("null")){
 			return true;
 		}

@@ -99,12 +99,8 @@ public class EnvironmentBuilder {
       	ParseTreeNode variableDeclarator = findNodeWithTokenType(node, TokenType.VARIABLE_DECLARATOR);
       	ParseTreeNode identifierNode = findNodeWithTokenType(variableDeclarator, TokenType.IDENTIFIER);
 				String variableName = ((TerminalToken) identifierNode.token).getRawValue();
-				// Make sure that no two variables in a class have the same name
-				if (environment.mScope.token.getType() == TokenType.CLASS_DECLARATION &&
-						environment.mVariableDeclarations.containsKey(variableName)) {
-					throw new TypeLinkingException(
-						"Variable " + variableName + " has already been declared in class " + environment.mName);
-				} else if(checkForLocalVariableDuplicates(environment, variableName)) {
+				// Make sure that no two variables in a method have the same name
+				if(environment.mVariableDeclarations.containsKey(variableName)) {
 					throw new TypeLinkingException(
 						"Variable " + variableName + " has already been declared in this method");
 
@@ -120,14 +116,9 @@ public class EnvironmentBuilder {
 					ParseTreeNode identifierNode = findNodeWithTokenType(variableDeclarator, TokenType.IDENTIFIER);
 					String variableName = ((TerminalToken) identifierNode.token).getRawValue();
 					// Make sure that no two variables in a class have the same name
-					if (environment.mScope.token.getType() == TokenType.CLASS_DECLARATION &&
-							environment.mVariableDeclarations.containsKey(variableName)) {
+					if (environment.mVariableDeclarations.containsKey(variableName)) {
 						throw new TypeLinkingException(
 							"Variable " + variableName + " has already been declared in class " + environment.mName);
-					} else if(checkForLocalVariableDuplicates(environment, variableName)) {
-						throw new TypeLinkingException(
-							"Variable " + variableName + " has already been declared in this method");
-
 					} else {
 						environment.mVariableDeclarations.put(variableName, node);
 					}
@@ -213,24 +204,6 @@ public class EnvironmentBuilder {
 			for (ParseTreeNode child : node.children) {
 				traverse(nextEnvironment, child, count + 1);
 			}
-		}
-	}
-
-	/**
-	 * Checks the current method environment for duplicate variable names in overlappingpes
-	 */
-	private static boolean checkForLocalVariableDuplicates(
-		Environment currentEnvironment,
-		String variableName) {
-		TokenType currentScopeType = currentEnvironment.mScope.token.getType();
-		if (currentScopeType != TokenType.CLASS_DECLARATION && currentScopeType != TokenType.INTERFACE_DECLARATION) {
-			if (currentEnvironment.mVariableDeclarations.containsKey(variableName)) {
-				return true;
-			} else {
-				return checkForLocalVariableDuplicates(currentEnvironment.mParent, variableName);
-			}
-		} else {
-			return false;
 		}
 	}
 

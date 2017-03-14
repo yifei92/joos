@@ -111,6 +111,7 @@ public class TypeLinking {
                             }
                             else{
                                 find=true;
+                                packgequalifedName=key+"."+name;
                             }
                         }
                     }

@@ -177,6 +177,12 @@ public class Disambiguation {
     if (dotIndex == -1) {
       Environment env = environment;
       while (getEnvironmentType(env) != EnvironmentType.CLASS) {
+        if (
+          getEnvironmentType(env) == EnvironmentType.METHOD &&
+          Environment.getMethodSignature(env, packageMap, "").modifiers.contains(TokenType.STATIC)
+        ) {
+          throw new InvalidSyntaxException("Method \"" + name + "\" in " + env.mParent.mName + "." + env.mName + " cannot be accessed without a full qualified name.");
+        }
         env = env.mParent;
       }
       node.type = new Type(env.PackageName + "." + env.mName);
@@ -319,7 +325,8 @@ public class Disambiguation {
       )
     ) {
       boolean isPrefixDeclarationStatic = environment.isFieldStatic(prefix);
-      if (shouldBeStatic && !isPrefixDeclarationStatic) {
+      if (getEnvironmentType(environment) == EnvironmentType.CLASS && shouldBeStatic && !isPrefixDeclarationStatic) {
+
         throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should be static");
       } else if (!shouldBeStatic && isPrefixDeclarationStatic) {
         throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should not be static");
@@ -350,6 +357,9 @@ public class Disambiguation {
         }
       }
     }
+    if (getEnvironmentType(environment) == EnvironmentType.CLASS && environment.mVariableDeclarations.containsKey(prefix)) {
+      throw new InvalidSyntaxException("Illegal forward reference of \"" + prefix + "\" in " + environment.mName);
+    }
     switch (getEnvironmentType(environment)) {
       case CLASS:
         for (Environment extendedEnvironment : getExtendedEnvironments(environment, packageMap)) {
@@ -361,14 +371,12 @@ public class Disambiguation {
     }
     return false;
   }
-    
+
   static void linkName(Environment environment, ParseTreeNode node, String name, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
     boolean shouldBeStatic = false;
     // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
-    if ((EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.METHOD &&
-        environment.getMethodSignature(environment, packageMap, "").modifiers.contains(TokenType.STATIC))) {
-      shouldBeStatic = true;
-    }
+    Environment methodEnvironment = environment.getParentMethodEnvironment();
+    if (methodEnvironment != null && Environment.getMethodSignature(methodEnvironment, packageMap, "").modifiers.contains(TokenType.STATIC)) shouldBeStatic = true;
     if (EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.CLASS) {
       ParseTreeNode fieldDeclarationNode = environment.findVariableDeclarationForUsage(node);
       if (fieldDeclarationNode != null) {
@@ -391,8 +399,16 @@ public class Disambiguation {
     } catch (InvalidSyntaxException e) {
       for (String packageName : packageMap.keySet()) {
         if (name.length() >= packageName.length() && name.substring(0, packageName.length()).equals(packageName)) {
-          typeEnvironment = packageMap.get(packageName);
-          dotIndex = name.indexOf('.', packageName.length());
+          Environment env = packageMap.get(packageName);
+          if (env.PackageName.length() != 0 || (env.PackageName.length() == 0 && environment.PackageName.length() == 0)) {
+            typeEnvironment = env;
+            dotIndex = name.indexOf('.', packageName.length());
+            if (dotIndex == -1) {
+              prefix = name;
+            } else {
+              prefix = name.substring(0, dotIndex);
+            }
+          }
         }
       }
     }

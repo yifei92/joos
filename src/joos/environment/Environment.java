@@ -115,6 +115,23 @@ public class Environment {
     return false;
   }
 
+  public boolean implementsEnvironment(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (this == environment) {
+      return true;
+    }
+    List<Environment> directParents = EnvironmentUtils.getImplementedEnvironments(this, packageMap);
+    if (directParents != null) {
+      boolean doesExtend = false;
+      for (Environment parent : directParents) {
+        doesExtend = parent.implementsEnvironment(environment, packageMap);
+        if (doesExtend) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 	/**
 	 * If the method signature exists within this class or is a method in a parent class then the full method
 	 * signature will be returned. Null otherwise
@@ -319,6 +336,33 @@ public class Environment {
     return new MethodSignature(environment.mName, type, parameterTypes, modifiers, origin);
   }
 
+	public Environment getParentMethodEnvironment() {
+		Environment env = this;
+		for (;;) {
+			EnvironmentType envType = getEnvironmentType(env);
+			switch (envType) {
+				case CLASS:
+					return null;
+				case METHOD:
+					return env;
+			}
+			if (env.mParent == null) return null;
+			env = env.mParent;
+		}
+	}
+
+	public Environment getParentClassEnvironment() {
+		Environment env = this;
+		for (;;) {
+			EnvironmentType envType = getEnvironmentType(env);
+			switch (envType) {
+				case CLASS:
+					return env;
+			}
+			if (env.mParent == null) return null;
+			env = env.mParent;
+		}
+	}
 
 	public void print() {
 		this.print(0);

@@ -430,7 +430,10 @@ public class EnvironmentUtils {
 
 	public static String getFullQualifiedNameFromTypeName(Environment environment, String identifier, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		if (packageMap.containsKey(identifier)) {
-			return identifier;
+			Environment env = packageMap.get(identifier);
+			if (env.PackageName.length() != 0 || (env.PackageName.length() == 0 && environment.PackageName.length() == 0)) {
+				return identifier;
+			}
 		}
 		for (String importName : environment.mSingleImports) {
 			if (importName.length() >= identifier.length() && importName.substring(importName.length() - identifier.length()).equals(identifier)) {

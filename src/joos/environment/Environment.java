@@ -336,6 +336,33 @@ public class Environment {
     return new MethodSignature(environment.mName, type, parameterTypes, modifiers, origin);
   }
 
+	public Environment getParentMethodEnvironment() {
+		Environment env = this;
+		for (;;) {
+			EnvironmentType envType = getEnvironmentType(env);
+			switch (envType) {
+				case CLASS:
+					return null;
+				case METHOD:
+					return env;
+			}
+			if (env.mParent == null) return null;
+			env = env.mParent;
+		}
+	}
+
+	public Environment getParentClassEnvironment() {
+		Environment env = this;
+		for (;;) {
+			EnvironmentType envType = getEnvironmentType(env);
+			switch (envType) {
+				case CLASS:
+					return env;
+			}
+			if (env.mParent == null) return null;
+			env = env.mParent;
+		}
+	}
 
 	public void print() {
 		this.print(0);

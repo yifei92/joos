@@ -453,6 +453,7 @@ public class EnvironmentUtils {
 		if (packageMap.containsKey(localName)) {
 			return localName;
 		}
+		System.out.println(identifier);
 		throw new InvalidSyntaxException("Qualified Name not found for " + identifier);
 	}
 

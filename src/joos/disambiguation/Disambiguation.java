@@ -317,7 +317,6 @@ public class Disambiguation {
     }
     if (
       environment.mVariableDeclarations.containsKey(prefix) &&
-      !(getEnvironmentType(environment) == EnvironmentType.CLASS && shouldBeStatic) &&
       (
         !isFirstScope ||
         isLeftHandSide ||
@@ -326,11 +325,12 @@ public class Disambiguation {
       )
     ) {
       boolean isPrefixDeclarationStatic = environment.isFieldStatic(prefix);
-      // if (shouldBeStatic && !isPrefixDeclarationStatic) {
-      //   throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should be static");
-      // } else if (!shouldBeStatic && isPrefixDeclarationStatic) {
-      //   throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should not be static");
-      // }
+      if (getEnvironmentType(environment) == EnvironmentType.CLASS && shouldBeStatic && !isPrefixDeclarationStatic) {
+
+        throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should be static");
+      } else if (!shouldBeStatic && isPrefixDeclarationStatic) {
+        throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should not be static");
+      }
       Type type = environment.mVariableToType.get(prefix);
       if (dotIndex == -1) {
         node.type = type;
@@ -372,19 +372,8 @@ public class Disambiguation {
   static void linkName(Environment environment, ParseTreeNode node, String name, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
     boolean shouldBeStatic = false;
     // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
-    Environment parentEnv = environment;
-    for (;;) {
-      EnvironmentType envType = getEnvironmentType(parentEnv);
-      if (envType == EnvironmentType.CLASS) break;
-      if (
-        envType == EnvironmentType.METHOD &&
-        Environment.getMethodSignature(parentEnv, packageMap, "").modifiers.contains(TokenType.STATIC)
-      ) {
-        shouldBeStatic = true;
-        break;
-      }
-      parentEnv = parentEnv.mParent;
-    }
+    Environment methodEnvironment = environment.getParentMethodEnvironment();
+    if (methodEnvironment != null && Environment.getMethodSignature(methodEnvironment, packageMap, "").modifiers.contains(TokenType.STATIC)) shouldBeStatic = true;
     if (EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.CLASS) {
       ParseTreeNode fieldDeclarationNode = environment.findVariableDeclarationForUsage(node);
       if (fieldDeclarationNode != null) {

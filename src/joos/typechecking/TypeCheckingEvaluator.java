@@ -240,7 +240,6 @@ public class TypeCheckingEvaluator {
 
 			case RETURN_STATEMENT:
 				Type ret=check(currentnode.children.get(1),PackageMap,rootenv);
-				System.out.println("return assignable "+returntype+ret.name);
 				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("void"))){
 					return null;
 				}
@@ -596,7 +595,6 @@ public class TypeCheckingEvaluator {
 			return false;
 		}
 
-		if()
 
 		Environment childenv=PackageMap.get(child);
 		Environment parentenv=PackageMap.get(parent);

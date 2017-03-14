@@ -127,7 +127,7 @@ public class TypeCheckingEvaluator {
 					throw new TypeLinkingException("if condition does not evaluate to boolean");
 				}
 				check(currentnode.children.get(4),PackageMap,rootenv);
-				return check(currentnode.children.get(4),PackageMap,rootenv);
+				return check(currentnode.children.get(6),PackageMap,rootenv);
 
 			case FOR_STATEMENT:
 			case FOR_STATEMENT_NO_SHORT_IF:
@@ -221,6 +221,10 @@ public class TypeCheckingEvaluator {
 			case RELATIONAL_EXPRESSION:
 				if(currentnode.children.size()>1){
 					if(currentnode.children.get(1).token.getType()==TokenType.INSTANCEOF){
+						left=check(currentnode.children.get(0),PackageMap,rootenv);
+						if(isnumicType(left)||left.equals("boolean")){
+							throw new TypeLinkingException("Cannot check instanceof on simple types");
+						}
 						return new Type("boolean");
 					}
 					if(isnumicType(check(currentnode.children.get(0),PackageMap,rootenv))&& isnumicType(check(currentnode.children.get(2),PackageMap,rootenv)) ){
@@ -236,10 +240,12 @@ public class TypeCheckingEvaluator {
 
 			case RETURN_STATEMENT:
 				Type ret=check(currentnode.children.get(1),PackageMap,rootenv);
+				System.out.println("return assignable "+returntype+ret.name);
 				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("void"))){
 					return null;
 				}
 				if(assignable(returntype,ret.name,PackageMap)){
+					System.out.println("return assignable "+returntype+ret.name);
 					return null;
 				}
 				throw new TypeLinkingException("return type does match method declation "+ret.name+ " return type "+ returntype);
@@ -364,6 +370,7 @@ public class TypeCheckingEvaluator {
 				if(assignable(Typedef.name,initilization.name,PackageMap)){
 					return null;
 				}
+				System.out.println(Typedef.name+initilization.name);
 				throw new TypeLinkingException("local variableinilize with wrong type");
 			case FIELD_DECLARATION:
 				Typedef=check(currentnode.children.get(1),PackageMap,rootenv);
@@ -459,8 +466,8 @@ public class TypeCheckingEvaluator {
 				return null;
 			case DIM_EXPR:
 				Type index=check(currentnode.children.get(1), PackageMap, rootenv);
-				if(index.equals("int")){
-					throw new TypeLinkingException("dimension index not int");
+				if(!index.equals("int")){
+					throw new TypeLinkingException("dimension index not int "+index.name);
 				}
 				return index;
 			case FOR_INIT:
@@ -552,12 +559,8 @@ public class TypeCheckingEvaluator {
 			return true;
 		}
 
-
 		if(!parent.equals("null")&&!isnumicType(new Type(parent))&&child.equals("null")){
 			return true;
-		}
-		if(parent.equals("boolean")||child.equals("boolean")){
-			return false;
 		}
 
 		if(parent.equals("short")&&child.equals("byte")){
@@ -576,9 +579,24 @@ public class TypeCheckingEvaluator {
 			System.out.println("assign fail "+parent+"  "+child);
 			return false;
 		}
+
 		if((parent.equals("java.lang.Cloneable")||parent.equals("java.io.Serializable"))&&child.contains("[]")){
 			return true;
 		}
+
+		if(parent.contains("[]")||child.contains("[]")){
+			return false;
+		}
+
+		if(parent.equals("boolean")||child.equals("boolean")){
+			return false;
+		}
+
+		if(parent.equals("null")||child.equals("null")){
+			return false;
+		}
+
+		if()
 
 		Environment childenv=PackageMap.get(child);
 		Environment parentenv=PackageMap.get(parent);
@@ -616,7 +634,6 @@ public class TypeCheckingEvaluator {
 			return true;
 		}
 
-
 		if(parent.equals("short")&&child.equals("byte")){
 			return true;
 		}
@@ -634,6 +651,17 @@ public class TypeCheckingEvaluator {
 		}
 		if((parent.equals("java.lang.Cloneable")||parent.equals("java.io.Serializable"))&&child.contains("[]")){
 			return true;
+		}
+
+		if(parent.contains("[]")||child.contains("[]")){
+			return false;
+		}
+
+		if(parent.equals("boolean")||child.equals("boolean")){
+			return false;
+		}
+		if(parent.equals("null")||child.equals("null")){
+			return false;
 		}
 
 		Environment childenv=PackageMap.get(child);

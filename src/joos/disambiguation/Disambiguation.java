@@ -357,6 +357,9 @@ public class Disambiguation {
         }
       }
     }
+    if (getEnvironmentType(environment) == EnvironmentType.CLASS && environment.mVariableDeclarations.containsKey(prefix)) {
+      throw new InvalidSyntaxException("Illegal forward reference of \"" + prefix + "\" in " + environment.mName);
+    }
     switch (getEnvironmentType(environment)) {
       case CLASS:
         for (Environment extendedEnvironment : getExtendedEnvironments(environment, packageMap)) {

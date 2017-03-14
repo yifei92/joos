@@ -48,6 +48,25 @@ public class TypeCheckingEvaluator {
 			case NULL_LITERAL:
 				return new Type("null");
 			case THIS:
+				Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
+				Environment method=local;
+				while (method.mType!= Environment.EnvironmentType.METHOD){
+					if(method.mParent==null){
+						break;
+					}
+					method=method.mParent;
+				}
+				if(method.mType!= Environment.EnvironmentType.METHOD){
+					if(rootenv.PackageName.equals(""))
+					{
+						return new Type(rootenv.mName);
+					}
+					return new Type(rootenv.PackageName+"."+rootenv.mName);
+				}
+				if(method.mModifiers!=null&&method.mModifiers.contains(TokenType.STATIC)){
+					throw new TypeLinkingException("invoc this in static method");
+				}
+
 				if(rootenv.PackageName.equals(""))
 				{
 					return new Type(rootenv.mName);
@@ -77,6 +96,9 @@ public class TypeCheckingEvaluator {
 							Type temp = check(currentnode.children.get(i), PackageMap, rootenv);
 							if (isnumicType(temp)) {
 								continue;
+							}
+							if(temp.equals("void")){
+								throw new TypeLinkingException("cannot add void");
 							}
 							numeric=false;
 							if(temp.equals("java.lang.String")){
@@ -240,6 +262,9 @@ public class TypeCheckingEvaluator {
 
 			case RETURN_STATEMENT:
 				Type ret=check(currentnode.children.get(1),PackageMap,rootenv);
+				if(ret.equals("void")){
+					throw new TypeLinkingException("no void return");
+				}
 				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("void"))){
 					return null;
 				}
@@ -272,7 +297,7 @@ public class TypeCheckingEvaluator {
 					if(fullname.contains(".")){
 						String variable=fullname.substring(0,fullname.lastIndexOf("."));
 						String methodname=fullname.substring(fullname.lastIndexOf(".")+1,fullname.length());
-						Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
+						local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
 						Type typename=check(currentnode.children.get(0),PackageMap,rootenv);
 						m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 					}
@@ -292,6 +317,9 @@ public class TypeCheckingEvaluator {
 					}
 				String methodname=((TerminalToken)currentnode.children.get(2).token).getRawValue();
 				Type primary=check(currentnode.children.get(0),PackageMap,rootenv);
+				if(primary.type== Type.TypeType.TYPE){
+					throw new TypeLinkingException("cannot innvoc method on type");
+				}
 				MethodSignature m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 				if(m==null){
 					throw new TypeLinkingException("unable to find method "+methodname);
@@ -403,7 +431,7 @@ public class TypeCheckingEvaluator {
 				}
 
 				if(!EnvironmentUtils.verifyConstructorSignature(typeenviroment,parameterTyps,PackageMap)) {
-					System.out.println(typeenviroment.mName+ "  "+parameterTyps.get(0));
+					//System.out.println(typeenviroment.mName+ "  "+parameterTyps.get(0));
 					throw new TypeLinkingException("cant find constructor 2");
 				}
 				return typedef;
@@ -465,21 +493,27 @@ public class TypeCheckingEvaluator {
 				return null;
 			case DIM_EXPR:
 				Type index=check(currentnode.children.get(1), PackageMap, rootenv);
-				if(!index.equals("int")){
-					throw new TypeLinkingException("dimension index not int "+index.name);
+				if(!isnumicType(index)){
+					throw new TypeLinkingException("dimension index not numeric "+index.name);
 				}
 				return index;
 			case FOR_INIT:
 			case FOR_UPDATE_OPT:
 			case FOR_UPDATE:
+			case FOR_INIT_OPT:
 				if(currentnode.children.size()==0){
 					return null;
 				}
 				return check(currentnode.children.get(0),PackageMap,rootenv);
+			case CONSTRUCTOR_DECLARATION:
+				if(rootenv.PackageName==""){
+					returntype=rootenv.mName;
+				}
+				returntype=rootenv.PackageName+rootenv.mName;
+				return check(currentnode.children.get(2),PackageMap,rootenv);
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
 			case TYPE:
-			case FOR_INIT_OPT:
 			case VARIABLE_DECLARATORS:
 			case LOCAL_VARIABLE_DECLARATION_STATEMENT:
 			case STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT:
@@ -508,8 +542,6 @@ public class TypeCheckingEvaluator {
 			case STATEMENT_EXPRESSION:
 			case TYPE_DECLARATION:    //weird semi Colum case
 				return check(currentnode.children.get(0),PackageMap,rootenv);
-			case CONSTRUCTOR_DECLARATION:
-				return check(currentnode.children.get(2),PackageMap,rootenv);
 			case CLASS_DECLARATION:
 				return check(currentnode.children.get(5),PackageMap,rootenv);
 			case INTERFACE_DECLARATION:
@@ -594,7 +626,9 @@ public class TypeCheckingEvaluator {
 		if(parent.equals("null")||child.equals("null")){
 			return false;
 		}
-
+		if(isnumicType(new Type(parent))||isnumicType(new Type(child))){
+			return false;
+		}
 
 		Environment childenv=PackageMap.get(child);
 		Environment parentenv=PackageMap.get(parent);
@@ -659,6 +693,10 @@ public class TypeCheckingEvaluator {
 			return false;
 		}
 		if(parent.equals("null")||child.equals("null")){
+			return false;
+		}
+
+		if(isnumicType(new Type(parent))||isnumicType(new Type(child))){
 			return false;
 		}
 

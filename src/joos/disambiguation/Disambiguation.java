@@ -177,6 +177,12 @@ public class Disambiguation {
     if (dotIndex == -1) {
       Environment env = environment;
       while (getEnvironmentType(env) != EnvironmentType.CLASS) {
+        if (
+          getEnvironmentType(env) == EnvironmentType.METHOD &&
+          Environment.getMethodSignature(env, packageMap, "").modifiers.contains(TokenType.STATIC)
+        ) {
+          throw new InvalidSyntaxException("Method \"" + name + "\" in " + env.mParent.mName + "." + env.mName + " cannot be accessed without a full qualified name.");
+        }
         env = env.mParent;
       }
       node.type = new Type(env.PackageName + "." + env.mName);
@@ -311,6 +317,7 @@ public class Disambiguation {
     }
     if (
       environment.mVariableDeclarations.containsKey(prefix) &&
+      !(getEnvironmentType(environment) == EnvironmentType.CLASS && shouldBeStatic) &&
       (
         !isFirstScope ||
         isLeftHandSide ||
@@ -319,11 +326,11 @@ public class Disambiguation {
       )
     ) {
       boolean isPrefixDeclarationStatic = environment.isFieldStatic(prefix);
-      if (shouldBeStatic && !isPrefixDeclarationStatic) {
-        throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should be static");
-      } else if (!shouldBeStatic && isPrefixDeclarationStatic) {
-        throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should not be static");
-      }
+      // if (shouldBeStatic && !isPrefixDeclarationStatic) {
+      //   throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should be static");
+      // } else if (!shouldBeStatic && isPrefixDeclarationStatic) {
+      //   throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should not be static");
+      // }
       Type type = environment.mVariableToType.get(prefix);
       if (dotIndex == -1) {
         node.type = type;
@@ -365,9 +372,18 @@ public class Disambiguation {
   static void linkName(Environment environment, ParseTreeNode node, String name, Map<String, Environment> packageMap, Environment usageEnvironment, boolean isLeftHandSide) throws InvalidSyntaxException {
     boolean shouldBeStatic = false;
     // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
-    if ((EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.METHOD &&
-        environment.getMethodSignature(environment, packageMap, "").modifiers.contains(TokenType.STATIC))) {
-      shouldBeStatic = true;
+    Environment parentEnv = environment;
+    for (;;) {
+      EnvironmentType envType = getEnvironmentType(parentEnv);
+      if (envType == EnvironmentType.CLASS) break;
+      if (
+        envType == EnvironmentType.METHOD &&
+        Environment.getMethodSignature(parentEnv, packageMap, "").modifiers.contains(TokenType.STATIC)
+      ) {
+        shouldBeStatic = true;
+        break;
+      }
+      parentEnv = parentEnv.mParent;
     }
     if (EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.CLASS) {
       ParseTreeNode fieldDeclarationNode = environment.findVariableDeclarationForUsage(node);
@@ -391,12 +407,15 @@ public class Disambiguation {
     } catch (InvalidSyntaxException e) {
       for (String packageName : packageMap.keySet()) {
         if (name.length() >= packageName.length() && name.substring(0, packageName.length()).equals(packageName)) {
-          typeEnvironment = packageMap.get(packageName);
-          dotIndex = name.indexOf('.', packageName.length());
-          if (dotIndex == -1) {
-            prefix = name;
-          } else {
-            prefix = name.substring(0, dotIndex);
+          Environment env = packageMap.get(packageName);
+          if (env.PackageName.length() != 0 || (env.PackageName.length() == 0 && environment.PackageName.length() == 0)) {
+            typeEnvironment = env;
+            dotIndex = name.indexOf('.', packageName.length());
+            if (dotIndex == -1) {
+              prefix = name;
+            } else {
+              prefix = name.substring(0, dotIndex);
+            }
           }
         }
       }

@@ -105,7 +105,7 @@ public class EnvironmentBuilder {
 						"Variable " + variableName + " has already been declared in this method");
 
 				} else {
-					environment.mVariableDeclarations.put(variableName, variableDeclarator);
+					environment.mVariableDeclarations.put(variableName, node);
 				}
       	break;
       }
@@ -128,25 +128,25 @@ public class EnvironmentBuilder {
 			case BLOCK: // fall through
 			case CONSTRUCTOR_DECLARATION: // fall through
 			case ABSTRACT_METHOD_DECLARATION: // fall through
-			case METHOD_DECLARATION:
+			case METHOD_DECLARATION: {
 				// create a new environment for the method.
 				Environment methodEnvironment  = new Environment(environment, node, getMethodName(node));
 				environment.mChildrenEnvironments.add(methodEnvironment);
 				List<ParseTreeNode> paramVarNodes = new ArrayList<ParseTreeNode>();
 				findFormalParameters(node, paramVarNodes);
 				for (ParseTreeNode paramNode : paramVarNodes) {
-					String name = ((TerminalToken) paramNode.token).getRawValue();
+					ParseTreeNode identifierNode = findImmediateNodeWithTokenType(paramNode, TokenType.IDENTIFIER);
+					String name = ((TerminalToken) identifierNode.token).getRawValue();
 					if (methodEnvironment.mVariableDeclarations.containsKey(name)) {
 						throw new TypeLinkingException(
 							"Variable " + name + " already declared in this constructor");
 					} else {
-						methodEnvironment.mVariableDeclarations.put(
-							((TerminalToken) paramNode.token).getRawValue(),
-							paramNode);
+						methodEnvironment.mVariableDeclarations.put(name, paramNode);
 					}
 				}
 				nextEnvironment = methodEnvironment;
 				break;
+			}
 			case IF_THEN_STATEMENT:
 				ParseTreeNode statementNode = findImmediateNodeWithTokenType(node, TokenType.STATEMENT);
 				// create a new environment for this new block
@@ -218,12 +218,7 @@ public class EnvironmentBuilder {
 
 	private static void findFormalParameters(ParseTreeNode node, List<ParseTreeNode> paramVarNodes) {
 		if (node.token.getType() == TokenType.FORMAL_PARAMETER) {
-			ParseTreeNode paramIdentifierNode = findImmediateNodeWithTokenType(node, TokenType.IDENTIFIER);
-			if (paramIdentifierNode != null) {
-				paramVarNodes.add(paramIdentifierNode);
-			} else {
-				System.out.println("Error, FORMAL_PARAMETER with no identifier");
-			}
+			paramVarNodes.add(node);
 		} else if (node.children != null) {
 			for (ParseTreeNode child : node.children) {
 				findFormalParameters(child, paramVarNodes);

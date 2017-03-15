@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import joos.commons.ParseTreeNode;
 import joos.environment.Environment;
+import java.util.Set;
 
 /**
  * Created by yifei on 09/03/17.
@@ -15,6 +16,7 @@ public class Type {
 	public Environment environment;
 	public Type subType;
 	public ParseTreeNode decl;
+	public Set<TokenType> modifiers;
 	public Type(String s){
 		name=s;
 	}

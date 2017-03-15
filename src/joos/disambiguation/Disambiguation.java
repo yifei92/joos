@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashSet;
 import joos.commons.ParseTreeNode;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
@@ -359,6 +360,9 @@ public class Disambiguation {
             String nextName = name.substring(dotIndex + 1);
             if (nextName.equals("length")) {
               node.type = Type.newPrimitive("int", null);
+              node.type.modifiers = new HashSet();
+              node.type.modifiers.add(TokenType.FINAL);
+              node.type.modifiers.add(TokenType.PUBLIC);
               return true;
             }
           }

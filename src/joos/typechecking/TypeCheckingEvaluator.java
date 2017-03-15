@@ -319,7 +319,7 @@ public class TypeCheckingEvaluator {
 						local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
 						Type typename=check(currentnode.children.get(0),PackageMap,rootenv);
 						if(currentnode.children.get(0).children.get(0).token.getType()==TokenType.PRIMARY_NO_NEW_ARRAY&&currentnode.children.get(0).children.get(0).children.size()>1&&typename.type== Type.TypeType.TYPE){
-							//throw new TypeLinkingException("cannot innvoc method on type 1");
+							throw new TypeLinkingException("cannot innvoc method on type 1");
 						}
 						m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 						if (m != null && typename.type == TypeType.TYPE && !m.modifiers.contains(TokenType.STATIC)) {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.HashSet;
+import java.util.Set;
 import joos.commons.ParseTreeNode;
 import joos.commons.TerminalToken;
 import joos.commons.TokenType;
@@ -147,7 +148,12 @@ public class Disambiguation {
         break;
       }
       case FIELD_DECLARATION: {
+        Set<TokenType> set = new HashSet();
+        for (ParseTreeNode child : environment.mScope.children.get(0).children.get(0).children) {
+          set.add(child.token.getType());
+        }
         Type type = getTypeFromTypeNode(environment, node.children.get(1), packageMap);
+        type.modifiers = set;
         for (ParseTreeNode child : node.children.get(2).children) {
           String name = ((TerminalToken)findNodeWithTokenType(child, TokenType.IDENTIFIER).token).getRawValue();
           environment.mVariableToType.put(name, type);

@@ -447,7 +447,16 @@ public class Disambiguation {
       }
     }
     if (typeEnvironment != null && dotIndex == -1) {
-      node.type = new Type(getFullQualifiedNameFromTypeName(environment, prefix, packageMap));
+      Type subType = Type.newObject(
+        getFullQualifiedNameFromTypeName(environment, prefix, packageMap),
+        typeEnvironment,
+        node
+      );
+      node.type = Type.newType(
+        subType.name,
+        subType,
+        node
+      );
       return;
     }
     if (typeEnvironment != null && dotIndex != -1) {

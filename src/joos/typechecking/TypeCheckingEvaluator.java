@@ -4,6 +4,7 @@ package joos.typechecking;
 import jdk.nashorn.internal.codegen.types.*;
 import jdk.nashorn.internal.ir.Terminal;
 import jdk.nashorn.internal.ir.TernaryNode;
+import jdk.nashorn.internal.ir.ThrowNode;
 import jdk.nashorn.internal.parser.*;
 import joos.commons.*;
 import joos.commons.TokenType;
@@ -239,14 +240,14 @@ public class TypeCheckingEvaluator {
 				}
 				left=check(currentnode.children.get(0),PackageMap,rootenv);
 				right=check(currentnode.children.get(2),PackageMap,rootenv);
+				if(left.equals("void")||right.equals("void")){
+					throw new TypeLinkingException("equality on void");
+				}
 				if(left.equals(right)){
 					return new Type("boolean");
 				};
 				if(left.equals("null")||right.equals("null")){
 					return new Type("boolean");
-				}
-				if(left.equals("void")||right.equals("void")){
-					throw new TypeLinkingException("equality on void");
 				}
 				if (!assignable(left.name,right.name,PackageMap) && !assignable(right.name,left.name,PackageMap)) {
 					throw new TypeLinkingException(rootenv.mName+"cannot cast equality " + left.name + " to " + right.name);
@@ -314,7 +315,7 @@ public class TypeCheckingEvaluator {
 						local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
 						Type typename=check(currentnode.children.get(0),PackageMap,rootenv);
 						if(currentnode.children.get(0).children.get(0).token.getType()==TokenType.PRIMARY_NO_NEW_ARRAY&&currentnode.children.get(0).children.get(0).children.size()>1&&typename.type== Type.TypeType.TYPE){
-							throw new TypeLinkingException("cannot innvoc method on type 1");
+							//throw new TypeLinkingException("cannot innvoc method on type 1");
 						}
 						m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 					}
@@ -355,9 +356,7 @@ public class TypeCheckingEvaluator {
 				if(primary.name.contains("[]")&&((TerminalToken)currentnode.children.get(2).token).getRawValue().equals("length")){
 					return new Type("int");
 				}
-				if(primary.equals("java.lang.Integer")){
-					System.out.println("primary type "+primary.type);
-				}
+
 				Environment Typecalled=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap);
 				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(2).token).getRawValue());
 				if(field==null){
@@ -366,6 +365,7 @@ public class TypeCheckingEvaluator {
 				return field;
 			case PRIMARY_NO_NEW_ARRAY:
 				if (currentnode.children.size()>1){
+
 					return  check(currentnode.children.get(1),PackageMap,rootenv);
 				}
 				return  check(currentnode.children.get(0),PackageMap,rootenv);

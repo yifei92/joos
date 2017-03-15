@@ -295,7 +295,12 @@ public class Disambiguation {
         break;
       case CAST_EXPRESSION:
         if (node.children.size() == 5) {
-          node.children.get(1).type = new Type(getFullQualifiedNameFromTypeNode(environment, node.children.get(1), packageMap));
+          Type subType = getTypeFromTypeNode(environment, node.children.get(1), packageMap);
+          node.children.get(1).type = Type.newType(
+            subType.name,
+            subType,
+            node.children.get(1)
+          );
         }
         break;
       case METHOD_INVOCATION:

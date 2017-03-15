@@ -110,6 +110,13 @@ public class TypeCheckingEvaluator {
 						return new Type("int");
 					}
 					else{
+						for (int i = 0; i < currentnode.children.size(); i++) {
+							if (i % 2 == 1) {
+								if(currentnode.children.get(i).token.getType()==TokenType.OP_MINUS){
+									throw new TypeLinkingException("string concatenation with minus");
+								}
+							}
+						}
 						if(findstring){
 							return new Type("java.lang.String");
 						}
@@ -165,6 +172,9 @@ public class TypeCheckingEvaluator {
 			case ASSIGNMENT:
 				Type left=check(currentnode.children.get(0),PackageMap,rootenv);
 				Type right=check(currentnode.children.get(2),PackageMap,rootenv);
+				if(left.modifiers!=null&&left.modifiers.contains(TokenType.FINAL)){
+					throw new TypeLinkingException("can't assigne to final");
+				}
 				if(left.equals(right)){
 					return left;
 				}
@@ -235,6 +245,9 @@ public class TypeCheckingEvaluator {
 				if(left.equals("null")||right.equals("null")){
 					return new Type("boolean");
 				}
+				if(left.equals("void")||right.equals("void")){
+					throw new TypeLinkingException("equality on void");
+				}
 				if (!assignable(left.name,right.name,PackageMap) && !assignable(right.name,left.name,PackageMap)) {
 					throw new TypeLinkingException(rootenv.mName+"cannot cast equality " + left.name + " to " + right.name);
 				}
@@ -263,6 +276,7 @@ public class TypeCheckingEvaluator {
 			case RETURN_STATEMENT:
 				Type ret=check(currentnode.children.get(1),PackageMap,rootenv);
 				if(ret.equals("void")){
+					System.out.println();
 					throw new TypeLinkingException("no void return");
 				}
 				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("void"))){
@@ -299,6 +313,9 @@ public class TypeCheckingEvaluator {
 						String methodname=fullname.substring(fullname.lastIndexOf(".")+1,fullname.length());
 						local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
 						Type typename=check(currentnode.children.get(0),PackageMap,rootenv);
+						if(currentnode.children.get(0).children.get(0).token.getType()==TokenType.PRIMARY_NO_NEW_ARRAY&&currentnode.children.get(0).children.get(0).children.size()>1&&typename.type== Type.TypeType.TYPE){
+							throw new TypeLinkingException("cannot innvoc method on type 1");
+						}
 						m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 					}
 					else {
@@ -318,7 +335,7 @@ public class TypeCheckingEvaluator {
 				String methodname=((TerminalToken)currentnode.children.get(2).token).getRawValue();
 				Type primary=check(currentnode.children.get(0),PackageMap,rootenv);
 				if(primary.type== Type.TypeType.TYPE){
-					throw new TypeLinkingException("cannot innvoc method on type");
+					//throw new TypeLinkingException("cannot innvoc method on type");
 				}
 				MethodSignature m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 				if(m==null){
@@ -338,6 +355,9 @@ public class TypeCheckingEvaluator {
 				if(primary.name.contains("[]")&&((TerminalToken)currentnode.children.get(2).token).getRawValue().equals("length")){
 					return new Type("int");
 				}
+				if(primary.equals("java.lang.Integer")){
+					System.out.println("primary type "+primary.type);
+				}
 				Environment Typecalled=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap);
 				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(2).token).getRawValue());
 				if(field==null){
@@ -352,7 +372,7 @@ public class TypeCheckingEvaluator {
 
 			case EXPRESSION_OPT:
 				if(currentnode.children==null||currentnode.children.size()==0){
-					return new Type("void");
+					return new Type("return void");
 				}
 				else{
 					return  check(currentnode.children.get(0),PackageMap,rootenv);
@@ -375,7 +395,7 @@ public class TypeCheckingEvaluator {
 					returntype =check(currentnode.children.get(1).children.get(0),PackageMap,rootenv).name;
 				}
 				else{
-					returntype = "void";
+					returntype = "return void";
 				}
 			return null;
 

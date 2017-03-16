@@ -447,7 +447,7 @@ public class TypeCheckingEvaluator {
 					return null;
 				}
 				System.out.println(Typedef.name+initilization.name);
-				throw new TypeLinkingException("local variableinilize with wrong type");
+				throw new TypeLinkingException("local variable inilize with wrong type");
 			case FIELD_DECLARATION:
 				Typedef=check(currentnode.children.get(1),PackageMap,rootenv);
 				initilization=check(currentnode.children.get(2),PackageMap,rootenv);

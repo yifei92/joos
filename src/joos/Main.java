@@ -1,6 +1,7 @@
 package joos;
 
 import joos.ast.ASTBuilder;
+import joos.exceptions.StaticAnalysisException;
 import joos.exceptions.TypeLinkingException;
 import joos.filereader.FileScanner;
 import joos.filereader.JoosFile;
@@ -83,8 +84,8 @@ public class Main {
 				AssignmentChecking.check(environment, packageMap);
 			}
 			for(String key : treeMap.keySet()){
-				//ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
-				//reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
+				ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
+				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
@@ -95,6 +96,12 @@ public class Main {
 			return;
 		}
 		catch (TypeLinkingException e){
+			System.out.println(e.getMessage());
+			System.out.println("Error");
+			System.exit(42);
+			return;
+		}
+		catch (StaticAnalysisException e){
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);

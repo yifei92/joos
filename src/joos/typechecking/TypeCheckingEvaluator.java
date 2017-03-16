@@ -244,9 +244,7 @@ public class TypeCheckingEvaluator {
 				}
 				left=check(currentnode.children.get(0),PackageMap,rootenv);
 				right=check(currentnode.children.get(2),PackageMap,rootenv);
-				if(left.equals("void")||right.equals("void")){
-					throw new TypeLinkingException("equality on void");
-				}
+
 				if(left.equals(right)){
 					return new Type("boolean");
 				};
@@ -256,6 +254,7 @@ public class TypeCheckingEvaluator {
 				if (!assignable(left.name,right.name,PackageMap) && !assignable(right.name,left.name,PackageMap)) {
 					throw new TypeLinkingException(rootenv.mName+"cannot cast equality " + left.name + " to " + right.name);
 				}
+				System.out.println("      "+left.name+right.name);
 				return new Type("boolean");
 
 			case RELATIONAL_EXPRESSION:

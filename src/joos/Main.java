@@ -17,6 +17,7 @@ import joos.environment.EnvironmentBuilder;
 import joos.hierarchychecking.HierarchyChecking;
 import joos.disambiguation.Disambiguation;
 import joos.typechecking.TypeChecker;
+import joos.reachability.AssignmentChecking;
 
 import java.util.*;
 
@@ -77,11 +78,14 @@ public class Main {
 				TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
 				typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
+
+			for (Environment environment : packageMap.values()) {
+				AssignmentChecking.check(environment, packageMap);
+			}
 			for(String key : treeMap.keySet()){
 				//ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
 				//reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
-
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

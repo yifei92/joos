@@ -13,6 +13,8 @@ public class ParseTreeNode {
 	public Type type;
 	public String name;
 	public boolean primitive = false;
+	public boolean in;
+	public boolean out;
 
 	public ParseTreeNode(Token token) {
 		this.token = token;

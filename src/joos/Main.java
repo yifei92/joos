@@ -8,6 +8,7 @@ import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
 import joos.parser.Parser;
 import joos.scanner.Scanner;
+import joos.staticanalysis.ReachabilityCheck;
 import joos.typechecking.TypeCheckingEvaluator;
 import joos.typelinking.TypeLinking;
 import joos.weeder.Weeder;
@@ -76,6 +77,11 @@ public class Main {
 				TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
 				typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
+			for(String key : treeMap.keySet()){
+				//ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
+				//reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
+			}
+
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());

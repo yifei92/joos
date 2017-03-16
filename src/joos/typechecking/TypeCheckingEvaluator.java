@@ -2,6 +2,7 @@ package joos.typechecking;
 
 
 import jdk.nashorn.internal.codegen.types.*;
+import jdk.nashorn.internal.ir.Symbol;
 import jdk.nashorn.internal.ir.Terminal;
 import jdk.nashorn.internal.ir.TernaryNode;
 import jdk.nashorn.internal.ir.ThrowNode;
@@ -157,6 +158,7 @@ public class TypeCheckingEvaluator {
 				return check(currentnode.children.get(4),PackageMap,rootenv);
 
 			case IF_THEN_ELSE_STATEMENT:
+			case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
 				if(!check(currentnode.children.get(2),PackageMap,rootenv).equals("boolean")){
 					throw new TypeLinkingException("if condition does not evaluate to boolean");
 				}
@@ -286,6 +288,7 @@ public class TypeCheckingEvaluator {
 				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("void"))){
 					return null;
 				}
+				System.out.println(returntype);
 				if(assignable(returntype,ret.name,PackageMap)){
 					System.out.println("return assignable "+returntype+ret.name);
 					return null;
@@ -433,6 +436,10 @@ public class TypeCheckingEvaluator {
 					Typedef=check(currentnode.children.get(0),PackageMap,rootenv);
 				}
 				Type initilization=check(currentnode.children.get(1),PackageMap,rootenv);
+
+				if(initilization==null){
+					return null;
+				}
 				if(Typedef.equals(initilization)){
 					return null;
 				}
@@ -548,10 +555,7 @@ public class TypeCheckingEvaluator {
 				}
 				return check(currentnode.children.get(0),PackageMap,rootenv);
 			case CONSTRUCTOR_DECLARATION:
-				if(rootenv.PackageName==""){
-					returntype=rootenv.mName;
-				}
-				returntype=rootenv.PackageName+rootenv.mName;
+				returntype="return void";
 				return check(currentnode.children.get(2),PackageMap,rootenv);
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
@@ -596,6 +600,8 @@ public class TypeCheckingEvaluator {
 			case COMPILATION_UNIT:
 				root=currentnode;
 				return check(currentnode.children.get(2),PackageMap,rootenv);
+			case EMPTY_STATEMENT:
+				return null;
 			default:
 				System.out.println("error forgot "+currentnode.token.getType());
 				System.out.print(currentnode.children.get(1000));

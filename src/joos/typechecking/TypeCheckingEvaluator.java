@@ -209,35 +209,35 @@ public class TypeCheckingEvaluator {
 					return left.subType;
 				}
 				if(currentnode.children.get(2).token.getType()==TokenType.DIMS){
-					left = check(currentnode.children.get(1), PackageMap, rootenv);
-					left.name=left.name+"[]";
+					left = check(currentnode.children.get(1), PackageMap, rootenv).subType;
+					left = Type.newArray(left.name+"[]", left, currentnode);
 					right = check(currentnode.children.get(4), PackageMap, rootenv);
 					if (left.equals(right)) {
-						return left.subType;
+						return left;
 					}
 					if (isnumicType(left) && isnumicType(right)) {
-						return left.subType;
+						return left;
 					}
 					if (!assignable(left.name,right.name,PackageMap) && !assignable(right.name,left.name,PackageMap))  {
 						throw new TypeLinkingException("cannot cast 2" + left.name + " to " + right.name);
 					}
-					return left.subType;
+					return left;
 				}
-				left = check(currentnode.children.get(1), PackageMap, rootenv);
+				left = check(currentnode.children.get(1), PackageMap, rootenv).subType;
 				if(currentnode.children.get(2).children!=null&&currentnode.children.get(2).children.size()>0) {
-					left.name = left.name + "[]";
+					left = Type.newArray(left.name + "[]", left, currentnode);
 				}
 				right = check(currentnode.children.get(4), PackageMap, rootenv);
 				if (left.equals(right)) {
-					return left.subType;
+					return left;
 				}
 				if (isnumicType(left) && isnumicType(right)) {
-					return left.subType;
+					return left;
 				}
 					if (!assignable(left.name,right.name,PackageMap) && !assignable(right.name,left.name,PackageMap))  {
 						throw new TypeLinkingException("cannot cast 3" + left.name + " to " + right.name);
 					}
-				return left.subType;
+				return left;
 			case EQUALITY_EXPRESSION:
 				if(currentnode.children.size()==1){
 					return check(currentnode.children.get(0), PackageMap, rootenv);
@@ -370,9 +370,20 @@ public class TypeCheckingEvaluator {
 					throw new TypeLinkingException("Illegal access of a field from type " + primary.name);
 				}
 				Environment Typecalled=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap);
-				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(2).token).getRawValue());
+				Type field;
+				String fieldName = ((TerminalToken)currentnode.children.get(2).token).getRawValue();
+				for (;;) {
+					field = Typecalled.mVariableToType.get(fieldName);
+					if (field != null) break;
+					List<Environment> extendedEnvironments = EnvironmentUtils.getExtendedEnvironments(Typecalled, PackageMap);
+					if (extendedEnvironments.size() > 0) {
+						Typecalled = extendedEnvironments.get(0);
+					} else {
+						break;
+					}
+				}
 				if(field==null){
-					throw new TypeLinkingException("unable to find field");
+					throw new TypeLinkingException("Unable to find field \"" + fieldName + "\" in " + primary.name);
 				}
 				return field;
 			case PRIMARY_NO_NEW_ARRAY:

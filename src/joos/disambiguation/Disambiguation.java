@@ -37,7 +37,7 @@ public class Disambiguation {
   }
   public static void linkAllNames(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if (environment.mName.equals("Integer")) p = true;
-    linkNames(environment, environment.mScope, packageMap, null);
+    linkNames(environment, environment.mScope, packageMap, null, false);
     p = false;
   }
 
@@ -194,11 +194,11 @@ public class Disambiguation {
       }
       node.type = new Type(env.PackageName + "." + env.mName);
     } else {
-      linkName(environment, node, name.substring(0, dotIndex), packageMap, environment, false, null);
+      linkName(environment, node, name.substring(0, dotIndex), packageMap, environment, false, null, false);
     }
   }
 
-  public static void linkNames(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap, ParseTreeNode declaration) throws InvalidSyntaxException {
+  public static void linkNames(Environment environment, ParseTreeNode node, Map<String, Environment> packageMap, ParseTreeNode declaration, boolean shouldBeType) throws InvalidSyntaxException {
     switch (node.token.getType()) {
 			case BLOCK: // fall through
       case ABSTRACT_METHOD_DECLARATION:
@@ -209,7 +209,7 @@ public class Disambiguation {
         } else {
           for (Environment child : environment.mChildrenEnvironments) {
             if (child.mScope == node) {
-              linkNames(child, node, packageMap, declaration);
+              linkNames(child, node, packageMap, declaration, shouldBeType);
               return;
             }
           }
@@ -224,11 +224,11 @@ public class Disambiguation {
             if (child.token.getType() == TokenType.STATEMENT || child.token.getType() == TokenType.STATEMENT_NO_SHORT_IF) {
               for (Environment childEnv : environment.mChildrenEnvironments) {
                 if (childEnv.mScope == child) {
-                  linkNames(childEnv, child, packageMap, declaration);
+                  linkNames(childEnv, child, packageMap, declaration, shouldBeType);
                 }
               }
             } else {
-              linkNames(environment, child, packageMap, declaration);
+              linkNames(environment, child, packageMap, declaration, shouldBeType);
             }
           }
           return;
@@ -244,7 +244,7 @@ public class Disambiguation {
             if (child.token.getType() == TokenType.STATEMENT || child.token.getType() == TokenType.STATEMENT_NO_SHORT_IF) {
               for (Environment childEnv : environment.mChildrenEnvironments) {
                 if (childEnv.mScope == child) {
-                  linkNames(childEnv, node, packageMap, declaration);
+                  linkNames(childEnv, node, packageMap, declaration, shouldBeType);
                   return;
                 }
               }
@@ -261,9 +261,9 @@ public class Disambiguation {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             String s = getNameFromTypeNode(nameNode);
-            linkName(environment, nameNode, s, packageMap, environment, false, declaration);
+            linkName(environment, nameNode, s, packageMap, environment, false, declaration, shouldBeType);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
-            linkNames(environment, node.children.get(2), packageMap, declaration);
+            linkNames(environment, node.children.get(2), packageMap, declaration, shouldBeType);
             return;
           }
         }
@@ -293,7 +293,7 @@ public class Disambiguation {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             String s = getNameFromTypeNode(nameNode);
-            linkName(environment, nameNode, s, packageMap, environment, node.token.getType() == TokenType.LEFT_HAND_SIDE, declaration);
+            linkName(environment, nameNode, s, packageMap, environment, node.token.getType() == TokenType.LEFT_HAND_SIDE, declaration, shouldBeType);
             TypeChecker.checkUsageForProtectedFieldAccess(environment, nameNode, packageMap);
             return;
           }
@@ -307,8 +307,12 @@ public class Disambiguation {
             subType,
             node.children.get(1)
           );
+          linkNames(environment, node.children.get(4), packageMap, declaration, shouldBeType);
+        } else {
+          linkNames(environment, node.children.get(1), packageMap, declaration, true);
+          linkNames(environment, node.children.get(3), packageMap, declaration, shouldBeType);
         }
-        break;
+        return;
       case METHOD_INVOCATION:
         if (node.children.get(0).token.getType() == TokenType.NAME) {
           linkMethodName(environment, node.children.get(0), packageMap);
@@ -318,7 +322,7 @@ public class Disambiguation {
     }
     if (node.children != null) {
       for (ParseTreeNode child : node.children) {
-        linkNames(environment, child, packageMap, declaration);
+        linkNames(environment, child, packageMap, declaration, shouldBeType);
       }
     }
   }
@@ -411,21 +415,24 @@ public class Disambiguation {
     Map<String, Environment> packageMap,
     Environment usageEnvironment,
     boolean isLeftHandSide,
-    ParseTreeNode declaration
+    ParseTreeNode declaration,
+    boolean shouldBeType
   ) throws InvalidSyntaxException {
-    boolean shouldBeStatic = false;
-    // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
-    Environment methodEnvironment = environment.getParentMethodEnvironment();
-    if (methodEnvironment != null && Environment.getMethodSignature(methodEnvironment, packageMap, "").modifiers.contains(TokenType.STATIC)) shouldBeStatic = true;
-    if (EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.CLASS) {
-      ParseTreeNode fieldDeclarationNode = environment.findVariableDeclarationForUsage(node);
-      if (fieldDeclarationNode != null) {
-        if (findNodeWithTokenType(fieldDeclarationNode, TokenType.STATIC) != null) {
-          shouldBeStatic = true;
+    if (!shouldBeType) {
+      boolean shouldBeStatic = false;
+      // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
+      Environment methodEnvironment = environment.getParentMethodEnvironment();
+      if (methodEnvironment != null && Environment.getMethodSignature(methodEnvironment, packageMap, "").modifiers.contains(TokenType.STATIC)) shouldBeStatic = true;
+      if (EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.CLASS) {
+        ParseTreeNode fieldDeclarationNode = environment.findVariableDeclarationForUsage(node);
+        if (fieldDeclarationNode != null) {
+          if (findNodeWithTokenType(fieldDeclarationNode, TokenType.STATIC) != null) {
+            shouldBeStatic = true;
+          }
         }
       }
+      if (linkNameToVariable(environment, name, node, packageMap, usageEnvironment, shouldBeStatic, true, isLeftHandSide, declaration)) return;
     }
-    if (linkNameToVariable(environment, name, node, packageMap, usageEnvironment, shouldBeStatic, true, isLeftHandSide, declaration)) return;
     int dotIndex = name.indexOf('.');
     String prefix;
     if (dotIndex != -1) {
@@ -465,7 +472,7 @@ public class Disambiguation {
       );
       return;
     }
-    if (typeEnvironment != null && dotIndex != -1) {
+    if (!shouldBeType && typeEnvironment != null && dotIndex != -1) {
       if (linkNameToVariable(typeEnvironment, name.substring(dotIndex + 1), node, packageMap, usageEnvironment, true, false, isLeftHandSide, declaration)) return;
     }
     throw new InvalidSyntaxException("Name \"" + name + "\" cannot be resolved");

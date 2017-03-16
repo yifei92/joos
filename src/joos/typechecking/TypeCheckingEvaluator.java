@@ -4,10 +4,12 @@ package joos.typechecking;
 import jdk.nashorn.internal.codegen.types.*;
 import jdk.nashorn.internal.ir.Terminal;
 import jdk.nashorn.internal.ir.TernaryNode;
+import jdk.nashorn.internal.ir.ThrowNode;
 import jdk.nashorn.internal.parser.*;
 import joos.commons.*;
 import joos.commons.TokenType;
 import joos.commons.Type;
+import joos.commons.Type.TypeType;
 import joos.environment.Environment;
 import joos.environment.EnvironmentUtils;
 import joos.exceptions.InvalidSyntaxException;
@@ -33,21 +35,43 @@ public class TypeCheckingEvaluator {
 			case STRING_LITERAL_WITH_QUOTES:
 				return new Type("java.lang.String");
 			case INTEGER_LITERAL:
-			case INT:
 				return new Type("int");
+			case INT:
+				return Type.newType("int", Type.newPrimitive("int", currentnode), currentnode);
 			case SHORT:
-				return new Type("short");
+				return Type.newType("short", Type.newPrimitive("short", currentnode), currentnode);
 			case BYTE:
-				return new Type("byte");
+				return Type.newType("byte", Type.newPrimitive("byte", currentnode), currentnode);
 			case CHAR:
+				return Type.newType("char", Type.newPrimitive("char", currentnode), currentnode);
 			case CHAR_LITERAL_WITH_QUOTES:
 				return new Type("char");
 			case BOOLEAN:
+				return Type.newType("boolean", Type.newPrimitive("boolean", currentnode), currentnode);
 			case BOOLEAN_LITERAL:
 				return new Type("boolean");
 			case NULL_LITERAL:
 				return new Type("null");
 			case THIS:
+				Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
+				Environment method=local;
+				while (method.mType!= Environment.EnvironmentType.METHOD){
+					if(method.mParent==null){
+						break;
+					}
+					method=method.mParent;
+				}
+				if(method.mType!= Environment.EnvironmentType.METHOD){
+					if(rootenv.PackageName.equals(""))
+					{
+						return new Type(rootenv.mName);
+					}
+					return new Type(rootenv.PackageName+"."+rootenv.mName);
+				}
+				if(method.mModifiers!=null&&method.mModifiers.contains(TokenType.STATIC)){
+					throw new TypeLinkingException("invoc this in static method");
+				}
+
 				if(rootenv.PackageName.equals(""))
 				{
 					return new Type(rootenv.mName);
@@ -78,6 +102,9 @@ public class TypeCheckingEvaluator {
 							if (isnumicType(temp)) {
 								continue;
 							}
+							if(temp.equals("void")){
+								throw new TypeLinkingException("cannot add void");
+							}
 							numeric=false;
 							if(temp.equals("java.lang.String")){
 								findstring=true;
@@ -88,6 +115,13 @@ public class TypeCheckingEvaluator {
 						return new Type("int");
 					}
 					else{
+						for (int i = 0; i < currentnode.children.size(); i++) {
+							if (i % 2 == 1) {
+								if(currentnode.children.get(i).token.getType()==TokenType.OP_MINUS){
+									throw new TypeLinkingException("string concatenation with minus");
+								}
+							}
+						}
 						if(findstring){
 							return new Type("java.lang.String");
 						}
@@ -143,6 +177,9 @@ public class TypeCheckingEvaluator {
 			case ASSIGNMENT:
 				Type left=check(currentnode.children.get(0),PackageMap,rootenv);
 				Type right=check(currentnode.children.get(2),PackageMap,rootenv);
+				if(left.modifiers!=null&&left.modifiers.contains(TokenType.FINAL)){
+					throw new TypeLinkingException("can't assigne to final");
+				}
 				if(left.equals(right)){
 					return left;
 				}
@@ -161,19 +198,19 @@ public class TypeCheckingEvaluator {
 					left = check(currentnode.children.get(1), PackageMap, rootenv);
 					right = check(currentnode.children.get(3), PackageMap, rootenv);
 					if (left.equals(right)) {
-						return left;
+						return left.subType;
 					}
 					if (isnumicType(left) && isnumicType(right)) {
-						return left;
+						return left.subType;
 					}
 					if (!assignable(left.name,right.name,PackageMap) && !assignable(right.name,left.name,PackageMap)) {
 						throw new TypeLinkingException("cannot cast 1" + left.name + " to " + right.name);
 					}
-					return left;
+					return left.subType;
 				}
 				if(currentnode.children.get(2).token.getType()==TokenType.DIMS){
-					left = check(currentnode.children.get(1), PackageMap, rootenv);
-					left.name=left.name+"[]";
+					left = check(currentnode.children.get(1), PackageMap, rootenv).subType;
+					left = Type.newArray(left.name+"[]", left, currentnode);
 					right = check(currentnode.children.get(4), PackageMap, rootenv);
 					if (left.equals(right)) {
 						return left;
@@ -186,9 +223,9 @@ public class TypeCheckingEvaluator {
 					}
 					return left;
 				}
-				left = check(currentnode.children.get(1), PackageMap, rootenv);
+				left = check(currentnode.children.get(1), PackageMap, rootenv).subType;
 				if(currentnode.children.get(2).children!=null&&currentnode.children.get(2).children.size()>0) {
-					left.name = left.name + "[]";
+					left = Type.newArray(left.name + "[]", left, currentnode);
 				}
 				right = check(currentnode.children.get(4), PackageMap, rootenv);
 				if (left.equals(right)) {
@@ -207,6 +244,9 @@ public class TypeCheckingEvaluator {
 				}
 				left=check(currentnode.children.get(0),PackageMap,rootenv);
 				right=check(currentnode.children.get(2),PackageMap,rootenv);
+				if(left.equals("void")||right.equals("void")){
+					throw new TypeLinkingException("equality on void");
+				}
 				if(left.equals(right)){
 					return new Type("boolean");
 				};
@@ -240,6 +280,10 @@ public class TypeCheckingEvaluator {
 
 			case RETURN_STATEMENT:
 				Type ret=check(currentnode.children.get(1),PackageMap,rootenv);
+				if(ret.equals("void")){
+					System.out.println();
+					throw new TypeLinkingException("no void return");
+				}
 				if(ret.equals(returntype)||(ret.equals("null")&&!returntype.equals("void"))){
 					return null;
 				}
@@ -272,9 +316,18 @@ public class TypeCheckingEvaluator {
 					if(fullname.contains(".")){
 						String variable=fullname.substring(0,fullname.lastIndexOf("."));
 						String methodname=fullname.substring(fullname.lastIndexOf(".")+1,fullname.length());
-						Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
+						local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
 						Type typename=check(currentnode.children.get(0),PackageMap,rootenv);
+						if(currentnode.children.get(0).children.get(0).token.getType()==TokenType.PRIMARY_NO_NEW_ARRAY&&currentnode.children.get(0).children.get(0).children.size()>1&&typename.type== Type.TypeType.TYPE){
+							throw new TypeLinkingException("cannot innvoc method on type 1");
+						}
 						m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,typename.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
+						if (m != null && typename.type == TypeType.TYPE && !m.modifiers.contains(TokenType.STATIC)) {
+							throw new TypeLinkingException("Non-static method \"" + methodname + "\" in " + typename.name + " cannot be called statically.");
+						}
+						if (m != null && typename.type != TypeType.TYPE && m.modifiers.contains(TokenType.STATIC)) {
+							throw new TypeLinkingException("Static method \"" + methodname + "\" in " + typename.name + " cannot be called non-statically.");
+						}
 					}
 					else {
 						m = rootenv.findMethodSignature(PackageMap, new MethodSignature(fullname, null, parameterTyps, null, null));
@@ -292,6 +345,9 @@ public class TypeCheckingEvaluator {
 					}
 				String methodname=((TerminalToken)currentnode.children.get(2).token).getRawValue();
 				Type primary=check(currentnode.children.get(0),PackageMap,rootenv);
+				if(primary.type== Type.TypeType.TYPE){
+					//throw new TypeLinkingException("cannot innvoc method on type");
+				}
 				MethodSignature m=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap).findMethodSignature(PackageMap,new MethodSignature(methodname, null, parameterTyps, null, null));
 				if(m==null){
 					throw new TypeLinkingException("unable to find method "+methodname);
@@ -310,21 +366,36 @@ public class TypeCheckingEvaluator {
 				if(primary.name.contains("[]")&&((TerminalToken)currentnode.children.get(2).token).getRawValue().equals("length")){
 					return new Type("int");
 				}
+				if (primary.type == TypeType.TYPE) {
+					throw new TypeLinkingException("Illegal access of a field from type " + primary.name);
+				}
 				Environment Typecalled=EnvironmentUtils.getEnvironmentFromTypeName(rootenv,primary.name,PackageMap);
-				Type field=Typecalled.mVariableToType.get(((TerminalToken)currentnode.children.get(2).token).getRawValue());
+				Type field;
+				String fieldName = ((TerminalToken)currentnode.children.get(2).token).getRawValue();
+				for (;;) {
+					field = Typecalled.mVariableToType.get(fieldName);
+					if (field != null) break;
+					List<Environment> extendedEnvironments = EnvironmentUtils.getExtendedEnvironments(Typecalled, PackageMap);
+					if (extendedEnvironments.size() > 0) {
+						Typecalled = extendedEnvironments.get(0);
+					} else {
+						break;
+					}
+				}
 				if(field==null){
-					throw new TypeLinkingException("unable to find field");
+					throw new TypeLinkingException("Unable to find field \"" + fieldName + "\" in " + primary.name);
 				}
 				return field;
 			case PRIMARY_NO_NEW_ARRAY:
 				if (currentnode.children.size()>1){
+
 					return  check(currentnode.children.get(1),PackageMap,rootenv);
 				}
 				return  check(currentnode.children.get(0),PackageMap,rootenv);
 
 			case EXPRESSION_OPT:
 				if(currentnode.children==null||currentnode.children.size()==0){
-					return new Type("void");
+					return new Type("return void");
 				}
 				else{
 					return  check(currentnode.children.get(0),PackageMap,rootenv);
@@ -347,7 +418,7 @@ public class TypeCheckingEvaluator {
 					returntype =check(currentnode.children.get(1).children.get(0),PackageMap,rootenv).name;
 				}
 				else{
-					returntype = "void";
+					returntype = "return void";
 				}
 			return null;
 
@@ -403,7 +474,7 @@ public class TypeCheckingEvaluator {
 				}
 
 				if(!EnvironmentUtils.verifyConstructorSignature(typeenviroment,parameterTyps,PackageMap)) {
-					System.out.println(typeenviroment.mName+ "  "+parameterTyps.get(0));
+					//System.out.println(typeenviroment.mName+ "  "+parameterTyps.get(0));
 					throw new TypeLinkingException("cant find constructor 2");
 				}
 				return typedef;
@@ -465,21 +536,27 @@ public class TypeCheckingEvaluator {
 				return null;
 			case DIM_EXPR:
 				Type index=check(currentnode.children.get(1), PackageMap, rootenv);
-				if(!index.equals("int")){
-					throw new TypeLinkingException("dimension index not int "+index.name);
+				if(!isnumicType(index)){
+					throw new TypeLinkingException("dimension index not numeric "+index.name);
 				}
 				return index;
 			case FOR_INIT:
 			case FOR_UPDATE_OPT:
 			case FOR_UPDATE:
+			case FOR_INIT_OPT:
 				if(currentnode.children.size()==0){
 					return null;
 				}
 				return check(currentnode.children.get(0),PackageMap,rootenv);
+			case CONSTRUCTOR_DECLARATION:
+				if(rootenv.PackageName==""){
+					returntype=rootenv.mName;
+				}
+				returntype=rootenv.PackageName+rootenv.mName;
+				return check(currentnode.children.get(2),PackageMap,rootenv);
 			case CLASS_TYPE:
 			case REFERENCE_TYPE:
 			case TYPE:
-			case FOR_INIT_OPT:
 			case VARIABLE_DECLARATORS:
 			case LOCAL_VARIABLE_DECLARATION_STATEMENT:
 			case STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT:
@@ -508,8 +585,6 @@ public class TypeCheckingEvaluator {
 			case STATEMENT_EXPRESSION:
 			case TYPE_DECLARATION:    //weird semi Colum case
 				return check(currentnode.children.get(0),PackageMap,rootenv);
-			case CONSTRUCTOR_DECLARATION:
-				return check(currentnode.children.get(2),PackageMap,rootenv);
 			case CLASS_DECLARATION:
 				return check(currentnode.children.get(5),PackageMap,rootenv);
 			case INTERFACE_DECLARATION:
@@ -594,7 +669,9 @@ public class TypeCheckingEvaluator {
 		if(parent.equals("null")||child.equals("null")){
 			return false;
 		}
-
+		if(isnumicType(new Type(parent))||isnumicType(new Type(child))){
+			return false;
+		}
 
 		Environment childenv=PackageMap.get(child);
 		Environment parentenv=PackageMap.get(parent);
@@ -659,6 +736,10 @@ public class TypeCheckingEvaluator {
 			return false;
 		}
 		if(parent.equals("null")||child.equals("null")){
+			return false;
+		}
+
+		if(isnumicType(new Type(parent))||isnumicType(new Type(child))){
 			return false;
 		}
 

@@ -16,12 +16,16 @@ import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 
 public class AssignmentChecking {
+  static boolean p;
+
   public static void check(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (environment.mName.equals("Je_8_DefiniteAssignment_SomethingAndAssignment")) p = true;
     for (Environment child : environment.mChildrenEnvironments) {
       if (getEnvironmentType(child) == EnvironmentType.METHOD) {
         AssignmentChecking.checkAssignment(child, child.mScope, packageMap, new HashMap());
       }
     }
+    p = false;
   }
 
   public static Map<String, Boolean> checkAssignment(
@@ -73,11 +77,12 @@ public class AssignmentChecking {
               if (childEnv.mScope == child) {
                 // check but ignore things that are assigned within
                 checkAssignment(childEnv, node, packageMap, map);
+                return map;
               }
             }
           }
         }
-        return map;
+        break;
       case WHILE_STATEMENT:
       case WHILE_STATEMENT_NO_SHORT_IF:
       case FOR_STATEMENT:
@@ -86,12 +91,13 @@ public class AssignmentChecking {
           if (child.token.getType() == TokenType.STATEMENT || child.token.getType() == TokenType.STATEMENT_NO_SHORT_IF) {
             for (Environment childEnv : environment.mChildrenEnvironments) {
               if (childEnv.mScope == child) {
-                map.putAll(checkAssignment(childEnv, node, packageMap, map));
+                checkAssignment(childEnv, node, packageMap, map);
+                return map;
               }
             }
           }
         }
-        return map;
+        break;
       case VARIABLE_DECLARATOR:
         if (node.children.size() == 3) {
           map.putAll(checkAssignment(environment, node.children.get(2), packageMap, map));
@@ -101,32 +107,48 @@ public class AssignmentChecking {
         }
         return map;
       case ASSIGNMENT: {
-        map.putAll(checkAssignment(environment, node.children.get(2), packageMap, map));
-        ParseTreeNode nameNode = node.children.get(0).children.get(0);
-        if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
-          String s = getNameFromTypeNode(nameNode);
-          if (map.containsKey(s)) {
-            map.put(s, true);
+        if (node.children.get(0).children.get(0).token.getType() == TokenType.NAME) {
+          map.putAll(checkAssignment(environment, node.children.get(2), packageMap, map));
+          ParseTreeNode nameNode = node.children.get(0).children.get(0);
+          if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
+            String s = getNameFromTypeNode(nameNode);
+            if (map.containsKey(s)) {
+              map.put(s, true);
+            }
+          }
+          return map;
+        }
+        break;
+      }
+      case CONDITIONAL_AND_EXPRESSION:
+      case CONDITIONAL_OR_EXPRESSION:
+        if (node.children.size() == 3) {
+          map.putAll(checkAssignment(environment, node.children.get(0), packageMap, map));
+          checkAssignment(environment, node.children.get(2), packageMap, map);
+          return map;
+        } else {
+          ParseTreeNode nameNode = node.children.get(0);
+          if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
+            String s = getNameFromTypeNode(nameNode);
+            if (map.containsKey(s) && !map.get(s)) throw new InvalidSyntaxException("\"" + s + "\" in " + environment.getParentClassEnvironment().mName + "." + environment.getParentMethodEnvironment().mName + " might be unassigned");
           }
         }
-        return map;
-      }
+        break;
       case ARRAY_ACCESS: {
         if (node.children != null) {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             String s = getNameFromTypeNode(nameNode);
-            if (map.containsKey(s) && !map.get(s)) throw new InvalidSyntaxException("\"" + s + "\" in " + environment.getParentClassEnvironment().mName + "." + environment.getParentMethodEnvironment().mName + " might be undefined");
+            if (map.containsKey(s) && !map.get(s)) throw new InvalidSyntaxException("\"" + s + "\" in " + environment.getParentClassEnvironment().mName + "." + environment.getParentMethodEnvironment().mName + " might be unassigned");
           }
         }
         break;
       }
+      case ASSIGNMENT_EXPRESSION:
       case POSTFIX_EXPRESSION:
       case EXPRESSION:
       case CONSTANT_EXPRESSION:
       case CONDITIONAL_EXPRESSION:
-      case CONDITIONAL_OR_EXPRESSION:
-      case CONDITIONAL_AND_EXPRESSION:
       case INCLUSIVE_OR_EXPRESSION:
       case EXCLUSIVE_OR_EXPRESSION:
       case AND_EXPRESSION:
@@ -144,7 +166,7 @@ public class AssignmentChecking {
           ParseTreeNode nameNode = node.children.get(0);
           if (nameNode != null && nameNode.token.getType() == TokenType.NAME) {
             String s = getNameFromTypeNode(nameNode);
-            if (map.containsKey(s) && !map.get(s)) throw new InvalidSyntaxException("\"" + s + "\" in " + environment.getParentClassEnvironment().mName + "." + environment.getParentMethodEnvironment().mName + " might be undefined");
+            if (map.containsKey(s) && !map.get(s)) throw new InvalidSyntaxException("\"" + s + "\" in " + environment.getParentClassEnvironment().mName + "." + environment.getParentMethodEnvironment().mName + " might be unassigned");
           }
         }
         break;
@@ -156,10 +178,13 @@ public class AssignmentChecking {
         map.putAll(checkAssignment(environment, child, packageMap, map));
       }
     }
-    Map<String, Boolean> retMap = new HashMap(current);
-    for (String key : retMap.keySet()) {
-      retMap.put(key, map.get(key));
+    if (environment.mScope == node) {
+      Map<String, Boolean> retMap = new HashMap(current);
+      for (String key : retMap.keySet()) {
+        retMap.put(key, map.get(key));
+      }
+      return retMap;
     }
-    return retMap;
+    return map;
   }
 }

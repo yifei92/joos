@@ -153,6 +153,7 @@ public class Disambiguation {
           set.add(child.token.getType());
         }
         Type type = getTypeFromTypeNode(environment, node.children.get(1), packageMap);
+        type.decl = node;
         type.modifiers = set;
         for (ParseTreeNode child : node.children.get(2).children) {
           String name = ((TerminalToken)findNodeWithTokenType(child, TokenType.IDENTIFIER).token).getRawValue();

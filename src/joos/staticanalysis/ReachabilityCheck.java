@@ -18,6 +18,8 @@ import java.util.Map;
  */
 public class ReachabilityCheck {
 
+	boolean returnvoid;
+
 	enum ExprType{booleanliteral,Stingliteral,intliteral}
 	protected  class ExprResult{
 		boolean constant=false;
@@ -25,9 +27,13 @@ public class ReachabilityCheck {
 		boolean value;
 		int num;
 		String s;
+		public ExprResult(){
+			constant=false;
+		}
 	}
 
 	public void check(ParseTreeNode currentnode, Map<String, Environment> PackageMap, Environment rootenv) throws TypeLinkingException, InvalidSyntaxException, StaticAnalysisException {
+		//System.out.println(currentnode.in+" "+currentnode.token.getType());
 		switch (currentnode.token.getType()) {
 			case IF_THEN_STATEMENT:
 				currentnode.children.get(4).in=currentnode.in;
@@ -41,12 +47,12 @@ public class ReachabilityCheck {
 				currentnode.children.get(6).in=currentnode.in;
 				check(currentnode.children.get(4), PackageMap, rootenv);
 				check(currentnode.children.get(6), PackageMap, rootenv);
-				currentnode.out=currentnode.children.get(4).out&&currentnode.children.get(6).out;
+				currentnode.out=currentnode.children.get(4).out||currentnode.children.get(6).out;
 				return;
 			case WHILE_STATEMENT:
 			case WHILE_STATEMENT_NO_SHORT_IF:
 				ExprResult cond=checkexpr(currentnode.children.get(2),PackageMap,rootenv);
-				if(cond.constant){
+				if(cond.constant==true){
 					if(cond.value){
 						currentnode.children.get(4).in=currentnode.in;
 						check(currentnode.children.get(4), PackageMap, rootenv);
@@ -63,12 +69,40 @@ public class ReachabilityCheck {
 				check(currentnode.children.get(4), PackageMap, rootenv);
 				currentnode.out=currentnode.in;
 				return;
-
+			case FOR_STATEMENT:
+			case FOR_STATEMENT_NO_SHORT_IF:
+				cond=checkexpr(currentnode.children.get(4),PackageMap,rootenv);
+				if(cond.constant==true){
+					if(cond.value){
+						currentnode.children.get(8).in=currentnode.in;
+						check(currentnode.children.get(8), PackageMap, rootenv);
+						currentnode.out=false;
+					}
+					else {
+						currentnode.children.get(8).in=false;
+						check(currentnode.children.get(8), PackageMap, rootenv);
+						currentnode.out=currentnode.in;
+					}
+					return;
+				}
+				currentnode.children.get(8).in=currentnode.in;
+				check(currentnode.children.get(8), PackageMap, rootenv);
+				currentnode.out=currentnode.in;
+				return;
 			case RETURN_STATEMENT:
 				currentnode.out=false;
 				return;
 			case STATEMENT:
+				if(currentnode.in==false){
+					throw new StaticAnalysisException("unreachable statment");
+				}
+				currentnode.children.get(0).in=currentnode.in;
+				check(currentnode.children.get(0), PackageMap, rootenv);
+				currentnode.out=currentnode.children.get(0).out;
+				return;
 			case LOCAL_VARIABLE_DECLARATION_STATEMENT:
+			case EMPTY_STATEMENT:
+			case EXPRESSION_STATEMENT:
 				if(currentnode.in==false){
 						throw new StaticAnalysisException("unreachable statment");
 				}
@@ -85,6 +119,8 @@ public class ReachabilityCheck {
 				currentnode.out=currentnode.children.get(currentnode.children.size()-1).out;
 				return;
 			case BLOCK_STATEMENT:
+			case STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT:
+			case STATEMENT_NO_SHORT_IF:
 				currentnode.children.get(0).in = currentnode.in;
 				check(currentnode.children.get(0), PackageMap, rootenv);
 				currentnode.out = currentnode.children.get(0).out;
@@ -94,12 +130,14 @@ public class ReachabilityCheck {
 					currentnode.children.get(0).in = currentnode.in;
 					check(currentnode.children.get(0), PackageMap, rootenv);
 					currentnode.out = currentnode.children.get(0).out;
+					return;
 				}
+				currentnode.out=currentnode.in;
 				return;
 			case BLOCK:
 				currentnode.children.get(1).in=currentnode.in;
 				check(currentnode.children.get(1), PackageMap, rootenv);
-				currentnode.out = currentnode.children.get(0).out;
+				currentnode.out = currentnode.children.get(1).out;
 				return;
 			case CONSTRUCTOR_BODY:
 				currentnode.children.get(1).in=true;
@@ -120,12 +158,24 @@ public class ReachabilityCheck {
 					check(currentnode.children.get(0), PackageMap, rootenv);
 					currentnode.out=currentnode.children.get(0).out;
 				}
+				if(!returnvoid&&currentnode.out==true){
+					throw new StaticAnalysisException("terminate without return for no void method");
+				}
 				return;
 			case METHOD_DECLARATION:
+				check(currentnode.children.get(0), PackageMap, rootenv);
 				currentnode.children.get(1).in=true;
 				check(currentnode.children.get(1), PackageMap, rootenv);
 				currentnode.out=currentnode.children.get(1).out;
 				return;
+			case METHOD_HEADER:
+				if(currentnode.children.get(1).token.getType()== TokenType.TYPE){
+					returnvoid =false;
+				}
+				else{
+					returnvoid = true;
+				}
+				return ;
 			case CLASS_BODY_DECLARATIONS:
 				for(ParseTreeNode child: currentnode.children){
 					check(child,PackageMap,rootenv);
@@ -191,7 +241,7 @@ public class ReachabilityCheck {
 				return new ExprResult();
 			case CONDITIONAL_OR_EXPRESSION:
 			case CONDITIONAL_AND_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				ExprResult left = checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -217,7 +267,7 @@ public class ReachabilityCheck {
 				}
 			case INCLUSIVE_OR_EXPRESSION:
 			case EXCLUSIVE_OR_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				left = checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -234,7 +284,7 @@ public class ReachabilityCheck {
 				ret.value = left.value || right.value;
 				return ret;
 			case AND_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				left = checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -251,7 +301,7 @@ public class ReachabilityCheck {
 				ret.value = left.value && right.value;
 				return ret;
 			case ADDITIVE_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				left = checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -275,7 +325,7 @@ public class ReachabilityCheck {
 				}
 				return new ExprResult();
 			case MULTIPLICATIVE_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				left = checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -293,7 +343,7 @@ public class ReachabilityCheck {
 				return ret;
 
 			case EQUALITY_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				left = checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -318,7 +368,7 @@ public class ReachabilityCheck {
 			case ASSIGNMENT_EXPRESSION:
 				return new ExprResult();
 			case RELATIONAL_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				left = checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -349,7 +399,7 @@ public class ReachabilityCheck {
 				}
 				return new ExprResult();
 			case UNARY_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				ret=checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -358,7 +408,7 @@ public class ReachabilityCheck {
 				}
 				return ret;
 			case UNARY_EXPRESSION_NOT_PLUS_MINUS:
-				if (currentnode.children.size() == 0) {
+				if (currentnode.children.size() == 1) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
 				ret=checkexpr(currentnode.children.get(0), PackageMap, rootenv);
@@ -369,7 +419,7 @@ public class ReachabilityCheck {
 			case NAME:
 				if(currentnode.type.modifiers!=null&&currentnode.type.modifiers.contains(TokenType.FINAL)&&currentnode.type.modifiers.contains(TokenType.STATIC)){
 					System.out.println("not implemented yet");
-					//currentnode.type.decl
+					return checkexpr(currentnode.type.decl,PackageMap,rootenv);
 				}
 				return new ExprResult();
 			case PRIMARY_NO_NEW_ARRAY:
@@ -389,16 +439,27 @@ public class ReachabilityCheck {
 			case SHIFT_EXPRESSION:
 			case CONDITIONAL_EXPRESSION:
 			case POSTFIX_EXPRESSION:
-				if (currentnode.children.size() == 0) {
+			case VARIABLE_DECLARATORS:
+			case VARIABLE_INITIALIZER:
+					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
+			case FIELD_DECLARATION:
+			case VARIABLE_DECLARATOR:
+				if (currentnode.children.size() > 2) {
+					return checkexpr(currentnode.children.get(2), PackageMap, rootenv);
+				}
+				return new ExprResult();
+			case METHOD_INVOCATION:
+				return new ExprResult();
+			case EXPRESSION_OPT:
+				if(currentnode.children.size() > 0) {
 					return checkexpr(currentnode.children.get(0), PackageMap, rootenv);
 				}
-				break;
+				return new ExprResult();
 			default:
 				System.out.println("error forgot " + currentnode.token.getType());
 				System.out.print(currentnode.children.get(1000));
 				return null;
 		}
-		return null;
 	}
 
 }

@@ -19,8 +19,10 @@ import joos.hierarchychecking.HierarchyChecking;
 import joos.disambiguation.Disambiguation;
 import joos.typechecking.TypeChecker;
 import joos.reachability.AssignmentChecking;
+import joos.codegeneration.CodeGeneration;
 
 import java.util.*;
+import java.io.IOException;
 
 public class Main {
 
@@ -87,6 +89,9 @@ public class Main {
 				ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
+			for (Environment environment : packageMap.values()) {
+				CodeGeneration.generateForClass(environment, packageMap);
+			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
 			System.out.println(e.getMessage());
@@ -101,6 +106,11 @@ public class Main {
 			return;
 		}
 		catch (StaticAnalysisException e){
+			System.out.println(e.getMessage());
+			System.out.println("Error");
+			System.exit(42);
+			return;
+		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);

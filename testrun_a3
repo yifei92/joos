@@ -3,53 +3,69 @@ chmod 777 buildscript
 ./buildscript
 
 javafiles=""
-for f in $(find test/java2 -name '*.java'); do
+for f in $(find test/java3 -name '*.java'); do
   chmod 777 $f
   javafiles="$javafiles $f";
 done
 
-echo "Running A3 tests"
-for filename in test/a3/*.java; do 
-  if [ $# -eq 1 ]
+failuresArray=
+
+echo "Running A3 tests J1_*"
+for filename in test/a3/J1_*.java; do 
+  printf "Test $filename\n"
+  testname="$filename"
+  filename="$filename $javafiles"
+  ./joosc $filename
+  if [ $? == 42 ]
     then
-      if [ $filename == $1 ]
-        then
-        printf "Test $filename\n"
-        filename="$filename $javafiles"
-        ./joosc $filename
-        printf "\n\n"
-      fi
-  else
-    printf "Test $filename\n"
-    filename="$filename $javafiles"
-    ./joosc $filename
-    printf "\n\n"
+    failuresArray+=($testname)
   fi
 done
-for directory in test/a3/*/; do 
-  if [ $# -eq 1 ]
+
+for filename in test/a3/Je_*.java; do 
+  printf "Test $filename\n"
+  testname="$filename"
+  filename="$filename $javafiles"
+  ./joosc $filename
+  if [ $? == 0 ]
     then
-      if [ $directory == $1 ]
-        then
-        printf "Test $directory\n"
-        params=""
-        for f in $(find $directory -name '*.java'); do
-          chmod 777 $f
-          params="$params $f";
-        done
-        params="$params $javafiles"
-        ./joosc $params
-        printf "\n\n"
-      fi
-  else
-    printf "Test $directory\n"
-    params=""
-    for f in $(find $directory -name '*.java'); do
-      chmod 777 $f
-      params="$params $f";
-    done
-    params="$params $javafiles"
-    ./joosc $params
-    printf "\n\n"
+    failuresArray+=($testname)
   fi
 done
+
+for directory in test/a3/J1_*/; do 
+  printf "Test $directory\n"
+  testname="$directory"
+  params=""
+  for f in $(find $directory -name '*.java'); do
+    chmod 777 $f
+    params="$params $f";
+  done
+  params="$params $javafiles"
+  ./joosc $params
+  if [ $? == 42 ]
+    then
+    failuresArray+=($testname)
+  fi
+  printf "\n\n"
+done
+
+for directory in test/a3/Je_*/; do 
+  printf "Test $directory\n"
+  testname="$directory"
+  params=""
+  for f in $(find $directory -name '*.java'); do
+    chmod 777 $f
+    params="$params $f";
+  done
+  params="$params $javafiles"
+  ./joosc $params
+  if [ $? == 0 ]
+    then
+    failuresArray+=($testname)
+  fi
+  printf "\n\n"
+done
+
+echo "++++++++++++Test Failures++++++++++++"
+printf '%s\n' "${failuresArray[@]}"

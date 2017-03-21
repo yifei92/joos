@@ -136,7 +136,7 @@ public class TypeChecker {
   //Checks if the given nameNode.type is protected from the given environment
   public static void checkUsageForProtectedFieldAccess(Environment environment, ParseTreeNode nameNode, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     // Check this usage of a variable for protected type access
-    ParseTreeNode declarationNode = nameNode.type.decl;
+    /*ParseTreeNode declarationNode = nameNode.type.decl;
     List<ParseTreeNode> modifiers = new ArrayList<>();
     findNodesWithTokenType(declarationNode, TokenType.MODIFIER, modifiers);
     for (ParseTreeNode modifier : modifiers) {
@@ -156,7 +156,7 @@ public class TypeChecker {
           }
         }
       }
-    }
+    }*/
   }
 
   // TODO: call this like checkUsageForProtectedFieldAccess is called in Disambiguation

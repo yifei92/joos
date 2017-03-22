@@ -1,0 +1,1287 @@
+Scanning for java files in src
+Build directory exists
+Compiling java files
+Packaging jar file
+COMPLETE!
+Running A3 tests J1_*
+Test test/a3/J1_5_AmbiguousName_FieldVsType_Initializer.java
+16
+Success
+Test test/a3/J1_5_AmbiguousName_FieldVsType.java
+16
+Success
+Test test/a3/J1_5_AmbiguousName_LocalVsField.java
+16
+Success
+Test test/a3/J1_5_AmbiguousName_LocalVsField_SameLine.java
+16
+Success
+Test test/a3/J1_5_AmbiguousName_LocalVsType.java
+16
+Success
+Test test/a3/J1_5_ForwardReference_ArrayLength.java
+16
+Success
+Test test/a3/J1_5_ForwardReference_EqualInfix.java
+16
+Success
+Test test/a3/J1_5_ForwardReference_ExplicitThis_InAssignment.java
+16
+Success
+Test test/a3/J1_5_ForwardReference_SameLine.java
+16
+Success
+Test test/a3/J1_6_Assignable_Object_ObjectArray.java
+16
+Success
+Test test/a3/J1_6_AssignmentInArrayLength.java
+16
+Success
+Test test/a3/J1_6_AssignmentInNotArrayLength.java
+16
+Success
+Test test/a3/J1_6_StaticMethodCall_ThisInArg.java
+16
+Success
+Test test/a3/J1_A_ConcatInSimpleInvoke.java
+16
+Success
+Test test/a3/J1_A_ConcatInStaticInvoke.java
+16
+Success
+Test test/a3/J1_ArrayAccess_Cast.java
+16
+Success
+Test test/a3/J1_arrayAccess.java
+16
+Success
+Test test/a3/J1_ArrayAccess_MethodInvocation.java
+16
+Success
+Test test/a3/J1_ArrayCast.java
+16
+Success
+Test test/a3/J1_arrayinstanceof1.java
+16
+Success
+Test test/a3/J1_arrayinstanceof2.java
+16
+Success
+Test test/a3/J1_ArrayInterfaces.java
+16
+Success
+Test test/a3/J1_array.java
+16
+Success
+Test test/a3/J1_arraylength.java
+16
+Success
+Test test/a3/J1_assign_Object_to_Object.java
+16
+Success
+Test test/a3/J1_backwardRef.java
+16
+Success
+Test test/a3/J1_backwardsFieldRef.java
+16
+Success
+Test test/a3/J1_BigByteInit.java
+16
+Success
+Test test/a3/J1_BigCharCharInit.java
+16
+Success
+Test test/a3/J1_BigShortFromByteInit.java
+16
+Success
+Test test/a3/J1_BigShortInit.java
+16
+Success
+Test test/a3/J1_boolean.java
+16
+Success
+Test test/a3/J1_booleanliterals.java
+16
+Success
+Test test/a3/J1_ByteCast.java
+16
+Success
+Test test/a3/J1_ByteCharInit2.java
+16
+Success
+Test test/a3/J1_ByteInit.java
+16
+Success
+Test test/a3/J1_byte.java
+16
+Success
+Test test/a3/J1_callstaticmethods.java
+16
+java
+Success
+Test test/a3/J1_castarrayaccess.java
+16
+Success
+Test test/a3/J1_castMultiple1.java
+16
+Success
+Test test/a3/J1_castMultiple2.java
+16
+Success
+Test test/a3/J1_castMultiple.java
+16
+Success
+Test test/a3/J1_castprimarymethodinvocation.java
+16
+Success
+Test test/a3/J1_castthis.java
+16
+Success
+Test test/a3/J1_cast_to_same_type.java
+16
+Success
+Test test/a3/J1_CharCast.java
+16
+Success
+Test test/a3/J1_CharCharInit1.java
+16
+Success
+Test test/a3/J1_closestMatchConstructor1.java
+16
+Success
+Test test/a3/J1_ClosestMatchMultiplePath1.java
+16
+Success
+Test test/a3/J1_ClosestMatchMultiplePath2.java
+16
+Success
+Test test/a3/J1_ClosestMethod2.java
+16
+Success
+Test test/a3/J1_ClosestMethod3.java
+16
+Success
+Test test/a3/J1_ClosestMethod4.java
+16
+Success
+Test test/a3/J1_constructoroverloading.java
+16
+Success
+Test test/a3/J1_evalMethodInvocationFromParExp.java
+16
+Success
+Test test/a3/J1_fieldinit2.java
+16
+Illegal forward reference of "y" in J1_fieldinit2
+Error
+Test test/a3/J1_fieldinit_forward_ref2.java
+16
+Success
+Test test/a3/J1_fieldinit_forward_ref.java
+16
+Success
+Test test/a3/J1_fieldinit.java
+16
+Success
+Test test/a3/J1_fieldInOwnInit.java
+16
+Success
+Test test/a3/J1_fieldOwnInit1.java
+16
+Success
+Test test/a3/J1_fieldOwnInit2.java
+16
+Success
+Test test/a3/J1_FieldRestrictionDuringInit.java
+16
+Success
+Test test/a3/J1_formalindex.java
+16
+Success
+Test test/a3/J1_formal_with_same_name_as_field.java
+16
+Success
+Test test/a3/J1_forwardfield1.java
+16
+Success
+Test test/a3/J1_forwardfield2.java
+16
+Success
+Test test/a3/J1_good_dot.java
+16
+Success
+Test test/a3/J1_implicitstringconcatenation.java
+16
+Success
+Test test/a3/J1_implicitthisforfields.java
+16
+Success
+Test test/a3/J1_implicitthisformethods.java
+16
+Success
+Test test/a3/J1_instanceof_array2.java
+16
+Success
+Test test/a3/J1_instanceof_array.java
+16
+Success
+Test test/a3/J1_instanceof.java
+16
+Success
+Test test/a3/J1_instanceof_string.java
+16
+Success
+Test test/a3/J1_int.java
+16
+Success
+Test test/a3/J1_intstringadd.java
+16
+Success
+Test test/a3/J1_length_field_not_array.java
+16
+Success
+Test test/a3/J1_localDeclAccess.java
+16
+Success
+Test test/a3/J1_methodInvocationQualified.java
+16
+Success
+Test test/a3/J1_methodoverloading.java
+16
+Success
+Test test/a3/J1_methodWithArgList.java
+16
+Success
+Test test/a3/J1_namelinking3.java
+16
+java
+Success
+Test test/a3/J1_nestedblocks.java
+16
+Success
+Test test/a3/J1_nestedcast.java
+16
+Success
+Test test/a3/J1_nonthisfieldaccess.java
+16
+Success
+Test test/a3/J1_nullinstanceof1.java
+16
+Success
+Test test/a3/J1_OneByteByteCast.java
+16
+int
+return assignable intbyte
+Success
+Test test/a3/J1_OneByteCharCast.java
+16
+int
+return assignable intchar
+Success
+Test test/a3/J1_OneByteIntCast.java
+16
+Success
+Test test/a3/J1_OneByteShortCast.java
+16
+int
+return assignable intshort
+Success
+Test test/a3/J1_primitivecasts.java
+16
+Success
+Test test/a3/J1_referencecasts.java
+16
+Success
+Test test/a3/J1_samestaticinvoketwice.java
+16
+Success
+Test test/a3/J1_ShortCast.java
+16
+Success
+Test test/a3/J1_ShortCharInit2.java
+16
+Success
+Test test/a3/J1_ShortFromByteInit.java
+16
+Success
+Test test/a3/J1_ShortInit.java
+16
+Success
+Test test/a3/J1_short.java
+16
+Success
+Test test/a3/J1_sideeffects_obj3.java
+16
+Success
+Test test/a3/J1_StaticField_AccessFromClass.java
+16
+Success
+Test test/a3/J1_staticMethodInvocation.java
+16
+Success
+Test test/a3/J1_typecheck_array.java
+16
+Success
+Test test/a3/J1_typecheck_constructor_invocation.java
+16
+Success
+Test test/a3/J1_typecheck_equality.java
+16
+Success
+Test test/a3/J1_typecheck_expstm.java
+16
+Success
+Test test/a3/J1_typecheck_if1.java
+16
+Success
+Test test/a3/J1_typecheck_if2.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof1.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof2.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof3.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof4.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof5.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof6.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof7.java
+16
+Success
+Test test/a3/J1_typecheck_instanceof.java
+16
+Success
+Test test/a3/J1_typecheck_plus.java
+16
+Success
+Test test/a3/J1_typecheck_return.java
+16
+java.lang.Object
+return assignable java.lang.Objectjava.lang.String
+Success
+Test test/a3/J1_typecheck_static_invocation1.java
+16
+Success
+Test test/a3/J1_typecheck_while.java
+16
+Success
+Test test/a3/J1_wrapper_classes_eq.java
+16
+      java.lang.Integerjava.lang.Object
+      java.lang.Characterjava.lang.Object
+      java.lang.Integerjava.lang.Object
+Success
+Test test/a3/Je_16_ClosestMatch_Array.java
+16
+Method "method" in Je_16_ClosestMatch_Array.test cannot be accessed without a full qualified name.
+Error
+Test test/a3/Je_16_ClosestMatch_Constructor_NoClosestMatch_This.java
+16
+Parsing error at token '('
+Error
+Test test/a3/Je_16_IncDec_Final_ArrayLengthDec.java
+16
+Parsing error at token '--'
+Error
+Test test/a3/Je_16_IncDec_Final_ArrayLengthInc.java
+16
+Parsing error at token '++'
+Error
+Test test/a3/Je_16_IncDec_Final_PostDec.java
+16
+Parsing error at token '--'
+Error
+Test test/a3/Je_16_IncDec_Final_PostInc.java
+16
+Parsing error at token '++'
+Error
+Test test/a3/Je_16_IncDec_Final_PreDec.java
+16
+Parsing error at token '--'
+Error
+Test test/a3/Je_16_IncDec_Final_PreInc.java
+16
+Parsing error at token '++'
+Error
+Test test/a3/Je_16_IncDec_StringPostDec.java
+16
+Parsing error at token '--'
+Error
+Test test/a3/Je_16_IncDec_StringPostInc.java
+16
+Parsing error at token '++'
+Error
+Test test/a3/Je_16_IncDec_StringPreDec.java
+16
+Parsing error at token '--'
+Error
+Test test/a3/Je_16_IncDec_StringPreInc.java
+16
+Parsing error at token '++'
+Error
+Test test/a3/Je_16_MethodPresent_WrongName_Array.java
+16
+int[]
+Qualified Name not found for int[]
+Error
+Test test/a3/Je_16_MultiArrayCreation_Assign_1.java
+16
+Parsing error at token '2'
+Error
+Test test/a3/Je_16_MultiArrayCreation_Null.java
+16
+Parsing error at token '['
+Error
+Test test/a3/Je_16_StaticThis_StaticFieldInitializer.java
+16
+i in Je_16_StaticThis_StaticFieldInitializer should be static
+Error
+Test test/a3/Je_16_SuperThis_InvalidSuperParameter.java
+16
+Parsing error at token 'super'
+Error
+Test test/a3/Je_16_SuperThis_InvalidThisParameter.java
+16
+Parsing error at token '('
+Error
+Test test/a3/Je_1_Cast_NamedCastNegativeint.java
+16
+string concatenation with minus
+Error
+Test test/a3/Je_1_Complement_OfIntLiteral.java
+16
+bool not operator on no boolean type int
+Error
+Test test/a3/Je_1_Dot_ParenthesizedType_Field.java
+16
+Illegal access of a field from type java.lang.Integer
+Error
+Test test/a3/Je_1_Dot_ParenthesizedType_Method.java
+16
+unable to find method getProperties
+Error
+Test test/a3/Je_1_InstanceOf_Primitive.java
+16
+Parsing error at token ')'
+Error
+Test test/a3/Je_1_MethodInvocation_Primitive.java
+16
+int
+Qualified Name not found for int
+Error
+Test test/a3/Je_2_Cast_NegativeComplexExpressionToNamedType.java
+16
+string concatenation with minus
+Error
+Test test/a3/Je_2_Cast_NegativeToNamedType.java
+16
+string concatenation with minus
+Error
+Test test/a3/Je_2_Cast_NegativeToQualifiedNamedType.java
+16
+java
+string concatenation with minus
+Error
+Test test/a3/Je_2_For_LocalVarInUpdate.java
+16
+tmp
+Name "tmp" cannot be resolved
+Error
+Test test/a3/Je_5_AmbiguousInvoke_LocalInOwnInitializer.java
+16
+int
+Qualified Name not found for int
+Error
+Test test/a3/Je_5_AmbiguousInvoke_Static_TypeNonExisting.java
+16
+java
+Name "java.lang.Integar" cannot be resolved
+Error
+Test test/a3/Je_5_AmbiguousName_FieldVsType_Initializer.java
+16
+Illegal forward reference of "Je_5_AmbiguousName_FieldVsType_Initializer" in Je_5_AmbiguousName_FieldVsType_Initializer
+Error
+Test test/a3/Je_5_AmbiguousName_Local_UseBeforeDeclare.java
+16
+b
+Name "b" cannot be resolved
+Error
+Test test/a3/Je_5_AmbiguousName_NoDeclaration.java
+16
+nowhere
+Name "nowhere" cannot be resolved
+Error
+Test test/a3/Je_5_AmbiguousName_SamePackageAndClassName.java
+16
+Name "Je_5_AmbiguousName_SamePackageAndClassName.Je_5_AmbiguousName_SamePackageAndClassName" cannot be resolved
+Error
+Test test/a3/Je_5_ForwardReference_ArrayLength.java
+16
+Illegal forward reference of "a" in Je_5_ForwardReference_ArrayLength
+Error
+Test test/a3/Je_5_ForwardReference_FieldDeclaredLater_ComplexExp.java
+16
+Illegal forward reference of "field2" in Je_5_ForwardReference_FieldDeclaredLater_ComplexExp
+Error
+Test test/a3/Je_5_ForwardReference_FieldDeclaredLater.java
+16
+Illegal forward reference of "j" in Je_5_ForwardReference_FieldDeclaredLater
+Error
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ComplexExpression.java
+16
+Illegal forward reference of "f" in Je_5_ForwardReference_FieldInOwnInitializer_ComplexExpression
+Error
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_Direct.java
+16
+Illegal forward reference of "err" in Je_5_ForwardReference_FieldInOwnInitializer_Direct
+Error
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ReadAfterAssignment.java
+16
+Illegal forward reference of "a" in Je_5_ForwardReference_FieldInOwnInitializer_ReadAfterAssignment
+Error
+Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_RightSideOfAssignment.java
+16
+Illegal forward reference of "foo" in Je_5_ForwardReference_FieldInOwnInitializer_RightSideOfAssignment
+Error
+Test test/a3/Je_5_ForwardReference_InAssignment.java
+16
+Illegal forward reference of "a" in Je_5_ForwardReference_InAssignment
+Error
+Test test/a3/Je_5_ForwardReference_MethodCall.java
+16
+Illegal forward reference of "z" in Je_5_ForwardReference_MethodCall
+Error
+Test test/a3/Je_6_ArrayLength_Invoke.java
+16
+int
+Qualified Name not found for int
+Error
+Test test/a3/Je_6_Array_NonNumericIndex.java
+16
+dimension index not numeric java.lang.String
+Error
+Test test/a3/Je_6_Array_NullTypeIndex.java
+16
+dimension index not numeric null
+Error
+Test test/a3/Je_6_Assignable_Array_Object.java
+16
+java.lang.Object[]java.lang.Object
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_byteArray_intArray.java
+16
+assign fail byte  int
+byte[]int[]
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_byte_char.java
+16
+assign fail byte  char
+bytechar
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_byte_int.java
+16
+assign fail byte  int
+byteint
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_Cast_intArray_int.java
+16
+cannot cast 3int[] to int
+Error
+Test test/a3/Je_6_Assignable_char_byte_1.java
+16
+assign fail char  byte
+charbyte
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_char_byte_2.java
+16
+assign fail char  byte
+charbyte
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_char_int.java
+16
+assign fail char  int
+charint
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_Condition.java
+16
+if condition does not evaluate to boolean
+Error
+Test test/a3/Je_6_Assignable_Condition_SimpleType.java
+16
+if condition does not evaluate to boolean
+Error
+Test test/a3/Je_6_Assignable_Condition_While.java
+16
+if condition does not evaluate to boolean
+Error
+Test test/a3/Je_6_Assignable_Instanceof_Result.java
+16
+intboolean
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_Instanceof_SimpleType.java
+16
+Cannot check instanceof on simple types
+Error
+Test test/a3/Je_6_Assignable_Instanceof_SimpleTypeOfSimpleType.java
+16
+Parsing error at token ')'
+Error
+Test test/a3/Je_6_Assignable_intArray_byteArray.java
+16
+assign fail int  byte
+int[]byte[]
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_intArray_int.java
+16
+int[]int
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_int_intArray.java
+16
+intint[]
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_int_null.java
+16
+intnull
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_NamedCastOfComplement.java
+16
+bool not operator on no boolean type int
+Error
+Test test/a3/Je_6_Assignable_NonstaticField.java
+16
+cannot cast int to boolean
+Error
+Test test/a3/Je_6_Assignable_RefType_RefTypeArray.java
+16
+java.lang.Integerjava.lang.Integer[]
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_ResultTypeOfAssignment.java
+16
+java.lang.Stringjava.lang.Object
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_ReturnInElse.java
+16
+java.lang.String
+return type does match method declation int return type java.lang.String
+Error
+Test test/a3/Je_6_Assignable_Return_ToSubType.java
+16
+java.lang.String
+return type does match method declation java.lang.Object return type java.lang.String
+Error
+Test test/a3/Je_6_Assignable_Return_VoidInVoidMethod.java
+16
+
+no void return
+Error
+Test test/a3/Je_6_Assignable_Return_Void.java
+16
+return void
+return type does match method declation int return type return void
+Error
+Test test/a3/Je_6_Assignable_short_char.java
+16
+assign fail short  char
+shortchar
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_short_int.java
+16
+assign fail short  int
+shortint
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Assignable_ToSubtype_FieldInit.java
+16
+Je_6_Assignable_ToSubtype_FieldInit field inilize with wrong type java.lang.Stringjava.lang.Object
+Error
+Test test/a3/Je_6_Assignable_ValueReturn_InConstructor.java
+16
+return void
+return type does match method declation int return type return void
+Error
+Test test/a3/Je_6_BinopExp_LogicalBitwise.java
+16
+Error! Detected bitwise operation!
+Error
+Test test/a3/Je_6_ClosestMatch_ArrayTypes.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_ClosestMatch_Constructor_NoClosestMatch_SimpleTypes.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_1.java
+16
+unable to find method aJe_6_ClosestMatch_MultipleClosest_1
+Error
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_2.java
+16
+unable to find method aJe_6_ClosestMatch_MultipleClosest_2
+Error
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_3.java
+16
+unable to find method aJe_6_ClosestMatch_MultipleClosest_3
+Error
+Test test/a3/Je_6_ClosestMatch_MultipleClosest_SimpleTypes.java
+16
+unable to find method aJe_6_ClosestMatch_MultipleClosest_SimpleTypes
+Error
+Test test/a3/Je_6_ConstructorPresent_ArgumentTypeMismatch.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_ConstructorPresent_IllegalConversion.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_ConstructorPresent_MultipleArgumentsOneMismatch.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_ConstructorPresent_SameLastArg.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_ConstructorPresent_TooFewArguments.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_ConstructorPresent_TooManyArguments.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_Constructor_WrongName.java
+16
+Constructor name JE_6_CONSTRUCTOR_WRONGNAME must be the same as class name Je_6_Constructor_WrongName
+Error
+Test test/a3/Je_6_Equality_int.java
+16
+intboolean
+local variable inilize with wrong type
+Error
+Test test/a3/Je_6_Equality_int_NamedType.java
+16
+Je_6_Equality_int_NamedTypecannot cast equality int to java.lang.Object
+Error
+Test test/a3/Je_6_Equality_StringInteger.java
+16
+Je_6_Equality_StringIntegercannot cast equality java.lang.String to java.lang.Integer
+Error
+Test test/a3/Je_6_Equality_Void.java
+16
+Success
+Test test/a3/Je_6_Expression_StringConcat_Void.java
+16
+cannot add void
+Error
+Test test/a3/Je_6_FinalField_ArrayLength.java
+16
+can't assigne to final
+Error
+Test test/a3/Je_6_For_NullInCondition.java
+16
+null
+for condition does not evaluate to boolean
+Error
+Test test/a3/Je_6_InstanceOf_Primitive_1.java
+16
+Parsing error at token ';'
+Error
+Test test/a3/Je_6_InstanceOf_Primitive_2.java
+16
+Parsing error at token ';'
+Error
+Test test/a3/Je_6_InstanceOf_Primitive_3.java
+16
+Cannot check instanceof on simple types
+Error
+Test test/a3/Je_6_InstantiateAbstract.java
+16
+abstract Number is being instantiated!
+Error
+Test test/a3/Je_6_InstantiateInterface.java
+16
+cant find constructor 2
+Error
+Test test/a3/Je_6_MethodInvocation_NonJoos_ReturnType.java
+16
+unable to find reference to type Long
+Error
+Test test/a3/Je_6_MethodPresent_ArgumentTypeMismatch.java
+16
+unable to find method m
+Error
+Test test/a3/Je_6_MethodPresent_IllegalConversion.java
+16
+unable to find method foo
+Error
+Test test/a3/Je_6_MethodPresent_MultipleArgumentsOneMismatch.java
+16
+unable to find method m
+Error
+Test test/a3/Je_6_MethodPresent_Nonstatic_SameLastArg.java
+16
+unable to find method j.methodJe_6_MethodPresent_Nonstatic_SameLastArg
+Error
+Test test/a3/Je_6_MethodPresent_Static_SameLastArg.java
+16
+unable to find method Je_6_MethodPresent_Static_SameLastArg.methodJe_6_MethodPresent_Static_SameLastArg
+Error
+Test test/a3/Je_6_MethodPresent_TooFewArguments.java
+16
+unable to find method m
+Error
+Test test/a3/Je_6_MethodPresent_TooManyArguments.java
+16
+unable to find method m
+Error
+Test test/a3/Je_6_NonStaticAccessToStatic_Field.java
+16
+MAX_VALUE in Integer should not be static
+Error
+Test test/a3/Je_6_NonStaticAccessToStatic_Method.java
+16
+Static method "parseInt" in java.lang.Integer cannot be called non-statically.
+Error
+Test test/a3/Je_6_StaticAccessToNontatic_Field.java
+16
+field in Je_6_StaticAccessToNontatic_Field should be static
+Error
+Test test/a3/Je_6_StaticAccessToNontatic_Method.java
+16
+Non-static method "hashCode" in java.lang.Object cannot be called statically.
+Error
+Test test/a3/Je_6_StaticThis_AfterStaticInvoke.java
+16
+invoc this in static method
+Error
+Test test/a3/Je_6_StaticThis_InvokeNonstatic_Implicit.java
+16
+Method "foo" in Je_6_StaticThis_InvokeNonstatic_Implicit.test cannot be accessed without a full qualified name.
+Error
+Test test/a3/Je_6_StaticThis_InvokeNonStatic.java
+16
+invoc this in static method
+Error
+Test test/a3/Je_6_StaticThis_InvokeStatic.java
+16
+invoc this in static method
+Error
+Test test/a3/Je_6_StaticThis_NonStaticField_ImplicitThis.java
+16
+foo in Je_6_StaticThis_NonStaticField_ImplicitThis should be static
+Error
+Test test/a3/Je_6_StaticThis_NonstaticField.java
+16
+invoc this in static method
+Error
+Test test/a3/Je_6_StringMinus.java
+16
+string concatenation with minus
+Error
+Test test/a3/Je_BadConstructorName.java
+16
+Constructor name AnotherConstructorName must be the same as class name Je_BadConstructorName
+Error
+Test test/a3/J1_5_AmbiguousName_DefaultPackageNotVisible/
+19
+Main
+foo
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_ImplicitSuper/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceField_SubVar/
+20
+Protected A is protected and cannot be referenced from C
+Error
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceField_This/
+20
+Protected A is protected and cannot be referenced from C
+Error
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceField_ThisVar/
+20
+Protected A is protected and cannot be referenced from C
+Error
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceMethod_SubVar/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceMethod_This/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_InstanceMethod_ThisVar/
+20
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_StaticMethod_Sub/
+20
+D
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_StaticMethod_Super/
+20
+A
+Success
+
+
+Test test/a3/J1_6_ProtectedAccess_StaticMethod_This/
+20
+Success
+
+
+Test test/a3/J1_accessstaticfield/
+17
+java
+Success
+
+
+Test test/a3/J1_ambiguousInvoke/
+17
+foo
+Success
+
+
+Test test/a3/J1_ArrayCast1/
+17
+Success
+
+
+Test test/a3/J1_ArrayCast2/
+17
+Success
+
+
+Test test/a3/J1_ArrayCast3/
+17
+Success
+
+
+Test test/a3/J1_ArrayCast4/
+17
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromArray/
+17
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromLit/
+16
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromMethod/
+17
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromObject/
+17
+Success
+
+
+Test test/a3/J1_evalMethodInvocationFromThis/
+17
+Success
+
+
+Test test/a3/J1_interfaceassignable/
+19
+java
+java.lang.Object
+return assignable java.lang.Objectjava.util.LinkedList
+Success
+
+
+Test test/a3/J1_interface_null/
+19
+java.lang.Object
+return assignable java.lang.Objectjava.util.LinkedList
+Success
+
+
+Test test/a3/J1_InterfaceObject/
+19
+java.lang.Object
+return assignable java.lang.Objectjava.util.LinkedList
+Success
+
+
+Test test/a3/J1_NamedCast2/
+17
+Success
+
+
+Test test/a3/J1_NamedCast3/
+17
+Success
+
+
+Test test/a3/J1_NamedCast4/
+17
+Success
+
+
+Test test/a3/J1_ProtectedAccess1/
+17
+Protected A is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/J1_ProtectedAccess2/
+17
+Success
+
+
+Test test/a3/J1_ProtectedAccess4/
+17
+p
+Success
+
+
+Test test/a3/J1_supermethod_override11/
+20
+Success
+
+
+Test test/a3/J1_typecheck_assignment/
+18
+Success
+
+
+Test test/a3/Je_16_ProtectedAccess_StaticField_Sub_DeclaredInSub/
+20
+D
+Success
+
+
+Test test/a3/Je_3_Resolve_LinkToCorrectPackage/
+18
+Zoo
+Name "Zoo" cannot be resolved
+Error
+
+
+Test test/a3/Je_5_AmbiguousName_DefaultPackageNotVisible/
+17
+Main
+Name "Main" cannot be resolved
+Error
+
+
+Test test/a3/Je_5_AmbiguousName_LinkToFirstFound/
+18
+fields must have a access modifier
+Error
+
+
+Test test/a3/Je_6_Assignable_ToSubtype/
+17
+cannot cast Main to java.lang.Thread
+Error
+
+
+Test test/a3/Je_6_Assignable_ToSubtype_DeclInit/
+17
+Mainjava.lang.Thread
+local variable inilize with wrong type
+Error
+
+
+Test test/a3/Je_6_ClosestMatch_Constructor_NoClosestMatch/
+18
+cant find constructor 2
+Error
+
+
+Test test/a3/Je_6_ConstructorPresent_PresentInSubclass/
+17
+cant find constructor 2
+Error
+
+
+Test test/a3/Je_6_ConstructorPresent_Super_NoDefault/
+17
+Success
+
+
+Test test/a3/Je_6_MethodPresent_PresentInSubclass/
+17
+unable to find method testMain
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_ClassCreation_Sub/
+20
+Protected D is protected and cannot be referenced from C
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_ClassCreation_Super/
+20
+Protected A is protected and cannot be referenced from C
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_Constructor/
+17
+Protected A is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_External/
+17
+Protected JComponent is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_External/
+18
+Protected JComponent is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_Internal/
+18
+Protected A is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_SubDeclare_SubVar/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceField_SuperVar/
+20
+Protected A is protected and cannot be referenced from C
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SubDeclare_SubVar/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SuperVar/
+20
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotBySubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotInSubclass/
+17
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotBySubclass/
+17
+Protected A is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotInSubclass/
+17
+Protected Foo is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_StaticMethod_Sub_DeclaredInSub/
+20
+D
+Success
+
+
+Test test/a3/Je_6_ProtectedAccess_SuperConstructor_NewExp/
+17
+Protected Bar is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_TwoSubtypes/
+18
+Protected A is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotBySubclass/
+17
+Protected A is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotInSubclass/
+17
+Protected Foo is protected and cannot be referenced from 
+Error
+
+
+Test test/a3/Je_AccessToStaticFieldWithImplicitThis/
+16
+fields must have a access modifier
+Error
+
+
+++++++++++++Test Failures++++++++++++
+
+test/a3/J1_fieldinit2.java
+test/a3/Je_6_Equality_Void.java
+test/a3/J1_6_ProtectedAccess_InstanceField_SubVar/
+test/a3/J1_6_ProtectedAccess_InstanceField_This/
+test/a3/J1_6_ProtectedAccess_InstanceField_ThisVar/
+test/a3/J1_ProtectedAccess1/
+test/a3/Je_16_ProtectedAccess_StaticField_Sub_DeclaredInSub/
+test/a3/Je_6_ConstructorPresent_Super_NoDefault/
+test/a3/Je_6_ProtectedAccess_InstanceField_SubDeclare_SubVar/
+test/a3/Je_6_ProtectedAccess_InstanceMethod_SubDeclare_SubVar/
+test/a3/Je_6_ProtectedAccess_InstanceMethod_SuperVar/
+test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotBySubclass/
+test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotInSubclass/
+test/a3/Je_6_ProtectedAccess_StaticMethod_Sub_DeclaredInSub/

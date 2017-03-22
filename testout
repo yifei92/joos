@@ -1,4 +1,69 @@
 20
+1linkMethodName for method write
+2linkMethodName for method PrintStream.nativeWrite
+2linkMethodName for method s.length
+1linkMethodName for method write
+2linkMethodName for method s.charAt
+1linkMethodName for method println
+1linkMethodName for method print
+1linkMethodName for method write
+1linkMethodName for method println
+2linkMethodName for method String.valueOf
+1linkMethodName for method println
+2linkMethodName for method String.valueOf
+1linkMethodName for method println
+2linkMethodName for method String.valueOf
+1linkMethodName for method println
+2linkMethodName for method String.valueOf
+1linkMethodName for method println
+2linkMethodName for method String.valueOf
+1linkMethodName for method println
+2linkMethodName for method String.valueOf
+1linkMethodName for method print
+2linkMethodName for method String.valueOf
+1linkMethodName for method print
+2linkMethodName for method String.valueOf
+1linkMethodName for method print
+2linkMethodName for method String.valueOf
+1linkMethodName for method print
+2linkMethodName for method String.valueOf
+1linkMethodName for method print
+2linkMethodName for method String.valueOf
+1linkMethodName for method print
+2linkMethodName for method String.valueOf
+2linkMethodName for method s.length
+2linkMethodName for method s.charAt
+2linkMethodName for method s.charAt
+2linkMethodName for method s.charAt
+2linkMethodName for method s.charAt
+2linkMethodName for method s.charAt
+2linkMethodName for method Integer.parseInt
+2linkMethodName for method String.valueOf
+2linkMethodName for method String.valueOf
+2linkMethodName for method String.valueOf
+2linkMethodName for method String.valueOf
+2linkMethodName for method var.instanceMethod
+1linkMethodName for method length
+2linkMethodName for method s2.length
+1linkMethodName for method length
+2linkMethodName for method s2.length
+1linkMethodName for method length
+2linkMethodName for method String.valueOf
+2linkMethodName for method String.valueOf
+2linkMethodName for method o.toString
+2linkMethodName for method Arrays.equals
+1linkMethodName for method length
+1linkMethodName for method charAt
+1linkMethodName for method length
+1linkMethodName for method charAt
+1linkMethodName for method length
+1linkMethodName for method charAt
+1linkMethodName for method substring
+1linkMethodName for method compareTo
+1linkMethodName for method length
+2linkMethodName for method needle.length
+1linkMethodName for method length
+2linkMethodName for method String.valueOf
 class A.A
 GOAL 
   COMPILATION_UNIT 
@@ -254,7 +319,7 @@ GOAL
                                             NAME T:OBJECT D.D D 
                                               IDENTIFIER 27 varT:OBJECT var  <envname>
                                               DOT 28 
-                                              IDENTIFIER 29 instanceMethod_Sub
+                                              IDENTIFIER 29 instanceMethod
                                             OPEN_BR 30 
                                             ARGUMENT_LIST_OPT 
                                             CLOSE_BR 31 

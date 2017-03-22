@@ -247,6 +247,25 @@ public class EnvironmentUtils {
 		}
 	}
 
+	/**
+	 * Call this on the TokenType.ARGUMENT_LIST node of a class instantiation or 
+	 * method invocation to get the called 
+	 */
+	public static void getMethodSignatureFromArgsList(ParseTreeNode node, List<String> methodSignature) {
+		if (node == null) {
+			return;
+		}
+		if (node.type != null) {
+			methodSignature.add(node.type.name);
+			return;
+		}
+		if (node.children != null) {
+			for(ParseTreeNode child : node.children) {
+				getMethodSignatureFromArgsList(child, methodSignature);
+			}
+		}
+	}
+
 	public static Set<TokenType> getEnvironmentModifiers(Environment environment) {
 		if (environment.mModifiers != null) return environment.mModifiers;
 		if (environment.mScope == null) return null;

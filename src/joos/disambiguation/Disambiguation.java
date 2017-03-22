@@ -149,8 +149,8 @@ public class Disambiguation {
       }
       case FIELD_DECLARATION: {
         Set<TokenType> set = new HashSet();
-        for (ParseTreeNode child : environment.mScope.children.get(0).children.get(0).children) {
-          set.add(child.token.getType());
+        for (ParseTreeNode child : node.children.get(0).children) {
+          set.add(child.children.get(0).token.getType());
         }
         Type type = getTypeFromTypeNode(environment, node.children.get(1), packageMap);
         type.decl = node;

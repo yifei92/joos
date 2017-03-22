@@ -253,6 +253,70 @@ public class CodeGeneration {
         writer.write("  call eax");
         writer.write("  pop ebp\n");
         break;
+      case IF_THEN_STATEMENT:
+        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
+        writer.write("  cmp eax 0\n");
+        writer.write("  je "+environment.mName+"end\n");
+        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
+        writer.write(environment.mName+"end:\n");
+      case IF_THEN_ELSE_STATEMENT:
+      case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
+        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
+        writer.write("  cmp eax 0\n");
+        writer.write("  je "+environment.mName+"else\n");
+        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
+        writer.write("  je "+environment.mName+"end\n");
+        writer.write(environment.mName+"else:\n");
+        generateForNode(writer, environment, node.children.get(6), offsets, packageMap);
+        writer.write(environment.mName+"end:\n");
+      case WHILE_STATEMENT:
+      case WHILE_STATEMENT_NO_SHORT_IF:
+        writer.write(environment.mName+"start:\n");
+        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
+        writer.write("  cmp eax 0\n");
+        writer.write("  je "+environment.mName+"end\n");
+        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
+        writer.write("  je "+environment.mName+"start\n");
+        writer.write(environment.mName+"end:\n");
+      case FOR_STATEMENT:
+      case FOR_STATEMENT_NO_SHORT_IF:
+        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
+        writer.write(environment.mName+"start:\n");
+        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
+        writer.write("  cmp eax 0\n");
+        writer.write("  je "+environment.mName+"end\n");
+        generateForNode(writer, environment, node.children.get(8), offsets, packageMap);
+        generateForNode(writer, environment, node.children.get(6), offsets, packageMap);
+        writer.write("  je "+environment.mName+"start\n");
+        writer.write(environment.mName+"end:\n");
+      case AND_EXPRESSION:
+        if(node.children.size()>1){
+          for(int i=0;i<node.children.size();i++) {
+            if(1%2==0) {
+              generateForNode(writer, environment, node.children.get(i), offsets, packageMap);
+              writer.write("  cmp eax 0\n");
+              writer.write("  je "+environment.mName+"end\n");
+            }
+          }
+          writer.write(environment.mName+"end:\n");
+        }
+        else {
+          generateForNode(writer, environment, node.children.get(0), offsets, packageMap);
+        }
+      case INCLUSIVE_OR_EXPRESSION:
+        if(node.children.size()>1){
+          for(int i=0;i<node.children.size();i++) {
+            if(1%2==0) {
+              generateForNode(writer, environment, node.children.get(i), offsets, packageMap);
+              writer.write("  cmp eax 1\n");
+              writer.write("  je "+environment.mName+"end\n");
+            }
+          }
+          writer.write(environment.mName+"end:\n");
+        }
+        else {
+          generateForNode(writer, environment, node.children.get(0), offsets, packageMap);
+        }
       case NAME:
         generateForName(writer, environment, getNameFromTypeNode(node), offsets, packageMap);
         break;

@@ -1,12 +1,7 @@
 package joos.typechecking;
 
 
-import jdk.nashorn.internal.codegen.types.*;
-import jdk.nashorn.internal.ir.Symbol;
-import jdk.nashorn.internal.ir.Terminal;
-import jdk.nashorn.internal.ir.TernaryNode;
-import jdk.nashorn.internal.ir.ThrowNode;
-import jdk.nashorn.internal.parser.*;
+
 import joos.commons.*;
 import joos.commons.TokenType;
 import joos.commons.Type;

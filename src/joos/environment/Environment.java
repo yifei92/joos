@@ -177,6 +177,44 @@ public class Environment {
     return false;
   }
 
+  /**
+   * Given a method name and signature returns the environment of the corresponding method if
+   * it can be found in this environment or a parent class environment
+   */
+  public Environment getMethodEnvironment(String name, List<String> signature, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if(getEnvironmentType(this) != EnvironmentType.CLASS) {
+      System.out.println("Environment.getMethodEnvironment can only be called on a class environment");
+      return null;
+    }
+    if (mChildrenEnvironments != null) {
+      for(Environment child : mChildrenEnvironments) {
+        if(getEnvironmentType(child) == EnvironmentType.METHOD) {
+          // check this the method name and args list
+          if(mName.equals(name)) {
+            MethodSignature sig = getMethodSignature(child, packageMap, null);
+            if(sig != null) {
+              List<String> paramTypes = sig.parameterTypes;
+              if (paramTypes.isEmpty() && signature.isEmpty() || signature.equals(paramTypes)) {
+                return child;
+              }
+            }
+          }
+        }
+      }
+    }
+    List<Environment> extendedEnvironments = getExtendedEnvironments(this, packageMap);
+    if(extendedEnvironments != null) {
+      Environment foundEnv;
+      for (Environment ext : extendedEnvironments) {
+        foundEnv = ext.getMethodEnvironment(name, signature, packageMap);
+        if(foundEnv != null) {
+          return foundEnv;
+        }
+      }
+    }
+    return null;
+  }
+
 	/**
 	 * If the method signature exists within this class or is a method in a parent class then the full method
 	 * signature will be returned. Null otherwise

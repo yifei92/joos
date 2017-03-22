@@ -87,8 +87,8 @@ public class Main {
 			}
 			for (String key : treeMap.keySet()) {
 				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C")) {
-					//System.out.println("class " + key);
-					//treeMap.get(key).print();
+					System.out.println("class " + key);
+					treeMap.get(key).print();
 				}
 			}
 			for (Environment environment : packageMap.values()) {

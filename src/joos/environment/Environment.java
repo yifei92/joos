@@ -109,6 +109,27 @@ public class Environment {
   }
 
   /**
+   * Searches this environment and its parent environments for the declaration of the given name.
+   * Returns the environment that declares the given name.
+   */
+  public Environment getVariableDeclarationEnvronment(String name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (mVariableDeclarations.get(name) != null) {
+      return this;
+    }
+    List<Environment> directParents = EnvironmentUtils.getExtendedEnvironments(this, packageMap);
+    if (directParents != null) {
+      Environment declEnv;
+      for(Environment parent : directParents) {
+        declEnv = parent.getVariableDeclarationEnvronment(name, packageMap);
+        if (declEnv != null) {
+          return declEnv;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
    * Given a field name returns whether or not this field in this environment is static
    */
   public boolean isFieldStatic(String name) {

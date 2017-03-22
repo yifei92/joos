@@ -4,6 +4,5 @@ import A.A;
 import C.C;
 
 public class B extends A{
-  protected C cinstance;
   B() {}
 }

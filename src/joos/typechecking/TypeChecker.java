@@ -166,7 +166,8 @@ public class TypeChecker {
           if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {
             if (!typeEnvironment.PackageName.equals(environment.PackageName)) {
               Environment usageClassEnvironment = moveUpToClassEnvironment(environment);
-              if (!usageClassEnvironment.extendsEnvironment(typeEnvironment, packageMap)) {
+              Environment declarationEnvironment = typeEnvironment.getVariableDeclarationEnvronment(type.name, packageMap);
+              if (!usageClassEnvironment.extendsEnvironment(declarationEnvironment, packageMap)) {
                 throw new InvalidSyntaxException(
                   "Protected " + type.name + " is protected and cannot be referenced from " + environment.PackageName);
               }

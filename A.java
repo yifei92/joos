@@ -4,8 +4,8 @@ import B.B;
 import C.C;
 
 protected class A {
-  public int ainstance = 10;
+  protected void meth() {}
   A(B b) {
-    ((A)b).ainstance = 3;
+    ((A)b).meth();
   }
 }

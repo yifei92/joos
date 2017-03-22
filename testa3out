@@ -2202,8 +2202,18 @@ Success
 
 Test test/a3/J1_6_ProtectedAccess_InstanceField_SubVar/
 20
-Protected instanceField is protected and cannot be referenced from C
-Error
+out: [PUBLIC, STATIC]
+MAX_VALUE: [PUBLIC, STATIC]
+value: [PUBLIC]
+instanceField: [PROTECTED]
+value: [PUBLIC]
+value: [PUBLIC]
+MAX_VALUE: [PUBLIC, STATIC]
+value: [PUBLIC]
+chars: [PUBLIC]
+MAX_VALUE: [PUBLIC, STATIC]
+value: [PUBLIC]
+Success
 
 
 Test test/a3/J1_6_ProtectedAccess_InstanceField_This/
@@ -2942,7 +2952,6 @@ Error
 
 test/a3/J1_fieldinit2.java
 test/a3/Je_6_Equality_Void.java
-test/a3/J1_6_ProtectedAccess_InstanceField_SubVar/
 test/a3/Je_6_ConstructorPresent_Super_NoDefault/
 test/a3/Je_6_ProtectedAccess_InstanceMethod_SubDeclare_SubVar/
 test/a3/Je_6_ProtectedAccess_InstanceMethod_SuperVar/

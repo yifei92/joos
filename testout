@@ -1,774 +1,1221 @@
-Scanning for java files in src
-Build directory exists
-Compiling java files
-Packaging jar file
-COMPLETE!
-Running A3 tests
-Test test/a3/J1_5_AmbiguousName_FieldVsType_Initializer.java
-16
-Success
-
-
-Test test/a3/J1_5_AmbiguousName_FieldVsType.java
-16
-Success
-
-
-Test test/a3/J1_5_AmbiguousName_LocalVsField.java
-16
-Success
-
-
-Test test/a3/J1_5_AmbiguousName_LocalVsField_SameLine.java
-16
-Success
-
-
-Test test/a3/J1_5_AmbiguousName_LocalVsType.java
-16
-Success
-
-
-Test test/a3/J1_5_ForwardReference_ArrayLength.java
-16
-Success
-
-
-Test test/a3/J1_5_ForwardReference_EqualInfix.java
-16
-Success
-
-
-Test test/a3/J1_5_ForwardReference_ExplicitThis_InAssignment.java
-16
-Success
-
-
-Test test/a3/J1_5_ForwardReference_SameLine.java
-16
-Success
-
-
-Test test/a3/J1_6_Assignable_Object_ObjectArray.java
-16
-Success
-
-
-Test test/a3/J1_6_AssignmentInArrayLength.java
-16
-Success
-
-
-Test test/a3/J1_6_AssignmentInNotArrayLength.java
-16
-Success
-
-
-Test test/a3/J1_6_StaticMethodCall_ThisInArg.java
-16
-Success
-
-
-Test test/a3/J1_A_ConcatInSimpleInvoke.java
-16
-Success
-
-
-Test test/a3/J1_A_ConcatInStaticInvoke.java
-16
-Success
-
-
-Test test/a3/J1_ArrayAccess_Cast.java
-16
-Success
-
-
-Test test/a3/J1_arrayAccess.java
-16
-Success
-
-
-Test test/a3/J1_ArrayAccess_MethodInvocation.java
-16
-Success
-
-
-Test test/a3/J1_ArrayCast.java
-16
-Success
-
-
-Test test/a3/J1_arrayinstanceof1.java
-16
-Success
-
-
-Test test/a3/J1_arrayinstanceof2.java
-16
-Success
-
-
-Test test/a3/J1_ArrayInterfaces.java
-16
-Success
-
-
-Test test/a3/J1_array.java
-16
-Success
-
-
-Test test/a3/J1_arraylength.java
-16
-Success
-
-
-Test test/a3/J1_assign_Object_to_Object.java
-16
-Success
-
-
-Test test/a3/J1_backwardRef.java
-16
-Success
-
-
-Test test/a3/J1_backwardsFieldRef.java
-16
-Success
-
-
-Test test/a3/J1_BigByteInit.java
-16
-Success
-
-
-Test test/a3/J1_BigCharCharInit.java
-16
-Success
-
-
-Test test/a3/J1_BigShortFromByteInit.java
-16
-Success
-
-
-Test test/a3/J1_BigShortInit.java
-16
-Success
-
-
-Test test/a3/J1_boolean.java
-16
-Success
-
-
-Test test/a3/J1_booleanliterals.java
-16
-Success
-
-
-Test test/a3/J1_ByteCast.java
-16
-Success
-
-
-Test test/a3/J1_ByteCharInit2.java
-16
-Success
-
-
-Test test/a3/J1_ByteInit.java
-16
-Success
-
-
-Test test/a3/J1_byte.java
-16
-Success
-
-
-Test test/a3/J1_callstaticmethods.java
-16
-java
-Success
-
-
-Test test/a3/J1_castarrayaccess.java
-16
-Success
-
-
-Test test/a3/J1_castMultiple1.java
-16
-Success
-
-
-Test test/a3/J1_castMultiple2.java
-16
-Success
-
-
-Test test/a3/J1_castMultiple.java
-16
-Success
-
-
-Test test/a3/J1_castprimarymethodinvocation.java
-16
-Success
-
-
-Test test/a3/J1_castthis.java
-16
-Success
-
-
-Test test/a3/J1_cast_to_same_type.java
-16
-Success
-
-
-Test test/a3/J1_CharCast.java
-16
-Success
-
-
-Test test/a3/J1_CharCharInit1.java
-16
-Success
-
-
-Test test/a3/J1_closestMatchConstructor1.java
-16
-Success
-
-
-Test test/a3/J1_ClosestMatchMultiplePath1.java
-16
-Success
-
-
-Test test/a3/J1_ClosestMatchMultiplePath2.java
-16
-Success
-
-
-Test test/a3/J1_ClosestMethod2.java
-16
-Success
-
-
-Test test/a3/J1_ClosestMethod3.java
-16
-Success
-
-
-Test test/a3/J1_ClosestMethod4.java
-16
-Success
-
-
-Test test/a3/J1_constructoroverloading.java
-16
-Success
-
-
-Test test/a3/J1_evalMethodInvocationFromParExp.java
-16
-Success
-
-
-Test test/a3/J1_fieldinit2.java
-16
-Illegal forward reference of "y" in J1_fieldinit2
-Error
-
-
-Test test/a3/J1_fieldinit_forward_ref2.java
-16
-Success
-
-
-Test test/a3/J1_fieldinit_forward_ref.java
-16
-Success
-
-
-Test test/a3/J1_fieldinit.java
-16
-Success
-
-
-Test test/a3/J1_fieldInOwnInit.java
-16
-Success
-
-
-Test test/a3/J1_fieldOwnInit1.java
-16
-Success
-
-
-Test test/a3/J1_fieldOwnInit2.java
-16
-Success
-
-
-Test test/a3/J1_FieldRestrictionDuringInit.java
-16
-Success
-
-
-Test test/a3/J1_formalindex.java
-16
-Success
-
-
-Test test/a3/J1_formal_with_same_name_as_field.java
-16
-Success
-
-
-Test test/a3/J1_forwardfield1.java
-16
-Success
-
-
-Test test/a3/J1_forwardfield2.java
-16
-Success
-
-
-Test test/a3/J1_good_dot.java
-16
-Success
-
-
-Test test/a3/J1_implicitstringconcatenation.java
-16
-Success
-
-
-Test test/a3/J1_implicitthisforfields.java
-16
-Success
-
-
-Test test/a3/J1_implicitthisformethods.java
-16
-Success
-
-
-Test test/a3/J1_instanceof_array2.java
-16
-Success
-
-
-Test test/a3/J1_instanceof_array.java
-16
-Success
-
-
-Test test/a3/J1_instanceof.java
-16
-Success
-
-
-Test test/a3/J1_instanceof_string.java
-16
-Success
-
-
-Test test/a3/J1_int.java
-16
-Success
-
-
-Test test/a3/J1_intstringadd.java
-16
-Success
-
-
-Test test/a3/J1_length_field_not_array.java
-16
-Success
-
-
-Test test/a3/J1_localDeclAccess.java
-16
-Success
-
-
-Test test/a3/J1_methodInvocationQualified.java
-16
-Success
-
-
-Test test/a3/J1_methodoverloading.java
-16
-Success
-
-
-Test test/a3/J1_methodWithArgList.java
-16
-Success
-
-
-Test test/a3/J1_namelinking3.java
-16
-java
-Success
-
-
-Test test/a3/J1_nestedblocks.java
-16
-Success
-
-
-Test test/a3/J1_nestedcast.java
-16
-Success
-
-
-Test test/a3/J1_nonthisfieldaccess.java
-16
-Success
-
-
-Test test/a3/J1_nullinstanceof1.java
-16
-Success
-
-
-Test test/a3/J1_OneByteByteCast.java
-16
-int
-return assignable intbyte
-Success
-
-
-Test test/a3/J1_OneByteCharCast.java
-16
-int
-return assignable intchar
-Success
-
-
-Test test/a3/J1_OneByteIntCast.java
-16
-Success
-
-
-Test test/a3/J1_OneByteShortCast.java
-16
-int
-return assignable intshort
-Success
-
-
-Test test/a3/J1_primitivecasts.java
-16
-Success
-
-
-Test test/a3/J1_referencecasts.java
-16
-Success
-
-
-Test test/a3/J1_samestaticinvoketwice.java
-16
-Success
-
-
-Test test/a3/J1_ShortCast.java
-16
-Success
-
-
-Test test/a3/J1_ShortCharInit2.java
-16
-Success
-
-
-Test test/a3/J1_ShortFromByteInit.java
-16
-Success
-
-
-Test test/a3/J1_ShortInit.java
-16
-Success
-
-
-Test test/a3/J1_short.java
-16
-Success
-
-
-Test test/a3/J1_sideeffects_obj3.java
-16
-Success
-
-
-Test test/a3/J1_StaticField_AccessFromClass.java
-16
-Success
-
-
-Test test/a3/J1_staticMethodInvocation.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_array.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_constructor_invocation.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_equality.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_expstm.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_if1.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_if2.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof1.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof2.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof3.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof4.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof5.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof6.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof7.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_instanceof.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_plus.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_return.java
-16
-java.lang.Object
-return assignable java.lang.Objectjava.lang.String
-Success
-
-
-Test test/a3/J1_typecheck_static_invocation1.java
-16
-Success
-
-
-Test test/a3/J1_typecheck_while.java
-16
-Success
-
-
-Test test/a3/J1_wrapper_classes_eq.java
-16
-      java.lang.Integerjava.lang.Object
-      java.lang.Characterjava.lang.Object
-      java.lang.Integerjava.lang.Object
-Success
-
-
-Test test/a3/J2_5_ForwardReference_StaticField.java
-16
-Success
-
-
-Test test/a3/J2_backwardsStaticFieldRef.java
-16
-Success
-
-
-Test test/a3/J2_exactMatchConstructor3.java
-16
-Success
-
-
-Test test/a3/J2_fieldinit_forward_ref.java
-16
-Success
-
-
-Test test/a3/J2_forwardRef.java
-16
-Success
-
-
-Test test/a3/J2_static_decl.java
-16
-Success
-
-
-Test test/a3/J2_staticField2.java
-16
-Success
-
-
-Test test/a3/J2_staticFieldDecl.java
-16
-Success
-
-
-Test test/a3/J2_staticField.java
-16
-Success
-
-
-Test test/a3/J2_static_shared.java
-16
-Success
-
-
-Test test/a3/Je_16_ClosestMatch_Array.java
-16
-Method "method" in Je_16_ClosestMatch_Array.test cannot be accessed without a full qualified name.
-Error
-
-
-Test test/a3/Je_16_ClosestMatch_Constructor_NoClosestMatch_This.java
-16
-Parsing error at token '('
-Error
-
-
-Test test/a3/Je_16_IncDec_Final_ArrayLengthDec.java
-16
-Parsing error at token '--'
-Error
-
-
-Test test/a3/Je_16_IncDec_Final_ArrayLengthInc.java
-16
-Parsing error at token '++'
-Error
-
-
-Test test/a3/Je_16_IncDec_Final_PostDec.java
-16
-Parsing error at token '--'
-Error
-
-
-Test test/a3/Je_16_IncDec_Final_PostInc.java
-16
-Parsing error at token '++'
-Error
-
-
-Test test/a3/Je_16_IncDec_Final_PreDec.java
-16
-Parsing error at token '--'
-Error
-
-
-Test test/a3/Je_16_IncDec_Final_PreInc.java
-16
-Parsing error at token '++'
-Error
-
-
-Test test/a3/Je_16_IncDec_StringPostDec.java
-16
-Parsing error at token '--'
-Error
-
-
-Test test/a3/Je_16_IncDec_StringPostInc.java
-16
-Parsing error at token '++'
-Error
-
-
-Test test/a3/Je_16_IncDec_StringPreDec.java
-16
-Parsing error at token '--'
-Error
-
-
-Test test/a3/Je_16_IncDec_StringPreInc.java
-16
-Parsing error at token '++'
-Error
-
-
-Test test/a3/Je_16_MethodPresent_WrongName_Array.java
-16
-int[]
-Qualified Name not found for int[]
-Error
-
-
-Test test/a3/Je_16_MultiArrayCreation_Assign_1.java
-16
-Parsing error at token '2'
-Error
-
-
-Test test/a3/Je_16_MultiArrayCreation_Null.java
-16
-Parsing error at token '['
-Error
-
-
-Test test/a3/Je_16_StaticThis_StaticFieldInitializer.java
-16
+20
+setting type for c environment name null
+checking if c is protected
+NAME T:PRIMITIVE char  <envname>
+  IDENTIFIER 28 cT:OBJECT c  <envname>
+setting type for PrintStream environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 44 bT:OBJECT b  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 32 iT:OBJECT i  <envname>
+setting type for s environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 40 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 42 iT:OBJECT i  <envname>
+setting type for s environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 53 iT:OBJECT i  <envname>
+setting type for s environment name null
+checking if s is protected
+NAME T:OBJECT java.lang.String String 
+  IDENTIFIER 82 sT:OBJECT s  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 107 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 126 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE byte  <envname>
+  IDENTIFIER 145 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE char  <envname>
+  IDENTIFIER 164 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE short  <envname>
+  IDENTIFIER 183 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 202 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 221 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 240 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE byte  <envname>
+  IDENTIFIER 259 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE char  <envname>
+  IDENTIFIER 278 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE short  <envname>
+  IDENTIFIER 297 bT:OBJECT b  <envname>
+setting type for String environment name null
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 316 bT:OBJECT b  <envname>
+setting type for a1 environment name null
+checking if a1 is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 33 a1T:OBJECT a1  <envname>
+  DOT 34 
+  IDENTIFIER 35 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 33 a1T:OBJECT a1  <envname>
+  DOT 34 
+  IDENTIFIER 35 length
+setting type for a2 environment name null
+checking if a2 is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 37 a2T:OBJECT a2  <envname>
+  DOT 38 
+  IDENTIFIER 39 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 37 a2T:OBJECT a2  <envname>
+  DOT 38 
+  IDENTIFIER 39 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 51 iT:OBJECT i  <envname>
+setting type for a1 environment name null
+checking if a1 is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 53 a1T:OBJECT a1  <envname>
+  DOT 54 
+  IDENTIFIER 55 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 53 a1T:OBJECT a1  <envname>
+  DOT 54 
+  IDENTIFIER 55 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 57 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 59 iT:OBJECT i  <envname>
+setting type for a1 environment name null
+checking if a1 is protected
+NAME T:ARRAY boolean[]  <envname>
+  IDENTIFIER 65 a1T:OBJECT a1  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 67 iT:OBJECT i  <envname>
+setting type for a2 environment name null
+checking if a2 is protected
+NAME T:ARRAY boolean[]  <envname>
+  IDENTIFIER 70 a2T:OBJECT a2  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 72 iT:OBJECT i  <envname>
+setting type for a1 environment name null
+checking if a1 is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 100 a1T:OBJECT a1  <envname>
+  DOT 101 
+  IDENTIFIER 102 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 100 a1T:OBJECT a1  <envname>
+  DOT 101 
+  IDENTIFIER 102 length
+setting type for a2 environment name null
+checking if a2 is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 104 a2T:OBJECT a2  <envname>
+  DOT 105 
+  IDENTIFIER 106 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 104 a2T:OBJECT a2  <envname>
+  DOT 105 
+  IDENTIFIER 106 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 118 iT:OBJECT i  <envname>
+setting type for a1 environment name null
+checking if a1 is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 120 a1T:OBJECT a1  <envname>
+  DOT 121 
+  IDENTIFIER 122 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 120 a1T:OBJECT a1  <envname>
+  DOT 121 
+  IDENTIFIER 122 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 124 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 126 iT:OBJECT i  <envname>
+setting type for a1 environment name null
+checking if a1 is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 132 a1T:OBJECT a1  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 134 iT:OBJECT i  <envname>
+setting type for a2 environment name null
+checking if a2 is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 137 a2T:OBJECT a2  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 139 iT:OBJECT i  <envname>
+setting type for value environment name Integer
+checking if value is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC
+  IDENTIFIER 23 valueT:OBJECT value Integer 
+setting type for i environment name Integer
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 25 iT:OBJECT i Integer 
+setting type for value environment name null
+checking if value is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC
+  IDENTIFIER 35 valueT:OBJECT value  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 64 iT:OBJECT i  <envname>
+setting type for s environment name null
+setting type for s environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 77 iT:OBJECT i  <envname>
+setting type for s environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 89 iT:OBJECT i  <envname>
+setting type for s environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 100 iT:OBJECT i  <envname>
+setting type for s environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 116 iT:OBJECT i  <envname>
+setting type for neg environment name null
+checking if neg is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 123 negT:OBJECT neg  <envname>
+setting type for neg environment name null
+checking if neg is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 126 negT:OBJECT neg  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 130 retT:OBJECT ret  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 132 retT:OBJECT ret  <envname>
+setting type for s environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 140 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 148 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 150 iT:OBJECT i  <envname>
+setting type for neg environment name null
+checking if neg is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 157 negT:OBJECT neg  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 159 retT:OBJECT ret  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 162 retT:OBJECT ret  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 165 retT:OBJECT ret  <envname>
+setting type for value environment name Integer
+checking if value is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC
+  IDENTIFIER 175 valueT:OBJECT value Integer 
+setting type for Integer environment name Integer
+setting type for s environment name Integer
+checking if s is protected
+NAME T:OBJECT java.lang.String String 
+  IDENTIFIER 181 sT:OBJECT s Integer 
+setting type for value environment name Integer
+checking if value is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC
+  IDENTIFIER 190 valueT:OBJECT value Integer 
+setting type for String environment name null
+setting type for value environment name null
+checking if value is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC
+  IDENTIFIER 206 valueT:OBJECT value  <envname>
+setting type for value environment name Character
+checking if value is protected
+NAME T:PRIMITIVE char  <envname> PUBLIC
+  IDENTIFIER 21 valueT:OBJECT value Character 
+setting type for i environment name Character
+checking if i is protected
+NAME T:PRIMITIVE char  <envname>
+  IDENTIFIER 23 iT:OBJECT i Character 
+setting type for String environment name null
+setting type for value environment name null
+checking if value is protected
+NAME T:PRIMITIVE char  <envname> PUBLIC
+  IDENTIFIER 43 valueT:OBJECT value  <envname>
+setting type for value environment name Short
+checking if value is protected
+NAME T:PRIMITIVE short  <envname> PUBLIC
+  IDENTIFIER 23 valueT:OBJECT value Short 
+setting type for i environment name Short
+checking if i is protected
+NAME T:PRIMITIVE short  <envname>
+  IDENTIFIER 25 iT:OBJECT i Short 
+setting type for value environment name null
+checking if value is protected
+NAME T:PRIMITIVE short  <envname> PUBLIC
+  IDENTIFIER 38 valueT:OBJECT value  <envname>
+setting type for String environment name null
+setting type for value environment name null
+checking if value is protected
+NAME T:PRIMITIVE short  <envname> PUBLIC
+  IDENTIFIER 58 valueT:OBJECT value  <envname>
+setting type for value environment name Boolean
+checking if value is protected
+NAME T:PRIMITIVE boolean  <envname> PUBLIC
+  IDENTIFIER 21 valueT:OBJECT value Boolean 
+setting type for i environment name Boolean
+checking if i is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 23 iT:OBJECT i Boolean 
+setting type for String environment name null
+setting type for value environment name null
+checking if value is protected
+NAME T:PRIMITIVE boolean  <envname> PUBLIC
+  IDENTIFIER 43 valueT:OBJECT value  <envname>
+setting type for var environment name null
+setting type for instanceField environment name D
+checking if var is protected
+NAME T:PRIMITIVE int  <envname> PROTECTED
+  IDENTIFIER 30 varT:OBJECT var  <envname>
+  DOT 31 
+  IDENTIFIER 32 instanceFieldT:OBJECT instanceField D 
+checking if instanceField is protected
+NAME T:PRIMITIVE int  <envname> PROTECTED
+  IDENTIFIER 30 varT:OBJECT var  <envname>
+  DOT 31 
+  IDENTIFIER 32 instanceFieldT:OBJECT instanceField D 
+setting type for x environment name null
+checking if x is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 34 xT:OBJECT x  <envname>
+setting type for other environment name null
+checking if other is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 26 otherT:OBJECT other  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 29 charsT:OBJECT chars  <envname>
+  DOT 30 
+  IDENTIFIER 31 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 29 charsT:OBJECT chars  <envname>
+  DOT 30 
+  IDENTIFIER 31 length
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 43 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 45 iT:OBJECT i  <envname>
+setting type for chars environment name String
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 54 charsT:OBJECT chars String 
+setting type for chars environment name String
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 79 charsT:OBJECT chars String 
+  DOT 80 
+  IDENTIFIER 81 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 79 charsT:OBJECT chars String 
+  DOT 80 
+  IDENTIFIER 81 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 91 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 93 charsT:OBJECT chars  <envname>
+  DOT 94 
+  IDENTIFIER 95 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 93 charsT:OBJECT chars  <envname>
+  DOT 94 
+  IDENTIFIER 95 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 97 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 99 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 107 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 110 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 112 iT:OBJECT i  <envname>
+setting type for other environment name String
+setting type for chars environment name String
+checking if other is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 127 otherT:OBJECT other String 
+  DOT 128 
+  IDENTIFIER 129 charsT:OBJECT chars String 
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 127 otherT:OBJECT other String 
+  DOT 128 
+  IDENTIFIER 129 charsT:OBJECT chars String 
+setting type for s2 environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 166 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 170 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 176 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 178 iT:OBJECT i  <envname>
+setting type for newchars environment name null
+checking if newchars is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 182 newcharsT:OBJECT newchars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 184 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 187 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 189 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 194 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 198 iT:OBJECT i  <envname>
+setting type for s2 environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 206 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 208 iT:OBJECT i  <envname>
+setting type for newchars environment name null
+checking if newchars is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 212 newcharsT:OBJECT newchars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 214 iT:OBJECT i  <envname>
+setting type for s2 environment name null
+setting type for chars environment name String
+checking if s2 is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 221 s2T:OBJECT s2  <envname>
+  DOT 222 
+  IDENTIFIER 223 charsT:OBJECT chars String 
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 221 s2T:OBJECT s2  <envname>
+  DOT 222 
+  IDENTIFIER 223 charsT:OBJECT chars String 
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 225 iT:OBJECT i  <envname>
+setting type for newchars environment name null
+checking if newchars is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 232 newcharsT:OBJECT newchars  <envname>
+setting type for newchars environment name null
+checking if newchars is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 256 newcharsT:OBJECT newchars  <envname>
+setting type for c environment name null
+checking if c is protected
+NAME T:PRIMITIVE char  <envname>
+  IDENTIFIER 261 cT:OBJECT c  <envname>
+setting type for newchars environment name null
+checking if newchars is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 267 newcharsT:OBJECT newchars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 303 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 315 iT:OBJECT i  <envname>
+setting type for wasneg environment name null
+checking if wasneg is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 320 wasnegT:OBJECT wasneg  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 324 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 327 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 332 iT:OBJECT i  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 337 retT:OBJECT ret  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 339 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 346 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 348 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 357 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 365 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 369 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 371 iT:OBJECT i  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 375 retT:OBJECT ret  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 377 jT:OBJECT j  <envname>
+setting type for d environment name null
+checking if d is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 384 dT:OBJECT d  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 391 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 393 jT:OBJECT j  <envname>
+setting type for wasneg environment name null
+checking if wasneg is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 401 wasnegT:OBJECT wasneg  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 404 retT:OBJECT ret  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 406 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 413 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 415 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 428 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 433 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 437 iT:OBJECT i  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 439 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 441 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 443 iT:OBJECT i  <envname>
+setting type for ret2 environment name null
+checking if ret2 is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 447 ret2T:OBJECT ret2  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 449 iT:OBJECT i  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 452 retT:OBJECT ret  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 454 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 458 iT:OBJECT i  <envname>
+setting type for ret2 environment name null
+checking if ret2 is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 465 ret2T:OBJECT ret2  <envname>
+setting type for String environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE short  <envname>
+  IDENTIFIER 486 iT:OBJECT i  <envname>
+setting type for String environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE byte  <envname>
+  IDENTIFIER 507 iT:OBJECT i  <envname>
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 522 bT:OBJECT b  <envname>
+setting type for o environment name null
+checking if o is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 547 oT:OBJECT o  <envname>
+setting type for o environment name null
+setting type for o environment name null
+checking if o is protected
+NAME T:OBJECT java.lang.String String 
+  IDENTIFIER 576 oT:OBJECT o  <envname>
+setting type for o environment name null
+checking if o is protected
+NAME T:OBJECT java.lang.String String 
+  IDENTIFIER 587 oT:OBJECT o  <envname>
+setting type for o environment name null
+checking if o is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 600 oT:OBJECT o  <envname>
+setting type for o environment name null
+checking if o is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 611 oT:OBJECT o  <envname>
+setting type for Arrays environment name null
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 624 charsT:OBJECT chars  <envname>
+checking if String is protected
+NAME T:TYPE java.lang.String  <envname>
+  IDENTIFIER 628 String
+setting type for o environment name null
+checking if o is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 630 oT:OBJECT o  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 655 iT:OBJECT i  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 665 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 677 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 679 iT:OBJECT i  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 693 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 695 iT:OBJECT i  <envname>
+setting type for k environment name null
+checking if k is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 700 kT:OBJECT k  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 702 iT:OBJECT i  <envname>
+setting type for k environment name null
+checking if k is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 704 kT:OBJECT k  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 706 jT:OBJECT j  <envname>
+setting type for k environment name null
+checking if k is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 708 kT:OBJECT k  <envname>
+setting type for k environment name null
+checking if k is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 710 kT:OBJECT k  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 714 retT:OBJECT ret  <envname>
+setting type for k environment name null
+checking if k is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 716 kT:OBJECT k  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 718 iT:OBJECT i  <envname>
+setting type for k environment name null
+checking if k is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 723 kT:OBJECT k  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 730 retT:OBJECT ret  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 752 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 756 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 764 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 771 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 773 iT:OBJECT i  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 781 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 789 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 795 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 802 jT:OBJECT j  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 804 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 812 iT:OBJECT i  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 814 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 824 iT:OBJECT i  <envname>
+setting type for j environment name null
+checking if j is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 826 jT:OBJECT j  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 850 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 852 charsT:OBJECT chars  <envname>
+  DOT 853 
+  IDENTIFIER 854 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 852 charsT:OBJECT chars  <envname>
+  DOT 853 
+  IDENTIFIER 854 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 856 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 858 iT:OBJECT i  <envname>
+setting type for h environment name null
+checking if h is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 863 hT:OBJECT h  <envname>
+setting type for h environment name null
+checking if h is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 867 hT:OBJECT h  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 869 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 871 iT:OBJECT i  <envname>
+setting type for h environment name null
+checking if h is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 876 hT:OBJECT h  <envname>
+checking if String is protected
+NAME T:TYPE java.lang.String  <envname>
+  IDENTIFIER 901 String
+setting type for other environment name null
+checking if other is protected
+NAME T:OBJECT java.lang.Object Object 
+  IDENTIFIER 903 otherT:OBJECT other  <envname>
+setting type for b environment name null
+checking if b is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 927 bT:OBJECT b  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 932 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 934 charsT:OBJECT chars  <envname>
+  DOT 935 
+  IDENTIFIER 936 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 934 charsT:OBJECT chars  <envname>
+  DOT 935 
+  IDENTIFIER 936 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 938 iT:OBJECT i  <envname>
+setting type for other environment name null
+setting type for chars environment name String
+checking if other is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 940 otherT:OBJECT other  <envname>
+  DOT 941 
+  IDENTIFIER 942 charsT:OBJECT chars String 
+  DOT 943 
+  IDENTIFIER 944 length
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 940 otherT:OBJECT other  <envname>
+  DOT 941 
+  IDENTIFIER 942 charsT:OBJECT chars String 
+  DOT 943 
+  IDENTIFIER 944 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 940 otherT:OBJECT other  <envname>
+  DOT 941 
+  IDENTIFIER 942 charsT:OBJECT chars String 
+  DOT 943 
+  IDENTIFIER 944 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 951 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 953 charsT:OBJECT chars  <envname>
+  DOT 954 
+  IDENTIFIER 955 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 953 charsT:OBJECT chars  <envname>
+  DOT 954 
+  IDENTIFIER 955 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 963 iT:OBJECT i  <envname>
+setting type for other environment name null
+setting type for chars environment name String
+checking if other is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 965 otherT:OBJECT other  <envname>
+  DOT 966 
+  IDENTIFIER 967 charsT:OBJECT chars String 
+  DOT 968 
+  IDENTIFIER 969 length
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 965 otherT:OBJECT other  <envname>
+  DOT 966 
+  IDENTIFIER 967 charsT:OBJECT chars String 
+  DOT 968 
+  IDENTIFIER 969 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 965 otherT:OBJECT other  <envname>
+  DOT 966 
+  IDENTIFIER 967 charsT:OBJECT chars String 
+  DOT 968 
+  IDENTIFIER 969 length
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 976 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 978 iT:OBJECT i  <envname>
+setting type for other environment name null
+setting type for chars environment name String
+checking if other is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 981 otherT:OBJECT other  <envname>
+  DOT 982 
+  IDENTIFIER 983 charsT:OBJECT chars String 
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 981 otherT:OBJECT other  <envname>
+  DOT 982 
+  IDENTIFIER 983 charsT:OBJECT chars String 
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 985 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 994 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 996 iT:OBJECT i  <envname>
+setting type for other environment name null
+setting type for chars environment name String
+checking if other is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 999 otherT:OBJECT other  <envname>
+  DOT 1000 
+  IDENTIFIER 1001 charsT:OBJECT chars String 
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 999 otherT:OBJECT other  <envname>
+  DOT 1000 
+  IDENTIFIER 1001 charsT:OBJECT chars String 
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1003 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1009 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1011 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 1036 charsT:OBJECT chars  <envname>
+  DOT 1037 
+  IDENTIFIER 1038 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 1036 charsT:OBJECT chars  <envname>
+  DOT 1037 
+  IDENTIFIER 1038 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1048 iT:OBJECT i  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 1050 retT:OBJECT ret  <envname>
+  DOT 1051 
+  IDENTIFIER 1052 length
+checking if length is protected
+NAME T:PRIMITIVE int  <envname> PUBLIC FINAL
+  IDENTIFIER 1050 retT:OBJECT ret  <envname>
+  DOT 1051 
+  IDENTIFIER 1052 length
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1054 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1056 iT:OBJECT i  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 1061 retT:OBJECT ret  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1063 iT:OBJECT i  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 1066 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1068 iT:OBJECT i  <envname>
+setting type for ret environment name null
+checking if ret is protected
+NAME T:ARRAY char[]  <envname>
+  IDENTIFIER 1073 retT:OBJECT ret  <envname>
+setting type for offset environment name null
+checking if offset is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1096 offsetT:OBJECT offset  <envname>
+setting type for offset environment name null
+checking if offset is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1100 offsetT:OBJECT offset  <envname>
+setting type for offset environment name null
+checking if offset is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1106 offsetT:OBJECT offset  <envname>
+setting type for offset environment name null
+checking if offset is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1108 offsetT:OBJECT offset  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1120 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1124 iT:OBJECT i  <envname>
+setting type for needle environment name null
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1132 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1134 iT:OBJECT i  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1141 iT:OBJECT i  <envname>
+setting type for offset environment name null
+checking if offset is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1143 offsetT:OBJECT offset  <envname>
+setting type for found environment name null
+checking if found is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 1149 foundT:OBJECT found  <envname>
+setting type for chars environment name null
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 1156 charsT:OBJECT chars  <envname>
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1158 iT:OBJECT i  <envname>
+setting type for offset environment name null
+checking if offset is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1160 offsetT:OBJECT offset  <envname>
+setting type for needle environment name null
+setting type for chars environment name String
+checking if needle is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 1163 needleT:OBJECT needle  <envname>
+  DOT 1164 
+  IDENTIFIER 1165 charsT:OBJECT chars String 
+checking if chars is protected
+NAME T:ARRAY char[]  <envname> PUBLIC
+  IDENTIFIER 1163 needleT:OBJECT needle  <envname>
+  DOT 1164 
+  IDENTIFIER 1165 charsT:OBJECT chars String 
+setting type for i environment name null
+checking if i is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1167 iT:OBJECT i  <envname>
+setting type for found environment name null
+checking if found is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 1170 foundT:OBJECT found  <envname>
+setting type for found environment name null
+checking if found is protected
+NAME T:PRIMITIVE boolean  <envname>
+  IDENTIFIER 1177 foundT:OBJECT found  <envname>
+setting type for offset environment name null
+checking if offset is protected
+NAME T:PRIMITIVE int  <envname>
+  IDENTIFIER 1180 offsetT:OBJECT offset  <envname>
+setting type for value environment name Byte
+checking if value is protected
+NAME T:PRIMITIVE byte  <envname> PUBLIC
+  IDENTIFIER 21 valueT:OBJECT value Byte 
+setting type for i environment name Byte
+checking if i is protected
+NAME T:PRIMITIVE byte  <envname>
+  IDENTIFIER 23 iT:OBJECT i Byte 
+setting type for String environment name null
+setting type for value environment name null
+checking if value is protected
+NAME T:PRIMITIVE byte  <envname> PUBLIC
+  IDENTIFIER 43 valueT:OBJECT value  <envname>
+class A.A
 GOAL 
   COMPILATION_UNIT 
     PACKAGE_DECLARATION_OPT 
+      PACKAGE_DECLARATION 
+        PACKAGE 0 
+        NAME 
+          IDENTIFIER 1 A
+        SEMICOLON 2 
     IMPORT_DECLARATIONS_OPT 
     TYPE_DECLARATIONS_OPT 
       TYPE_DECLARATIONS 
@@ -776,1177 +1223,272 @@ GOAL
           CLASS_DECLARATION 
             MODIFIERS 
               MODIFIER 
-                PUBLIC 0
-            CLASS 1
-            IDENTIFIER 2
+                PUBLIC 3 
+            CLASS 4 
+            IDENTIFIER 5 A
             SUPER_CLAUSE_OPT 
             INTERFACES_OPT 
             CLASS_BODY 
-              OPEN_CBR 3
+              OPEN_CBR 6 
               CLASS_BODY_DECLARATIONS_OPT 
                 CLASS_BODY_DECLARATIONS 
-                  CLASS_BODY_DECLARATION 
-                    CLASS_MEMBER_DECLARATION 
-                      FIELD_DECLARATION 
-                        MODIFIERS 
-                          MODIFIER 
-                            PUBLIC 4
-                        TYPE 
-                          PRIMITIVE_TYPE 
-                            NUMERIC_TYPE 
-                              INTEGRAL_TYPE 
-                                INT 5
-                        VARIABLE_DECLARATORS 
-                          VARIABLE_DECLARATOR 
-                            IDENTIFIER 6
-                            ASSIGN 7
-                            VARIABLE_INITIALIZER 
-                              EXPRESSION 
-                                LITERAL 
-                                  INTEGER_LITERAL 8
-                        SEMICOLON 9
-                  CLASS_BODY_DECLARATION 
-                    CLASS_MEMBER_DECLARATION 
-                      FIELD_DECLARATION 
-                        MODIFIERS 
-                          MODIFIER 
-                            PUBLIC 10
-                          MODIFIER 
-                            STATIC 11
-                        TYPE 
-                          PRIMITIVE_TYPE 
-                            NUMERIC_TYPE 
-                              INTEGRAL_TYPE 
-                                INT 12
-                        VARIABLE_DECLARATORS 
-                          VARIABLE_DECLARATOR 
-                            IDENTIFIER 13
-                            ASSIGN 14
-                            VARIABLE_INITIALIZER 
-                              EXPRESSION 
-                                ADDITIVE_EXPRESSION 
-                                  MULTIPLICATIVE_EXPRESSION 
-                                    LITERAL 
-                                      INTEGER_LITERAL 15
-                                  OP_PLUS 16
-                                  MULTIPLICATIVE_EXPRESSION 
-                                    NAME 
-                                      IDENTIFIER 17
-                                  OP_PLUS 18
-                                  MULTIPLICATIVE_EXPRESSION 
-                                    LITERAL 
-                                      INTEGER_LITERAL 19
-                        SEMICOLON 20
                   CLASS_BODY_DECLARATION 
                     CONSTRUCTOR_DECLARATION 
                       MODIFIERS_OPT 
                         MODIFIERS 
                           MODIFIER 
-                            PUBLIC 21
+                            PROTECTED 7 
                       CONSTRUCTOR_DECLARATOR 
                         SIMPLE_NAME 
-                          IDENTIFIER 22
-                        OPEN_BR 23
+                          IDENTIFIER 8 A
+                        OPEN_BR 9 
                         FORMAL_PARAMETER_LIST_OPT 
-                        CLOSE_BR 24
+                        CLOSE_BR 10 
                       CONSTRUCTOR_BODY 
-                        OPEN_CBR 25
+                        OPEN_CBR 11 
                         BLOCK_STATEMENTS_OPT 
-                        CLOSE_CBR 26
+                        CLOSE_CBR 12 
                   CLASS_BODY_DECLARATION 
                     CLASS_MEMBER_DECLARATION 
                       METHOD_DECLARATION 
                         METHOD_HEADER 
                           MODIFIERS 
                             MODIFIER 
-                              PUBLIC 27
-                            MODIFIER 
-                              STATIC 28
-                          TYPE 
-                            PRIMITIVE_TYPE 
-                              NUMERIC_TYPE 
-                                INTEGRAL_TYPE 
-                                  INT 29
+                              PROTECTED 13 
+                          VOID 14 
                           METHOD_DECLARATOR 
-                            IDENTIFIER 30
-                            OPEN_BR 31
+                            IDENTIFIER 15 instanceMethod
+                            OPEN_BR 16 
                             FORMAL_PARAMETER_LIST_OPT 
-                            CLOSE_BR 32
+                            CLOSE_BR 17 
                         METHOD_BODY 
                           BLOCK 
-                            OPEN_CBR 33
+                            OPEN_CBR 18 
+                            BLOCK_STATEMENTS_OPT 
+                            CLOSE_CBR 19 
+                  CLASS_BODY_DECLARATION 
+                    CLASS_MEMBER_DECLARATION 
+                      METHOD_DECLARATION 
+                        METHOD_HEADER 
+                          MODIFIERS 
+                            MODIFIER 
+                              PROTECTED 20 
+                            MODIFIER 
+                              STATIC 21 
+                          VOID 22 
+                          METHOD_DECLARATOR 
+                            IDENTIFIER 23 staticMethod
+                            OPEN_BR 24 
+                            FORMAL_PARAMETER_LIST_OPT 
+                            CLOSE_BR 25 
+                        METHOD_BODY 
+                          BLOCK 
+                            OPEN_CBR 26 
+                            BLOCK_STATEMENTS_OPT 
+                            CLOSE_CBR 27 
+                  CLASS_BODY_DECLARATION 
+                    CLASS_MEMBER_DECLARATION 
+                      FIELD_DECLARATION 
+                        MODIFIERS 
+                          MODIFIER 
+                            PROTECTED 28 
+                        TYPE 
+                          PRIMITIVE_TYPE 
+                            NUMERIC_TYPE 
+                              INTEGRAL_TYPE 
+                                INT 29 
+                        VARIABLE_DECLARATORS 
+                          VARIABLE_DECLARATOR 
+                            IDENTIFIER 30 instanceField
+                        SEMICOLON 31 
+              CLOSE_CBR 32 
+class B.B
+GOAL 
+  COMPILATION_UNIT 
+    PACKAGE_DECLARATION_OPT 
+      PACKAGE_DECLARATION 
+        PACKAGE 0 
+        NAME 
+          IDENTIFIER 1 B
+        SEMICOLON 2 
+    IMPORT_DECLARATIONS_OPT 
+    TYPE_DECLARATIONS_OPT 
+      TYPE_DECLARATIONS 
+        TYPE_DECLARATION 
+          CLASS_DECLARATION 
+            MODIFIERS 
+              MODIFIER 
+                PUBLIC 3 
+            CLASS 4 
+            IDENTIFIER 5 B
+            SUPER_CLAUSE_OPT 
+              SUPER_CLAUSE 
+                EXTENDS 6 
+                CLASS_TYPE 
+                  CLASS_OR_INTERFACE_TYPE T:null A.A  <envname>
+                    NAME 
+                      IDENTIFIER 7 A
+                      DOT 8 
+                      IDENTIFIER 9 A
+            INTERFACES_OPT 
+            CLASS_BODY 
+              OPEN_CBR 10 
+              CLASS_BODY_DECLARATIONS_OPT 
+                CLASS_BODY_DECLARATIONS 
+                  CLASS_BODY_DECLARATION 
+                    CONSTRUCTOR_DECLARATION 
+                      MODIFIERS_OPT 
+                        MODIFIERS 
+                          MODIFIER 
+                            PROTECTED 11 
+                      CONSTRUCTOR_DECLARATOR 
+                        SIMPLE_NAME 
+                          IDENTIFIER 12 B
+                        OPEN_BR 13 
+                        FORMAL_PARAMETER_LIST_OPT 
+                        CLOSE_BR 14 
+                      CONSTRUCTOR_BODY 
+                        OPEN_CBR 15 
+                        BLOCK_STATEMENTS_OPT 
+                        CLOSE_CBR 16 
+                  CLASS_BODY_DECLARATION 
+                    CONSTRUCTOR_DECLARATION 
+                      MODIFIERS_OPT 
+                        MODIFIERS 
+                          MODIFIER 
+                            PROTECTED 17 
+                      CONSTRUCTOR_DECLARATOR 
+                        SIMPLE_NAME 
+                          IDENTIFIER 18 B
+                        OPEN_BR 19 
+                        FORMAL_PARAMETER_LIST_OPT 
+                          FORMAL_PARAMETER_LIST 
+                            FORMAL_PARAMETER 
+                              TYPE 
+                                PRIMITIVE_TYPE 
+                                  NUMERIC_TYPE 
+                                    INTEGRAL_TYPE 
+                                      INT 20 
+                              IDENTIFIER 21 x
+                        CLOSE_BR 22 
+                      CONSTRUCTOR_BODY 
+                        OPEN_CBR 23 
+                        BLOCK_STATEMENTS_OPT 
+                        CLOSE_CBR 24 
+              CLOSE_CBR 25 
+class C.C
+GOAL 
+  COMPILATION_UNIT 
+    PACKAGE_DECLARATION_OPT 
+      PACKAGE_DECLARATION 
+        PACKAGE 0 
+        NAME 
+          IDENTIFIER 1 C
+        SEMICOLON 2 
+    IMPORT_DECLARATIONS_OPT 
+    TYPE_DECLARATIONS_OPT 
+      TYPE_DECLARATIONS 
+        TYPE_DECLARATION 
+          CLASS_DECLARATION 
+            MODIFIERS 
+              MODIFIER 
+                PUBLIC 3 
+            CLASS 4 
+            IDENTIFIER 5 C
+            SUPER_CLAUSE_OPT 
+              SUPER_CLAUSE 
+                EXTENDS 6 
+                CLASS_TYPE 
+                  CLASS_OR_INTERFACE_TYPE T:null B.B  <envname>
+                    NAME 
+                      IDENTIFIER 7 B
+                      DOT 8 
+                      IDENTIFIER 9 B
+            INTERFACES_OPT 
+            CLASS_BODY 
+              OPEN_CBR 10 
+              CLASS_BODY_DECLARATIONS_OPT 
+                CLASS_BODY_DECLARATIONS 
+                  CLASS_BODY_DECLARATION 
+                    CONSTRUCTOR_DECLARATION 
+                      MODIFIERS_OPT 
+                        MODIFIERS 
+                          MODIFIER 
+                            PUBLIC 11 
+                      CONSTRUCTOR_DECLARATOR 
+                        SIMPLE_NAME 
+                          IDENTIFIER 12 C
+                        OPEN_BR 13 
+                        FORMAL_PARAMETER_LIST_OPT 
+                        CLOSE_BR 14 
+                      CONSTRUCTOR_BODY 
+                        OPEN_CBR 15 
+                        BLOCK_STATEMENTS_OPT 
+                        CLOSE_CBR 16 
+                  CLASS_BODY_DECLARATION 
+                    CLASS_MEMBER_DECLARATION 
+                      METHOD_DECLARATION 
+                        METHOD_HEADER 
+                          MODIFIERS 
+                            MODIFIER 
+                              PUBLIC 17 
+                          VOID 18 
+                          METHOD_DECLARATOR 
+                            IDENTIFIER 19 instanceFieldAccessFromSub
+                            OPEN_BR 20 
+                            FORMAL_PARAMETER_LIST_OPT 
+                              FORMAL_PARAMETER_LIST 
+                                FORMAL_PARAMETER 
+                                  TYPE 
+                                    REFERENCE_TYPE 
+                                      CLASS_OR_INTERFACE_TYPE T:null D.D  <envname>
+                                        NAME 
+                                          IDENTIFIER 21 D
+                                          DOT 22 
+                                          IDENTIFIER 23 D
+                                  IDENTIFIER 24 var
+                                COMMA 25 
+                                FORMAL_PARAMETER 
+                                  TYPE 
+                                    PRIMITIVE_TYPE 
+                                      NUMERIC_TYPE 
+                                        INTEGRAL_TYPE 
+                                          INT 26 
+                                  IDENTIFIER 27 x
+                            CLOSE_BR 28 
+                        METHOD_BODY 
+                          BLOCK 
+                            OPEN_CBR 29 
                             BLOCK_STATEMENTS_OPT 
                               BLOCK_STATEMENTS 
                                 BLOCK_STATEMENT 
                                   STATEMENT 
                                     STATEMENT_WITHOUT_TRAILING_SUBSTATEMENT 
-                                      RETURN_STATEMENT 
-                                        RETURN 34
-                                        EXPRESSION_OPT 
-                                          EXPRESSION 
-                                            LITERAL 
-                                              INTEGER_LITERAL 35
-                                        SEMICOLON 36
-                            CLOSE_CBR 37
-              CLOSE_CBR 38
-i in Je_16_StaticThis_StaticFieldInitializer should be static
-Error
-
-
-Test test/a3/Je_16_SuperThis_InvalidSuperParameter.java
-16
-Parsing error at token 'super'
-Error
-
-
-Test test/a3/Je_16_SuperThis_InvalidThisParameter.java
-16
-Parsing error at token '('
-Error
-
-
-Test test/a3/Je_1_Cast_NamedCastNegativeint.java
-16
-string concatenation with minus
-Error
-
-
-Test test/a3/Je_1_Complement_OfIntLiteral.java
-16
-bool not operator on no boolean type int
-Error
-
-
-Test test/a3/Je_1_Dot_ParenthesizedType_Field.java
-16
-Illegal access of a field from type java.lang.Integer
-Error
-
-
-Test test/a3/Je_1_Dot_ParenthesizedType_Method.java
-16
-unable to find method getProperties
-Error
-
-
-Test test/a3/Je_1_InstanceOf_Primitive.java
-16
-Parsing error at token ')'
-Error
-
-
-Test test/a3/Je_1_MethodInvocation_Primitive.java
-16
-int
-Qualified Name not found for int
-Error
-
-
-Test test/a3/Je_2_Cast_NegativeComplexExpressionToNamedType.java
-16
-string concatenation with minus
-Error
-
-
-Test test/a3/Je_2_Cast_NegativeToNamedType.java
-16
-string concatenation with minus
-Error
-
-
-Test test/a3/Je_2_Cast_NegativeToQualifiedNamedType.java
-16
-java
-string concatenation with minus
-Error
-
-
-Test test/a3/Je_2_For_LocalVarInUpdate.java
-16
-tmp
-Name "tmp" cannot be resolved
-Error
-
-
-Test test/a3/Je_5_AmbiguousInvoke_LocalInOwnInitializer.java
-16
-int
-Qualified Name not found for int
-Error
-
-
-Test test/a3/Je_5_AmbiguousInvoke_Static_TypeNonExisting.java
-16
-java
-Name "java.lang.Integar" cannot be resolved
-Error
-
-
-Test test/a3/Je_5_AmbiguousName_FieldVsType_Initializer.java
-16
-Illegal forward reference of "Je_5_AmbiguousName_FieldVsType_Initializer" in Je_5_AmbiguousName_FieldVsType_Initializer
-Error
-
-
-Test test/a3/Je_5_AmbiguousName_Local_UseBeforeDeclare.java
-16
-b
-Name "b" cannot be resolved
-Error
-
-
-Test test/a3/Je_5_AmbiguousName_NoDeclaration.java
-16
-nowhere
-Name "nowhere" cannot be resolved
-Error
-
-
-Test test/a3/Je_5_AmbiguousName_SamePackageAndClassName.java
-16
-Name "Je_5_AmbiguousName_SamePackageAndClassName.Je_5_AmbiguousName_SamePackageAndClassName" cannot be resolved
-Error
-
-
-Test test/a3/Je_5_ForwardReference_ArrayLength.java
-16
-Illegal forward reference of "a" in Je_5_ForwardReference_ArrayLength
-Error
-
-
-Test test/a3/Je_5_ForwardReference_FieldDeclaredLater_ComplexExp.java
-16
-Illegal forward reference of "field2" in Je_5_ForwardReference_FieldDeclaredLater_ComplexExp
-Error
-
-
-Test test/a3/Je_5_ForwardReference_FieldDeclaredLater.java
-16
-Illegal forward reference of "j" in Je_5_ForwardReference_FieldDeclaredLater
-Error
-
-
-Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ComplexExpression.java
-16
-Illegal forward reference of "f" in Je_5_ForwardReference_FieldInOwnInitializer_ComplexExpression
-Error
-
-
-Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_Direct.java
-16
-Illegal forward reference of "err" in Je_5_ForwardReference_FieldInOwnInitializer_Direct
-Error
-
-
-Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_ReadAfterAssignment.java
-16
-Illegal forward reference of "a" in Je_5_ForwardReference_FieldInOwnInitializer_ReadAfterAssignment
-Error
-
-
-Test test/a3/Je_5_ForwardReference_FieldInOwnInitializer_RightSideOfAssignment.java
-16
-Illegal forward reference of "foo" in Je_5_ForwardReference_FieldInOwnInitializer_RightSideOfAssignment
-Error
-
-
-Test test/a3/Je_5_ForwardReference_InAssignment.java
-16
-Illegal forward reference of "a" in Je_5_ForwardReference_InAssignment
-Error
-
-
-Test test/a3/Je_5_ForwardReference_MethodCall.java
-16
-Illegal forward reference of "z" in Je_5_ForwardReference_MethodCall
-Error
-
-
-Test test/a3/Je_6_ArrayLength_Invoke.java
-16
-int
-Qualified Name not found for int
-Error
-
-
-Test test/a3/Je_6_Array_NonNumericIndex.java
-16
-dimension index not numeric java.lang.String
-Error
-
-
-Test test/a3/Je_6_Array_NullTypeIndex.java
-16
-dimension index not numeric null
-Error
-
-
-Test test/a3/Je_6_Assignable_Array_Object.java
-16
-java.lang.Object[]java.lang.Object
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_byteArray_intArray.java
-16
-assign fail byte  int
-byte[]int[]
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_byte_char.java
-16
-assign fail byte  char
-bytechar
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_byte_int.java
-16
-assign fail byte  int
-byteint
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_Cast_intArray_int.java
-16
-cannot cast 3int[] to int
-Error
-
-
-Test test/a3/Je_6_Assignable_char_byte_1.java
-16
-assign fail char  byte
-charbyte
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_char_byte_2.java
-16
-assign fail char  byte
-charbyte
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_char_int.java
-16
-assign fail char  int
-charint
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_Condition.java
-16
-if condition does not evaluate to boolean
-Error
-
-
-Test test/a3/Je_6_Assignable_Condition_SimpleType.java
-16
-if condition does not evaluate to boolean
-Error
-
-
-Test test/a3/Je_6_Assignable_Condition_While.java
-16
-if condition does not evaluate to boolean
-Error
-
-
-Test test/a3/Je_6_Assignable_Instanceof_Result.java
-16
-intboolean
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_Instanceof_SimpleType.java
-16
-Cannot check instanceof on simple types
-Error
-
-
-Test test/a3/Je_6_Assignable_Instanceof_SimpleTypeOfSimpleType.java
-16
-Parsing error at token ')'
-Error
-
-
-Test test/a3/Je_6_Assignable_intArray_byteArray.java
-16
-assign fail int  byte
-int[]byte[]
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_intArray_int.java
-16
-int[]int
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_int_intArray.java
-16
-intint[]
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_int_null.java
-16
-intnull
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_NamedCastOfComplement.java
-16
-bool not operator on no boolean type int
-Error
-
-
-Test test/a3/Je_6_Assignable_NonstaticField.java
-16
-cannot cast int to boolean
-Error
-
-
-Test test/a3/Je_6_Assignable_RefType_RefTypeArray.java
-16
-java.lang.Integerjava.lang.Integer[]
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_ResultTypeOfAssignment.java
-16
-java.lang.Stringjava.lang.Object
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_ReturnInElse.java
-16
-java.lang.String
-return type does match method declation int return type java.lang.String
-Error
-
-
-Test test/a3/Je_6_Assignable_Return_ToSubType.java
-16
-java.lang.String
-return type does match method declation java.lang.Object return type java.lang.String
-Error
-
-
-Test test/a3/Je_6_Assignable_Return_VoidInVoidMethod.java
-16
-
-no void return
-Error
-
-
-Test test/a3/Je_6_Assignable_Return_Void.java
-16
-return void
-return type does match method declation int return type return void
-Error
-
-
-Test test/a3/Je_6_Assignable_short_char.java
-16
-assign fail short  char
-shortchar
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_short_int.java
-16
-assign fail short  int
-shortint
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Assignable_ToSubtype_FieldInit.java
-16
-Je_6_Assignable_ToSubtype_FieldInit field inilize with wrong type java.lang.Stringjava.lang.Object
-Error
-
-
-Test test/a3/Je_6_Assignable_ValueReturn_InConstructor.java
-16
-return void
-return type does match method declation int return type return void
-Error
-
-
-Test test/a3/Je_6_BinopExp_LogicalBitwise.java
-16
-Error! Detected bitwise operation!
-Error
-
-
-Test test/a3/Je_6_ClosestMatch_ArrayTypes.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ClosestMatch_Constructor_NoClosestMatch_SimpleTypes.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ClosestMatch_MultipleClosest_1.java
-16
-unable to find method aJe_6_ClosestMatch_MultipleClosest_1
-Error
-
-
-Test test/a3/Je_6_ClosestMatch_MultipleClosest_2.java
-16
-unable to find method aJe_6_ClosestMatch_MultipleClosest_2
-Error
-
-
-Test test/a3/Je_6_ClosestMatch_MultipleClosest_3.java
-16
-unable to find method aJe_6_ClosestMatch_MultipleClosest_3
-Error
-
-
-Test test/a3/Je_6_ClosestMatch_MultipleClosest_SimpleTypes.java
-16
-unable to find method aJe_6_ClosestMatch_MultipleClosest_SimpleTypes
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_ArgumentTypeMismatch.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_IllegalConversion.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_MultipleArgumentsOneMismatch.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_SameLastArg.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_TooFewArguments.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_TooManyArguments.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_Constructor_WrongName.java
-16
-Constructor name JE_6_CONSTRUCTOR_WRONGNAME must be the same as class name Je_6_Constructor_WrongName
-Error
-
-
-Test test/a3/Je_6_Equality_int.java
-16
-intboolean
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_Equality_int_NamedType.java
-16
-Je_6_Equality_int_NamedTypecannot cast equality int to java.lang.Object
-Error
-
-
-Test test/a3/Je_6_Equality_StringInteger.java
-16
-Je_6_Equality_StringIntegercannot cast equality java.lang.String to java.lang.Integer
-Error
-
-
-Test test/a3/Je_6_Equality_Void.java
-16
+                                      EXPRESSION_STATEMENT 
+                                        STATEMENT_EXPRESSION 
+                                          ASSIGNMENT 
+                                            LEFT_HAND_SIDE 
+                                              NAME T:PRIMITIVE int  <envname> PROTECTED
+                                                IDENTIFIER 30 varT:OBJECT var  <envname>
+                                                DOT 31 
+                                                IDENTIFIER 32 instanceFieldT:OBJECT instanceField D 
+                                            ASSIGNMENT_OPERATOR 
+                                              ASSIGN 33 
+                                            ASSIGNMENT_EXPRESSION 
+                                              NAME T:PRIMITIVE int  <envname>
+                                                IDENTIFIER 34 xT:OBJECT x  <envname>
+                                        SEMICOLON 35 
+                            CLOSE_CBR 36 
+              CLOSE_CBR 37 
+out: [PUBLIC, STATIC]
+MAX_VALUE: [PUBLIC, STATIC]
+value: [PUBLIC]
+value: [PUBLIC]
+instanceField: [PROTECTED]
+value: [PUBLIC]
+MAX_VALUE: [PUBLIC, STATIC]
+value: [PUBLIC]
+chars: [PUBLIC]
+MAX_VALUE: [PUBLIC, STATIC]
+value: [PUBLIC]
 Success
-
-
-Test test/a3/Je_6_Expression_StringConcat_Void.java
-16
-cannot add void
-Error
-
-
-Test test/a3/Je_6_FinalField_ArrayLength.java
-16
-can't assigne to final
-Error
-
-
-Test test/a3/Je_6_For_NullInCondition.java
-16
-null
-for condition does not evaluate to boolean
-Error
-
-
-Test test/a3/Je_6_InstanceOf_Primitive_1.java
-16
-Parsing error at token ';'
-Error
-
-
-Test test/a3/Je_6_InstanceOf_Primitive_2.java
-16
-Parsing error at token ';'
-Error
-
-
-Test test/a3/Je_6_InstanceOf_Primitive_3.java
-16
-Cannot check instanceof on simple types
-Error
-
-
-Test test/a3/Je_6_InstantiateAbstract.java
-16
-abstract Number is being instantiated!
-Error
-
-
-Test test/a3/Je_6_InstantiateInterface.java
-16
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_MethodInvocation_NonJoos_ReturnType.java
-16
-unable to find reference to type Long
-Error
-
-
-Test test/a3/Je_6_MethodPresent_ArgumentTypeMismatch.java
-16
-unable to find method m
-Error
-
-
-Test test/a3/Je_6_MethodPresent_IllegalConversion.java
-16
-unable to find method foo
-Error
-
-
-Test test/a3/Je_6_MethodPresent_MultipleArgumentsOneMismatch.java
-16
-unable to find method m
-Error
-
-
-Test test/a3/Je_6_MethodPresent_Nonstatic_SameLastArg.java
-16
-unable to find method j.methodJe_6_MethodPresent_Nonstatic_SameLastArg
-Error
-
-
-Test test/a3/Je_6_MethodPresent_Static_SameLastArg.java
-16
-unable to find method Je_6_MethodPresent_Static_SameLastArg.methodJe_6_MethodPresent_Static_SameLastArg
-Error
-
-
-Test test/a3/Je_6_MethodPresent_TooFewArguments.java
-16
-unable to find method m
-Error
-
-
-Test test/a3/Je_6_MethodPresent_TooManyArguments.java
-16
-unable to find method m
-Error
-
-
-Test test/a3/Je_6_NonStaticAccessToStatic_Field.java
-16
-MAX_VALUE in Integer should not be static
-Error
-
-
-Test test/a3/Je_6_NonStaticAccessToStatic_Method.java
-16
-Static method "parseInt" in java.lang.Integer cannot be called non-statically.
-Error
-
-
-Test test/a3/Je_6_StaticAccessToNontatic_Field.java
-16
-field in Je_6_StaticAccessToNontatic_Field should be static
-Error
-
-
-Test test/a3/Je_6_StaticAccessToNontatic_Method.java
-16
-Non-static method "hashCode" in java.lang.Object cannot be called statically.
-Error
-
-
-Test test/a3/Je_6_StaticThis_AfterStaticInvoke.java
-16
-invoc this in static method
-Error
-
-
-Test test/a3/Je_6_StaticThis_InvokeNonstatic_Implicit.java
-16
-Method "foo" in Je_6_StaticThis_InvokeNonstatic_Implicit.test cannot be accessed without a full qualified name.
-Error
-
-
-Test test/a3/Je_6_StaticThis_InvokeNonStatic.java
-16
-invoc this in static method
-Error
-
-
-Test test/a3/Je_6_StaticThis_InvokeStatic.java
-16
-invoc this in static method
-Error
-
-
-Test test/a3/Je_6_StaticThis_NonStaticField_ImplicitThis.java
-16
-foo in Je_6_StaticThis_NonStaticField_ImplicitThis should be static
-Error
-
-
-Test test/a3/Je_6_StaticThis_NonstaticField.java
-16
-invoc this in static method
-Error
-
-
-Test test/a3/Je_6_StringMinus.java
-16
-string concatenation with minus
-Error
-
-
-Test test/a3/Je_BadConstructorName.java
-16
-Constructor name AnotherConstructorName must be the same as class name Je_BadConstructorName
-Error
-
-
-Test test/a3/J1_5_AmbiguousName_DefaultPackageNotVisible/
-19
-Main
-foo
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_ImplicitSuper/
-20
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_InstanceField_SubVar/
-20
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_InstanceField_This/
-20
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_InstanceField_ThisVar/
-20
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_InstanceMethod_SubVar/
-20
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_InstanceMethod_This/
-20
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_InstanceMethod_ThisVar/
-20
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_StaticMethod_Sub/
-20
-D
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_StaticMethod_Super/
-20
-A
-Success
-
-
-Test test/a3/J1_6_ProtectedAccess_StaticMethod_This/
-20
-Success
-
-
-Test test/a3/J1_accessstaticfield/
-17
-java
-Success
-
-
-Test test/a3/J1_ambiguousInvoke/
-17
-foo
-Success
-
-
-Test test/a3/J1_ArrayCast1/
-17
-Success
-
-
-Test test/a3/J1_ArrayCast2/
-17
-Success
-
-
-Test test/a3/J1_ArrayCast3/
-17
-Success
-
-
-Test test/a3/J1_ArrayCast4/
-17
-Success
-
-
-Test test/a3/J1_evalMethodInvocationFromArray/
-17
-Success
-
-
-Test test/a3/J1_evalMethodInvocationFromLit/
-16
-Success
-
-
-Test test/a3/J1_evalMethodInvocationFromMethod/
-17
-Success
-
-
-Test test/a3/J1_evalMethodInvocationFromObject/
-17
-Success
-
-
-Test test/a3/J1_evalMethodInvocationFromThis/
-17
-Success
-
-
-Test test/a3/J1_interfaceassignable/
-19
-java
-java.lang.Object
-return assignable java.lang.Objectjava.util.LinkedList
-Success
-
-
-Test test/a3/J1_interface_null/
-19
-java.lang.Object
-return assignable java.lang.Objectjava.util.LinkedList
-Success
-
-
-Test test/a3/J1_InterfaceObject/
-19
-java.lang.Object
-return assignable java.lang.Objectjava.util.LinkedList
-Success
-
-
-Test test/a3/J1_NamedCast2/
-17
-Success
-
-
-Test test/a3/J1_NamedCast3/
-17
-Success
-
-
-Test test/a3/J1_NamedCast4/
-17
-Success
-
-
-Test test/a3/J1_ProtectedAccess1/
-17
-Success
-
-
-Test test/a3/J1_ProtectedAccess2/
-17
-Success
-
-
-Test test/a3/J1_ProtectedAccess4/
-17
-p
-Success
-
-
-Test test/a3/J1_supermethod_override11/
-20
-Success
-
-
-Test test/a3/J1_typecheck_assignment/
-18
-Success
-
-
-Test test/a3/J2_6_AmbiguousName_StaticFieldAccess/
-17
-a
-Success
-
-
-Test test/a3/J2_6_ProtectedAccess_StaticField_Sub/
-20
-D
-Success
-
-
-Test test/a3/J2_6_ProtectedAccess_StaticField_Super/
-20
-A
-Success
-
-
-Test test/a3/J2_6_ProtectedAccess_StaticField_This/
-20
-Success
-
-
-Test test/a3/J2_implicitStaticMethod/
-17
-Success
-
-
-Test test/a3/J2_interfaces/
-17
-Success
-
-
-Test test/a3/J2_ProtectedAccess3/
-17
-p
-Success
-
-
-Test test/a3/Je_16_ProtectedAccess_StaticField_Sub_DeclaredInSub/
-20
-D
-Success
-
-
-Test test/a3/Je_3_Resolve_LinkToCorrectPackage/
-18
-Zoo
-Name "Zoo" cannot be resolved
-Error
-
-
-Test test/a3/Je_5_AmbiguousName_DefaultPackageNotVisible/
-17
-Main
-Name "Main" cannot be resolved
-Error
-
-
-Test test/a3/Je_5_AmbiguousName_LinkToFirstFound/
-18
-fields must have a access modifier
-Error
-
-
-Test test/a3/Je_6_Assignable_ToSubtype/
-17
-cannot cast Main to java.lang.Thread
-Error
-
-
-Test test/a3/Je_6_Assignable_ToSubtype_DeclInit/
-17
-Mainjava.lang.Thread
-local variable inilize with wrong type
-Error
-
-
-Test test/a3/Je_6_ClosestMatch_Constructor_NoClosestMatch/
-18
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_PresentInSubclass/
-17
-cant find constructor 2
-Error
-
-
-Test test/a3/Je_6_ConstructorPresent_Super_NoDefault/
-17
-Success
-
-
-Test test/a3/Je_6_MethodPresent_PresentInSubclass/
-17
-unable to find method testMain
-Error
-
-
-Test test/a3/Je_6_ProtectedAccess_ClassCreation_Sub/
-20
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_ClassCreation_Super/
-20
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_Constructor/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_External/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_External/
-18
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_InstanceField_NoRelation_Internal/
-18
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_InstanceField_SubDeclare_SubVar/
-20
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_InstanceField_SuperVar/
-20
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SubDeclare_SubVar/
-20
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_InstanceMethod_SuperVar/
-20
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotBySubclass/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_Method_OutsidePackage_NotInSubclass/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotBySubclass/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_ReadField_OutsidePackage_NotInSubclass/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_StaticMethod_Sub_DeclaredInSub/
-20
-D
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_SuperConstructor_NewExp/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_TwoSubtypes/
-18
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotBySubclass/
-17
-Success
-
-
-Test test/a3/Je_6_ProtectedAccess_WriteField_OutsidePackage_NotInSubclass/
-17
-Success
-
-
-Test test/a3/Je_AccessToStaticFieldWithImplicitThis/
-16
-fields must have a access modifier
-Error
-
-

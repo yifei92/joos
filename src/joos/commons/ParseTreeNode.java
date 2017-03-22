@@ -108,7 +108,26 @@ public class ParseTreeNode {
 		System.out.print(this.token.getType());
 		System.out.print(" ");
 		if (this.token instanceof TerminalToken) {
-			System.out.print(((TerminalToken)this.token).getIndex());
+			System.out.print(((TerminalToken)this.token).getIndex() + " ");
+		}
+		if (this.token.getType() == TokenType.IDENTIFIER) {
+			System.out.print(((TerminalToken)this.token).getRawValue());
+		}
+		if (this.type != null) {
+			System.out.print(
+				"T:"
+				+this.type.type+" "
+				+this.type.name+" ");
+			if(this.type.environment != null && this.type.environment.mName != null) {
+				System.out.print(this.type.environment.mName+" ");
+			} else {
+				System.out.print(" <envname>");
+			}
+			if(this.type.modifiers != null) {
+				for(TokenType mod : this.type.modifiers) {
+					System.out.print(" " + mod);
+				}
+			}
 		}
 		System.out.println();
 		if (this.children != null) {

@@ -16,6 +16,6 @@ public class Main {
     public Main() {}
     
     public static int test() {
-	return 123;
+	   return 123;
     }
 }

@@ -16,6 +16,6 @@ public class C extends B.B {
      * => FAIL, since D.D (the type of declaring .instanceField_Sub) is a not a superclass of C (6.6.2.1 item 2)
      */
     public void instanceFieldAccessFromSuper(D.D var, int x) {
-	var.instanceField_Sub = x; 
+      var.instanceField_Sub = x; 
     }
 }

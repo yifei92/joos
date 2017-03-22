@@ -24,6 +24,7 @@ import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeName
 import static joos.environment.EnvironmentUtils.getFullQualifiedNameFromTypeNode;
 import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
 import static joos.environment.EnvironmentUtils.getTypeFromTypeNode;
+import static joos.environment.EnvironmentUtils.findNodeWithRawValue;
 
 public class Disambiguation {
 
@@ -346,6 +347,13 @@ public class Disambiguation {
     } else {
       prefix = name;
     }
+    // find the identifier node under the given node for this prefix and set its type environment
+    // to the given environment
+    ParseTreeNode prefixIdentifierNode = findNodeWithRawValue(node, prefix);
+    if (prefixIdentifierNode != null && prefixIdentifierNode.type == null) {
+      prefixIdentifierNode.type = 
+        Type.newObject(prefix, environment, environment.mScope);
+    }
     if (
       environment.mVariableDeclarations.containsKey(prefix) &&
       (
@@ -360,7 +368,6 @@ public class Disambiguation {
     ) {
       boolean isPrefixDeclarationStatic = environment.isFieldStatic(prefix);
       if (getEnvironmentType(environment) == EnvironmentType.CLASS && shouldBeStatic && !isPrefixDeclarationStatic) {
-
         throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should be static");
       } else if (!shouldBeStatic && isPrefixDeclarationStatic) {
         throw new InvalidSyntaxException(prefix + " in " + environment.mName + " should not be static");
@@ -459,7 +466,7 @@ public class Disambiguation {
           }
         }
       }
-    }
+    }      
     if (typeEnvironment != null && dotIndex == -1) {
       Type subType = Type.newObject(
         getFullQualifiedNameFromTypeName(environment, prefix, packageMap),

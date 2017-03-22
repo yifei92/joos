@@ -16,6 +16,6 @@ public class C extends B.B {
      * => FAIL, since A is not in the package of C (6.6.2.2 item 3)
      */
     public void constructorAccessCreationOfSuperType() {
-	new A.A();
+	   new A.A();
     }
 }

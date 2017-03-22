@@ -179,6 +179,26 @@ public class EnvironmentUtils {
 		return environments;
 	}
 
+	public static ParseTreeNode findNodeWithRawValue(final ParseTreeNode root, final String rawValue) {
+		Token token  = root.token;
+		if (token instanceof TerminalToken) {
+			TerminalToken terminalToken = (TerminalToken) token;
+			if(terminalToken.getRawValue().equals(rawValue)) {
+				return root;
+			}
+		}
+		if (root.children != null) {
+			ParseTreeNode foundNode;
+			for(ParseTreeNode child : root.children) {
+				foundNode = findNodeWithRawValue(child, rawValue);
+				if (foundNode != null) {
+					return foundNode;
+				}
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Traverses the given root node's children for the first TokenType node and returns it.
 	 * null otherwise
@@ -273,17 +293,15 @@ public class EnvironmentUtils {
 			case INTERFACE_DECLARATION:
 			case CLASS_DECLARATION:
 			case CONSTRUCTOR_DECLARATION:
-				if (environment.mScope.children.get(0).children.size() == 0) {
-					environment.mModifiers = new HashSet();
-					return environment.mModifiers;
-				} else {
-					Set<TokenType> set = new HashSet();
-					for (ParseTreeNode child : environment.mScope.children.get(0).children) {
-						set.add(child.children.get(0).token.getType());
+				environment.mModifiers = new HashSet();
+				List<ParseTreeNode> modifiers = new ArrayList<>();
+				findNodesWithTokenType(environment.mScope.children.get(0), TokenType.MODIFIER, modifiers);
+				if (modifiers != null) {
+					for(ParseTreeNode mod : modifiers) {
+						environment.mModifiers.add(mod.children.get(0).token.getType());
 					}
-					environment.mModifiers = set;
-					return set;
 				}
+				return environment.mModifiers;
 			case ABSTRACT_METHOD_DECLARATION:
 			case METHOD_DECLARATION:
 				if (environment.mScope.children.get(0).children.get(0).children.size() == 0) {

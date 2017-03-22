@@ -85,6 +85,30 @@ public class Environment {
   }
 
   /**
+   * Given a field name checks this environment and all parent environments for the given name and 
+   * returns its modifiers.
+   * Returns null if no such field exists
+   */
+  public Set<TokenType> getFieldModifiers(String name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    ParseTreeNode variableDeclaration = mVariableDeclarations.get(name); 
+    if (variableDeclaration != null) {
+      return EnvironmentUtils.getAllModifiers(variableDeclaration);
+    } else {
+      List<Environment> directParents = EnvironmentUtils.getExtendedEnvironments(this, packageMap);
+      if (directParents != null) {
+        Set<TokenType> mods;
+        for(Environment parent : directParents) {
+          mods = parent.getFieldModifiers(name, packageMap);
+          if (mods != null) {
+            return mods;
+          }
+        }
+      }
+      return null;
+    }
+  }
+
+  /**
    * Given a field name returns whether or not this field in this environment is static
    */
   public boolean isFieldStatic(String name) {

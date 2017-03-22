@@ -1,12 +1,7 @@
 package joos.typechecking;
 
 
-import jdk.nashorn.internal.codegen.types.*;
-import jdk.nashorn.internal.ir.Symbol;
-import jdk.nashorn.internal.ir.Terminal;
-import jdk.nashorn.internal.ir.TernaryNode;
-import jdk.nashorn.internal.ir.ThrowNode;
-import jdk.nashorn.internal.parser.*;
+
 import joos.commons.*;
 import joos.commons.TokenType;
 import joos.commons.Type;
@@ -587,7 +582,9 @@ public class TypeCheckingEvaluator {
 			case EXPRESSION_STATEMENT:
 			case STATEMENT_EXPRESSION:
 			case TYPE_DECLARATION:    //weird semi Colum case
-				return check(currentnode.children.get(0),PackageMap,rootenv);
+				primary=check(currentnode.children.get(0),PackageMap,rootenv);
+				currentnode.type=primary;
+				return primary;
 			case CLASS_DECLARATION:
 				return check(currentnode.children.get(5),PackageMap,rootenv);
 			case INTERFACE_DECLARATION:

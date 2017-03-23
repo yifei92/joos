@@ -26,6 +26,7 @@ import static joos.environment.EnvironmentUtils.getImplementedEnvironments;
 import static joos.environment.EnvironmentUtils.getMethodSignatureFromArgsList;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
 import static joos.environment.EnvironmentUtils.findImmediateNodeWithTokenType;
+import static joos.environment.EnvironmentUtils.getMethodNameFromInvocation;
 
 public class TypeChecker {
 
@@ -36,6 +37,7 @@ public class TypeChecker {
         checkForAbstractClassInstantiation(environment, packageMap);
         checkConstructorUsageForProtectedAccess(environment, packageMap);
         checkConstructorImportsForProtectedAccess(environment, packageMap);
+        checkUsageForProtectedMethodAccess(environment, packageMap);
         checkForBitwiseOpts(environment);
         break;
       }
@@ -170,17 +172,17 @@ public class TypeChecker {
     List<ParseTreeNode> methodInvocations = new ArrayList<>();
     findNodesWithTokenType(classEnvironment.mScope, TokenType.METHOD_INVOCATION, methodInvocations);
     for(ParseTreeNode methodInvocation : methodInvocations) {
-      ParseTreeNode primaryNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.PRIMARY);
-      // we have a primary node on which we're making the invokation.
-      String methodName =
-        ((TerminalToken)(findImmediateNodeWithTokenType(methodInvocation, TokenType.IDENTIFIER).token)).getRawValue();
+      String methodName = getMethodNameFromInvocation(methodInvocation);
       System.out.println("checking usage of method " + methodName);
       List<String> invocationSignature = new ArrayList<>();
       ParseTreeNode argsListOptNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.ARGUMENT_LIST_OPT);
       if (argsListOptNode != null) {
-        getMethodSignatureFromArgsList(argsListOptNode.children.get(0), invocationSignature);
+        if(argsListOptNode.children != null && argsListOptNode.children.size() > 0) {
+          getMethodSignatureFromArgsList(argsListOptNode.children.get(0), invocationSignature);
+        }
       }
       Type type;
+      ParseTreeNode primaryNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.PRIMARY);
       if(primaryNode != null) {
         type = primaryNode.type;
         System.out.println("invocation of " + methodName + " is on a primary exp");
@@ -197,8 +199,11 @@ public class TypeChecker {
           System.out.println("typeEnvironment = " + typeEnvironment.mName);
           Environment declarationEnvironment = typeEnvironment.getMethodEnvironment(methodName, invocationSignature, packageMap);
           Set<TokenType> modifiers = getEnvironmentModifiers(declarationEnvironment);
+          System.out.println("declarationEnvironment = " + declarationEnvironment.mName);
           if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {
+            System.out.println("is protected");
             if (!typeEnvironment.PackageName.equals(classEnvironment.PackageName)) {
+              System.out.println("usage and decl is in diff env");
               declarationEnvironment = moveUpToClassEnvironment(declarationEnvironment);
               if (!classEnvironment.extendsEnvironment(declarationEnvironment, packageMap)) {
                 throw new InvalidSyntaxException(

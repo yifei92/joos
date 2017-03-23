@@ -16,6 +16,6 @@ public class C extends B.B {
      * => FAIL, since D.D (the type declaring instanceMethod_Sub) is not a superclass of C (6.6.2.1 item 2)
      */
     public void instanceMethodAccessFromThis(D.D var) {
-	var.instanceMethod();
+	var.instanceMethod_Sub();
     }
 }

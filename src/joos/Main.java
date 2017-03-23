@@ -70,6 +70,12 @@ public class Main {
 			for (Environment environment : packageMap.values()) {
 				Disambiguation.linkAllNames(environment, packageMap);
 			}
+			for (String key : treeMap.keySet()) {
+				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C") || key.contains("J1_formal_with_same_name_as_field")) {
+					System.out.println("class " + key);
+					treeMap.get(key).print();
+				}
+			}
 			for (Environment environment : packageMap.values()) {
 				TypeChecker.check(environment, packageMap);
 			}
@@ -84,12 +90,6 @@ public class Main {
 			for(String key : treeMap.keySet()){
 				ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
-			}
-			for (String key : treeMap.keySet()) {
-				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C")) {
-					System.out.println("class " + key);
-					treeMap.get(key).print();
-				}
 			}
 			for (Environment environment : packageMap.values()) {
 				CodeGeneration.generateForClass(environment, packageMap);

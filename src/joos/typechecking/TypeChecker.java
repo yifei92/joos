@@ -26,6 +26,7 @@ import static joos.environment.EnvironmentUtils.getImplementedEnvironments;
 import static joos.environment.EnvironmentUtils.getMethodSignatureFromArgsList;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
 import static joos.environment.EnvironmentUtils.findImmediateNodeWithTokenType;
+import static joos.environment.EnvironmentUtils.getMethodNameFromInvocation;
 
 public class TypeChecker {
 
@@ -36,6 +37,7 @@ public class TypeChecker {
         checkForAbstractClassInstantiation(environment, packageMap);
         checkConstructorUsageForProtectedAccess(environment, packageMap);
         checkConstructorImportsForProtectedAccess(environment, packageMap);
+        checkUsageForProtectedMethodAccess(environment, packageMap);
         checkForBitwiseOpts(environment);
         break;
       }
@@ -170,42 +172,50 @@ public class TypeChecker {
     List<ParseTreeNode> methodInvocations = new ArrayList<>();
     findNodesWithTokenType(classEnvironment.mScope, TokenType.METHOD_INVOCATION, methodInvocations);
     for(ParseTreeNode methodInvocation : methodInvocations) {
-      ParseTreeNode primaryNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.PRIMARY);
-      if(primaryNode != null) {
-        // we have a primary node on which we're making the invokation.
-        String methodName =
-          ((TerminalToken)(findImmediateNodeWithTokenType(methodInvocation, TokenType.IDENTIFIER).token)).getRawValue();
-        System.out.println("checking usage of method " + methodName);
-        List<String> invocationSignature = new ArrayList<>();
-        ParseTreeNode argsListOptNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.ARGUMENT_LIST_OPT);
-        if (argsListOptNode != null) {
+      String methodName = getMethodNameFromInvocation(methodInvocation);
+      System.out.println("checking usage of method " + methodName);
+      List<String> invocationSignature = new ArrayList<>();
+      ParseTreeNode argsListOptNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.ARGUMENT_LIST_OPT);
+      if (argsListOptNode != null) {
+        if(argsListOptNode.children != null && argsListOptNode.children.size() > 0) {
           getMethodSignatureFromArgsList(argsListOptNode.children.get(0), invocationSignature);
         }
-        Type type = primaryNode.type;
-        if (type != null) {
-          // check if this type.name is protected in type.environment and if so whether or not type.environment
-          // extends the given environment
-          Environment typeEnvironment = type.environment;
-          if (typeEnvironment != null) {
-            Environment declarationEnvironment = typeEnvironment.getMethodEnvironment(methodName, invocationSignature, packageMap);
-            Set<TokenType> modifiers = getEnvironmentModifiers(declarationEnvironment);
-            if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {
-              if (!typeEnvironment.PackageName.equals(classEnvironment.PackageName)) {
-                declarationEnvironment = moveUpToClassEnvironment(declarationEnvironment);
-                if (!classEnvironment.extendsEnvironment(declarationEnvironment, packageMap)) {
-                  throw new InvalidSyntaxException(
-                    "Protected " + type.name + " is protected and cannot be referenced from " + classEnvironment.PackageName);
-                }
-                if(!typeEnvironment.extendsEnvironment(classEnvironment, packageMap)) {
-                  throw new InvalidSyntaxException(
-                    "Protected " + type.name + " is protected and cannot be referenced from " + classEnvironment.PackageName);
-                }
+      }
+      Type type;
+      ParseTreeNode primaryNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.PRIMARY);
+      if(primaryNode != null) {
+        type = primaryNode.type;
+        System.out.println("invocation of " + methodName + " is on a primary exp");
+      } else {
+        ParseTreeNode nameNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.NAME);
+        type = nameNode.type;
+        System.out.println("invocation of " + methodName + " is on a name node");
+      }
+      if (type != null) {
+        // check if this type.name is protected in type.environment and if so whether or not type.environment
+        // extends the given environment
+        Environment typeEnvironment = type.environment;
+        if (typeEnvironment != null) {
+          System.out.println("typeEnvironment = " + typeEnvironment.mName);
+          Environment declarationEnvironment = typeEnvironment.getMethodEnvironment(methodName, invocationSignature, packageMap);
+          Set<TokenType> modifiers = getEnvironmentModifiers(declarationEnvironment);
+          System.out.println("declarationEnvironment = " + declarationEnvironment.mName);
+          if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {
+            System.out.println("is protected");
+            if (!typeEnvironment.PackageName.equals(classEnvironment.PackageName)) {
+              System.out.println("usage and decl is in diff env");
+              declarationEnvironment = moveUpToClassEnvironment(declarationEnvironment);
+              if (!classEnvironment.extendsEnvironment(declarationEnvironment, packageMap)) {
+                throw new InvalidSyntaxException(
+                  "Protected " + type.name + " is protected and cannot be referenced from " + classEnvironment.PackageName);
+              }
+              if(!typeEnvironment.extendsEnvironment(classEnvironment, packageMap)) {
+                throw new InvalidSyntaxException(
+                  "Protected " + type.name + " is protected and cannot be referenced from " + classEnvironment.PackageName);
               }
             }
           }
         }
-      } else {
-        // The method is either static (with absolute import) or is located in a parent class
       }
     }
   }

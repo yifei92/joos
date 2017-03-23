@@ -39,6 +39,21 @@ public class EnvironmentUtils {
 		return null;
 	}
 
+	public static String getMethodNameFromInvocation(ParseTreeNode methodInvocationNode) {
+		ParseTreeNode identifierNode = findImmediateNodeWithTokenType(methodInvocationNode, TokenType.IDENTIFIER);
+		if (identifierNode == null) {
+			ParseTreeNode nameNode = findImmediateNodeWithTokenType(methodInvocationNode, TokenType.NAME);
+			identifierNode = findLastNodeWithTokenType(nameNode, TokenType.IDENTIFIER);
+			if (identifierNode != null) {
+				return ((TerminalToken)identifierNode.token).getRawValue();
+			} else {
+				return null;
+			}
+		} else {
+			return ((TerminalToken)identifierNode.token).getRawValue();
+		}
+	}
+
 	private static Environment searchEnvironmentTreeForMethodEnvironment(ParseTreeNode methodDeclaration, Environment environment) {
 		if (environment.mScope == methodDeclaration) {
 			return environment;
@@ -229,6 +244,23 @@ public class EnvironmentUtils {
 			}
 		}
 		return null;
+	}
+
+	public static ParseTreeNode findLastNodeWithTokenType(ParseTreeNode node, TokenType type) {
+		ParseTreeNode found = null;
+		if (node.token.getType() == type) {
+			found = node;
+		}
+		if(node.children != null) {
+			ParseTreeNode foundInChild;
+			for(ParseTreeNode child : node.children) {
+				foundInChild = findLastNodeWithTokenType(child, type);
+				if (foundInChild != null) {
+					found = foundInChild;
+				}
+ 			}
+		}
+		return found;
 	}
 
 	/**
@@ -490,7 +522,6 @@ public class EnvironmentUtils {
 		if (packageMap.containsKey(localName)) {
 			return localName;
 		}
-		System.out.println(identifier);
 		throw new InvalidSyntaxException("Qualified Name not found for " + identifier);
 	}
 

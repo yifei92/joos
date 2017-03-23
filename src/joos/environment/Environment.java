@@ -186,11 +186,12 @@ public class Environment {
       System.out.println("Environment.getMethodEnvironment can only be called on a class environment");
       return null;
     }
+    System.out.println("getMethodEnvironment searching for method " + name + " in environment " + mName + " sig list size " + signature.size());
     if (mChildrenEnvironments != null) {
       for(Environment child : mChildrenEnvironments) {
         if(getEnvironmentType(child) == EnvironmentType.METHOD) {
           // check this the method name and args list
-          if(mName.equals(name)) {
+          if(child.mName.equals(name)) {
             MethodSignature sig = getMethodSignature(child, packageMap, null);
             if(sig != null) {
               List<String> paramTypes = sig.parameterTypes;

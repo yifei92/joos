@@ -27,6 +27,7 @@ public class Type {
 		this.subType = subType;
 		this.decl = decl;
 	}
+
 	public Boolean equals(String s){
 		return this.name.equals(s);
 	}

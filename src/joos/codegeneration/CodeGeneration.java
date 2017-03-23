@@ -24,6 +24,7 @@ import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
+import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeNode;
 
 
 class Pair<T1, T2> {
@@ -112,7 +113,7 @@ public class CodeGeneration {
     List<Pair<Type, String>> list = getFieldList(environment, packageMap);
     int i = 0;
     for (Pair<Type, String> pair : list) {
-      if (pair.second.equals(field)) return i * 4;
+      if (pair.second.equals(field)) return (i + 1) * 4;
       i++;
     }
     return -1;
@@ -132,8 +133,13 @@ public class CodeGeneration {
       }
     }
     for (Environment child : environment.mChildrenEnvironments) {
-      if (getEnvironmentType(child) == EnvironmentType.METHOD) {
-        generateForMethod(writer, environment, child, packageMap);
+      switch(getEnvironmentType(child)) {
+        case METHOD:
+          generateForMethod(writer, environment, child, packageMap);
+          break;
+        case CONSTRUCTOR:
+          generateForConstructor(writer, environment, child, packageMap);
+          break;
       }
     }
 
@@ -170,6 +176,37 @@ public class CodeGeneration {
     writer.write("\n");
   }
 
+  public static void generateForConstructor(FileWriter writer, Environment classEnv, Environment constructorEnv, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+    List<String> argTypes = constructorEnv.getConstructorSignature(packageMap);
+    String label = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
+    for (String argType : argTypes) {
+      label += argType + "#";
+    }
+    writer.write("global " + label + "\n" + label + ":\n");
+    Map<String, Pair<Integer, Type>> offsets = new HashMap();
+    offsets.put("this", new Pair(-8, Type.newObject(classEnv.mName, classEnv, null)));
+    int i = -12;
+    for (String param : constructorEnv.mVariableDeclarations.keySet()) {
+      offsets.put(param, new Pair(i, constructorEnv.mVariableToType.get(param)));
+      i -= 4;
+    }
+    int size = (getFieldList(classEnv, packageMap).size() + 1) * 4;
+    writer.write("  push ebp\n");
+    writer.write("  mov ebp, esp\n");
+    writer.write("  mov eax, " + size + "\n");
+    writer.write("  call __malloc\n");
+    writer.write("  mov dword [ebp + 8], eax\n"); // set this
+    writer.write("  mov dword [eax], VTABLE$" + getClassLabel(classEnv) + "\n");
+    for (int j = 4; j < size; j += 4) {
+      writer.write("  mov dword [eax + " + j + "], 0\n");
+    }
+    generateForNode(writer, constructorEnv, constructorEnv.mScope.children.get(2), offsets, 0, packageMap);
+    writer.write("  mov eax, [ebp + 8]\n"); //return this
+    writer.write("  pop ebp\n");
+    writer.write("  ret\n");
+    writer.write("\n");
+  }
+
   private static void generateForMethodNode(FileWriter writer, Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
     List<String> argTypes = new ArrayList();
     if (node.children.get(node.children.size() -2).children.size() > 0) {
@@ -186,7 +223,7 @@ public class CodeGeneration {
       if (dotIndex == -1) {
         MethodSignature methodSignature = environment.getParentClassEnvironment().getMethodSignatures(packageMap).get(name).get(argTypes);
         int offset = getVTableOffsetForMethod(environment.getParentClassEnvironment(), methodSignature, packageMap);
-        writer.write("  mov eax, [ebp]\n"); //this
+        writer.write("  mov eax, [ebp + 8]\n"); //this
         writer.write("  push eax\n"); // push this
         writer.write("  mov eax, [eax]\n"); //VTABLE
         writer.write("  add eax, " + offset + "\n");
@@ -201,7 +238,6 @@ public class CodeGeneration {
       } else {
         MethodSignature methodSignature = node.children.get(0).type.environment.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
         int offset = getVTableOffsetForMethod(node.children.get(0).type.environment, methodSignature, packageMap);
-        writer.write("  mov eax, [eax]\n");
         writer.write("  push eax\n"); //push new this
         writer.write("  mov eax, [eax]\n"); //VTABLE
         writer.write("  add eax, " + offset + "\n");
@@ -211,7 +247,6 @@ public class CodeGeneration {
       String name = ((TerminalToken)findNodeWithTokenType(node.children.get(2), TokenType.IDENTIFIER).token).getRawValue();
       MethodSignature methodSignature = node.children.get(0).type.environment.getMethodSignatures(packageMap).get(name).get(argTypes);
       int offset = getVTableOffsetForMethod(node.children.get(0).type.environment, methodSignature, packageMap);
-      writer.write("  mov eax, [eax]\n");
       writer.write("  push eax\n"); //push new this
       writer.write("  mov eax, [eax]\n"); //VTABLE
       writer.write("  add eax, " + offset + "\n");
@@ -233,7 +268,7 @@ public class CodeGeneration {
       classEnv = environment.getParentClassEnvironment();
       int offset = getOffsetForField(classEnv, prefix, packageMap);
       if (offset != -1) {
-        writer.write("  mov eax, [ebp]\n"); //this
+        writer.write("  mov eax, [ebp + 8]\n"); //this
         writer.write("  mov eax, [eax + " + offset + "]\n");
       } else {
         classEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
@@ -274,7 +309,7 @@ public class CodeGeneration {
       }
     }
     switch (node.token.getType()) {
-      case METHOD_INVOCATION:
+      case METHOD_INVOCATION: {
         int numArgs = 0;
         if (node.children.get(node.children.size() - 2).children.size() > 0) {
           for (ParseTreeNode param : node.children.get(node.children.size() - 2).children.get(0).children) {
@@ -288,6 +323,7 @@ public class CodeGeneration {
         writer.write("  call eax\n");
         writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
         return;
+      }
       case IF_THEN_STATEMENT:
         generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, packageMap);
         writer.write("  cmp eax 0\n");
@@ -409,8 +445,33 @@ public class CodeGeneration {
             return;
         }
       }
-
-
+      case CLASS_INSTANCE_CREATION_EXPRESSION: {
+        int numArgs = 0;
+        List<String> argTypes = new ArrayList();
+        if (node.children.get(3).children.size() > 0) {
+          for (ParseTreeNode param : node.children.get(3).children.get(0).children) {
+            if (param.token.getType() == TokenType.COMMA) continue;
+            argTypes.add(param.type.name);
+            generateForNode(writer, currentEnvironment, param, currentOffsets, currentOffset, packageMap);
+            numArgs++;
+            writer.write("  push eax\n");
+          }
+        }
+        writer.write("  push 0\n");
+        Environment classEnv = getEnvironmentFromTypeNode(environment, node.children.get(1), packageMap);
+        int size = (getFieldList(environment, packageMap).size() + 1) * 4;
+        String constructorLabel = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
+        for (String argType : argTypes) {
+          constructorLabel += argType + "#";
+        }
+        writer.write("  call " + constructorLabel + "\n");
+        writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
+        return;
+      }
+      case THIS: {
+        writer.write("  mov eax, [ebp + 8]\n");
+        return;
+      }
     }
     if (node.children != null) {
       for (ParseTreeNode child : node.children) {

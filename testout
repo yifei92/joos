@@ -1,82 +1,453 @@
 20
+setting type for prefix c
+setting type for prefix PrintStream
+setting type for prefix b
+setting type for prefix i
+setting type for prefix s
+setting type for prefix i
+setting type for prefix i
+setting type for prefix s
+setting type for prefix i
+setting type for prefix s
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix String
+setting type for prefix b
+setting type for prefix a1
+setting type for prefix a2
+setting type for prefix i
+setting type for prefix a1
+setting type for prefix i
+setting type for prefix i
+setting type for prefix a1
+setting type for prefix i
+setting type for prefix a2
+setting type for prefix i
+setting type for prefix a1
+setting type for prefix a2
+setting type for prefix i
+setting type for prefix a1
+setting type for prefix i
+setting type for prefix i
+setting type for prefix a1
+setting type for prefix i
+setting type for prefix a2
+setting type for prefix i
+setting type for prefix value
+setting type for prefix i
+setting type for prefix value
+setting type for prefix i
+setting type for prefix s
+setting type for prefix s
+setting type for prefix i
+setting type for prefix s
+setting type for prefix i
+setting type for prefix s
+setting type for prefix i
+setting type for prefix s
+setting type for prefix i
+setting type for prefix neg
+setting type for prefix neg
+setting type for prefix ret
+setting type for prefix ret
+setting type for prefix s
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix neg
+setting type for prefix ret
+setting type for prefix ret
+setting type for prefix ret
+setting type for prefix value
+setting type for prefix Integer
+setting type for prefix s
+setting type for prefix value
+setting type for prefix String
+setting type for prefix value
+setting type for prefix value
+setting type for prefix i
+setting type for prefix String
+setting type for prefix value
+setting type for prefix value
+setting type for prefix i
+setting type for prefix value
+setting type for prefix String
+setting type for prefix value
+setting type for prefix value
+setting type for prefix i
+setting type for prefix String
+setting type for prefix value
+setting type for prefix D
+setting type for prefix other
+setting type for prefix chars
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix other
+setting type for prefix chars
+setting type for prefix s2
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix newchars
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix s2
+setting type for prefix i
+setting type for prefix i
+setting type for prefix newchars
+setting type for prefix i
+setting type for prefix s2
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix newchars
+setting type for prefix newchars
+setting type for prefix c
+setting type for prefix newchars
+setting type for prefix i
+setting type for prefix i
+setting type for prefix wasneg
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix ret
+setting type for prefix j
+setting type for prefix j
+setting type for prefix j
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix ret
+setting type for prefix j
+setting type for prefix d
+setting type for prefix j
+setting type for prefix j
+setting type for prefix wasneg
+setting type for prefix ret
+setting type for prefix j
+setting type for prefix j
+setting type for prefix j
+setting type for prefix j
+setting type for prefix i
+setting type for prefix i
+setting type for prefix j
+setting type for prefix i
+setting type for prefix i
+setting type for prefix ret2
+setting type for prefix i
+setting type for prefix ret
+setting type for prefix j
+setting type for prefix i
+setting type for prefix ret2
+setting type for prefix String
+setting type for prefix i
+setting type for prefix String
+setting type for prefix i
+setting type for prefix b
+setting type for prefix o
+setting type for prefix o
+setting type for prefix o
+setting type for prefix o
+setting type for prefix o
+setting type for prefix o
+setting type for prefix Arrays
+setting type for prefix chars
+setting type for prefix o
+setting type for prefix i
+setting type for prefix j
+setting type for prefix j
+setting type for prefix i
+setting type for prefix j
+setting type for prefix i
+setting type for prefix k
+setting type for prefix i
+setting type for prefix k
+setting type for prefix j
+setting type for prefix k
+setting type for prefix k
+setting type for prefix ret
+setting type for prefix k
+setting type for prefix i
+setting type for prefix k
+setting type for prefix ret
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix j
+setting type for prefix j
+setting type for prefix j
+setting type for prefix j
+setting type for prefix j
+setting type for prefix i
+setting type for prefix j
+setting type for prefix i
+setting type for prefix j
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix i
+setting type for prefix h
+setting type for prefix h
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix h
+setting type for prefix other
+setting type for prefix b
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix other
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix other
+setting type for prefix chars
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix other
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix other
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix ret
+setting type for prefix i
+setting type for prefix i
+setting type for prefix ret
+setting type for prefix i
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix ret
+setting type for prefix offset
+setting type for prefix offset
+setting type for prefix offset
+setting type for prefix offset
+setting type for prefix i
+setting type for prefix i
+setting type for prefix needle
+setting type for prefix i
+setting type for prefix i
+setting type for prefix i
+setting type for prefix offset
+setting type for prefix found
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix offset
+setting type for prefix needle
+setting type for prefix chars
+setting type for prefix i
+setting type for prefix found
+setting type for prefix found
+setting type for prefix offset
+setting type for prefix value
+setting type for prefix i
+setting type for prefix String
+setting type for prefix value
 checking usage of method write
 invocation of write is on a name node
+type is not null. subType is 
+typeEnvironment = OutputStream
+declarationEnvironment = write
 checking usage of method nativeWrite
 invocation of nativeWrite is on a name node
+type is not null. subType is 
+T: type: OBJECT name: java.io.PrintStream environment is null: false subType is null: true decl is null: false modifiers: null
+typeEnvironment = PrintStream
+declarationEnvironment = nativeWrite
+is protected
 checking usage of method length
 invocation of length is on a name node
+type is not null. subType is 
 typeEnvironment = String
 declarationEnvironment = length
 checking usage of method write
 invocation of write is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = write
 checking usage of method println
 invocation of println is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = println
 checking usage of method print
 invocation of print is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = print
 checking usage of method write
 invocation of write is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = write
 checking usage of method println
 invocation of println is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = println
 checking usage of method println
 invocation of println is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = println
 checking usage of method println
 invocation of println is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = println
 checking usage of method println
 invocation of println is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = println
 checking usage of method println
 invocation of println is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = println
 checking usage of method println
 invocation of println is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = println
 checking usage of method print
 invocation of print is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = print
 checking usage of method print
 invocation of print is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = print
 checking usage of method print
 invocation of print is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = print
 checking usage of method print
 invocation of print is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = print
 checking usage of method print
 invocation of print is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = print
 checking usage of method print
 invocation of print is on a name node
+type is not null. subType is 
+typeEnvironment = PrintStream
+declarationEnvironment = print
 checking usage of method length
 invocation of length is on a name node
+type is not null. subType is 
 typeEnvironment = String
 declarationEnvironment = length
 checking usage of method charAt
 invocation of charAt is on a name node
+type is not null. subType is 
 typeEnvironment = String
 declarationEnvironment = charAt
 checking usage of method charAt
 invocation of charAt is on a name node
+type is not null. subType is 
 typeEnvironment = String
 declarationEnvironment = charAt
 checking usage of method charAt
 invocation of charAt is on a name node
+type is not null. subType is 
 typeEnvironment = String
 declarationEnvironment = charAt
 checking usage of method charAt
 invocation of charAt is on a name node
+type is not null. subType is 
 typeEnvironment = String
 declarationEnvironment = charAt
 checking usage of method charAt
 invocation of charAt is on a name node
+type is not null. subType is 
 typeEnvironment = String
 declarationEnvironment = charAt
 checking usage of method parseInt
 invocation of parseInt is on a name node
+type is not null. subType is 
+T: type: OBJECT name: java.lang.Integer environment is null: false subType is null: true decl is null: false modifiers: null
+typeEnvironment = Integer
+declarationEnvironment = parseInt
 checking usage of method valueOf
 invocation of valueOf is on a name node
+type is not null. subType is 
+T: type: OBJECT name: java.lang.String environment is null: false subType is null: true decl is null: false modifiers: null
+typeEnvironment = String
+declarationEnvironment = valueOf
 checking usage of method valueOf
 invocation of valueOf is on a name node
+type is not null. subType is 
+T: type: OBJECT name: java.lang.String environment is null: false subType is null: true decl is null: false modifiers: null
+typeEnvironment = String
+declarationEnvironment = valueOf
 checking usage of method valueOf
 invocation of valueOf is on a name node
+type is not null. subType is 
+T: type: OBJECT name: java.lang.String environment is null: false subType is null: true decl is null: false modifiers: null
+typeEnvironment = String
+declarationEnvironment = valueOf
 checking usage of method valueOf
 invocation of valueOf is on a name node
-checking usage of method instanceMethod_Sub
-invocation of instanceMethod_Sub is on a name node
+type is not null. subType is 
+T: type: OBJECT name: java.lang.String environment is null: false subType is null: true decl is null: false modifiers: null
+typeEnvironment = String
+declarationEnvironment = valueOf
+checking usage of method staticMethod
+invocation of staticMethod is on a name node
+type is not null. subType is 
+T: type: OBJECT name: D.D environment is null: false subType is null: true decl is null: false modifiers: null
 typeEnvironment = D
-declarationEnvironment = instanceMethod_Sub
+declarationEnvironment = staticMethod
 is protected
 usage and decl is in diff env
 Protected D.D is protected and cannot be referenced from C

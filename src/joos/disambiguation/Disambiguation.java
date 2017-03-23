@@ -447,7 +447,7 @@ public class Disambiguation {
       prefix = name.substring(0, dotIndex);
     } else {
       prefix = name;
-    }
+    }    
     Environment typeEnvironment = null;
     try {
       typeEnvironment = getEnvironmentFromTypeName(environment, prefix, packageMap);

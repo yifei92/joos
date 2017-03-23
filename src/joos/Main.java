@@ -79,8 +79,8 @@ public class Main {
 			}
 			for (String key : treeMap.keySet()) {
 				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C") || key.contains("J1_formal_with_same_name_as_field")) {
-					//System.out.println("class " + key);
-					//treeMap.get(key).print();
+					System.out.println("class " + key);
+					treeMap.get(key).print();
 				}
 			}
 			for (Environment environment : packageMap.values()) {

@@ -367,6 +367,41 @@ public class CodeGeneration {
       case NAME:
         generateForName(writer, currentEnvironment, getNameFromTypeNode(node), currentOffsets, packageMap);
         return;
+      case BOOLEAN_LITERAL_TRUE:
+        writer.write("  mov eax, 1\n");
+        return;
+      case NULL_LITERAL:
+      case BOOLEAN_LITERAL_FALSE:
+        writer.write("  mov eax, 0\n");
+        return;
+      case INTEGER_LITERAL:
+        writer.write("  mov eax, " + ((TerminalToken)node.token).getRawValue() + "\n");
+        return;
+      case CHAR_LITERAL:
+        writer.write("  mov eax, " + Character.getNumericValue(((TerminalToken)node.token).getRawValue().charAt(0)) + "\n");
+        return;
+      case ESCAPE: {
+        String value = ((TerminalToken)node.token).getRawValue();
+        switch (value.charAt(0)) {
+          case 't':
+            writer.write("  mov eax, 9\n");
+            return;
+          case 'b':
+            writer.write("  mov eax, 8\n");
+            return;
+          case 'n':
+            writer.write("  mov eax, 10\n");
+            return;
+          case 'r':
+            writer.write("  mov eax, 13\n");
+            return;
+          default:
+            writer.write("  mov eax, " + Character.getNumericValue(value.charAt(0)) + "\n");
+            return;
+        }
+      }
+
+
     }
     if (node.children != null) {
       for (ParseTreeNode child : node.children) {

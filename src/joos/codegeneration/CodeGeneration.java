@@ -99,10 +99,11 @@ public class CodeGeneration {
   }
 
   private static int getVTableOffsetForMethod(Environment environment, MethodSignature methodSignature, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    System.out.println(methodSignature.name);
+    // System.out.println(methodSignature.name);
     List<Pair<Environment, MethodSignature>> list = getMethodList(environment, packageMap);
     int i = 0;
     for (Pair<Environment, MethodSignature> pair : list) {
+      // System.out.println(pair.second.name);
       if (pair.second.equals(methodSignature)) return i * 4;
       i++;
     }
@@ -110,6 +111,7 @@ public class CodeGeneration {
   }
 
   private static int getOffsetForField(Environment environment, String field, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    System.out.println(field);
     List<Pair<Type, String>> list = getFieldList(environment, packageMap);
     int i = 0;
     for (Pair<Type, String> pair : list) {
@@ -220,6 +222,7 @@ public class CodeGeneration {
   }
 
   private static boolean generateForName(FileWriter writer, Environment environment, String name, Map<String, Pair<Integer, Type>> offsets, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+    System.out.println(name);
     int dotIndex = name.indexOf('.');
     String prefix = dotIndex == -1 ? name : name.substring(0, dotIndex);
     boolean stat = false;
@@ -245,6 +248,7 @@ public class CodeGeneration {
       } else {
         prefix = name.substring(dotIndex + 1, newDotIndex);
       }
+      if (prefix.equals("length")) return stat;
       if (stat) {
         stat = false;
         writer.write("  mov eax, [STATICFIELD$" + getClassLabel(classEnv) + "$" + prefix +"]\n");
@@ -257,12 +261,13 @@ public class CodeGeneration {
   }
 
   public static void generateForNode(FileWriter writer, Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+    System.out.println(node.token.getType());
     Environment currentEnvironment = environment;
     Map<String, Pair<Integer, Type>> currentOffsets = new HashMap(offsets);
     for (Environment childEnv : environment.mChildrenEnvironments) {
       if (childEnv.mScope == node) {
         currentEnvironment = childEnv;
-        if (currentEnvironment.mVariableDeclarations.size() > 0) writer.write("  sub esp, " + currentEnvironment.mVariableDeclarations.size() * 4);
+        if (currentEnvironment.mVariableDeclarations.size() > 0) writer.write("  sub esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
         for (String var : currentEnvironment.mVariableDeclarations.keySet()) {
           currentOffsets.put(var, new Pair(currentOffsets.size() * 4, currentEnvironment.mVariableToType.get(var)));
         }
@@ -270,30 +275,6 @@ public class CodeGeneration {
       }
     }
     switch (node.token.getType()) {
-      case WHILE_STATEMENT:
-      case WHILE_STATEMENT_NO_SHORT_IF:
-      case FOR_STATEMENT:
-      case FOR_STATEMENT_NO_SHORT_IF:
-        if (node.children != null) {
-          for (ParseTreeNode child : node.children) {
-            if (child.token.getType() == TokenType.STATEMENT || child.token.getType() == TokenType.STATEMENT_NO_SHORT_IF) {
-              for (Environment childEnv : environment.mChildrenEnvironments) {
-                if (childEnv.mScope == child) {
-                  if (childEnv.mVariableDeclarations.size() > 0) writer.write("  sub esp, " + childEnv.mVariableDeclarations.size() * 4);
-                  for (String var : childEnv.mVariableDeclarations.keySet()) {
-                    currentOffsets.put(var, new Pair(currentOffsets.size() * 4, childEnv.mVariableToType.get(var)));
-                  }
-                  generateForNode(writer, childEnv, node, currentOffsets, packageMap);
-                  if (childEnv.mVariableDeclarations.size() > 0) {
-                    writer.write("  add esp, " + childEnv.mVariableDeclarations.size() * 4);
-                  }
-                  return;
-                }
-              }
-            }
-          }
-        }
-        break;
       case METHOD_INVOCATION:
         int numArgs = 0;
         for (ParseTreeNode param : node.children.get(node.children.size() - 2).children) {
@@ -308,79 +289,97 @@ public class CodeGeneration {
         writer.write("  pop ebp\n");
         return;
       case IF_THEN_STATEMENT:
-        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, packageMap);
         writer.write("  cmp eax 0\n");
-        writer.write("  je "+environment.mName+"end\n");
-        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
-        writer.write(environment.mName+"end:\n");
+        writer.write("  je "+currentEnvironment.mName+"end\n");
+        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, packageMap);
+        writer.write(currentEnvironment.mName+"end:\n");
+        return;
       case IF_THEN_ELSE_STATEMENT:
       case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
-        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, packageMap);
         writer.write("  cmp eax 0\n");
-        writer.write("  je "+environment.mName+"else\n");
-        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
-        writer.write("  je "+environment.mName+"end\n");
-        writer.write(environment.mName+"else:\n");
-        generateForNode(writer, environment, node.children.get(6), offsets, packageMap);
-        writer.write(environment.mName+"end:\n");
+        writer.write("  je "+currentEnvironment.mName+"else\n");
+        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, packageMap);
+        writer.write("  je "+currentEnvironment.mName+"end\n");
+        writer.write(currentEnvironment.mName+"else:\n");
+        generateForNode(writer, currentEnvironment, node.children.get(6), currentOffsets, packageMap);
+        writer.write(currentEnvironment.mName+"end:\n");
+        return;
       case WHILE_STATEMENT:
       case WHILE_STATEMENT_NO_SHORT_IF:
-        writer.write(environment.mName+"start:\n");
-        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
+        writer.write(currentEnvironment.mName+"start:\n");
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, packageMap);
         writer.write("  cmp eax 0\n");
-        writer.write("  je "+environment.mName+"end\n");
-        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
-        writer.write("  je "+environment.mName+"start\n");
-        writer.write(environment.mName+"end:\n");
+        writer.write("  je "+currentEnvironment.mName+"end\n");
+        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, packageMap);
+        writer.write("  je "+currentEnvironment.mName+"start\n");
+        writer.write(currentEnvironment.mName+"end:\n");
+        return;
       case FOR_STATEMENT:
       case FOR_STATEMENT_NO_SHORT_IF:
-        generateForNode(writer, environment, node.children.get(2), offsets, packageMap);
-        writer.write(environment.mName+"start:\n");
-        generateForNode(writer, environment, node.children.get(4), offsets, packageMap);
+        for (Environment childEnv : currentEnvironment.mChildrenEnvironments) {
+          if (childEnv.mScope == node.children.get(8)) {
+            currentEnvironment = childEnv;
+            for (String var : childEnv.mVariableDeclarations.keySet()) {
+              currentOffsets.put(var, new Pair(currentOffsets.size() * 4, childEnv.mVariableToType.get(var)));
+            }
+          }
+        }
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, packageMap);
+        writer.write(currentEnvironment.mName+"start:\n");
+        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, packageMap);
         writer.write("  cmp eax 0\n");
-        writer.write("  je "+environment.mName+"end\n");
-        generateForNode(writer, environment, node.children.get(8), offsets, packageMap);
-        generateForNode(writer, environment, node.children.get(6), offsets, packageMap);
-        writer.write("  je "+environment.mName+"start\n");
-        writer.write(environment.mName+"end:\n");
+        writer.write("  je "+currentEnvironment.mName+"end\n");
+        generateForNode(writer, currentEnvironment, node.children.get(8), currentOffsets, packageMap);
+        generateForNode(writer, currentEnvironment, node.children.get(6), currentOffsets, packageMap);
+        writer.write("  je "+currentEnvironment.mName+"start\n");
+        writer.write(currentEnvironment.mName+"end:\n");
+        if (currentEnvironment.mVariableDeclarations.size() > 0) {
+          writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
+        }
+        return;
       case AND_EXPRESSION:
         if(node.children.size()>1){
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
-              generateForNode(writer, environment, node.children.get(i), offsets, packageMap);
+              generateForNode(writer, currentEnvironment, node.children.get(i), currentOffsets, packageMap);
               writer.write("  cmp eax 0\n");
-              writer.write("  je "+environment.mName+"end\n");
+              writer.write("  je "+currentEnvironment.mName+"end\n");
             }
           }
-          writer.write(environment.mName+"end:\n");
+          writer.write(currentEnvironment.mName+"end:\n");
         }
         else {
-          generateForNode(writer, environment, node.children.get(0), offsets, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, packageMap);
         }
+        return;
       case INCLUSIVE_OR_EXPRESSION:
         if(node.children.size()>1){
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
-              generateForNode(writer, environment, node.children.get(i), offsets, packageMap);
+              generateForNode(writer, currentEnvironment, node.children.get(i), currentOffsets, packageMap);
               writer.write("  cmp eax 1\n");
-              writer.write("  je "+environment.mName+"end\n");
+              writer.write("  je "+currentEnvironment.mName+"end\n");
             }
           }
-          writer.write(environment.mName+"end:\n");
+          writer.write(currentEnvironment.mName+"end:\n");
         }
         else {
-          generateForNode(writer, environment, node.children.get(0), offsets, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, packageMap);
         }
+        return;
       case NAME:
         generateForName(writer, currentEnvironment, getNameFromTypeNode(node), currentOffsets, packageMap);
         return;
     }
-    if (currentEnvironment.mScope == node && currentEnvironment.mVariableDeclarations.size() > 0) {
-      writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4);
+    if (node.children != null) {
+      for (ParseTreeNode child : node.children) {
+        generateForNode(writer, currentEnvironment, child, currentOffsets, packageMap);
+      }
     }
-    if (node.children == null) return;
-    for (ParseTreeNode child : node.children) {
-      generateForNode(writer, currentEnvironment, child, currentOffsets, packageMap);
+    if (currentEnvironment.mScope == node && currentEnvironment.mVariableDeclarations.size() > 0) {
+      writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
     }
   }
 }

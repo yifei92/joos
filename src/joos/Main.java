@@ -70,20 +70,19 @@ public class Main {
 			for (Environment environment : packageMap.values()) {
 				Disambiguation.linkAllNames(environment, packageMap);
 			}
-			for (String key : treeMap.keySet()) {
-				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C") || key.contains("J1_formal_with_same_name_as_field")) {
-					System.out.println("class " + key);
-					treeMap.get(key).print();
-				}
-			}
-			for (Environment environment : packageMap.values()) {
-				TypeChecker.check(environment, packageMap);
-			}
 			for(String key : treeMap.keySet()){
 				TypeCheckingEvaluator typeCheckingEvaluator =new TypeCheckingEvaluator();
 				typeCheckingEvaluator.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
-
+			for (Environment environment : packageMap.values()) {
+				TypeChecker.check(environment, packageMap);
+			}
+			for (String key : treeMap.keySet()) {
+				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C") || key.contains("J1_formal_with_same_name_as_field")) {
+					//System.out.println("class " + key);
+					//treeMap.get(key).print();
+				}
+			}
 			for (Environment environment : packageMap.values()) {
 				AssignmentChecking.check(environment, packageMap);
 			}
@@ -92,11 +91,10 @@ public class Main {
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
 			for (Environment environment : packageMap.values()) {
-				CodeGeneration.generateForClass(environment, packageMap);
+				//CodeGeneration.generateForClass(environment, packageMap);
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
-			e.printStackTrace();
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);
@@ -113,12 +111,12 @@ public class Main {
 			System.out.println("Error");
 			System.exit(42);
 			return;
-		} catch (IOException e) {
+		} /*catch (IOException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);
 			return;
-		}
+		}*/
 
 		System.out.println("Success");
 		System.exit(0);

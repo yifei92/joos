@@ -186,7 +186,6 @@ public class Environment {
       System.out.println("Environment.getMethodEnvironment can only be called on a class environment");
       return null;
     }
-    System.out.println("getMethodEnvironment searching for method " + name + " in environment " + mName + " sig list size " + signature.size());
     if (mChildrenEnvironments != null) {
       for(Environment child : mChildrenEnvironments) {
         if(getEnvironmentType(child) == EnvironmentType.METHOD) {
@@ -266,28 +265,32 @@ public class Environment {
 	}
 
   /**
-   * Checks if this environment contains a zero arg default constructor and then 
-   * checks if all its parent evironments also contain default constructors
+   * checks if all this environment's parent evironments contain default constructors
    */
-  public boolean containsZeroArgConstructors(Map<String, Environment> packageMap) throws InvalidSyntaxException {
+  public boolean containsZeroArgConstructors(Map<String, Environment> packageMap, boolean isFirstCheck) throws InvalidSyntaxException {
     if (getEnvironmentType(this) != EnvironmentType.CLASS) {
       System.out.println("containsZeroArgConstructor can only be called on a class environment");
       return false;
     }
     boolean defaultConstrFound = false;
-    if (mChildrenEnvironments != null) {
-      for(Environment child : mChildrenEnvironments) {
-        if (child.getConstructorSignature(packageMap).size() == 0 && child.mName.equals(mName)) {
-          defaultConstrFound = true;
-          break;
+    if (!isFirstCheck) {
+      if (mChildrenEnvironments != null) {
+        for(Environment child : mChildrenEnvironments) {
+          List<String> constrSig = child.getConstructorSignature(packageMap);
+          if (constrSig != null && constrSig.size() == 0 && child.mName.equals(mName)) {
+            defaultConstrFound = true;
+            break;
+          }
         }
       }
+    } else {
+      defaultConstrFound = true;
     }
     List<Environment> extendedEnvs = getExtendedEnvironments(this, packageMap);
     boolean parentsContainDefaultConstr = true;
     if(extendedEnvs != null) {
       for(Environment parent : extendedEnvs) {
-        if(!parent.containsZeroArgConstructors(packageMap)) {
+        if(!parent.containsZeroArgConstructors(packageMap, false)) {
           parentsContainDefaultConstr = false;
         }
       }

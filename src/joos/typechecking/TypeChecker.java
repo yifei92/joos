@@ -70,7 +70,7 @@ public class TypeChecker {
   //A constructor in a class other than java.lang.Object implicitly calls the zero-argument 
   //constructor of its superclass. Check that this zero-argument constructor exists.
   private static void checkForZeroArgParentConstructor(Environment classEnvironment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    boolean containsDefaultConstructor = classEnvironment.containsZeroArgConstructors(packageMap);
+    boolean containsDefaultConstructor = classEnvironment.containsZeroArgConstructors(packageMap, true);
     if (!containsDefaultConstructor) {
       throw new InvalidSyntaxException(
         "Class " + classEnvironment.mName +  " does not have a default constructor in its super class");
@@ -173,7 +173,7 @@ public class TypeChecker {
     findNodesWithTokenType(classEnvironment.mScope, TokenType.METHOD_INVOCATION, methodInvocations);
     for(ParseTreeNode methodInvocation : methodInvocations) {
       String methodName = getMethodNameFromInvocation(methodInvocation);
-      System.out.println("checking usage of method " + methodName);
+      //System.out.println("checking usage of method " + methodName);
       List<String> invocationSignature = new ArrayList<>();
       ParseTreeNode argsListOptNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.ARGUMENT_LIST_OPT);
       if (argsListOptNode != null) {
@@ -185,25 +185,25 @@ public class TypeChecker {
       ParseTreeNode primaryNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.PRIMARY);
       if(primaryNode != null) {
         type = primaryNode.type;
-        System.out.println("invocation of " + methodName + " is on a primary exp");
+        //System.out.println("invocation of " + methodName + " is on a primary exp");
       } else {
         ParseTreeNode nameNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.NAME);
         type = nameNode.type;
-        System.out.println("invocation of " + methodName + " is on a name node");
+        //System.out.println("invocation of " + methodName + " is on a name node");
       }
       if (type != null) {
         // check if this type.name is protected in type.environment and if so whether or not type.environment
         // extends the given environment
         Environment typeEnvironment = type.environment;
         if (typeEnvironment != null) {
-          System.out.println("typeEnvironment = " + typeEnvironment.mName);
+          //System.out.println("typeEnvironment = " + typeEnvironment.mName);
           Environment declarationEnvironment = typeEnvironment.getMethodEnvironment(methodName, invocationSignature, packageMap);
           Set<TokenType> modifiers = getEnvironmentModifiers(declarationEnvironment);
-          System.out.println("declarationEnvironment = " + declarationEnvironment.mName);
+          //System.out.println("declarationEnvironment = " + declarationEnvironment.mName);
           if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {
-            System.out.println("is protected");
+            //System.out.println("is protected");
             if (!typeEnvironment.PackageName.equals(classEnvironment.PackageName)) {
-              System.out.println("usage and decl is in diff env");
+              //System.out.println("usage and decl is in diff env");
               declarationEnvironment = moveUpToClassEnvironment(declarationEnvironment);
               if (!classEnvironment.extendsEnvironment(declarationEnvironment, packageMap)) {
                 throw new InvalidSyntaxException(

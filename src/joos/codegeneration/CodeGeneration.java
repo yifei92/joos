@@ -84,7 +84,7 @@ public class CodeGeneration {
         if (methodSignature.modifiers.contains(TokenType.STATIC)) continue;
         boolean contains = false;
         for (Pair<Environment, MethodSignature> pair : list) {
-          if (pair.second.equals(methodSignature)) {
+          if (pair.second.name.equals(methodSignature.name) && pair.second.parameterTypes.equals(methodSignature.parameterTypes)) {
             pair.first = environment;
             contains = true;
             break;
@@ -99,19 +99,16 @@ public class CodeGeneration {
   }
 
   private static int getVTableOffsetForMethod(Environment environment, MethodSignature methodSignature, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    // System.out.println(methodSignature.name);
     List<Pair<Environment, MethodSignature>> list = getMethodList(environment, packageMap);
     int i = 0;
     for (Pair<Environment, MethodSignature> pair : list) {
-      // System.out.println(pair.second.name);
-      if (pair.second.equals(methodSignature)) return i * 4;
+      if (pair.second.name.equals(methodSignature.name) && pair.second.parameterTypes.equals(methodSignature.parameterTypes)) return i * 4;
       i++;
     }
     return -1;
   }
 
   private static int getOffsetForField(Environment environment, String field, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    System.out.println(field);
     List<Pair<Type, String>> list = getFieldList(environment, packageMap);
     int i = 0;
     for (Pair<Type, String> pair : list) {
@@ -222,7 +219,6 @@ public class CodeGeneration {
   }
 
   private static boolean generateForName(FileWriter writer, Environment environment, String name, Map<String, Pair<Integer, Type>> offsets, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
-    System.out.println(name);
     int dotIndex = name.indexOf('.');
     String prefix = dotIndex == -1 ? name : name.substring(0, dotIndex);
     boolean stat = false;
@@ -261,7 +257,6 @@ public class CodeGeneration {
   }
 
   public static void generateForNode(FileWriter writer, Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
-    System.out.println(node.token.getType());
     Environment currentEnvironment = environment;
     Map<String, Pair<Integer, Type>> currentOffsets = new HashMap(offsets);
     for (Environment childEnv : environment.mChildrenEnvironments) {

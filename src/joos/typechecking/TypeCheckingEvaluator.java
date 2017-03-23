@@ -587,7 +587,8 @@ public class TypeCheckingEvaluator {
 			case EXPRESSION_STATEMENT:
 			case STATEMENT_EXPRESSION:
 			case TYPE_DECLARATION:    //weird semi Colum case
-				return check(currentnode.children.get(0),PackageMap,rootenv);
+				currentnode.type = check(currentnode.children.get(0),PackageMap,rootenv);
+				return currentnode.type;
 			case CLASS_DECLARATION:
 				return check(currentnode.children.get(5),PackageMap,rootenv);
 			case INTERFACE_DECLARATION:

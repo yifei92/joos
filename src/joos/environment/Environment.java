@@ -265,6 +265,36 @@ public class Environment {
 		return mMethodSignatures;
 	}
 
+  /**
+   * Checks if this environment contains a zero arg default constructor and then 
+   * checks if all its parent evironments also contain default constructors
+   */
+  public boolean containsZeroArgConstructors(Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (getEnvironmentType(this) != EnvironmentType.CLASS) {
+      System.out.println("containsZeroArgConstructor can only be called on a class environment");
+      return false;
+    }
+    boolean defaultConstrFound = false;
+    if (mChildrenEnvironments != null) {
+      for(Environment child : mChildrenEnvironments) {
+        if (child.getConstructorSignature(packageMap).size() == 0 && child.mName.equals(mName)) {
+          defaultConstrFound = true;
+          break;
+        }
+      }
+    }
+    List<Environment> extendedEnvs = getExtendedEnvironments(this, packageMap);
+    boolean parentsContainDefaultConstr = true;
+    if(extendedEnvs != null) {
+      for(Environment parent : extendedEnvs) {
+        if(!parent.containsZeroArgConstructors(packageMap)) {
+          parentsContainDefaultConstr = false;
+        }
+      }
+    }
+    return defaultConstrFound && parentsContainDefaultConstr;
+  }
+
 	public List<String> getConstructorSignature(Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		return sGetConstructorSignature(this, packageMap);
 	}

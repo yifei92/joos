@@ -39,6 +39,7 @@ public class TypeChecker {
         checkConstructorImportsForProtectedAccess(environment, packageMap);
         checkUsageForProtectedMethodAccess(environment, packageMap);
         checkForBitwiseOpts(environment);
+        checkForZeroArgParentConstructor(environment, packageMap);
         break;
       }
       case INTERFACE: {
@@ -46,7 +47,6 @@ public class TypeChecker {
       }
       case CONSTRUCTOR:
         checkConstructorName(environment);
-        checkForZeroArgParentConstructor(environment, packageMap);
       case METHOD: {
         break;
       }
@@ -69,11 +69,11 @@ public class TypeChecker {
 
   //A constructor in a class other than java.lang.Object implicitly calls the zero-argument 
   //constructor of its superclass. Check that this zero-argument constructor exists.
-  private static void checkForZeroArgParentConstructor(Environment constructorEnvironment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    List<Environment> extendedEnvironments = getExtendedEnvironments(constructorEnvironment.mParent, packageMap);
-    if (extendedEnvironments.size() > 0 && !containsConstructor(extendedEnvironments.get(0))) {
+  private static void checkForZeroArgParentConstructor(Environment classEnvironment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    boolean containsDefaultConstructor = classEnvironment.containsZeroArgConstructors(packageMap);
+    if (!containsDefaultConstructor) {
       throw new InvalidSyntaxException(
-        "Class " + constructorEnvironment.mName +  " does not have a default constructor in its super class");
+        "Class " + classEnvironment.mName +  " does not have a default constructor in its super class");
     }
   }
 

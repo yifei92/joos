@@ -60,10 +60,6 @@ public class Main {
 			    entry.getValue().print();
 			    System.out.println("");
 			}*/
-			for (String key : treeMap.keySet()) {
-				if (key.contains("Je_16_StaticThis_StaticFieldInitializer"))
-					treeMap.get(key).print();
-			}
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();
 				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap,key);
@@ -88,6 +84,12 @@ public class Main {
 			for(String key : treeMap.keySet()){
 				ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
+			}
+			for (String key : treeMap.keySet()) {
+				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C")) {
+					System.out.println("class " + key);
+					treeMap.get(key).print();
+				}
 			}
 			for (Environment environment : packageMap.values()) {
 				CodeGeneration.generateForClass(environment, packageMap);

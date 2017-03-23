@@ -16,6 +16,6 @@ public class C extends B.B {
      * => FAIL, since A.A (the type of var) is a not a subclass of C (6.6.2.1 item 2)
      */
     public void instanceFieldAccessFromSuper(A.A var, int x) {
-	var.instanceField = x; 
+	    var.instanceField = x; 
     }
 }

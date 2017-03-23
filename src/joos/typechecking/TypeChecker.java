@@ -9,6 +9,8 @@ import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
 import joos.commons.TokenType;
+import joos.commons.Type;
+import joos.commons.TerminalToken;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
 import static joos.environment.EnvironmentUtils.containsConstructor;
@@ -21,6 +23,9 @@ import static joos.environment.EnvironmentUtils.getEnvironmentForMethodDeclarati
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeNode;
 import static joos.environment.EnvironmentUtils.moveUpToClassEnvironment;
 import static joos.environment.EnvironmentUtils.getImplementedEnvironments;
+import static joos.environment.EnvironmentUtils.getMethodSignatureFromArgsList;
+import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
+import static joos.environment.EnvironmentUtils.findImmediateNodeWithTokenType;
 
 public class TypeChecker {
 
@@ -129,80 +134,112 @@ public class TypeChecker {
     }
   }
 
-  //Check that all accesses of protected fields, methods and constructors are in 
-  //a subtype of the type declaring the entity being accessed, or in the same 
-  //package as that type.
-  //
-  //Checks if the given nameNode.type is protected from the given environment
   public static void checkUsageForProtectedFieldAccess(Environment environment, ParseTreeNode nameNode, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     // Check this usage of a variable for protected type access
-    /*ParseTreeNode declarationNode = nameNode.type.decl;
-    List<ParseTreeNode> modifiers = new ArrayList<>();
-    findNodesWithTokenType(declarationNode, TokenType.MODIFIER, modifiers);
-    for (ParseTreeNode modifier : modifiers) {
-      if (modifier.children.get(0).token.getType() == TokenType.PROTECTED) {
-        Environment declarationEnvironment = getEnvironmentForFieldDeclaration(declarationNode, packageMap);
-        if (!declarationEnvironment.PackageName.equals(environment.PackageName)) {
-          throw new InvalidSyntaxException("Protected " + declarationEnvironment.mName + " is protected and cannot be referenced from " + environment.PackageName);
-        } else {
-          Environment usageClassEnvironment = moveUpToClassEnvironment(environment);
-          List<Environment> extendedEnvironments = getExtendedEnvironments(usageClassEnvironment, packageMap);
-          if (!extendedEnvironments.contains(declarationEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + declarationEnvironment.mName + " is protected and cannot be referenced from " + environment.PackageName);
-          }
-          List<Environment> implementedEnvironments = getImplementedEnvironments(environment, packageMap);
-          if (!implementedEnvironments.contains(declarationEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + declarationEnvironment.mName + " is protected and cannot be referenced from " + environment.PackageName);
-          }
-        }
-      }
-    }*/
-  }
-
-  // TODO: call this like checkUsageForProtectedFieldAccess is called in Disambiguation
-  //Checks if the given nameNode.type is protected from the given environment
-  public static void checkUsageForProtectedMethodAccess(Environment environment, ParseTreeNode nameNode, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    // Check this usage of a variable for protected type access
-    ParseTreeNode declarationNode = nameNode.type.decl;
-    List<ParseTreeNode> modifiers = new ArrayList<>();
-    findNodesWithTokenType(declarationNode, TokenType.MODIFIER, modifiers);
-    for (ParseTreeNode modifier : modifiers) {
-      if (modifier.children.get(0).token.getType() == TokenType.PROTECTED) {
-        Environment declarationEnvironment = getEnvironmentForMethodDeclaration(declarationNode, packageMap);
-        if (!declarationEnvironment.PackageName.equals(environment.PackageName)) {
-          throw new InvalidSyntaxException("Protected " + declarationEnvironment.mName + " is protected and cannot be referenced from " + environment.PackageName);
-        } else {
-          Environment usageClassEnvironment = moveUpToClassEnvironment(environment);
-          List<Environment> extendedEnvironments = getExtendedEnvironments(usageClassEnvironment, packageMap);
-          if (!extendedEnvironments.contains(declarationEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + declarationEnvironment.mName + " is protected and cannot be referenced from " + environment.PackageName);
-          }
-          List<Environment> implementedEnvironments = getImplementedEnvironments(environment, packageMap);
-          if (!implementedEnvironments.contains(declarationEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + declarationEnvironment.mName + " is protected and cannot be referenced from " + environment.PackageName);
+    List<ParseTreeNode> identifierNodes = new ArrayList<>();
+    findNodesWithTokenType(nameNode, TokenType.IDENTIFIER, identifierNodes);
+    for(ParseTreeNode identifierNode : identifierNodes) {
+      Type type = identifierNode.type;
+      if (type != null) {
+        // check if this type.name is protected in type.environment and if so whether or not type.environment
+        // extends the given environment
+        Environment typeEnvironment = type.environment;
+        if (typeEnvironment != null) {
+          Set<TokenType> modifiers = typeEnvironment.getFieldModifiers(type.name, packageMap);
+          if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {
+            if (!typeEnvironment.PackageName.equals(environment.PackageName)) {
+              Environment usageClassEnvironment = moveUpToClassEnvironment(environment);
+              Environment declarationEnvironment = typeEnvironment.getVariableDeclarationEnvronment(type.name, packageMap);
+              if (!usageClassEnvironment.extendsEnvironment(declarationEnvironment, packageMap)) {
+                throw new InvalidSyntaxException(
+                  "Protected " + type.name + " is protected and cannot be referenced from " + environment.PackageName);
+              }
+              if(!typeEnvironment.extendsEnvironment(usageClassEnvironment, packageMap)) {
+                throw new InvalidSyntaxException(
+                  "Protected " + type.name + " is protected and cannot be referenced from " + environment.PackageName);
+              }
+            }
           }
         }
       }
     }
   }
 
+  public static void checkUsageForProtectedMethodAccess(Environment classEnvironment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    // Check this usage of a variable for protected type access
+    List<ParseTreeNode> methodInvocations = new ArrayList<>();
+    findNodesWithTokenType(classEnvironment.mScope, TokenType.METHOD_INVOCATION, methodInvocations);
+    for(ParseTreeNode methodInvocation : methodInvocations) {
+      ParseTreeNode primaryNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.PRIMARY);
+      if(primaryNode != null) {
+        // we have a primary node on which we're making the invokation.
+        String methodName =
+          ((TerminalToken)(findImmediateNodeWithTokenType(methodInvocation, TokenType.IDENTIFIER).token)).getRawValue();
+        System.out.println("checking usage of method " + methodName);
+        List<String> invocationSignature = new ArrayList<>();
+        ParseTreeNode argsListOptNode = findImmediateNodeWithTokenType(methodInvocation, TokenType.ARGUMENT_LIST_OPT);
+        if (argsListOptNode != null) {
+          getMethodSignatureFromArgsList(argsListOptNode.children.get(0), invocationSignature);
+        }
+        Type type = primaryNode.type;
+        if (type != null) {
+          // check if this type.name is protected in type.environment and if so whether or not type.environment
+          // extends the given environment
+          Environment typeEnvironment = type.environment;
+          if (typeEnvironment != null) {
+            Environment declarationEnvironment = typeEnvironment.getMethodEnvironment(methodName, invocationSignature, packageMap);
+            Set<TokenType> modifiers = getEnvironmentModifiers(declarationEnvironment);
+            if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {
+              if (!typeEnvironment.PackageName.equals(classEnvironment.PackageName)) {
+                declarationEnvironment = moveUpToClassEnvironment(declarationEnvironment);
+                if (!classEnvironment.extendsEnvironment(declarationEnvironment, packageMap)) {
+                  throw new InvalidSyntaxException(
+                    "Protected " + type.name + " is protected and cannot be referenced from " + classEnvironment.PackageName);
+                }
+                if(!typeEnvironment.extendsEnvironment(classEnvironment, packageMap)) {
+                  throw new InvalidSyntaxException(
+                    "Protected " + type.name + " is protected and cannot be referenced from " + classEnvironment.PackageName);
+                }
+              }
+            }
+          }
+        }
+      } else {
+        // The method is either static (with absolute import) or is located in a parent class
+      }
+    }
+  }
+
   private static void checkConstructorUsageForProtectedAccess(Environment classEnvironment, Map<String, Environment> packageMap) throws InvalidSyntaxException  {
-    List<ParseTreeNode> constructorTypeUsages = new ArrayList<>();
-    findNodesWithTokenType(classEnvironment.mScope, TokenType.CLASS_OR_INTERFACE_TYPE, constructorTypeUsages);
-    for (ParseTreeNode constructorTypeUsage: constructorTypeUsages) {
-      Environment definitionEnvironment = getEnvironmentFromTypeNode(classEnvironment, constructorTypeUsage, packageMap);
+    List<ParseTreeNode> constructorUsages = new ArrayList<>();
+    findNodesWithTokenType(classEnvironment.mScope, TokenType.CLASS_INSTANCE_CREATION_EXPRESSION, constructorUsages);
+    for (ParseTreeNode constructorUsage: constructorUsages) {
+      ParseTreeNode constructorTypeNode = findNodeWithTokenType(constructorUsage, TokenType.CLASS_OR_INTERFACE_TYPE);
+      Environment definitionEnvironment = getEnvironmentFromTypeNode(classEnvironment, constructorTypeNode, packageMap);
       Set<TokenType> modifiers = getEnvironmentModifiers(definitionEnvironment);
+      // Check the class if its protected
       if (modifiers.contains(TokenType.PROTECTED)) {
         if (!definitionEnvironment.PackageName.equals(classEnvironment.PackageName)) {
-          throw new InvalidSyntaxException("Protected " + definitionEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
-        } else {
-          List<Environment> extendedEnvironments = getExtendedEnvironments(classEnvironment, packageMap);
-          if (!extendedEnvironments.contains(definitionEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + definitionEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
-          }
-          List<Environment> implementedEnvironments = getImplementedEnvironments(classEnvironment, packageMap);
-          if (!implementedEnvironments.contains(definitionEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + definitionEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
+          throw new InvalidSyntaxException(
+            "Protected " + definitionEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
+        }
+      }
+      // check the constructor if its protected
+      ParseTreeNode constructorArgsListNode = findNodeWithTokenType(constructorUsage, TokenType.ARGUMENT_LIST);
+      List<String> constructorInvocationSignature = new ArrayList<>();
+      getMethodSignatureFromArgsList(constructorArgsListNode, constructorInvocationSignature);
+      for(Environment child: definitionEnvironment.mChildrenEnvironments) {
+        if (getEnvironmentType(child) == EnvironmentType.CONSTRUCTOR) {
+          List<String> constructorSignature = child.getConstructorSignature(packageMap);
+          if (constructorInvocationSignature.isEmpty() && constructorSignature.isEmpty() ||
+              constructorInvocationSignature.equals(constructorSignature)) {
+            Set<TokenType> modifs = getEnvironmentModifiers(child);
+            if (modifs != null && modifs.contains(TokenType.PROTECTED)) {
+              if (!definitionEnvironment.PackageName.equals(classEnvironment.PackageName)) {
+                throw new InvalidSyntaxException(
+                  "Protected " + definitionEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
+              }
+            }
           }
         }
       }
@@ -215,15 +252,10 @@ public class TypeChecker {
       Set<TokenType> modifiers = getEnvironmentModifiers(importedClassEnvironment);
       if (modifiers.contains(TokenType.PROTECTED)) {
         if (!importedClassEnvironment.PackageName.equals(classEnvironment.PackageName)) {
-          throw new InvalidSyntaxException("Protected " + importedClassEnvironment.mName + " is protected and cannot be referenced in imports in " + classEnvironment.PackageName);
-        } else {
-          List<Environment> extendedEnvironments = getExtendedEnvironments(classEnvironment, packageMap);
-          if (!extendedEnvironments.contains(importedClassEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + importedClassEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
-          }
-          List<Environment> implementedEnvironments = getImplementedEnvironments(classEnvironment, packageMap);
-          if (!implementedEnvironments.contains(importedClassEnvironment)) {
-            throw new InvalidSyntaxException("Protected " + importedClassEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
+          if (!classEnvironment.extendsEnvironment(importedClassEnvironment, packageMap) && 
+              !classEnvironment.implementsEnvironment(importedClassEnvironment, packageMap)) {
+            throw new InvalidSyntaxException(
+              "Protected " + importedClassEnvironment.mName + " is protected and cannot be referenced from " + classEnvironment.PackageName);
           }
         }
       }

@@ -85,6 +85,51 @@ public class Environment {
   }
 
   /**
+   * Given a field name checks this environment and all parent environments for the given name and 
+   * returns its modifiers.
+   * Returns null if no such field exists
+   */
+  public Set<TokenType> getFieldModifiers(String name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    ParseTreeNode variableDeclaration = mVariableDeclarations.get(name); 
+    if (variableDeclaration != null) {
+      return EnvironmentUtils.getAllModifiers(variableDeclaration);
+    } else {
+      List<Environment> directParents = EnvironmentUtils.getExtendedEnvironments(this, packageMap);
+      if (directParents != null) {
+        Set<TokenType> mods;
+        for(Environment parent : directParents) {
+          mods = parent.getFieldModifiers(name, packageMap);
+          if (mods != null) {
+            return mods;
+          }
+        }
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Searches this environment and its parent environments for the declaration of the given name.
+   * Returns the environment that declares the given name.
+   */
+  public Environment getVariableDeclarationEnvronment(String name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (mVariableDeclarations.get(name) != null) {
+      return this;
+    }
+    List<Environment> directParents = EnvironmentUtils.getExtendedEnvironments(this, packageMap);
+    if (directParents != null) {
+      Environment declEnv;
+      for(Environment parent : directParents) {
+        declEnv = parent.getVariableDeclarationEnvronment(name, packageMap);
+        if (declEnv != null) {
+          return declEnv;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
    * Given a field name returns whether or not this field in this environment is static
    */
   public boolean isFieldStatic(String name) {
@@ -130,6 +175,44 @@ public class Environment {
       }
     }
     return false;
+  }
+
+  /**
+   * Given a method name and signature returns the environment of the corresponding method if
+   * it can be found in this environment or a parent class environment
+   */
+  public Environment getMethodEnvironment(String name, List<String> signature, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if(getEnvironmentType(this) != EnvironmentType.CLASS) {
+      System.out.println("Environment.getMethodEnvironment can only be called on a class environment");
+      return null;
+    }
+    if (mChildrenEnvironments != null) {
+      for(Environment child : mChildrenEnvironments) {
+        if(getEnvironmentType(child) == EnvironmentType.METHOD) {
+          // check this the method name and args list
+          if(mName.equals(name)) {
+            MethodSignature sig = getMethodSignature(child, packageMap, null);
+            if(sig != null) {
+              List<String> paramTypes = sig.parameterTypes;
+              if (paramTypes.isEmpty() && signature.isEmpty() || signature.equals(paramTypes)) {
+                return child;
+              }
+            }
+          }
+        }
+      }
+    }
+    List<Environment> extendedEnvironments = getExtendedEnvironments(this, packageMap);
+    if(extendedEnvironments != null) {
+      Environment foundEnv;
+      for (Environment ext : extendedEnvironments) {
+        foundEnv = ext.getMethodEnvironment(name, signature, packageMap);
+        if(foundEnv != null) {
+          return foundEnv;
+        }
+      }
+    }
+    return null;
   }
 
 	/**

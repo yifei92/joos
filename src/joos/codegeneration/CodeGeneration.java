@@ -393,7 +393,7 @@ public class CodeGeneration {
       }
       case IF_THEN_STATEMENT:
         generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
-        writer.write("  cmp eax 0\n");
+        writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"end\n");
         generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
         writer.write(currentEnvironment.mName+"end:\n");
@@ -401,7 +401,7 @@ public class CodeGeneration {
       case IF_THEN_ELSE_STATEMENT:
       case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
         generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
-        writer.write("  cmp eax 0\n");
+        writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"else\n");
         generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
         writer.write("  je "+currentEnvironment.mName+"end\n");
@@ -413,7 +413,7 @@ public class CodeGeneration {
       case WHILE_STATEMENT_NO_SHORT_IF:
         writer.write(currentEnvironment.mName+"start:\n");
         generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
-        writer.write("  cmp eax 0\n");
+        writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"end\n");
         generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
         writer.write("  je "+currentEnvironment.mName+"start\n");
@@ -433,7 +433,7 @@ public class CodeGeneration {
         generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
         writer.write(currentEnvironment.mName+"start:\n");
         generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
-        writer.write("  cmp eax 0\n");
+        writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"end\n");
         generateForNode(writer, currentEnvironment, node.children.get(8), currentOffsets, currentOffset, externs, packageMap);
         generateForNode(writer, currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs, packageMap);
@@ -448,7 +448,7 @@ public class CodeGeneration {
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
               generateForNode(writer, currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs, packageMap);
-              writer.write("  cmp eax 0\n");
+              writer.write("  cmp eax, 0\n");
               writer.write("  je "+currentEnvironment.mName+"end\n");
             }
           }
@@ -463,7 +463,7 @@ public class CodeGeneration {
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
               generateForNode(writer, currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs, packageMap);
-              writer.write("  cmp eax 1\n");
+              writer.write("  cmp eax, 1\n");
               writer.write("  je "+currentEnvironment.mName+"end\n");
             }
           }

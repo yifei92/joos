@@ -193,7 +193,6 @@ public class TypeChecker {
         // extends the given environment
         Environment typeEnvironment = type.environment;
         if (typeEnvironment != null) {
-          System.out.println("calling getMethodEnvironment on " + typeEnvironment.mName);
           Environment declarationEnvironment = typeEnvironment.getMethodEnvironment(methodName, invocationSignature, packageMap);
           Set<TokenType> modifiers = getEnvironmentModifiers(declarationEnvironment);
           if(modifiers != null && modifiers.contains(TokenType.PROTECTED)) {

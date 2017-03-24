@@ -4,6 +4,7 @@ import joos.commons.ParseTreeNode;
 import joos.commons.TokenType;
 import joos.commons.TerminalToken;
 import joos.exceptions.TypeLinkingException;
+import joos.exceptions.EnvironmentBuilderException;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -15,10 +16,16 @@ import static joos.environment.EnvironmentUtils.findNodesWithTokenType;
 
 public class EnvironmentBuilder {
 
+	private static int nameCounter = 0;
+	private static int getNextNameCount() {
+		nameCounter++;
+		return nameCounter;
+	}
+
 	/**
 	 * Builds the environment tree using the given parse trees for each joos file.
 	 */
-	public static Map<String, Environment> build (List<ParseTreeNode> parseTrees,Map<String,ParseTreeNode> treeMap) throws TypeLinkingException {
+	public static Map<String, Environment> build (List<ParseTreeNode> parseTrees,Map<String,ParseTreeNode> treeMap) throws TypeLinkingException, EnvironmentBuilderException {
 		Map<String, Environment> packageMap = new HashMap<String, Environment>();
 		for (ParseTreeNode parseTree : parseTrees) {
 			ParseTreeNode packageDeclNode = findNodeWithTokenType(parseTree, TokenType.PACKAGE_DECLARATION);
@@ -54,7 +61,7 @@ public class EnvironmentBuilder {
 	 * Traverses the parse tree and adds new child environments (with appropriate scopes and parents)
 	 * as well as new names the given environment.
 	 */
-	private static void traverse (final Environment environment, final ParseTreeNode node, int count) throws TypeLinkingException {
+	private static void traverse (final Environment environment, final ParseTreeNode node, int count) throws TypeLinkingException, EnvironmentBuilderException {
 		if (node == null) return;
 		Environment nextEnvironment = environment;
 
@@ -150,7 +157,7 @@ public class EnvironmentBuilder {
 			case IF_THEN_STATEMENT:
 				ParseTreeNode statementNode = findImmediateNodeWithTokenType(node, TokenType.STATEMENT);
 				// create a new environment for this new block
-				Environment thenEnvironment  = new Environment(environment, statementNode, null);
+				Environment thenEnvironment  = new Environment(environment, statementNode, "then_statement"+getNextNameCount());
 				environment.mChildrenEnvironments.add(thenEnvironment);
 				traverse(thenEnvironment, statementNode, count + 1);
 				return;
@@ -162,8 +169,8 @@ public class EnvironmentBuilder {
 				TokenType elseStatementTokenType = node.token.getType() == TokenType.IF_THEN_ELSE_STATEMENT_NO_SHORT_IF ? TokenType.STATEMENT_NO_SHORT_IF : TokenType.STATEMENT;
 				ParseTreeNode elseStatementNode = findImmediateNodeWithTokenType(node, elseStatementTokenType);
 				// Create new environments for both the if and else statements
-				Environment ifEnvironment  = new Environment(environment, ifStatementNode, null);
-				Environment elseEnvironment  = new Environment(environment, elseStatementNode, null);
+				Environment ifEnvironment  = new Environment(environment, ifStatementNode, "then_statement"+getNextNameCount());
+				Environment elseEnvironment  = new Environment(environment, elseStatementNode, "else_statement"+getNextNameCount());
 				environment.mChildrenEnvironments.add(ifEnvironment);
 				environment.mChildrenEnvironments.add(elseEnvironment);
 				// Traverse the if and else statement nodes with their own environments
@@ -177,7 +184,7 @@ public class EnvironmentBuilder {
 				// get the loop contents node
 				ParseTreeNode loopContentsNode = findImmediateNodeWithTokenType(node, loopContentsTokenType);
 				// create a new environment for the loop contents node
-				Environment statementEnvironment  = new Environment(environment, loopContentsNode, null);
+				Environment statementEnvironment  = new Environment(environment, loopContentsNode, "while_body"+getNextNameCount());
 				environment.mChildrenEnvironments.add(statementEnvironment);
 				// Traverse the loop contents node with its own environment
 				traverse(statementEnvironment, loopContentsNode, count + 1);
@@ -192,7 +199,7 @@ public class EnvironmentBuilder {
 				ParseTreeNode forLoopInitNode = findNodeWithTokenType(node, TokenType.FOR_INIT);
 
 				// create a new environment for the loop contents node
-				Environment forLoopEnvironment  = new Environment(environment, forLoopContentsNode, null);
+				Environment forLoopEnvironment  = new Environment(environment, forLoopContentsNode, "for_body"+getNextNameCount());
 				environment.mChildrenEnvironments.add(forLoopEnvironment);
 				// Traverse the loop contents node and init node with its the forLoopEnvironment
 				traverse(forLoopEnvironment, forLoopContentsNode, count + 1);

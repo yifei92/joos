@@ -7,6 +7,7 @@ import joos.filereader.FileScanner;
 import joos.filereader.JoosFile;
 import joos.commons.*;
 import joos.exceptions.InvalidSyntaxException;
+import joos.exceptions.EnvironmentBuilderException;
 import joos.parser.Parser;
 import joos.scanner.Scanner;
 import joos.staticanalysis.ReachabilityCheck;
@@ -115,6 +116,11 @@ public class Main {
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);
+			return;
+		} catch (EnvironmentBuilderException e) {
+			System.out.println(e.getMessage());
+			System.out.println("Error");
+			System.exit(43);
 			return;
 		}
 

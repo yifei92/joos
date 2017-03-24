@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import joos.exceptions.InvalidSyntaxException;
+import joos.exceptions.EnvironmentBuilderException;
 import joos.commons.MethodSignature;
 import joos.commons.ParseTreeNode;
 import joos.commons.TokenType;
@@ -51,10 +52,13 @@ public class Environment {
 	 * @param  scope  reference to the ParseTreeNode that counts as
 	 * @param  name   name of this Environment (name of the class )
 	 */
-	public Environment(Environment parent, ParseTreeNode scope, String name) {
+	public Environment(Environment parent, ParseTreeNode scope, String name) throws EnvironmentBuilderException {
 		mParent = parent;
 		mScope = scope;
 		mName = name;
+    if (mName == null || mScope == null) {
+      throw new EnvironmentBuilderException("Cannot create a new Environment with a null name or scope");
+    }
 		if(parent==null) {
 			mSingleImports = new ArrayList<>();
 			mOnDemandeImports = new ArrayList<>();

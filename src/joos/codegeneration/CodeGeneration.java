@@ -120,12 +120,17 @@ public class CodeGeneration {
   }
 
   public static void generateForClass(Environment environment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+    if(getEnvironmentType(environment) != EnvironmentType.CLASS) {
+      // We don't need to generate code for interfaces
+      return;
+    }
     String filename = getClassLabel(environment);
     File file = new File(filename + ".s");
     file.createNewFile();
     FileWriter writer = new FileWriter(file);
 
     generateVTable(writer, environment, packageMap);
+    Interfaces.generateInterfaceTable(writer, environment, packageMap);
     for (String key : environment.mVariableToType.keySet()) {
       if (environment.mVariableToType.get(key).modifiers.contains(TokenType.STATIC)) {
         String label = "STATICFIELD$" + getClassLabel(environment) + "$" + key;

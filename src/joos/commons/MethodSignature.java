@@ -1,9 +1,12 @@
 package joos.commons;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import joos.commons.TokenType;
+import joos.environment.Environment;
+import joos.exceptions.InvalidSyntaxException;
 
 public class MethodSignature {
   public String name;
@@ -24,8 +27,7 @@ public class MethodSignature {
    */
   public boolean implementsAbstractMethod(Environment abstractMethod, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if(name.equals(abstractMethod.mName)) {
-      MethodSignature thisSignature = getMethodSignature(this, packageMap, null);
-      MethodSignature otherSignature = getMethodSignature(abstractMethod, packageMap, null);
+      MethodSignature otherSignature = abstractMethod.getMethodSignature(packageMap, null);
       if (parameterTypes == null && otherSignature.parameterTypes == null) {
         return true;
       }

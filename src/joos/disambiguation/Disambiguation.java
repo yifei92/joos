@@ -188,7 +188,7 @@ public class Disambiguation {
       while (getEnvironmentType(env) != EnvironmentType.CLASS) {
         if (
           getEnvironmentType(env) == EnvironmentType.METHOD &&
-          Environment.getMethodSignature(env, packageMap, "").modifiers.contains(TokenType.STATIC)
+          env.getMethodSignature(packageMap, "").modifiers.contains(TokenType.STATIC)
         ) {
           throw new InvalidSyntaxException("Method \"" + name + "\" in " + env.mParent.mName + "." + env.mName + " cannot be accessed without a full qualified name.");
         }
@@ -430,7 +430,7 @@ public class Disambiguation {
       boolean shouldBeStatic = false;
       // if node is in a static environment then shouldBeStatic = true else shouldBeStatic = false
       Environment methodEnvironment = environment.getParentMethodEnvironment();
-      if (methodEnvironment != null && Environment.getMethodSignature(methodEnvironment, packageMap, "").modifiers.contains(TokenType.STATIC)) shouldBeStatic = true;
+      if (methodEnvironment != null && methodEnvironment.getMethodSignature(packageMap, "").modifiers.contains(TokenType.STATIC)) shouldBeStatic = true;
       if (EnvironmentUtils.getEnvironmentType(environment) == EnvironmentType.CLASS) {
         ParseTreeNode fieldDeclarationNode = environment.findVariableDeclarationForUsage(node);
         if (fieldDeclarationNode != null) {

@@ -3,7 +3,7 @@ package joos.codegeneration;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.io.FileWriter;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import joos.commons.MethodSignature;
@@ -11,7 +11,6 @@ import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
 
-import static joos.environment.Environment.getMethodSignature;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 
 public class Interfaces {
@@ -45,14 +44,14 @@ public class Interfaces {
     }
   }
 
-  public static void generateInterfaceTable(FileWriter writer, Environment classEnvironment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  public static void generateInterfaceTable(StringWriter writer, Environment classEnvironment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
     generateInterfacesList(packageMap);
     String className = CodeGeneration.getClassLabel(classEnvironment);
     // list of all methods in this class
     List<Environment> methodList = classEnvironment.getAllMethodEnvironments();
     // list of all interfaces this class should have implemented
     List<Environment> implementedInterfaces = classEnvironment.getAllImplementedEnvironments(packageMap);
-    writer.write("global InterfaceTABLE$" + className + "InterfaceTABLE$" + className + ":\n");
+    writer.write("global InterfaceTABLE$" + className + "\nInterfaceTABLE$" + className + ":\n");
     // Iterate over the global interface list
     for (Environment interfc : mListOfInterfaces) {
       boolean foundImplementation = false;
@@ -60,13 +59,13 @@ public class Interfaces {
         // Check this interface against the interfaces this class implements
         if (interfc == implementedInterface) {
           foundImplementation = true;
-          // this class implements this interface so we should add entries for each of the 
+          // this class implements this interface so we should add entries for each of the
           // implemented methods
           for(Environment abstractMethod: interfc.mChildrenEnvironments) {
             // find the implementation of this method in this class
             for(Environment method : methodList) {
               if(method.implementsAbstractMethod(abstractMethod, packageMap)) {
-                MethodSignature signature = Environment.getMethodSignature(method, packageMap, null);
+                MethodSignature signature = method.getMethodSignature(packageMap, null);
                 writer.write("  dd " + CodeGeneration.getMethodLabel(classEnvironment, signature) + "\n");
               }
             }
@@ -79,11 +78,11 @@ public class Interfaces {
         // for each of the methods in this interface
         if(interfc.mChildrenEnvironments != null) {
           for(Environment abstractMethod : interfc.mChildrenEnvironments) {
-            writer.write("  dd 00000000\n");    
+            writer.write("  dd 00000000\n");
           }
         }
       }
     }
     writer.write("\n");
-  } 
+  }
 }

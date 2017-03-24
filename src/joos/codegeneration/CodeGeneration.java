@@ -687,6 +687,29 @@ public class CodeGeneration {
         }
         return;
       }
+      case FIELD_ACCESS: {
+        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        int offset = getOffsetForField(
+          packageMap.get(node.children.get(0).type.name),
+          ((TerminalToken)node.children.get(2).token).getRawValue(),
+          packageMap
+        ).first;
+        writer.write("  mov eax, [eax + " + offset + "]\n");
+        return;
+      }
+      case ARRAY_ACCESS: {
+        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        writer.write("  push eax\n");
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        writer.write("  add eax, 2\n");
+        writer.write("  mov ebx, 4\n");
+        writer.write("  mul ebx\n");
+        writer.write("  mov ebx, eax\n");
+        writer.write("  pop eax\n");
+        writer.write("  add eax, eab\n");
+        writer.write("  mov eax, [eax]\n");
+        return;
+      }
       case ARRAY_CREATION_EXPRESSION: {
         generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
         writer.write("  push eax\n"); // size

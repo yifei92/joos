@@ -91,7 +91,7 @@ public class Main {
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
 			for (Environment environment : packageMap.values()) {
-				//CodeGeneration.generateForClass(environment, packageMap);
+				CodeGeneration.generateForClass(environment, packageMap);
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
@@ -111,12 +111,12 @@ public class Main {
 			System.out.println("Error");
 			System.exit(42);
 			return;
-		} /*catch (IOException e) {
+		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);
 			return;
-		}*/
+		}
 
 		System.out.println("Success");
 		System.exit(0);

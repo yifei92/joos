@@ -120,6 +120,7 @@ public class Main {
 		} catch (EnvironmentBuilderException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Error");
+			e.printStackTrace();
 			System.exit(43);
 			return;
 		}

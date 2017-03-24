@@ -137,7 +137,8 @@ public class EnvironmentBuilder {
 			case ABSTRACT_METHOD_DECLARATION: // fall through
 			case METHOD_DECLARATION: {
 				// create a new environment for the method.
-				Environment methodEnvironment  = new Environment(environment, node, getMethodName(node));
+				String envName = node.token.getType() == TokenType.BLOCK ? "block" + getNextNameCount() : getMethodName(node);
+				Environment methodEnvironment  = new Environment(environment, node, envName);
 				environment.mChildrenEnvironments.add(methodEnvironment);
 				List<ParseTreeNode> paramVarNodes = new ArrayList<ParseTreeNode>();
 				findFormalParameters(node, paramVarNodes);

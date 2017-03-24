@@ -3,7 +3,7 @@ package joos.codegeneration;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.io.FileWriter;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import joos.commons.MethodSignature;
@@ -36,7 +36,7 @@ public class Interfaces {
     }
   }
 
-  public static void generateInterfaceTable(FileWriter writer, Environment classEnvironment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  public static void generateInterfaceTable(StringWriter writer, Environment classEnvironment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
     generateInterfacesList(packageMap);
     String className = CodeGeneration.getClassLabel(classEnvironment);
     // list of all methods in this class
@@ -51,7 +51,7 @@ public class Interfaces {
         // Check this interface against the interfaces this class implements
         if (interfc == implementedInterface) {
           foundImplementation = true;
-          // this class implements this interface so we should add entries for each of the 
+          // this class implements this interface so we should add entries for each of the
           // implemented methods
           for(Environment abstractMethod: interfc.mChildrenEnvironments) {
             // find the implementation of this method in this class
@@ -70,11 +70,11 @@ public class Interfaces {
         // for each of the methods in this interface
         if(interfc.mChildrenEnvironments != null) {
           for(Environment abstractMethod : interfc.mChildrenEnvironments) {
-            writer.write("  dd 00000000\n");    
+            writer.write("  dd 00000000\n");
           }
         }
       }
     }
     writer.write("\n");
-  } 
+  }
 }

@@ -46,7 +46,7 @@ public class CodeGeneration {
     }
     ret += "METHOD$" + getClassLabel(environment) + "$" + methodSignature.name + "@";
     for (String type : methodSignature.parameterTypes) {
-      ret += type + "#";
+      ret += type.replace("[]", "~") + "#";
     }
     return ret;
   }
@@ -196,11 +196,51 @@ public class CodeGeneration {
     writer.write("\n");
   }
 
+  public static void getDataForStringLiteral(List<Integer> data, ParseTreeNode node) {
+    switch (node.token.getType()) {
+      case ESCAPE: {
+        String value = ((TerminalToken)node.token).getRawValue();
+        int i;
+        switch (value.charAt(0)) {
+          case 't':
+            i = 9;
+            break;
+          case 'b':
+            i = 8;
+            break;
+          case 'n':
+            i = 10;
+            break;
+          case 'r':
+            i = 13;
+            break;
+          default:
+            i = (int)value.charAt(0);
+            break;
+        }
+        data.add(i);
+        break;
+      }
+      case STRING_LITERAL: {
+        String value = ((TerminalToken)node.token).getRawValue();
+        for (int i = 0; i < value.length(); i++) {
+          data.add((int)value.charAt(i));
+        }
+        break;
+      }
+    }
+    if (node.children != null) {
+      for (ParseTreeNode child : node.children) {
+        getDataForStringLiteral(data, child);
+      }
+    }
+  }
+
   public static void generateForConstructor(StringWriter writer, Environment classEnv, Environment constructorEnv, Set<String> externs, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
     List<String> argTypes = constructorEnv.getConstructorSignature(packageMap);
     String label = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
     for (String argType : argTypes) {
-      label += argType + "#";
+      label += argType.replace("[]", "~") + "#";
     }
     writer.write("global " + label + "\n" + label + ":\n");
     Map<String, Pair<Integer, Type>> offsets = new HashMap();
@@ -490,11 +530,37 @@ public class CodeGeneration {
         writer.write("  mov eax, " + ((TerminalToken)node.token).getRawValue() + "\n");
         return;
       case CHAR_LITERAL:
-        writer.write("  mov eax, " + Character.getNumericValue(((TerminalToken)node.token).getRawValue().charAt(0)) + "\n");
+        writer.write("  mov eax, " + (int)((TerminalToken)node.token).getRawValue().charAt(0) + "\n");
         return;
-      case STRING_LITERAL:
-        writer.write("  mov eax, 0\n"); //TODO
+      case STRING_LITERAL_WITH_QUOTES: {
+        List<Integer> list = new ArrayList();
+        getDataForStringLiteral(list, node.children.get(1));
+        int size = list.size();
+        writer.write("  mov eax, " + (size + 2) * 4 + "\n");
+        externs.add("__malloc");
+        writer.write("  call __malloc\n"); // allocate array
+        if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
+          externs.add("VTABLE$java.lang.Object");
+        }
+        writer.write("  mov dword [eax], VTABLE$java.lang.Object\n");
+        writer.write("  mov dword [eax + 4], " + size + "\n");
+        int i = 8;
+        for (int val : list) { // populate array
+          writer.write("  mov dword [eax + " + i + "], " + val + "\n");
+          i += 4;
+        }
+        writer.write("  push eax\n");
+
+        writer.write("  mov eax, 8\n");
+        writer.write("  call __malloc\n"); // allocate string
+        if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.String")) {
+          externs.add("VTABLE$java.lang.String");
+        }
+        writer.write("  mov dword [eax], VTABLE$java.lang.String\n");
+        writer.write("  pop ebx\n");
+        writer.write("  mov dword [eax + 4], ebx\n");
         return;
+      }
       case ESCAPE: {
         String value = ((TerminalToken)node.token).getRawValue();
         switch (value.charAt(0)) {
@@ -511,7 +577,7 @@ public class CodeGeneration {
             writer.write("  mov eax, 13\n");
             return;
           default:
-            writer.write("  mov eax, " + Character.getNumericValue(value.charAt(0)) + "\n");
+            writer.write("  mov eax, " + (int)value.charAt(0) + "\n");
             return;
         }
       }
@@ -624,6 +690,29 @@ public class CodeGeneration {
         }
         return;
       }
+      case FIELD_ACCESS: {
+        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        int offset = getOffsetForField(
+          packageMap.get(node.children.get(0).type.name),
+          ((TerminalToken)node.children.get(2).token).getRawValue(),
+          packageMap
+        ).first;
+        writer.write("  mov eax, [eax + " + offset + "]\n");
+        return;
+      }
+      case ARRAY_ACCESS: {
+        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        writer.write("  push eax\n");
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        writer.write("  add eax, 2\n");
+        writer.write("  mov ebx, 4\n");
+        writer.write("  mul ebx\n");
+        writer.write("  mov ebx, eax\n");
+        writer.write("  pop eax\n");
+        writer.write("  add eax, eab\n");
+        writer.write("  mov eax, [eax]\n");
+        return;
+      }
       case ARRAY_CREATION_EXPRESSION: {
         generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
         writer.write("  push eax\n"); // size
@@ -633,6 +722,9 @@ public class CodeGeneration {
         externs.add("__malloc");
         writer.write("  call __malloc\n"); // eax is pointer to array
         writer.write("  pop ebx\n"); // size
+        if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
+          externs.add("VTABLE$java.lang.Object");
+        }
         writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
         writer.write("  mov dword [eax + 4], ebx\n");
         writer.write("  push eax\n");
@@ -671,7 +763,7 @@ public class CodeGeneration {
         int size = (getFieldList(currentEnvironment, packageMap).size() + 1) * 4;
         String constructorLabel = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
         for (String argType : argTypes) {
-          constructorLabel += argType + "#";
+          constructorLabel += argType.replace("[]", "~") + "#";
         }
         if (classEnv != currentEnvironment.getParentClassEnvironment()) {
           externs.add(constructorLabel);
@@ -682,6 +774,10 @@ public class CodeGeneration {
       }
       case THIS: {
         writer.write("  mov eax, [ebp + 8]\n");
+        return;
+      }
+      case CAST_EXPRESSION: {
+        generateForNode(writer, currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs, packageMap);
         return;
       }
     }

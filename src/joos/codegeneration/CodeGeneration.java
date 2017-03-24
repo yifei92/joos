@@ -101,7 +101,7 @@ public class CodeGeneration {
 
   private static int getVTableOffsetForMethod(Environment environment, MethodSignature methodSignature, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     List<Pair<Environment, MethodSignature>> list = getMethodList(environment, packageMap);
-    int i = 0;
+    int i = Interfaces.getInterfaceTableSize(packageMap);
     for (Pair<Environment, MethodSignature> pair : list) {
       if (pair.second.name.equals(methodSignature.name) && pair.second.parameterTypes.equals(methodSignature.parameterTypes)) return i * 4;
       i++;
@@ -212,6 +212,31 @@ public class CodeGeneration {
     writer.write("\n");
   }
 
+  private static void generateForMethodOffset(
+    FileWriter writer,
+    Environment usageClassEnvironment,
+    MethodSignature methodSignature,
+    Map<String, Environment> packageMap) {
+
+    if (methodSignature.modifiers.contains(TokenType.ABSTRACT)) {
+      List<Environment> implementedInterfaces = classEnvironment.getAllImplementedEnvironments(packageMap);
+      for(Environment interfc : implementedInterfaces) {
+        if (interfc.mChildrenEnvironments != null) {
+          for (Environment abstractMethod : interfc.mChildrenEnvironments) {
+            if (methodSignature.implementsAbstractMethod(abstractMethod, packageMap)) {
+              int offset = Interfaces.getInterfaceOffset(abstractMethod, packageMap);
+              // This is the offset of this method in the interface table
+              writer.write("  add eax, " + offset + "\n");
+              return;
+            }
+          }
+        }
+      }
+    } else {
+      int offset = getVTableOffsetForMethod(environment.getParentClassEnvironment(), methodSignature, packageMap);
+    }
+  }
+
   private static void generateForMethodNode(FileWriter writer, Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
     List<String> argTypes = new ArrayList();
     if (node.children.get(node.children.size() -2).children.size() > 0) {
@@ -223,15 +248,16 @@ public class CodeGeneration {
       }
     }
     if (node.children.size() == 4) {
+      // means name()
       String name = getNameFromTypeNode(node.children.get(0));
       int dotIndex = name.lastIndexOf('.');
       if (dotIndex == -1) {
-        MethodSignature methodSignature = environment.getParentClassEnvironment().getMethodSignatures(packageMap).get(name).get(argTypes);
-        int offset = getVTableOffsetForMethod(environment.getParentClassEnvironment(), methodSignature, packageMap);
+        Environment parentClassEnvironment = environment.getParentClassEnvironment();
+        MethodSignature methodSignature = parentClassEnvironment.getMethodSignatures(packageMap).get(name).get(argTypes);
         writer.write("  mov eax, [ebp + 8]\n"); //this
         writer.write("  push eax\n"); // push this
-        writer.write("  mov eax, [eax]\n"); //VTABLE
-        writer.write("  add eax, " + offset + "\n");
+        writer.write("  mov eax, [eax]\n"); //top of INTERFACETABLE
+        generateForMethodOffset(writer, parentClassEnvironment, methodSignature, packageMap);
         writer.write("  mov eax, [eax]\n");
         return;
       }
@@ -259,8 +285,6 @@ public class CodeGeneration {
       writer.write("  add eax, " + offset + "\n");
       writer.write("  mov eax, [eax]\n");
     }
-
-
   }
 
   private static boolean generateForName(FileWriter writer, Environment environment, String name, Map<String, Pair<Integer, Type>> offsets, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {

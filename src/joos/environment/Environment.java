@@ -34,6 +34,7 @@ public class Environment {
 
 	public List<Environment> mExtendedEnvironments;
 	public List<Environment> mImplementedEnvironments;
+  private List<Environment> mAllImplementedEnvironments;
 	public Set<TokenType> mModifiers;
 	public EnvironmentType mType;
   private Map<String, Map<List<String>, MethodSignature>> mMethodSignatures;
@@ -478,6 +479,44 @@ public class Environment {
         return methodSignatures;
     }
     return null;
+  }
+
+  private List<Environment> getAllImplementedEnvironments(Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (mAllImplementedEnvironments == null) {
+      mAllImplementedEnvironments = getAllImplementedEnvironmentsRecursive(packageMap);
+    } 
+    return mAllImplementedEnvironments
+  }
+
+  /**
+   * Returns a list of every interface environment that is implemented by the given environment.
+   * Recall that interfaces can extend other interfaces
+   */
+  private List<Environment> getAllImplementedEnvironmentsRecursive(Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    List<Environment> implemented = new ArrayList<>();
+    EnvironmentType type = getEnvironmentType(this);
+    if (type == EnvironmentType.INTERFACE) {
+      List<Environment> extended = getExtendedEnvironments(this, packageMap);
+      if (extended != null) {
+        implemented.addAll(extended);
+      }
+    } else if(type == EnvironmentType.CLASS) {
+      List<Environment> impl = getImplementedEnvironments(this, packageMap);
+      if(impl != null) {
+        implemented.addAll(impl);
+      }
+    }
+    if(implemented != null) {
+      List<Environment> parentImplementations = new ArrayList<>();
+      for(Environment parent : implemented) {
+        List<Environment> impls = getAllImplementedEnvironments(parent, packageMap);
+        if (impls != null) {
+          parentImplementations.addAll(impls);
+        }
+      }
+      implemented.addAll(parentImplementations);
+    }
+    return implemented;
   }
 
   public static MethodSignature getMethodSignature(Environment environment, Map<String, Environment> packageMap, String origin) throws InvalidSyntaxException {

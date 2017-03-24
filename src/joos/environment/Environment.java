@@ -34,6 +34,7 @@ public class Environment {
 
 	public List<Environment> mExtendedEnvironments;
 	public List<Environment> mImplementedEnvironments;
+  private List<Environment> mAllImplementedEnvironments;
 	public Set<TokenType> mModifiers;
 	public EnvironmentType mType;
   private Map<String, Map<List<String>, MethodSignature>> mMethodSignatures;
@@ -149,8 +150,8 @@ public class Environment {
    */
   public boolean implementsAbstractMethod(Environment abstractMethod, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if(mName.equals(abstractMethod.mName)) {
-      MethodSignature thisSignature = getMethodSignature(this, packageMap, null);
-      MethodSignature otherSignature = getMethodSignature(abstractMethod, packageMap, null);
+      MethodSignature thisSignature = this.getMethodSignature(packageMap, null);
+      MethodSignature otherSignature = abstractMethod.getMethodSignature(packageMap, null);
       if (thisSignature.parameterTypes == null && otherSignature.parameterTypes == null) {
         return true;
       }
@@ -234,7 +235,7 @@ public class Environment {
         if(getEnvironmentType(child) == EnvironmentType.METHOD || getEnvironmentType(child) == EnvironmentType.ABSTRACT_METHOD) {
           // check this the method name and args list
           if(child.mName.equals(name)) {
-            MethodSignature sig = getMethodSignature(child, packageMap, null);
+            MethodSignature sig = child.getMethodSignature(packageMap, null);
             if(sig != null) {
               List<String> paramTypes = sig.parameterTypes;
               if (paramTypes.isEmpty() && signature.isEmpty() || signature.equals(paramTypes)) {
@@ -368,7 +369,7 @@ public class Environment {
         for (Environment childEnvironment : environment.mChildrenEnvironments) {
           EnvironmentType childType = getEnvironmentType(childEnvironment);
           if (childType == EnvironmentType.METHOD || childType == EnvironmentType.ABSTRACT_METHOD) {
-            MethodSignature methodSignature = getMethodSignature(childEnvironment, packageMap, environment.mName + "." + environment.PackageName);
+            MethodSignature methodSignature = childEnvironment.getMethodSignature(packageMap, environment.mName + "." + environment.PackageName);
             if (methodSignatures.containsKey(methodSignature.name)) {
               if (methodSignatures.get(methodSignature.name).containsKey(methodSignature.parameterTypes)) {
                 throw new InvalidSyntaxException("A class must not declare two methods with the same signature.");
@@ -480,20 +481,58 @@ public class Environment {
     return null;
   }
 
-  public static MethodSignature getMethodSignature(Environment environment, Map<String, Environment> packageMap, String origin) throws InvalidSyntaxException {
-    ParseTreeNode declarator = environment.mScope.children.get(0).children.get(2);
+  public List<Environment> getAllImplementedEnvironments(Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if (mAllImplementedEnvironments == null) {
+      mAllImplementedEnvironments = getAllImplementedEnvironmentsRecursive(packageMap);
+    } 
+    return mAllImplementedEnvironments;
+  }
+
+  /**
+   * Returns a list of every interface environment that is implemented by the given environment.
+   * Recall that interfaces can extend other interfaces
+   */
+  private List<Environment> getAllImplementedEnvironmentsRecursive(Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    List<Environment> implemented = new ArrayList<>();
+    EnvironmentType type = getEnvironmentType(this);
+    if (type == EnvironmentType.INTERFACE) {
+      List<Environment> extended = getExtendedEnvironments(this, packageMap);
+      if (extended != null) {
+        implemented.addAll(extended);
+      }
+    } else if(type == EnvironmentType.CLASS) {
+      List<Environment> impl = getImplementedEnvironments(this, packageMap);
+      if(impl != null) {
+        implemented.addAll(impl);
+      }
+    }
+    if(implemented != null) {
+      List<Environment> parentImplementations = new ArrayList<>();
+      for(Environment parent : implemented) {
+        List<Environment> impls = parent.getAllImplementedEnvironments(packageMap);
+        if (impls != null) {
+          parentImplementations.addAll(impls);
+        }
+      }
+      implemented.addAll(parentImplementations);
+    }
+    return implemented;
+  }
+
+  public MethodSignature getMethodSignature(Map<String, Environment> packageMap, String origin) throws InvalidSyntaxException {
+    ParseTreeNode declarator = mScope.children.get(0).children.get(2);
     List<String> parameterTypes = new ArrayList();
     if (declarator.children.get(2).children.size() > 0) {
       for (ParseTreeNode parameter : declarator.children.get(2).children.get(0).children) {
         if (parameter.token.getType() == TokenType.COMMA) continue;
-        parameterTypes.add(getFullQualifiedNameFromTypeNode(environment, parameter.children.get(0), packageMap));
+        parameterTypes.add(getFullQualifiedNameFromTypeNode(this, parameter.children.get(0), packageMap));
       }
     }
-    ParseTreeNode typeNode = environment.mScope.children.get(0).children.get(1);
-    String type = typeNode.token.getType() == TokenType.VOID ? "void" : getFullQualifiedNameFromTypeNode(environment, typeNode, packageMap);
-    Set<TokenType> modifiers = new HashSet(getEnvironmentModifiers(environment));
-    if (getEnvironmentType(environment) == EnvironmentType.ABSTRACT_METHOD) modifiers.add(TokenType.ABSTRACT);
-    return new MethodSignature(environment.mName, type, parameterTypes, modifiers, origin);
+    ParseTreeNode typeNode = mScope.children.get(0).children.get(1);
+    String type = typeNode.token.getType() == TokenType.VOID ? "void" : getFullQualifiedNameFromTypeNode(this, typeNode, packageMap);
+    Set<TokenType> modifiers = new HashSet(getEnvironmentModifiers(this));
+    if (getEnvironmentType(this) == EnvironmentType.ABSTRACT_METHOD) modifiers.add(TokenType.ABSTRACT);
+    return new MethodSignature(mName, type, parameterTypes, modifiers, origin);
   }
 
 	public Environment getParentMethodEnvironment() {

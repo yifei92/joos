@@ -410,37 +410,6 @@ public class EnvironmentUtils {
 		return moveUpToClassEnvironment(environment.mParent);
 	}
 
-	/**
-	 * Returns a list of every interface environment that is implemented by the given environment.
-	 * Recall that interfaces can extend other interfaces
-	 */
-	public static List<Environment> getAllImplementedEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-		List<Environment> implemented = new ArrayList<>();
-		EnvironmentType type = getEnvironmentType(environment);
-		if (type == EnvironmentType.INTERFACE) {
-			List<Environment> extended = getExtendedEnvironments(environment, packageMap);
-			if (extended != null) {
-				implemented.addAll(extended);
-			}
-		} else if(type == EnvironmentType.CLASS) {
-			List<Environment> impl = getImplementedEnvironments(environment, packageMap);
-			if(impl != null) {
-				implemented.addAll(impl);
-			}
-		}
-		if(implemented != null) {
-			List<Environment> parentImplementations = new ArrayList<>();
-			for(Environment parent : implemented) {
-				List<Environment> impls = getAllImplementedEnvironments(parent, packageMap);
-				if (impls != null) {
-					parentImplementations.addAll(impls);
-				}
-			}
-			implemented.addAll(parentImplementations);
-		}
-		return implemented;
-	}
-
 	public static List<Environment> getImplementedEnvironments(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
 		if (environment.mImplementedEnvironments != null) return environment.mImplementedEnvironments;
 		if (environment.mScope == null) return null;

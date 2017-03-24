@@ -11,9 +11,7 @@ import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
 
-import static joos.environment.Environment.getMethodSignature;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
-import static joos.environment.EnvironmentUtils.getAllImplementedEnvironments;
 
 public class Interfaces {
 
@@ -21,6 +19,16 @@ public class Interfaces {
    * List of all of the interfaces in our program
    */
   private static List<Environment> mListOfInterfaces = null;
+
+  public static int getInterfaceOffset(Environment interfaceEnvironment, Map<String, Environment> packageMap) {
+    generateInterfacesList(packageMap);
+    return mListOfInterfaces.indexOf(interfaceEnvironment);
+  }
+
+  public static int getInterfaceTableSize(Map<String, Environment> packageMap) {
+    generateInterfacesList(packageMap);
+    return mListOfInterfaces.size();
+  }
 
   private static void generateInterfacesList(Map<String, Environment> packageMap) {
     if (mListOfInterfaces != null) {
@@ -42,8 +50,8 @@ public class Interfaces {
     // list of all methods in this class
     List<Environment> methodList = classEnvironment.getAllMethodEnvironments();
     // list of all interfaces this class should have implemented
-    List<Environment> implementedInterfaces = getAllImplementedEnvironments(classEnvironment, packageMap);
-    writer.write("global InterfaceTABLE$" + className + "InterfaceTABLE$" + className + ":\n");
+    List<Environment> implementedInterfaces = classEnvironment.getAllImplementedEnvironments(packageMap);
+    writer.write("global InterfaceTABLE$" + className + "\nInterfaceTABLE$" + className + ":\n");
     // Iterate over the global interface list
     for (Environment interfc : mListOfInterfaces) {
       boolean foundImplementation = false;
@@ -57,7 +65,7 @@ public class Interfaces {
             // find the implementation of this method in this class
             for(Environment method : methodList) {
               if(method.implementsAbstractMethod(abstractMethod, packageMap)) {
-                MethodSignature signature = Environment.getMethodSignature(method, packageMap, null);
+                MethodSignature signature = method.getMethodSignature(packageMap, null);
                 writer.write("  dd " + CodeGeneration.getMethodLabel(classEnvironment, signature) + "\n");
               }
             }

@@ -4,7 +4,8 @@ import B.B;
 import C.C;
 
 protected class A {
-  A(B b) {
+  A() {
+    B b = new C();
     b.func();
   }
 }

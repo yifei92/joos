@@ -1,0 +1,3 @@
+global VTABLE$B.B
+VTABLE$B.B:
+

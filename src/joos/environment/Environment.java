@@ -182,13 +182,13 @@ public class Environment {
    * it can be found in this environment or a parent class environment
    */
   public Environment getMethodEnvironment(String name, List<String> signature, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    if(getEnvironmentType(this) != EnvironmentType.CLASS) {
+    if(getEnvironmentType(this) != EnvironmentType.CLASS && getEnvironmentType(this) != EnvironmentType.INTERFACE) {
       System.out.println("Environment.getMethodEnvironment can only be called on a class environment");
       return null;
     }
     if (mChildrenEnvironments != null) {
       for(Environment child : mChildrenEnvironments) {
-        if(getEnvironmentType(child) == EnvironmentType.METHOD) {
+        if(getEnvironmentType(child) == EnvironmentType.METHOD || getEnvironmentType(child) == EnvironmentType.ABSTRACT_METHOD) {
           // check this the method name and args list
           if(child.mName.equals(name)) {
             MethodSignature sig = getMethodSignature(child, packageMap, null);

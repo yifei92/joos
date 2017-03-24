@@ -192,9 +192,6 @@ public class TypeChecker {
         // check if this type.name is protected in type.environment and if so whether or not type.environment
         // extends the given environment
         Environment typeEnvironment = type.environment;
-        if (typeEnvironment == null) {
-          typeEnvironment = getEnvironmentFromTypeName(classEnvironment, type.name, packageMap);
-        }
         if (typeEnvironment != null) {
           Environment declarationEnvironment = typeEnvironment.getMethodEnvironment(methodName, invocationSignature, packageMap);
           Set<TokenType> modifiers = getEnvironmentModifiers(declarationEnvironment);

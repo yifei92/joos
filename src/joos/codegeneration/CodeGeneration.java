@@ -227,6 +227,7 @@ public class CodeGeneration {
         writer.write("  push eax\n"); // push this
         writer.write("  mov eax, [eax]\n"); //VTABLE
         writer.write("  add eax, " + offset + "\n");
+        writer.write("  mov eax, [eax]\n");
         return;
       }
       String prefix = name.substring(0, dotIndex);
@@ -241,6 +242,7 @@ public class CodeGeneration {
         writer.write("  push eax\n"); //push new this
         writer.write("  mov eax, [eax]\n"); //VTABLE
         writer.write("  add eax, " + offset + "\n");
+        writer.write("  mov eax, [eax]\n");
       }
     } else {
       generateForNode(writer, environment, node.children.get(0), offsets, currentOffset, packageMap);
@@ -250,6 +252,7 @@ public class CodeGeneration {
       writer.write("  push eax\n"); //push new this
       writer.write("  mov eax, [eax]\n"); //VTABLE
       writer.write("  add eax, " + offset + "\n");
+      writer.write("  mov eax, [eax]\n");
     }
 
 
@@ -444,6 +447,71 @@ public class CodeGeneration {
             writer.write("  mov eax, " + Character.getNumericValue(value.charAt(0)) + "\n");
             return;
         }
+      }
+      case VARIABLE_DECLARATOR: {
+        if (node.children.size() == 3) {
+          generateForNode(node.children.get(2));
+          if (node.children.get(0).children.get(0).token.getType() == TokenType.IDENTIFIER) {
+            String var = ((TerminalToken)node.children.get(0).children.get(0).token).getRawValue();
+            writer.write("  mov dword [ebp - " + currentOffsets.get(var).first + "], eax\n");
+          } else {
+            //TODO array
+          }
+        }
+        return;
+      }
+      case ASSIGNMENT: {
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, packageMap);
+        switch (node.children.get(0).children.get(0).token.getType()) {
+          case NAME: {
+            String name = getNameFromTypeNode(node.children.get(0).children.get(0));
+            int dotIndex = name.lastIndexOf('.');
+            if (dotIndex == -1) {
+              if (currentOffsets.containsKey(name)) {
+                writer.write("  mov dword [ebp - " + currentOffsets.get(name).first + "], eax\n");
+              } else {
+                writer.write("  mov ebx, eax\n");
+                writer.write("  mov eax, [ebp + 8]\n");
+                writer.write("  mov dword [eax + " + getOffsetForField(currentEnvironment.getParentClassEnvironment(), name, packageMap) + "], ebx\n");
+                writer.write("  mov eax, ebx\n");
+              }
+            } else {
+              writer.write("  mov ebx, eax\n");
+              generateForName(
+                writer,
+                currentEnvironment,
+                name.substring(0, dotIndex),
+                currentOffsets,
+                packageMap
+              );
+              writer.write("  mov dword [eax + ], ebx\n"); // TODO
+              writer.write("  mov eax, ebx\n");
+            }
+            break;
+          }
+          case FIELD_ACCESS: {
+            String fieldName = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
+            writer.write("  push eax\n");
+            generateForNode(writer, currentEnvironment, node.children.get(0).children.get(0).children.get(0), currentOffsets, currentOffset, packageMap);
+            writer.write("  pop ebx\n");
+            int offset = getOffsetForField(
+              getEnvironmentFromTypeName(
+                environment,
+                node.children.get(0).children.get(0).children.get(0).type.name,
+                packageMap
+              ),
+              fieldName,
+              packageMap
+            );
+            writer.write("  mov dword [eax + " + offset + "], ebx\n");
+            writer.write("  mov eax, ebx\n");
+            break;
+          }
+          case ARRAY_ACCESS:
+            //TODO
+            break;
+        }
+        return;
       }
       case CLASS_INSTANCE_CREATION_EXPRESSION: {
         int numArgs = 0;

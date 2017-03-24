@@ -145,6 +145,26 @@ public class Environment {
   }
 
   /**
+   * Returns true if this METHOD environment implements the given ABSTRACT_METHOD
+   */
+  public boolean implementsAbstractMethod(Environment abstractMethod, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if(mName.equals(abstractMethod.mName)) {
+      MethodSignature thisSignature = getMethodSignature(this, packageMap, null);
+      MethodSignature otherSignature = getMethodSignature(abstractMethod, packageMap, null);
+      if (thisSignature.parameterTypes == null && otherSignature.parameterTypes == null) {
+        return true;
+      }
+      if (thisSignature.parameterTypes.isEmpty() && otherSignature.parameterTypes.isEmpty()) {
+        return true;
+      }
+      if (thisSignature.parameterTypes.equals(otherSignature.parameterTypes)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Returns true if this environment is a child of the given environment
    */
   public boolean extendsEnvironment(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
@@ -179,6 +199,25 @@ public class Environment {
       }
     }
     return false;
+  }
+
+  /**
+   * Returns all of the method environments in this class (not for parent classes)
+   */
+  public List<Environment> getAllMethodEnvironments() {
+    if (getEnvironmentType(this) != EnvironmentType.CLASS) {
+      System.out.println("getAllMethodEnvironments can only be called on a class environment!");
+      return null;
+    }
+    List<Environment> methods = new ArrayList<>();
+    if(mChildrenEnvironments != null) {
+      for(Environment child : mChildrenEnvironments) {
+        if (getEnvironmentType(child) == EnvironmentType.METHOD) {
+          methods.add(child);
+        }
+      }
+    }
+    return methods;
   }
 
   /**

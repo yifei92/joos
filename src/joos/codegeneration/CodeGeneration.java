@@ -37,7 +37,7 @@ class Pair<T1, T2> {
 }
 
 public class CodeGeneration {
-  private static String getMethodLabel(Environment environment, MethodSignature methodSignature) {
+  public static String getMethodLabel(Environment environment, MethodSignature methodSignature) {
     String ret = "";
     if (methodSignature.modifiers.contains(TokenType.STATIC)) {
       ret += "STATIC";
@@ -49,7 +49,7 @@ public class CodeGeneration {
     return ret;
   }
 
-  private static String getClassLabel(Environment environment) {
+  public static String getClassLabel(Environment environment) {
     String ret = "";
     if (environment.PackageName.length() > 0) {
       ret += environment.PackageName + ".";
@@ -120,12 +120,17 @@ public class CodeGeneration {
   }
 
   public static void generateForClass(Environment environment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+    if(getEnvironmentType(environment) != EnvironmentType.CLASS) {
+      // We don't need to generate code for interfaces
+      return;
+    }
     String filename = getClassLabel(environment);
     File file = new File(filename + ".s");
     file.createNewFile();
     FileWriter writer = new FileWriter(file);
 
     generateVTable(writer, environment, packageMap);
+    Interfaces.generateInterfaceTable(writer, environment, packageMap);
     for (String key : environment.mVariableToType.keySet()) {
       if (environment.mVariableToType.get(key).modifiers.contains(TokenType.STATIC)) {
         String label = "STATICFIELD$" + getClassLabel(environment) + "$" + key;

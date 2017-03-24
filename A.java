@@ -1,10 +1,6 @@
 package A;
 
-import B.B;
-import C.C;
-
-protected class A {
-  A(B b) {
-    b.func();
-  }
+public interface A {
+  public void funca();
+  public void funca2();
 }

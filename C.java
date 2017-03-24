@@ -8,4 +8,13 @@ public class C implements B{
   public void func() {
 
   }
+  public void func2() {
+
+  }
+  public void funca() {
+
+  }
+  public void funca2() {
+
+  }
 }

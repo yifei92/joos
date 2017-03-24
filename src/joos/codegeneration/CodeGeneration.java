@@ -230,16 +230,19 @@ public class CodeGeneration {
 
   private static void generateForMethodOffset(
     StringWriter writer,
-    Environment usageClassEnvironment,
+    Environment typeEnvironment,
     MethodSignature methodSignature,
     Map<String, Environment> packageMap)  throws IOException, InvalidSyntaxException {
-
-    if (methodSignature.modifiers.contains(TokenType.ABSTRACT)) {
-      List<Environment> implementedInterfaces = usageClassEnvironment.getAllImplementedEnvironments(packageMap);
+    if (getEnvironmentType(typeEnvironment) == EnvironmentType.INTERFACE) {
+      // get all of the interfaces that this interface may have extended (including itself)
+      List<Environment> implementedInterfaces = typeEnvironment.getAllImplementedEnvironments(packageMap);
+      implementedInterfaces.add(typeEnvironment);
       for(Environment interfc : implementedInterfaces) {
         if (interfc.mChildrenEnvironments != null) {
           for (Environment abstractMethod : interfc.mChildrenEnvironments) {
-            if (methodSignature.implementsAbstractMethod(abstractMethod, packageMap)) {
+            if (methodSignature.equals(abstractMethod, packageMap)) {
+              // We have found the environment of the abstract method that is being invoked
+              // We can search for this environment in the global interfaces table
               int offset = Interfaces.getInterfaceOffset(abstractMethod, packageMap);
               // This is the offset of this method in the interface table
               writer.write("  add eax, " + offset + "\n");
@@ -249,7 +252,7 @@ public class CodeGeneration {
         }
       }
     } else {
-      int offset = getVTableOffsetForMethod(usageClassEnvironment, methodSignature, packageMap);
+      int offset = getVTableOffsetForMethod(typeEnvironment, methodSignature, packageMap);
       writer.write("  add eax, " + offset + "\n");
       return;
     }
@@ -270,12 +273,12 @@ public class CodeGeneration {
       String name = getNameFromTypeNode(node.children.get(0));
       int dotIndex = name.lastIndexOf('.');
       if (dotIndex == -1) {
-        Environment usageClassEnvironment = environment.getParentClassEnvironment();
-        MethodSignature methodSignature = usageClassEnvironment.getMethodSignatures(packageMap).get(name).get(argTypes);
+        Environment typeEnvironment = environment.getParentClassEnvironment();
+        MethodSignature methodSignature = typeEnvironment.getMethodSignatures(packageMap).get(name).get(argTypes);
         writer.write("  mov eax, [ebp + 8]\n"); //this
         writer.write("  push eax\n"); // push this
         writer.write("  mov eax, [eax]\n"); //top of INTERFACETABLE
-        generateForMethodOffset(writer, usageClassEnvironment, methodSignature, packageMap);
+        generateForMethodOffset(writer, typeEnvironment, methodSignature, packageMap);
         writer.write("  mov eax, [eax]\n");
         return;
       }
@@ -292,22 +295,22 @@ public class CodeGeneration {
         writer.write("  mov eax, " + label + "\n");
       } else {
         // a.b.c()
-        Environment usageClassEnvironment = node.children.get(0).type.environment;
-        MethodSignature methodSignature = usageClassEnvironment.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
+        Environment typeEnvironment = node.children.get(0).type.environment;
+        MethodSignature methodSignature = typeEnvironment.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
         writer.write("  push eax\n"); //push new this
         writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
-        generateForMethodOffset(writer, usageClassEnvironment, methodSignature, packageMap);
+        generateForMethodOffset(writer, typeEnvironment, methodSignature, packageMap);
         writer.write("  mov eax, [eax]\n");
       }
     } else {
       // primary.c()
       generateForNode(writer, environment, node.children.get(0), offsets, currentOffset, externs, packageMap);
       String name = ((TerminalToken)findNodeWithTokenType(node.children.get(2), TokenType.IDENTIFIER).token).getRawValue();
-      Environment usageClassEnvironment = node.children.get(0).type.environment;
-      MethodSignature methodSignature = usageClassEnvironment.getMethodSignatures(packageMap).get(name).get(argTypes);
+      Environment typeEnvironment = node.children.get(0).type.environment;
+      MethodSignature methodSignature = typeEnvironment.getMethodSignatures(packageMap).get(name).get(argTypes);
       writer.write("  push eax\n"); //push new this
       writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
-      generateForMethodOffset(writer, usageClassEnvironment, methodSignature, packageMap);
+      generateForMethodOffset(writer, typeEnvironment, methodSignature, packageMap);
       writer.write("  mov eax, [eax]\n");
     }
   }

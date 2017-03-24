@@ -213,7 +213,7 @@ public class Environment {
     List<Environment> methods = new ArrayList<>();
     if(mChildrenEnvironments != null) {
       for(Environment child : mChildrenEnvironments) {
-        if (getEnvironmentType(child) == EnvironmentType.METHOD) {
+        if (getEnvironmentType(child) == EnvironmentType.METHOD || getEnvironmentType(child) == EnvironmentType.ABSTRACT_METHOD) {
           methods.add(child);
         }
       }

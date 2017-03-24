@@ -19,15 +19,40 @@ public class Interfaces {
    * List of all of the interfaces in our program
    */
   private static List<Environment> mListOfInterfaces = null;
+  private static int mInterfaceTableSize = -1;
 
-  public static int getInterfaceOffset(Environment interfaceEnvironment, Map<String, Environment> packageMap) {
+  public static int getInterfaceOffset(Environment methodEnvironment, Map<String, Environment> packageMap) {
     generateInterfacesList(packageMap);
-    return mListOfInterfaces.indexOf(interfaceEnvironment);
+    int offset = 0;
+    for(Environment interfc : mListOfInterfaces) {
+      if (interfc.mChildrenEnvironments != null) {
+        for(Environment method : interfc.mChildrenEnvironments) {
+          if (methodEnvironment == method) {
+            break;
+          }
+          offset += 4;
+        }
+      }
+    }
+    return offset;
   }
 
+  /**
+   * Returns the size of the interface table in 32 byte chunks
+   * @param  packageMap [description]
+   * @return            [description]
+   */
   public static int getInterfaceTableSize(Map<String, Environment> packageMap) {
     generateInterfacesList(packageMap);
-    return mListOfInterfaces.size();
+    if (mInterfaceTableSize == -1) {
+      mInterfaceTableSize = 0;
+      for(Environment interfc : mListOfInterfaces) {
+        if(interfc.mChildrenEnvironments!= null) {
+          mInterfaceTableSize+=interfc.mChildrenEnvironments.size();
+        }
+      }
+    }
+    return mInterfaceTableSize;
   }
 
   private static void generateInterfacesList(Map<String, Environment> packageMap) {

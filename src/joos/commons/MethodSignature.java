@@ -25,9 +25,9 @@ public class MethodSignature {
   /**
    * Returns true if this METHOD environment implements the given ABSTRACT_METHOD
    */
-  public boolean implementsAbstractMethod(Environment abstractMethod, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    if(name.equals(abstractMethod.mName)) {
-      MethodSignature otherSignature = abstractMethod.getMethodSignature(packageMap, null);
+  public boolean equals(Environment methodEnvironment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+    if(name.equals(methodEnvironment.mName)) {
+      MethodSignature otherSignature = methodEnvironment.getMethodSignature(packageMap, null);
       if (parameterTypes == null && otherSignature.parameterTypes == null) {
         return true;
       }

@@ -37,7 +37,7 @@ class Pair<T1, T2> {
 }
 
 public class CodeGeneration {
-  private static String getMethodLabel(Environment environment, MethodSignature methodSignature) {
+  public static String getMethodLabel(Environment environment, MethodSignature methodSignature) {
     String ret = "";
     if (methodSignature.modifiers.contains(TokenType.STATIC)) {
       ret += "STATIC";
@@ -49,7 +49,7 @@ public class CodeGeneration {
     return ret;
   }
 
-  private static String getClassLabel(Environment environment) {
+  public static String getClassLabel(Environment environment) {
     String ret = "";
     if (environment.PackageName.length() > 0) {
       ret += environment.PackageName + ".";

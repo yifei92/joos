@@ -147,11 +147,11 @@ public class Environment {
   /**
    * Returns true if this METHOD environment implements the given ABSTRACT_METHOD
    */
-  public boolean implementsAbstractMethod(Environment abstractMethod, Map<String, Environment> packageMap) {
+  public boolean implementsAbstractMethod(Environment abstractMethod, Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if(mName.equals(abstractMethod.mName)) {
-      MethodSignature thisSignature = getMethodSignature(environment, packageMap, null);
+      MethodSignature thisSignature = getMethodSignature(this, packageMap, null);
       MethodSignature otherSignature = getMethodSignature(abstractMethod, packageMap, null);
-      if (thisSignature.parameterTypes == null && otherSignature.parameterTypes) {
+      if (thisSignature.parameterTypes == null && otherSignature.parameterTypes == null) {
         return true;
       }
       if (thisSignature.parameterTypes.isEmpty() && otherSignature.parameterTypes.isEmpty()) {

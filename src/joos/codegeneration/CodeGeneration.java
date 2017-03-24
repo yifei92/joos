@@ -455,9 +455,9 @@ public class CodeGeneration {
       }
       case VARIABLE_DECLARATOR: {
         if (node.children.size() == 3) {
-          generateForNode(node.children.get(2));
-          if (node.children.get(0).children.get(0).token.getType() == TokenType.IDENTIFIER) {
-            String var = ((TerminalToken)node.children.get(0).children.get(0).token).getRawValue();
+          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, packageMap);
+          if (node.children.get(0).token.getType() == TokenType.IDENTIFIER) {
+            String var = ((TerminalToken)node.children.get(0).token).getRawValue();
             writer.write("  mov dword [ebp - " + currentOffsets.get(var).first + "], eax\n");
           } else {
             //TODO array
@@ -518,6 +518,14 @@ public class CodeGeneration {
         }
         return;
       }
+      case ARRAY_CREATION_EXPRESSION: {
+        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, packageMap);
+        writer.write("  mul eax, 4\n");
+        writer.write("  push eax\n");
+        writer.write("  call __malloc\n");
+
+        return;
+      }
       case CLASS_INSTANCE_CREATION_EXPRESSION: {
         int numArgs = 0;
         List<String> argTypes = new ArrayList();
@@ -531,8 +539,8 @@ public class CodeGeneration {
           }
         }
         writer.write("  push 0\n");
-        Environment classEnv = getEnvironmentFromTypeNode(environment, node.children.get(1), packageMap);
-        int size = (getFieldList(environment, packageMap).size() + 1) * 4;
+        Environment classEnv = getEnvironmentFromTypeNode(currentEnvironment, node.children.get(1), packageMap);
+        int size = (getFieldList(currentEnvironment, packageMap).size() + 1) * 4;
         String constructorLabel = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
         for (String argType : argTypes) {
           constructorLabel += argType + "#";

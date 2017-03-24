@@ -85,9 +85,11 @@ public class TypeLinking {
                         break;
                     }
                     Boolean find=false;
+                    String importname="";
                     for(String key:environment.mSingleImports){
                         if(key.substring(key.lastIndexOf(".")+1,key.length()).equals(name)){
                             if(find){
+                                importname=key;
                                 throw new TypeLinkingException("type already import by another packege");
                             }
                             else{
@@ -96,7 +98,7 @@ public class TypeLinking {
                         }
                     }
                     if(find){
-                        current.type=new Type(packgequalifedName);
+                        current.type=new Type(importname);
                         break;
                     }
 

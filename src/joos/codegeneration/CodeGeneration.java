@@ -543,8 +543,6 @@ public class CodeGeneration {
       case EQUALITY_EXPRESSION: {
         if(node.children.size() == 1) {
           generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
-        } else if(node.children.get(1).token.getType() == TokenType.INSTANCEOF) {
-          //TODO: dis gon b some wierd shit
         } else {
           // Generate code for lhs
           // assume result is in eax

@@ -15,13 +15,21 @@ import static joos.environment.EnvironmentUtils.getEnvironmentType;
 
 public class Interfaces {
 
+  Map<String, Environment> packageMap;
+  StringWriter writer;
+
+  public Interfaces(Map<String, Environment> packageMap, StringWriter writer) {
+    this.packageMap = packageMap;
+    this.writer = writer;
+  }
+
   /**
    * List of all of the interfaces in our program
    */
   private static List<Environment> mListOfInterfaces = null;
   private static int mInterfaceTableSize = -1;
 
-  public static int getInterfaceOffset(Environment methodEnvironment, Map<String, Environment> packageMap) {
+  public int getInterfaceOffset(Environment methodEnvironment) {
     generateInterfacesList(packageMap);
     int offset = 0;
     for(Environment interfc : mListOfInterfaces) {
@@ -39,10 +47,8 @@ public class Interfaces {
 
   /**
    * Returns the size of the interface table in 32 byte chunks
-   * @param  packageMap [description]
-   * @return            [description]
    */
-  public static int getInterfaceTableSize(Map<String, Environment> packageMap) {
+  public int getInterfaceTableSize(Map<String, Environment> packageMap) {
     generateInterfacesList(packageMap);
     if (mInterfaceTableSize == -1) {
       mInterfaceTableSize = 0;
@@ -55,7 +61,7 @@ public class Interfaces {
     return mInterfaceTableSize;
   }
 
-  private static void generateInterfacesList(Map<String, Environment> packageMap) {
+  private void generateInterfacesList(Map<String, Environment> packageMap) {
     if (mListOfInterfaces != null) {
       return;
     }
@@ -69,9 +75,9 @@ public class Interfaces {
     }
   }
 
-  public static void generateInterfaceTable(StringWriter writer, Environment classEnvironment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  public void generateInterfaceTable(Environment classEnvironment) throws IOException, InvalidSyntaxException {
     generateInterfacesList(packageMap);
-    String className = CodeGeneration.getClassLabel(classEnvironment);
+    String className = Utils.getClassLabel(classEnvironment);
     // list of all methods in this class
     List<Environment> methodList = classEnvironment.getAllMethodEnvironments();
     // list of all interfaces this class should have implemented
@@ -91,7 +97,7 @@ public class Interfaces {
             for(Environment method : methodList) {
               if(method.implementsAbstractMethod(abstractMethod, packageMap)) {
                 MethodSignature signature = method.getMethodSignature(packageMap, null);
-                writer.write("  dd " + CodeGeneration.getMethodLabel(classEnvironment, signature) + "\n");
+                writer.write("  dd " + Utils.getMethodLabel(classEnvironment, signature) + "\n");
               }
             }
           }

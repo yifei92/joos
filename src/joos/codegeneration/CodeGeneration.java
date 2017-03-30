@@ -39,32 +39,23 @@ class Pair<T1, T2> {
 }
 
 public class CodeGeneration {
-  public static String getMethodLabel(Environment environment, MethodSignature methodSignature) {
-    String ret = "";
-    if (methodSignature.modifiers.contains(TokenType.STATIC)) {
-      ret += "STATIC";
-    }
-    ret += "METHOD$" + getClassLabel(environment) + "$" + methodSignature.name + "@";
-    for (String type : methodSignature.parameterTypes) {
-      ret += type.replace("[]", "~") + "#";
-    }
-    return ret;
+
+  private Map<String, Environment> packageMap;
+  private StringWriter writer;
+  private Interfaces interfacesGenerator;
+
+  public CodeGeneration(Map<String, Environment> packageMap, StringWriter writer) {
+    this.packageMap = packageMap;
+    this.writer = writer;
+    this.interfacesGenerator = new Interfaces(packageMap, writer);
   }
 
-  public static String getClassLabel(Environment environment) {
-    String ret = "";
-    if (environment.PackageName.length() > 0) {
-      ret += environment.PackageName + ".";
-    }
-    return ret + environment.mName;
-  }
-
-  private static List<Pair<Type, String>> getFieldList(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+  private List<Pair<Type, String>> getFieldList(Environment environment) throws InvalidSyntaxException {
     List<Pair<Type, String>> list = new ArrayList();
     Environment classEnv = environment.getParentClassEnvironment();
     List<Environment> extendedEnvironments = getExtendedEnvironments(classEnv, packageMap);
     if (extendedEnvironments != null && extendedEnvironments.size() > 0) {
-      list.addAll(getFieldList(extendedEnvironments.get(0), packageMap));
+      list.addAll(getFieldList(extendedEnvironments.get(0)));
     }
 
     for (String field : classEnv.mVariableDeclarations.keySet()) {
@@ -74,11 +65,11 @@ public class CodeGeneration {
     return list;
   }
 
-  private static List<Pair<Environment, MethodSignature>> getMethodList(Environment environment, Map<String, Environment> packageMap) throws InvalidSyntaxException {
+  private List<Pair<Environment, MethodSignature>> getMethodList(Environment environment) throws InvalidSyntaxException {
     List<Pair<Environment, MethodSignature>> list = new ArrayList();
     List<Environment> extendedEnvironments = getExtendedEnvironments(environment, packageMap);
     if (extendedEnvironments != null && extendedEnvironments.size() > 0) {
-      list.addAll(getMethodList(extendedEnvironments.get(0), packageMap));
+      list.addAll(getMethodList(extendedEnvironments.get(0)));
     }
 
     for (Environment child : environment.mChildrenEnvironments) {
@@ -101,9 +92,9 @@ public class CodeGeneration {
     return list;
   }
 
-  private static int getVTableOffsetForMethod(Environment environment, MethodSignature methodSignature, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    List<Pair<Environment, MethodSignature>> list = getMethodList(environment, packageMap);
-    int i = Interfaces.getInterfaceTableSize(packageMap);
+  private int getVTableOffsetForMethod(Environment environment, MethodSignature methodSignature) throws InvalidSyntaxException {
+    List<Pair<Environment, MethodSignature>> list = getMethodList(environment);
+    int i = interfacesGenerator.getInterfaceTableSize(packageMap);
     for (Pair<Environment, MethodSignature> pair : list) {
       if (pair.second.name.equals(methodSignature.name) && pair.second.parameterTypes.equals(methodSignature.parameterTypes)) return i * 4;
       i++;
@@ -111,8 +102,8 @@ public class CodeGeneration {
     return -1;
   }
 
-  private static Pair<Integer, Type> getOffsetForField(Environment environment, String field, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    List<Pair<Type, String>> list = getFieldList(environment, packageMap);
+  private Pair<Integer, Type> getOffsetForField(Environment environment, String field) throws InvalidSyntaxException {
+    List<Pair<Type, String>> list = getFieldList(environment);
     int i = 0;
     for (Pair<Type, String> pair : list) {
       if (pair.second.equals(field)) return new Pair((i + 1) * 4, pair.first);
@@ -121,36 +112,35 @@ public class CodeGeneration {
     return null;
   }
 
-  public static void generateForClass(Environment environment, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  public void generateForClass(Environment environment) throws IOException, InvalidSyntaxException {
     if(getEnvironmentType(environment) != EnvironmentType.CLASS) {
       // We don't need to generate code for interfaces
       return;
     }
-    StringWriter writer = new StringWriter();
     Set<String> externs = new HashSet();
 
-    Interfaces.generateInterfaceTable(writer, environment, packageMap);
-    generateVTable(writer, environment, externs, packageMap);
+    interfacesGenerator.generateInterfaceTable(environment);
+    generateVTable(environment, externs);
     for (String key : environment.mVariableToType.keySet()) {
       if (environment.mVariableToType.get(key).modifiers.contains(TokenType.STATIC)) {
-        String label = "STATICFIELD$" + getClassLabel(environment) + "$" + key;
+        String label = "STATICFIELD$" + Utils.getClassLabel(environment) + "$" + key;
         writer.write("global " + label + "\n" + label + ":\n  dd 0\n\n");
       }
     }
     for (Environment child : environment.mChildrenEnvironments) {
       switch(getEnvironmentType(child)) {
         case METHOD:
-          generateForMethod(writer, environment, child, externs, packageMap);
+          generateForMethod(environment, child, externs);
           break;
         case CONSTRUCTOR:
-          generateForConstructor(writer, environment, child, externs, packageMap);
+          generateForConstructor(environment, child, externs);
           break;
       }
     }
 
     writer.flush();
 
-    String filename = getClassLabel(environment);
+    String filename = Utils.getClassLabel(environment);
     File file = new File(filename + ".s");
     file.createNewFile();
     FileWriter fileWriter = new FileWriter(file);
@@ -163,12 +153,12 @@ public class CodeGeneration {
     fileWriter.close();
   }
 
-  public static void generateVTable(StringWriter writer, Environment environment, Set<String> externs, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
-    String className = getClassLabel(environment);
-    List<Pair<Environment, MethodSignature>> methodList = getMethodList(environment, packageMap);
+  public void generateVTable(Environment environment, Set<String> externs) throws IOException, InvalidSyntaxException {
+    String className = Utils.getClassLabel(environment);
+    List<Pair<Environment, MethodSignature>> methodList = getMethodList(environment);
     writer.write("global VTABLE$" + className + "\nVTABLE$" + className + ":\n");
     for (Pair<Environment, MethodSignature> pair : methodList) {
-      String label = getMethodLabel(pair.first, pair.second);
+      String label = Utils.getMethodLabel(pair.first, pair.second);
       if (pair.first != environment) {
         externs.add(label);
       }
@@ -177,9 +167,9 @@ public class CodeGeneration {
     writer.write("\n");
   }
 
-  public static void generateForMethod(StringWriter writer, Environment classEnv, Environment methodEnv, Set<String> externs, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  public void generateForMethod(Environment classEnv, Environment methodEnv, Set<String> externs) throws IOException, InvalidSyntaxException {
     MethodSignature methodSignature = methodEnv.getMethodSignature(packageMap, "");
-    String label = getMethodLabel(classEnv, methodSignature);
+    String label = Utils.getMethodLabel(classEnv, methodSignature);
     writer.write("global " + label + "\n" + label + ":\n");
     Map<String, Pair<Integer, Type>> offsets = new HashMap();
     offsets.put("this", new Pair(-8, Type.newObject(classEnv.mName, classEnv, null)));
@@ -190,13 +180,13 @@ public class CodeGeneration {
     }
     writer.write("  push ebp\n");
     writer.write("  mov ebp, esp\n");
-    generateForNode(writer, methodEnv, methodEnv.mScope.children.get(1), offsets, 0, externs, packageMap);
+    generateForNode(methodEnv, methodEnv.mScope.children.get(1), offsets, 0, externs);
     writer.write("  pop ebp\n");
     writer.write("  ret\n");
     writer.write("\n");
   }
 
-  public static void getDataForStringLiteral(List<Integer> data, ParseTreeNode node) {
+  public void getDataForStringLiteral(List<Integer> data, ParseTreeNode node) {
     switch (node.token.getType()) {
       case ESCAPE: {
         String value = ((TerminalToken)node.token).getRawValue();
@@ -236,9 +226,9 @@ public class CodeGeneration {
     }
   }
 
-  public static void generateForConstructor(StringWriter writer, Environment classEnv, Environment constructorEnv, Set<String> externs, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  public void generateForConstructor(Environment classEnv, Environment constructorEnv, Set<String> externs) throws IOException, InvalidSyntaxException {
     List<String> argTypes = constructorEnv.getConstructorSignature(packageMap);
-    String label = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
+    String label = "CONSTRUCTOR$" + Utils.getClassLabel(classEnv) + "@";
     for (String argType : argTypes) {
       label += argType.replace("[]", "~") + "#";
     }
@@ -250,29 +240,25 @@ public class CodeGeneration {
       offsets.put(param, new Pair(i, constructorEnv.mVariableToType.get(param)));
       i -= 4;
     }
-    int size = (getFieldList(classEnv, packageMap).size() + 1) * 4;
+    int size = (getFieldList(classEnv).size() + 1) * 4;
     writer.write("  push ebp\n");
     writer.write("  mov ebp, esp\n");
     writer.write("  mov eax, " + size + "\n");
     externs.add("__malloc");
     writer.write("  call __malloc\n");
     writer.write("  mov dword [ebp + 8], eax\n"); // set this
-    writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
+    writer.write("  mov dword [eax], InterfaceTABLE$" + Utils.getClassLabel(classEnv) + "\n");
     for (int j = 4; j < size; j += 4) {
       writer.write("  mov dword [eax + " + j + "], 0\n");
     }
-    generateForNode(writer, constructorEnv, constructorEnv.mScope.children.get(2), offsets, 0, externs, packageMap);
+    generateForNode(constructorEnv, constructorEnv.mScope.children.get(2), offsets, 0, externs);
     writer.write("  mov eax, [ebp + 8]\n"); //return this
     writer.write("  pop ebp\n");
     writer.write("  ret\n");
     writer.write("\n");
   }
 
-  private static void generateForMethodOffset(
-    StringWriter writer,
-    Environment typeEnvironment,
-    MethodSignature methodSignature,
-    Map<String, Environment> packageMap)  throws IOException, InvalidSyntaxException {
+  private void generateForMethodOffset(Environment typeEnvironment, MethodSignature methodSignature)  throws IOException, InvalidSyntaxException {
     if (getEnvironmentType(typeEnvironment) == EnvironmentType.INTERFACE) {
       // get all of the interfaces that this interface may have extended (including itself)
       List<Environment> implementedInterfaces = typeEnvironment.getAllImplementedEnvironments(packageMap);
@@ -280,10 +266,10 @@ public class CodeGeneration {
       for(Environment interfc : implementedInterfaces) {
         if (interfc.mChildrenEnvironments != null) {
           for (Environment abstractMethod : interfc.mChildrenEnvironments) {
-            if (methodSignature.equals(abstractMethod, packageMap)) {
+            if (methodSignature.equals(abstractMethod)) {
               // We have found the environment of the abstract method that is being invoked
               // We can search for this environment in the global interfaces table
-              int offset = Interfaces.getInterfaceOffset(abstractMethod, packageMap);
+              int offset = interfacesGenerator.getInterfaceOffset(abstractMethod);
               // This is the offset of this method in the interface table
               writer.write("  add eax, " + offset + "\n");
               return;
@@ -292,13 +278,13 @@ public class CodeGeneration {
         }
       }
     } else {
-      int offset = getVTableOffsetForMethod(typeEnvironment, methodSignature, packageMap);
+      int offset = getVTableOffsetForMethod(typeEnvironment, methodSignature);
       writer.write("  add eax, " + offset + "\n");
       return;
     }
   }
 
-  private static void generateForMethodNode(StringWriter writer, Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  private void generateForMethodNode(Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
     List<String> argTypes = new ArrayList();
     if (node.children.get(node.children.size() -2).children.size() > 0) {
       for (ParseTreeNode arg : node.children.get(node.children.size() - 2).children.get(0).children) {
@@ -318,17 +304,17 @@ public class CodeGeneration {
         writer.write("  mov eax, [ebp + 8]\n"); //this
         writer.write("  push eax\n"); // push this
         writer.write("  mov eax, [eax]\n"); //top of INTERFACETABLE
-        generateForMethodOffset(writer, typeEnvironment, methodSignature, packageMap);
+        generateForMethodOffset(typeEnvironment, methodSignature);
         writer.write("  mov eax, [eax]\n");
         return;
       }
       String prefix = name.substring(0, dotIndex);
-      if (generateForName(writer, environment, prefix, offsets, externs, packageMap).first) {
+      if (generateForName(environment, prefix, offsets, externs).first) {
         // a.b.c() static
         Environment classEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
         MethodSignature methodSignature = classEnv.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
-        writer.write("  push 0\n"); //fake this for static call
-        String label = getMethodLabel(classEnv, methodSignature);
+        writer.write("  push 0\n"); //fake this for call
+        String label = Utils.getMethodLabel(classEnv, methodSignature);
         if (classEnv != environment.getParentClassEnvironment()) {
           externs.add(label);
         }
@@ -339,23 +325,23 @@ public class CodeGeneration {
         MethodSignature methodSignature = typeEnvironment.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
         writer.write("  push eax\n"); //push new this
         writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
-        generateForMethodOffset(writer, typeEnvironment, methodSignature, packageMap);
+        generateForMethodOffset(typeEnvironment, methodSignature);
         writer.write("  mov eax, [eax]\n");
       }
     } else {
       // primary.c()
-      generateForNode(writer, environment, node.children.get(0), offsets, currentOffset, externs, packageMap);
+      generateForNode(environment, node.children.get(0), offsets, currentOffset, externs);
       String name = ((TerminalToken)findNodeWithTokenType(node.children.get(2), TokenType.IDENTIFIER).token).getRawValue();
       Environment typeEnvironment = node.children.get(0).type.environment;
       MethodSignature methodSignature = typeEnvironment.getMethodSignatures(packageMap).get(name).get(argTypes);
       writer.write("  push eax\n"); //push new this
       writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
-      generateForMethodOffset(writer, typeEnvironment, methodSignature, packageMap);
+      generateForMethodOffset(typeEnvironment, methodSignature);
       writer.write("  mov eax, [eax]\n");
     }
   }
 
-  private static Pair<Boolean, Environment> generateForName(StringWriter writer, Environment environment, String name, Map<String, Pair<Integer, Type>> offsets, Set<String> externs, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  private Pair<Boolean, Environment> generateForName(Environment environment, String name, Map<String, Pair<Integer, Type>> offsets, Set<String> externs) throws IOException, InvalidSyntaxException {
     int dotIndex = name.indexOf('.');
     String prefix = dotIndex == -1 ? name : name.substring(0, dotIndex);
     boolean stat = false;
@@ -366,7 +352,7 @@ public class CodeGeneration {
       writer.write("  mov eax, [ebp - " + offset + "]\n");
     } else {
       fieldEnv = environment.getParentClassEnvironment();
-      Pair<Integer, Type> pair = getOffsetForField(fieldEnv, prefix, packageMap);
+      Pair<Integer, Type> pair = getOffsetForField(fieldEnv, prefix);
       if (pair != null) {
         int offset = pair.first;
         fieldEnv = packageMap.get(pair.second.name);
@@ -387,14 +373,14 @@ public class CodeGeneration {
       if (prefix.equals("length")) return new Pair(stat, null);
       if (stat) {
         stat = false;
-        String label = "STATICFIELD$" + getClassLabel(fieldEnv) + "$" + prefix;
+        String label = "STATICFIELD$" + Utils.getClassLabel(fieldEnv) + "$" + prefix;
         if (fieldEnv != environment.getParentClassEnvironment()) {
           externs.add(label);
         }
         writer.write("  mov eax, [" + label +"]\n");
         fieldEnv = packageMap.get(fieldEnv.mVariableToType.get(prefix).name);
       } else {
-        Pair<Integer, Type> pair = getOffsetForField(fieldEnv, prefix, packageMap);
+        Pair<Integer, Type> pair = getOffsetForField(fieldEnv, prefix);
         int offset = pair.first;
         fieldEnv = packageMap.get(pair.second.name);
         writer.write("  mov eax, [eax + " + offset + "]\n");
@@ -404,7 +390,7 @@ public class CodeGeneration {
     return new Pair(stat, fieldEnv);
   }
 
-  public static void generateForNode(StringWriter writer, Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs, Map<String, Environment> packageMap) throws IOException, InvalidSyntaxException {
+  public void generateForNode(Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
     Environment currentEnvironment = environment;
     Map<String, Pair<Integer, Type>> currentOffsets = new HashMap(offsets);
     for (Environment childEnv : environment.mChildrenEnvironments) {
@@ -424,41 +410,41 @@ public class CodeGeneration {
         if (node.children.get(node.children.size() - 2).children.size() > 0) {
           for (ParseTreeNode param : node.children.get(node.children.size() - 2).children.get(0).children) {
             if (param.token.getType() == TokenType.COMMA) continue;
-            generateForNode(writer, currentEnvironment, param, currentOffsets, currentOffset, externs, packageMap);
+            generateForNode(currentEnvironment, param, currentOffsets, currentOffset, externs);
             numArgs++;
             writer.write("  push eax\n");
           }
         }
-        generateForMethodNode(writer, currentEnvironment, node, currentOffsets, currentOffset, externs, packageMap);
+        generateForMethodNode(currentEnvironment, node, currentOffsets, currentOffset, externs);
         writer.write("  call eax\n");
         writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
         return;
       }
       case IF_THEN_STATEMENT:
-        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"end\n");
-        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write(currentEnvironment.mName+"end:\n");
         return;
       case IF_THEN_ELSE_STATEMENT:
       case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
-        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"else\n");
-        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write("  je "+currentEnvironment.mName+"end\n");
         writer.write(currentEnvironment.mName+"else:\n");
-        generateForNode(writer, currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
         writer.write(currentEnvironment.mName+"end:\n");
         return;
       case WHILE_STATEMENT:
       case WHILE_STATEMENT_NO_SHORT_IF:
         writer.write(currentEnvironment.mName+"start:\n");
-        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"end\n");
-        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write("  je "+currentEnvironment.mName+"start\n");
         writer.write(currentEnvironment.mName+"end:\n");
         return;
@@ -473,13 +459,13 @@ public class CodeGeneration {
             }
           }
         }
-        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write(currentEnvironment.mName+"start:\n");
-        generateForNode(writer, currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"end\n");
-        generateForNode(writer, currentEnvironment, node.children.get(8), currentOffsets, currentOffset, externs, packageMap);
-        generateForNode(writer, currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(8), currentOffsets, currentOffset, externs);
+        generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
         writer.write("  je "+currentEnvironment.mName+"start\n");
         writer.write(currentEnvironment.mName+"end:\n");
         if (currentEnvironment.mVariableDeclarations.size() > 0) {
@@ -488,15 +474,15 @@ public class CodeGeneration {
         return;
       case ADDITIVE_EXPRESSION: {
         if(node.children.size() == 1) {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
           // Generate code for lhs
           // assume result is in eax
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // move result in a temp register
           writer.write("  mov ebx, eax\n");
           // Generate for rhs
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           if(node.children.get(1).token.getType() == TokenType.OP_PLUS) {
             writer.write("  add eax, ebx\n");
           } else if (node.children.get(1).token.getType() == TokenType.OP_MINUS) {
@@ -507,17 +493,17 @@ public class CodeGeneration {
       }
       case RELATIONAL_EXPRESSION: {
         if(node.children.size() == 1) {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else if(node.children.get(1).token.getType() == TokenType.INSTANCEOF) {
           //TODO: dis gon b some wierd shit
         } else {
           // Generate code for lhs
           // assume result is in eax
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // move result in a temp register
           writer.write("  mov ebx, eax\n");
           // Generate for rhs
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default
@@ -542,15 +528,15 @@ public class CodeGeneration {
       }
       case EQUALITY_EXPRESSION: {
         if(node.children.size() == 1) {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
           // Generate code for lhs
           // assume result is in eax
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // move result in a temp register
           writer.write("  mov ebx, eax\n");
           // Generate for rhs
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default
@@ -570,13 +556,13 @@ public class CodeGeneration {
       }
       case SHIFT_EXPRESSION: {
         // just contains an additive expression
-        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
       }
       case AND_EXPRESSION:
         if(node.children.size()>1){
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
-              generateForNode(writer, currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs, packageMap);
+              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               writer.write("  cmp eax, 0\n");
               writer.write("  je "+currentEnvironment.mName+"end\n");
             }
@@ -584,17 +570,17 @@ public class CodeGeneration {
           writer.write(currentEnvironment.mName+"end:\n");
         }
         else {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         }
         return;
       case EXCLUSIVE_OR_EXPRESSION: {
-        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
       }
       case INCLUSIVE_OR_EXPRESSION:
         if(node.children.size()>1){
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
-              generateForNode(writer, currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs, packageMap);
+              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               writer.write("  cmp eax, 1\n");
               writer.write("  je "+currentEnvironment.mName+"end\n");
             }
@@ -602,11 +588,11 @@ public class CodeGeneration {
           writer.write(currentEnvironment.mName+"end:\n");
         }
         else {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         }
         return;
       case NAME:
-        generateForName(writer, currentEnvironment, getNameFromTypeNode(node), currentOffsets, externs, packageMap);
+        generateForName(currentEnvironment, getNameFromTypeNode(node), currentOffsets, externs);
         return;
       case BOOLEAN_LITERAL_TRUE:
         writer.write("  mov eax, 1\n");
@@ -672,14 +658,14 @@ public class CodeGeneration {
       }
       case VARIABLE_DECLARATOR: {
         if (node.children.size() == 3) {
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           String var = ((TerminalToken)node.children.get(0).token).getRawValue();
           writer.write("  mov dword [ebp - " + currentOffsets.get(var).first + "], eax\n");
         }
         return;
       }
       case ASSIGNMENT: {
-        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         switch (node.children.get(0).children.get(0).token.getType()) {
           case NAME: {
             String name = getNameFromTypeNode(node.children.get(0).children.get(0));
@@ -690,21 +676,19 @@ public class CodeGeneration {
               } else {
                 writer.write("  mov ebx, eax\n");
                 writer.write("  mov eax, [ebp + 8]\n");
-                // writer.write("  mov dword [eax + " + getOffsetForField(currentEnvironment.getParentClassEnvironment(), name, packageMap) + "], ebx\n");
+                // writer.write("  mov dword [eax + " + getOffsetForField(currentEnvironment.getParentClassEnvironment(), name) + "], ebx\n");
                 writer.write("  mov eax, ebx\n");
               }
             } else {
               writer.write("  mov ebx, eax\n");
               Environment fieldEnv = generateForName(
-                writer,
                 currentEnvironment,
                 name.substring(0, dotIndex),
                 currentOffsets,
-                externs,
-                packageMap
+                externs
               ).second;
               name = name.substring(dotIndex + 1);
-              int offset = getOffsetForField(fieldEnv, name, packageMap).first;
+              int offset = getOffsetForField(fieldEnv, name).first;
               writer.write("  mov dword [eax + " + offset + "], ebx\n");
               writer.write("  mov eax, ebx\n");
             }
@@ -713,12 +697,11 @@ public class CodeGeneration {
           case FIELD_ACCESS: {
             String fieldName = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
             writer.write("  push eax\n");
-            generateForNode(writer, currentEnvironment, node.children.get(0).children.get(0).children.get(0), currentOffsets, currentOffset, externs, packageMap);
+            generateForNode(currentEnvironment, node.children.get(0).children.get(0).children.get(0), currentOffsets, currentOffset, externs);
             writer.write("  pop ebx\n");
             int offset = getOffsetForField(
               packageMap.get(node.children.get(0).children.get(0).children.get(0).type.name),
-              fieldName,
-              packageMap
+              fieldName
             ).first;
             writer.write("  mov dword [eax + " + offset + "], ebx\n");
             writer.write("  mov eax, ebx\n");
@@ -727,13 +710,11 @@ public class CodeGeneration {
           case ARRAY_ACCESS: {
             writer.write("  push eax\n"); // push the value to assign
             generateForNode(
-              writer,
               currentEnvironment,
               node.children.get(0).children.get(0).children.get(2),
               currentOffsets,
               currentOffset,
-              externs,
-              packageMap
+              externs
             );
             writer.write("  mov ebx, 4\n");
             writer.write("  mul ebx\n");
@@ -742,12 +723,10 @@ public class CodeGeneration {
               case NAME: {
                 writer.write("  mov ebx, eax\n"); //ebx is the index
                 generateForName(
-                  writer,
                   currentEnvironment,
                   getNameFromTypeNode(node.children.get(0).children.get(0).children.get(0)),
                   currentOffsets,
-                  externs,
-                  packageMap
+                  externs
                 ); // eax is the array
                 writer.write("  add eax, ebx\n");
                 writer.write("  pop ebx\n"); // the value
@@ -758,13 +737,11 @@ public class CodeGeneration {
               case PRIMARY_NO_NEW_ARRAY: {
                 writer.write("  push eax\n");
                 generateForNode(
-                  writer,
                   currentEnvironment,
                   node.children.get(0).children.get(0).children.get(0),
                   currentOffsets,
                   currentOffset,
-                  externs,
-                  packageMap
+                  externs
                 );
                 writer.write("  pop ebx\n"); // the index
                 writer.write("  add eax, ebx\n");
@@ -780,19 +757,18 @@ public class CodeGeneration {
         return;
       }
       case FIELD_ACCESS: {
-        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         int offset = getOffsetForField(
           packageMap.get(node.children.get(0).type.name),
-          ((TerminalToken)node.children.get(2).token).getRawValue(),
-          packageMap
+          ((TerminalToken)node.children.get(2).token).getRawValue()
         ).first;
         writer.write("  mov eax, [eax + " + offset + "]\n");
         return;
       }
       case ARRAY_ACCESS: {
-        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         writer.write("  push eax\n");
-        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  add eax, 2\n");
         writer.write("  mov ebx, 4\n");
         writer.write("  mul ebx\n");
@@ -803,7 +779,7 @@ public class CodeGeneration {
         return;
       }
       case ARRAY_CREATION_EXPRESSION: {
-        generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  push eax\n"); // size
         writer.write("  mov ebx, 4\n");
         writer.write("  mul ebx\n");
@@ -842,15 +818,15 @@ public class CodeGeneration {
           for (ParseTreeNode param : node.children.get(3).children.get(0).children) {
             if (param.token.getType() == TokenType.COMMA) continue;
             argTypes.add(param.type.name);
-            generateForNode(writer, currentEnvironment, param, currentOffsets, currentOffset, externs, packageMap);
+            generateForNode(currentEnvironment, param, currentOffsets, currentOffset, externs);
             numArgs++;
             writer.write("  push eax\n");
           }
         }
         writer.write("  push 0\n");
         Environment classEnv = getEnvironmentFromTypeNode(currentEnvironment, node.children.get(1), packageMap);
-        int size = (getFieldList(currentEnvironment, packageMap).size() + 1) * 4;
-        String constructorLabel = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
+        int size = (getFieldList(currentEnvironment).size() + 1) * 4;
+        String constructorLabel = "CONSTRUCTOR$" + Utils.getClassLabel(classEnv) + "@";
         for (String argType : argTypes) {
           constructorLabel += argType.replace("[]", "~") + "#";
         }
@@ -866,13 +842,13 @@ public class CodeGeneration {
         return;
       }
       case CAST_EXPRESSION: {
-        generateForNode(writer, currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs);
         return;
       }
     }
     if (node.children != null) {
       for (ParseTreeNode child : node.children) {
-        generateForNode(writer, currentEnvironment, child, currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);
       }
     }
     if (currentEnvironment.mScope == node && currentEnvironment.mVariableDeclarations.size() > 0) {

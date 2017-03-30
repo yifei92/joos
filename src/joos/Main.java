@@ -24,6 +24,7 @@ import joos.codegeneration.CodeGeneration;
 
 import java.util.*;
 import java.io.IOException;
+import java.io.StringWriter;
 
 public class Main {
 
@@ -91,8 +92,9 @@ public class Main {
 				ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
+			CodeGeneration codeGen = new CodeGeneration(packageMap, new StringWriter());
 			for (Environment environment : packageMap.values()) {
-				CodeGeneration.generateForClass(environment, packageMap);
+				codeGen.generateForClass(environment);
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

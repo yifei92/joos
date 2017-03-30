@@ -231,7 +231,8 @@ public class CodeGeneration {
     }
     writer = new StringWriter();
     Set<String> externs = new HashSet();
-    externs.add("$$subtypecheckingtable");
+    externs.add("subtypecheckingtable");
+    externs.add("__exception");
     generateInterfaceTable(environment);
     generateVTable(environment, externs);
     for (String key : environment.mVariableToType.keySet()) {
@@ -538,31 +539,31 @@ public class CodeGeneration {
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         int uniqueid=subTypingTesting.getuniqueid();
-        writer.write("  je "+uniqueid+"end\n");
+        writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write(uniqueid+"end:\n");
+        writer.write("label"+uniqueid+"end:\n");
         return;
       case IF_THEN_ELSE_STATEMENT:
       case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         uniqueid=subTypingTesting.getuniqueid();
-        writer.write("  je "+uniqueid+"else\n");
+        writer.write("  je label"+uniqueid+"else\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je "+uniqueid+"end\n");
-        writer.write(uniqueid+"else:\n");
+        writer.write("  je label"+uniqueid+"end\n");
+        writer.write("label"+uniqueid+"else:\n");
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
-        writer.write(uniqueid+"end:\n");
+        writer.write("label"+uniqueid+"end:\n");
         return;
       case WHILE_STATEMENT:
       case WHILE_STATEMENT_NO_SHORT_IF:
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         uniqueid=subTypingTesting.getuniqueid();
-        writer.write("  je "+uniqueid+"end\n");
+        writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je "+uniqueid+"start\n");
-        writer.write(uniqueid+"end:\n");
+        writer.write("  je label"+uniqueid+"start\n");
+        writer.write("label"+uniqueid+"end:\n");
         return;
       case FOR_STATEMENT:
       case FOR_STATEMENT_NO_SHORT_IF:
@@ -577,14 +578,14 @@ public class CodeGeneration {
         }
         uniqueid=subTypingTesting.getuniqueid();
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
-        writer.write(uniqueid+"start:\n");
+        writer.write("label"+uniqueid+"start:\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
-        writer.write("  je "+uniqueid+"end\n");
+        writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(8), currentOffsets, currentOffset, externs);
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
-        writer.write("  je "+uniqueid+"start\n");
-        writer.write(uniqueid+"end:\n");
+        writer.write("  je label"+uniqueid+"start\n");
+        writer.write("label"+uniqueid+"end:\n");
         if (currentEnvironment.mVariableDeclarations.size() > 0) {
           writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
         }
@@ -635,16 +636,16 @@ public class CodeGeneration {
           // conditional move true to eax
           switch(node.children.get(1).token.getType()) {
             case COMP_LESS_THAN:
-              writer.write("cmovl eax, 1");
+              writer.write("cmovl eax, 1\n");
             break;
             case COMP_GREATER_THAN:
-              writer.write("cmovg eax, 1");
+              writer.write("cmovg eax, 1\n");
             break;
             case COMP_LESS_THAN_EQ:
-              writer.write("cmovle eax, 1");
+              writer.write("cmovle eax, 1\n");
             break;
             case COMP_GREATER_THAN_EQ:
-              writer.write("cmovge eax, 1");
+              writer.write("cmovge eax, 1\n");
             break;
           }
         }
@@ -691,10 +692,10 @@ public class CodeGeneration {
             if(1%2==0) {
               generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               writer.write("  cmp eax, 0\n");
-              writer.write("  je "+uniqueid+"end\n");
+              writer.write("  je label"+uniqueid+"end\n");
             }
           }
-          writer.write(uniqueid+"end:\n");
+          writer.write("label"+uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
@@ -710,10 +711,10 @@ public class CodeGeneration {
             if(1%2==0) {
               generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               writer.write("  cmp eax, 1\n");
-              writer.write("  je "+uniqueid+"end\n");
+              writer.write("  je label"+uniqueid+"end\n");
             }
           }
-          writer.write(uniqueid+"end:\n");
+          writer.write("label"+uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
@@ -973,12 +974,12 @@ public class CodeGeneration {
         generateForNode(currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs);
         writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
-        writer.write("  mov ebx,[$$subtypecheckingtable+ebx+"+offset+"]\n");
+        writer.write("  mov ebx, [subtypecheckingtable+ebx+"+offset+"]\n");
         writer.write(" cmp ebx, 0\n");
         int unique=subTypingTesting.getuniqueid();
         writer.write(" je subtypingcheck"+unique+" \n");
-        writer.write(" call __exception");
-        writer.write(" subtypingcheck"+unique+":\n");
+        writer.write(" call __exception\n");
+        writer.write("subtypingcheck"+unique+":\n");
         return;
       }
     }

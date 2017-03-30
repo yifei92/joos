@@ -25,8 +25,8 @@ public class SubTypingTesting {
 		for(String s:packageMap.keySet()){
 			classlist.add(s);
 		}
-		writer.write("global $$subtypecheckingtable\n");
-		writer.write("$$subtypecheckingtable:");
+		writer.write("global subtypecheckingtable\n");
+		writer.write("subtypecheckingtable:");
 		//lookuptable=new int[classlist.size()][classlist.size()];
 		for(int i=0;i<classlist.size();i++){
 			for(int j=0;j<classlist.size();i++) {

@@ -591,11 +591,13 @@ public class CodeGeneration {
         } else {
           // Generate code for lhs
           // assume result is in eax
-          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
-          // move result in a temp register
-          writer.write("  mov ebx, eax\n");
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
+          // save the lhs
+          writer.write("  push eax\n");
           // Generate for rhs
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
+          // fetch the saved lhs from the stack
+          writer.write("  pop ebx\n");
           if(node.children.get(1).token.getType() == TokenType.OP_PLUS) {
             writer.write("  add eax, ebx\n");
           } else if (node.children.get(1).token.getType() == TokenType.OP_MINUS) {
@@ -616,10 +618,12 @@ public class CodeGeneration {
           // Generate code for lhs
           // assume result is in eax
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
-          // move result in a temp register
-          writer.write("  mov ebx, eax\n");
+          // move result into the stack for safekeeping
+          writer.write("  push eax\n");
           // Generate for rhs
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
+          // fetch the saved lhs from the stack
+          writer.write("  pop ebx\n");
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default
@@ -649,10 +653,12 @@ public class CodeGeneration {
           // Generate code for lhs
           // assume result is in eax
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
-          // move result in a temp register
-          writer.write("  mov ebx, eax\n");
+          // move result into the stack for safekeeping
+          writer.write("  push eax\n");
           // Generate for rhs
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
+          // fetch the saved lhs from the stack
+          writer.write("  pop ebx\n");
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default

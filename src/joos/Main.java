@@ -1,6 +1,7 @@
 package joos;
 
 import joos.ast.ASTBuilder;
+import joos.codegeneration.SubTypingTesting;
 import joos.exceptions.StaticAnalysisException;
 import joos.exceptions.TypeLinkingException;
 import joos.filereader.FileScanner;
@@ -92,7 +93,8 @@ public class Main {
 				ReachabilityCheck reachabilityCheck =new ReachabilityCheck();
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
-			CodeGeneration codeGen = new CodeGeneration(packageMap, new StringWriter());
+			SubTypingTesting subTypingTesting = new SubTypingTesting(packageMap);
+			CodeGeneration codeGen = new CodeGeneration(packageMap, subTypingTesting);
 			for (Environment environment : packageMap.values()) {
 				codeGen.generateForClass(environment);
 			}

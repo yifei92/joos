@@ -42,12 +42,37 @@ public class CodeGeneration {
 
   private Map<String, Environment> packageMap;
   private StringWriter writer;
-  private Interfaces interfacesGenerator;
+  private SubTypingTesting subTypingTesting;
 
-  public CodeGeneration(Map<String, Environment> packageMap, StringWriter writer) {
+  /**
+   * List of all of the interfaces in our program
+   */
+  private static List<Environment> mListOfInterfaces = null;
+  private static int mInterfaceTableSize = -1;
+
+  public CodeGeneration(Map<String, Environment> packageMap, SubTypingTesting subTypingTesting) {
     this.packageMap = packageMap;
-    this.writer = writer;
-    this.interfacesGenerator = new Interfaces(packageMap, writer);
+    this.subTypingTesting = subTypingTesting;
+  }
+
+  public String getMethodLabel(Environment environment, MethodSignature methodSignature) {
+    String ret = "";
+    if (methodSignature.modifiers.contains(TokenType.STATIC)) {
+      ret += "STATIC";
+    }
+    ret += "METHOD$" + getClassLabel(environment) + "$" + methodSignature.name + "@";
+    for (String type : methodSignature.parameterTypes) {
+      ret += type.replace("[]", "~") + "#";
+    }
+    return ret;
+  }
+
+  public String getClassLabel(Environment environment) {
+    String ret = "";
+    if (environment.PackageName.length() > 0) {
+      ret += environment.PackageName + ".";
+    }
+    return ret + environment.mName;
   }
 
   private List<Pair<Type, String>> getFieldList(Environment environment) throws InvalidSyntaxException {
@@ -94,7 +119,7 @@ public class CodeGeneration {
 
   private int getVTableOffsetForMethod(Environment environment, MethodSignature methodSignature) throws InvalidSyntaxException {
     List<Pair<Environment, MethodSignature>> list = getMethodList(environment);
-    int i = interfacesGenerator.getInterfaceTableSize(packageMap);
+    int i = getInterfaceTableSize();
     for (Pair<Environment, MethodSignature> pair : list) {
       if (pair.second.name.equals(methodSignature.name) && pair.second.parameterTypes.equals(methodSignature.parameterTypes)) return i * 4;
       i++;
@@ -106,10 +131,97 @@ public class CodeGeneration {
     List<Pair<Type, String>> list = getFieldList(environment);
     int i = 0;
     for (Pair<Type, String> pair : list) {
-      if (pair.second.equals(field)) return new Pair((i + 1) * 4, pair.first);
+      if (pair.second.equals(field)) return new Pair((i + 2) * 4, pair.first);
       i++;
     }
     return null;
+  }
+  public int getInterfaceOffset(Environment methodEnvironment) {
+    generateInterfacesList();
+    int offset = 0;
+    for(Environment interfc : mListOfInterfaces) {
+      if (interfc.mChildrenEnvironments != null) {
+        for(Environment method : interfc.mChildrenEnvironments) {
+          if (methodEnvironment == method) {
+            break;
+          }
+          offset += 4;
+        }
+      }
+    }
+    return offset;
+  }
+
+  /**
+   * Returns the size of the interface table in 32 byte chunks
+   */
+  public int getInterfaceTableSize() {
+    generateInterfacesList();
+    if (mInterfaceTableSize == -1) {
+      mInterfaceTableSize = 0;
+      for(Environment interfc : mListOfInterfaces) {
+        if(interfc.mChildrenEnvironments!= null) {
+          mInterfaceTableSize+=interfc.mChildrenEnvironments.size();
+        }
+      }
+    }
+    return mInterfaceTableSize;
+  }
+
+  private void generateInterfacesList() {
+    if (mListOfInterfaces != null) {
+      return;
+    }
+    mListOfInterfaces = new ArrayList<>();
+    for(String key: packageMap.keySet()) {
+      Environment interfc = packageMap.get(key);
+      if (getEnvironmentType(interfc) == EnvironmentType.INTERFACE) {
+        // this environment is an interfc. We need to put it in our interfc list
+        mListOfInterfaces.add(interfc);
+      }
+    }
+  }
+
+  public void generateInterfaceTable(Environment classEnvironment) throws IOException, InvalidSyntaxException {
+    generateInterfacesList();
+    String className = getClassLabel(classEnvironment);
+    // list of all methods in this class
+    List<Environment> methodList = classEnvironment.getAllMethodEnvironments();
+    // list of all interfaces this class should have implemented
+    List<Environment> implementedInterfaces = classEnvironment.getAllImplementedEnvironments(packageMap);
+    writer.write("global InterfaceTABLE$" + className + "\nInterfaceTABLE$" + className + ":\n");
+    // Iterate over the global interface list
+    for (Environment interfc : mListOfInterfaces) {
+      boolean foundImplementation = false;
+      for (Environment implementedInterface : implementedInterfaces) {
+        // Check this interface against the interfaces this class implements
+        if (interfc == implementedInterface) {
+          foundImplementation = true;
+          // this class implements this interface so we should add entries for each of the
+          // implemented methods
+          for(Environment abstractMethod: interfc.mChildrenEnvironments) {
+            // find the implementation of this method in this class
+            for(Environment method : methodList) {
+              if(method.implementsAbstractMethod(abstractMethod, packageMap)) {
+                MethodSignature signature = method.getMethodSignature(packageMap, null);
+                writer.write("  dd " + getMethodLabel(classEnvironment, signature) + "\n");
+              }
+            }
+          }
+          break;
+        }
+      }
+      if(!foundImplementation) {
+        // if we didn't find an implementation of this interface then we should put a blank entry for
+        // for each of the methods in this interface
+        if(interfc.mChildrenEnvironments != null) {
+          for(Environment abstractMethod : interfc.mChildrenEnvironments) {
+            writer.write("  dd 00000000\n");
+          }
+        }
+      }
+    }
+    writer.write("\n");
   }
 
   public void generateForClass(Environment environment) throws IOException, InvalidSyntaxException {
@@ -117,13 +229,14 @@ public class CodeGeneration {
       // We don't need to generate code for interfaces
       return;
     }
+    writer = new StringWriter();
     Set<String> externs = new HashSet();
-
-    interfacesGenerator.generateInterfaceTable(environment);
+    externs.add("$$subtypecheckingtable");
+    generateInterfaceTable(environment);
     generateVTable(environment, externs);
     for (String key : environment.mVariableToType.keySet()) {
       if (environment.mVariableToType.get(key).modifiers.contains(TokenType.STATIC)) {
-        String label = "STATICFIELD$" + Utils.getClassLabel(environment) + "$" + key;
+        String label = "STATICFIELD$" + getClassLabel(environment) + "$" + key;
         writer.write("global " + label + "\n" + label + ":\n  dd 0\n\n");
       }
     }
@@ -140,7 +253,7 @@ public class CodeGeneration {
 
     writer.flush();
 
-    String filename = Utils.getClassLabel(environment);
+    String filename = getClassLabel(environment);
     File file = new File(filename + ".s");
     file.createNewFile();
     FileWriter fileWriter = new FileWriter(file);
@@ -154,11 +267,11 @@ public class CodeGeneration {
   }
 
   public void generateVTable(Environment environment, Set<String> externs) throws IOException, InvalidSyntaxException {
-    String className = Utils.getClassLabel(environment);
+    String className = getClassLabel(environment);
     List<Pair<Environment, MethodSignature>> methodList = getMethodList(environment);
     writer.write("global VTABLE$" + className + "\nVTABLE$" + className + ":\n");
     for (Pair<Environment, MethodSignature> pair : methodList) {
-      String label = Utils.getMethodLabel(pair.first, pair.second);
+      String label = getMethodLabel(pair.first, pair.second);
       if (pair.first != environment) {
         externs.add(label);
       }
@@ -169,7 +282,7 @@ public class CodeGeneration {
 
   public void generateForMethod(Environment classEnv, Environment methodEnv, Set<String> externs) throws IOException, InvalidSyntaxException {
     MethodSignature methodSignature = methodEnv.getMethodSignature(packageMap, "");
-    String label = Utils.getMethodLabel(classEnv, methodSignature);
+    String label = getMethodLabel(classEnv, methodSignature);
     writer.write("global " + label + "\n" + label + ":\n");
     Map<String, Pair<Integer, Type>> offsets = new HashMap();
     offsets.put("this", new Pair(-8, Type.newObject(classEnv.mName, classEnv, null)));
@@ -228,7 +341,7 @@ public class CodeGeneration {
 
   public void generateForConstructor(Environment classEnv, Environment constructorEnv, Set<String> externs) throws IOException, InvalidSyntaxException {
     List<String> argTypes = constructorEnv.getConstructorSignature(packageMap);
-    String label = "CONSTRUCTOR$" + Utils.getClassLabel(classEnv) + "@";
+    String label = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
     for (String argType : argTypes) {
       label += argType.replace("[]", "~") + "#";
     }
@@ -240,14 +353,15 @@ public class CodeGeneration {
       offsets.put(param, new Pair(i, constructorEnv.mVariableToType.get(param)));
       i -= 4;
     }
-    int size = (getFieldList(classEnv).size() + 1) * 4;
+    int size = (getFieldList(classEnv).size() + 2) * 4;
     writer.write("  push ebp\n");
     writer.write("  mov ebp, esp\n");
     writer.write("  mov eax, " + size + "\n");
     externs.add("__malloc");
     writer.write("  call __malloc\n");
     writer.write("  mov dword [ebp + 8], eax\n"); // set this
-    writer.write("  mov dword [eax], InterfaceTABLE$" + Utils.getClassLabel(classEnv) + "\n");
+    writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
+    writer.write("  mov dword [eax + 4], "+subTypingTesting.getrow(getClassLabel(classEnv))+"\n");
     for (int j = 4; j < size; j += 4) {
       writer.write("  mov dword [eax + " + j + "], 0\n");
     }
@@ -269,7 +383,7 @@ public class CodeGeneration {
             if (methodSignature.equals(abstractMethod)) {
               // We have found the environment of the abstract method that is being invoked
               // We can search for this environment in the global interfaces table
-              int offset = interfacesGenerator.getInterfaceOffset(abstractMethod);
+              int offset = getInterfaceOffset(abstractMethod);
               // This is the offset of this method in the interface table
               writer.write("  add eax, " + offset + "\n");
               return;
@@ -314,7 +428,7 @@ public class CodeGeneration {
         Environment classEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
         MethodSignature methodSignature = classEnv.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
         writer.write("  push 0\n"); //fake this for call
-        String label = Utils.getMethodLabel(classEnv, methodSignature);
+        String label = getMethodLabel(classEnv, methodSignature);
         if (classEnv != environment.getParentClassEnvironment()) {
           externs.add(label);
         }
@@ -373,7 +487,7 @@ public class CodeGeneration {
       if (prefix.equals("length")) return new Pair(stat, null);
       if (stat) {
         stat = false;
-        String label = "STATICFIELD$" + Utils.getClassLabel(fieldEnv) + "$" + prefix;
+        String label = "STATICFIELD$" + getClassLabel(fieldEnv) + "$" + prefix;
         if (fieldEnv != environment.getParentClassEnvironment()) {
           externs.add(label);
         }
@@ -423,7 +537,7 @@ public class CodeGeneration {
       case IF_THEN_STATEMENT:
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
-        writer.write("  je "+currentEnvironment.mName+"end\n");
+        writer.write("  je "+subTypingTesting.getuniqueid()+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write(currentEnvironment.mName+"end:\n");
         return;
@@ -440,7 +554,6 @@ public class CodeGeneration {
         return;
       case WHILE_STATEMENT:
       case WHILE_STATEMENT_NO_SHORT_IF:
-        writer.write(currentEnvironment.mName+"start:\n");
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
         writer.write("  je "+currentEnvironment.mName+"end\n");
@@ -496,6 +609,9 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else if(node.children.get(1).token.getType() == TokenType.INSTANCEOF) {
           //TODO: dis gon b some wierd shit
+          generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
+          int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
+          writer.write("  mov ebx, [eax + 8]\n");
         } else {
           // Generate code for lhs
           // assume result is in eax
@@ -826,7 +942,7 @@ public class CodeGeneration {
         writer.write("  push 0\n");
         Environment classEnv = getEnvironmentFromTypeNode(currentEnvironment, node.children.get(1), packageMap);
         int size = (getFieldList(currentEnvironment).size() + 1) * 4;
-        String constructorLabel = "CONSTRUCTOR$" + Utils.getClassLabel(classEnv) + "@";
+        String constructorLabel = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
         for (String argType : argTypes) {
           constructorLabel += argType.replace("[]", "~") + "#";
         }
@@ -843,6 +959,14 @@ public class CodeGeneration {
       }
       case CAST_EXPRESSION: {
         generateForNode(currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs);
+        writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
+        int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
+        writer.write("  mov ebx,[$$subtypecheckingtable+ebx+"+offset+"]\n");
+        writer.write(" cmp ebx, 0\n");
+        int unique=subTypingTesting.getuniqueid();
+        writer.write(" je subtypingcheck"+unique+" \n");
+        writer.write(" call __exception");
+        writer.write(" subtypingcheck"+unique+":\n");
         return;
       }
     }

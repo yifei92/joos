@@ -557,9 +557,10 @@ public class CodeGeneration {
         return;
       case WHILE_STATEMENT:
       case WHILE_STATEMENT_NO_SHORT_IF:
+        uniqueid=subTypingTesting.getuniqueid();
+        writer.write("label"+uniqueid+"start:\n");
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
-        uniqueid=subTypingTesting.getuniqueid();
         writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write("  je label"+uniqueid+"start\n");
@@ -671,10 +672,10 @@ public class CodeGeneration {
           // conditional move true to eax
           switch(node.children.get(1).token.getType()) {
             case COMP_EQ:
-              writer.write("cmove eax, 1");
+              writer.write("cmove eax, 1\n");
             break;
             case COMP_NOT_EQ:
-              writer.write("cmovne eax, 1");
+              writer.write("cmovne eax, 1\n");
             break;
           }
         }

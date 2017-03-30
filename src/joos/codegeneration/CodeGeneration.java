@@ -923,7 +923,7 @@ public class CodeGeneration {
           externs.add("VTABLE$java.lang.Object");
         }
         writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
-        writer.write("  mov dword [eax + 4],"+subTypingTesting.getrow(node.type.name));
+        writer.write("  mov dword [eax + 4],"+subTypingTesting.getrow(node.type.name)+"\n");
         writer.write("  mov dword [eax + 8], ebx\n");
         writer.write("  push eax\n");
         writer.write("  push eax\n");

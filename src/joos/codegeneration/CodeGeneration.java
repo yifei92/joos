@@ -610,7 +610,7 @@ public class CodeGeneration {
         } else if(node.children.get(1).token.getType() == TokenType.INSTANCEOF) {
           //TODO: dis gon b some wierd shit
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
-          int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
+          //int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
           writer.write("  mov ebx, [eax + 8]\n");
         } else {
           // Generate code for lhs

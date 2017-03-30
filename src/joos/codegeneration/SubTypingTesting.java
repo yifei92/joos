@@ -5,10 +5,11 @@ import joos.exceptions.InvalidSyntaxException;
 
 import java.io.StringWriter;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class SubTypingTesting {
-	private List<String> classlist;
+	private List<String> classlist = new ArrayList<>();
 	private int id;
 	private Map<String, Environment> packageMap;
 

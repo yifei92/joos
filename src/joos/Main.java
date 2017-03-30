@@ -1,6 +1,7 @@
 package joos;
 
 import joos.ast.ASTBuilder;
+import joos.codegeneration.SubTypingTesting;
 import joos.exceptions.StaticAnalysisException;
 import joos.exceptions.TypeLinkingException;
 import joos.filereader.FileScanner;
@@ -92,7 +93,8 @@ public class Main {
 				reachabilityCheck.check(treeMap.get(key),packageMap,packageMap.get(key));
 			}
 			for (Environment environment : packageMap.values()) {
-				CodeGeneration.generateForClass(environment, packageMap);
+				SubTypingTesting subTypingTesting=new SubTypingTesting();
+				CodeGeneration.generateForClass(environment, packageMap,subTypingTesting);
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps

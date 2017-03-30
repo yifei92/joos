@@ -537,29 +537,32 @@ public class CodeGeneration {
       case IF_THEN_STATEMENT:
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
-        writer.write("  je "+subTypingTesting.getuniqueid()+"end\n");
+        int uniqueid=subTypingTesting.getuniqueid();
+        writer.write("  je "+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write(currentEnvironment.mName+"end:\n");
+        writer.write(uniqueid+"end:\n");
         return;
       case IF_THEN_ELSE_STATEMENT:
       case IF_THEN_ELSE_STATEMENT_NO_SHORT_IF:
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
-        writer.write("  je "+currentEnvironment.mName+"else\n");
+        uniqueid=subTypingTesting.getuniqueid();
+        writer.write("  je "+uniqueid+"else\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je "+currentEnvironment.mName+"end\n");
-        writer.write(currentEnvironment.mName+"else:\n");
+        writer.write("  je "+uniqueid+"end\n");
+        writer.write(uniqueid+"else:\n");
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
-        writer.write(currentEnvironment.mName+"end:\n");
+        writer.write(uniqueid+"end:\n");
         return;
       case WHILE_STATEMENT:
       case WHILE_STATEMENT_NO_SHORT_IF:
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
-        writer.write("  je "+currentEnvironment.mName+"end\n");
+        uniqueid=subTypingTesting.getuniqueid();
+        writer.write("  je "+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je "+currentEnvironment.mName+"start\n");
-        writer.write(currentEnvironment.mName+"end:\n");
+        writer.write("  je "+uniqueid+"start\n");
+        writer.write(uniqueid+"end:\n");
         return;
       case FOR_STATEMENT:
       case FOR_STATEMENT_NO_SHORT_IF:
@@ -572,15 +575,16 @@ public class CodeGeneration {
             }
           }
         }
+        uniqueid=subTypingTesting.getuniqueid();
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
-        writer.write(currentEnvironment.mName+"start:\n");
+        writer.write(uniqueid+"start:\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
         writer.write("  cmp eax, 0\n");
-        writer.write("  je "+currentEnvironment.mName+"end\n");
+        writer.write("  je "+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(8), currentOffsets, currentOffset, externs);
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
-        writer.write("  je "+currentEnvironment.mName+"start\n");
-        writer.write(currentEnvironment.mName+"end:\n");
+        writer.write("  je "+uniqueid+"start\n");
+        writer.write(uniqueid+"end:\n");
         if (currentEnvironment.mVariableDeclarations.size() > 0) {
           writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
         }
@@ -682,14 +686,15 @@ public class CodeGeneration {
       }
       case AND_EXPRESSION:
         if(node.children.size()>1){
+          uniqueid=subTypingTesting.getuniqueid();
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
               generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               writer.write("  cmp eax, 0\n");
-              writer.write("  je "+currentEnvironment.mName+"end\n");
+              writer.write("  je "+uniqueid+"end\n");
             }
           }
-          writer.write(currentEnvironment.mName+"end:\n");
+          writer.write(uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
@@ -700,14 +705,15 @@ public class CodeGeneration {
       }
       case INCLUSIVE_OR_EXPRESSION:
         if(node.children.size()>1){
+          uniqueid=subTypingTesting.getuniqueid();
           for(int i=0;i<node.children.size();i++) {
             if(1%2==0) {
               generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               writer.write("  cmp eax, 1\n");
-              writer.write("  je "+currentEnvironment.mName+"end\n");
+              writer.write("  je "+uniqueid+"end\n");
             }
           }
-          writer.write(currentEnvironment.mName+"end:\n");
+          writer.write(uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);

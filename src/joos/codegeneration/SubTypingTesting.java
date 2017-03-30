@@ -3,6 +3,8 @@ package joos.codegeneration;
 import joos.environment.Environment;
 import joos.exceptions.InvalidSyntaxException;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.ArrayList;
@@ -56,6 +58,20 @@ public class SubTypingTesting {
 				//lookuptable[i][j]=0;
 				writer.write("dd 0x0\n");
 			}
+		}
+		writer.flush();
+		;
+		File file = new File("subteypchecking.s");
+		try {
+			file.createNewFile();
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write("\n");
+			fileWriter.write(writer.toString());
+			fileWriter.flush();
+			fileWriter.close();
+		}
+		catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 

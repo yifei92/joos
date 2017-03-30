@@ -489,15 +489,15 @@ public class CodeGeneration {
         return;
       case ADDITIVE_EXPRESSION: {
         if(node.children.size() == 1) {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
         } else {
           // Generate code for lhs
           // assume result is in eax
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
           // move result in a temp register
           writer.write("  mov ebx, eax\n");
           // Generate for rhs
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
           if(node.children.get(1).token.getType() == TokenType.OP_PLUS) {
             writer.write("  add eax, ebx\n");
           } else if (node.children.get(1).token.getType() == TokenType.OP_MINUS) {
@@ -508,17 +508,20 @@ public class CodeGeneration {
       }
       case RELATIONAL_EXPRESSION: {
         if(node.children.size() == 1) {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
         } else if(node.children.get(1).token.getType() == TokenType.INSTANCEOF) {
           //TODO: dis gon b some wierd shit
+          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
+          int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
+          writer.write("  mov ebx, [eax + 8]\n");
         } else {
           // Generate code for lhs
           // assume result is in eax
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
           // move result in a temp register
           writer.write("  mov ebx, eax\n");
           // Generate for rhs
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default
@@ -543,15 +546,15 @@ public class CodeGeneration {
       }
       case EQUALITY_EXPRESSION: {
         if(node.children.size() == 1) {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
         } else {
           // Generate code for lhs
           // assume result is in eax
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
           // move result in a temp register
           writer.write("  mov ebx, eax\n");
           // Generate for rhs
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap);
+          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default
@@ -571,7 +574,7 @@ public class CodeGeneration {
       }
       case SHIFT_EXPRESSION: {
         // just contains an additive expression
-        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
+        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
       }
       case AND_EXPRESSION:
         if(node.children.size()>1){
@@ -588,9 +591,9 @@ public class CodeGeneration {
           generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
         }
         return;
-      case EXCLUSIVE_OR_EXPRESSION: {
-        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap);
-      }
+      case EXCLUSIVE_OR_EXPRESSION:
+        generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
+        return;
       case INCLUSIVE_OR_EXPRESSION:
         if(node.children.size()>1){
           for(int i=0;i<node.children.size();i++) {
@@ -606,48 +609,6 @@ public class CodeGeneration {
           generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
         }
         return;
-      case RELATIONAL_EXPRESSION:
-        if(node.children.size()>1) {
-          if(node.children.get(1).token.getType()==TokenType.INSTANCEOF){
-            generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
-            int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
-            writer.write("  mov ebx, [eax + 8]\n");
-          }
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
-          writer.write(" push eax\n");
-          generateForNode(writer, currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
-          writer.write(" pop ebx\n");
-          writer.write(" cmp ebx, eax\n");
-          switch (node.children.get(1).token.getType()){
-            case COMP_EQ:
-              writer.write(" je true\n");
-              break;
-            case COMP_GREATER_THAN:
-              writer.write(" jg true\n");
-              break;
-            case COMP_GREATER_THAN_EQ:
-              writer.write(" jge true\n");
-              break;
-            case COMP_LESS_THAN:
-              writer.write(" jl true\n");
-              break;
-            case COMP_LESS_THAN_EQ:
-              writer.write(" jle true\n");
-              break;
-            case COMP_NOT_EQ:
-              writer.write(" jne true\n");
-              break;
-          }
-          writer.write(" mov eax , 0\n");
-          writer.write(" jmp endcompare\n");
-          writer.write(" true:\n");
-          writer.write(" mov eax , 1\n");
-          writer.write(" endcompare:\n");
-
-        }
-        else {
-          generateForNode(writer, currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs, packageMap,subTypingTesting);
-        }
       case NAME:
         generateForName(writer, currentEnvironment, getNameFromTypeNode(node), currentOffsets, externs, packageMap);
         return;

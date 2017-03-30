@@ -618,8 +618,10 @@ public class CodeGeneration {
         } else if(node.children.get(1).token.getType() == TokenType.INSTANCEOF) {
           //TODO: dis gon b some wierd shit
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
-          //int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
+          int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
           writer.write("  mov ebx, [eax + 8]\n");
+          writer.write("  mov eax, [subtypecheckingtable+ebx+"+offset+"]\n");
+          return;
         } else {
           // Generate code for lhs
           // assume result is in eax
@@ -848,7 +850,7 @@ public class CodeGeneration {
             );
             writer.write("  mov ebx, 4\n");
             writer.write("  mul ebx\n");
-            writer.write("  add eax, 8\n");
+            writer.write("  add eax, 12\n");
             switch (node.children.get(0).children.get(0).children.get(0).token.getType()) {
               case NAME: {
                 writer.write("  mov ebx, eax\n"); //ebx is the index
@@ -899,12 +901,12 @@ public class CodeGeneration {
         generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         writer.write("  push eax\n");
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
-        writer.write("  add eax, 2\n");
+        writer.write("  add eax, 3\n");
         writer.write("  mov ebx, 4\n");
         writer.write("  mul ebx\n");
         writer.write("  mov ebx, eax\n");
         writer.write("  pop eax\n");
-        writer.write("  add eax, eab\n");
+        writer.write("  add eax, ebx\n");
         writer.write("  mov eax, [eax]\n");
         return;
       }
@@ -913,7 +915,7 @@ public class CodeGeneration {
         writer.write("  push eax\n"); // size
         writer.write("  mov ebx, 4\n");
         writer.write("  mul ebx\n");
-        writer.write("  add eax, 8\n");
+        writer.write("  add eax, 12\n");
         externs.add("__malloc");
         writer.write("  call __malloc\n"); // eax is pointer to array
         writer.write("  pop ebx\n"); // size
@@ -921,7 +923,8 @@ public class CodeGeneration {
           externs.add("VTABLE$java.lang.Object");
         }
         writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
-        writer.write("  mov dword [eax + 4], ebx\n");
+        writer.write("  mov dword [eax + 4],"+subTypingTesting.getrow(node.type.name));
+        writer.write("  mov dword [eax + 8], ebx\n");
         writer.write("  push eax\n");
         writer.write("  push eax\n");
         writer.write("  mov eax, ebx\n");

@@ -1,10 +1,11 @@
 package C;
 
 public class C {
-  public static int test1() {
-    return 1;
-  }
+  public static int a = 10;
   C() {
-  int a = C.test1();
+  }
+
+  public static int test() {
+   return 0;
   }
 }

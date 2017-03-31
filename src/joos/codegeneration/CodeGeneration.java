@@ -27,7 +27,7 @@ import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeName;
 import static joos.environment.EnvironmentUtils.getEnvironmentType;
 import static joos.environment.EnvironmentUtils.getExtendedEnvironments;
 import static joos.environment.EnvironmentUtils.getEnvironmentFromTypeNode;
-
+import static joos.environment.EnvironmentUtils.moveUpToClassEnvironment;
 
 class Pair<T1, T2> {
   public T1 first;
@@ -224,18 +224,26 @@ public class CodeGeneration {
     writer.write("\n");
   }
 
-  public void generateStartCode(Environment startMethodClassEnvironment) {
+  public void generateStartCode(Environment startMethodClassEnvironment, Set<String> externs) {
     writer.write("global _start\n");
-    writer.write("_start\n");
+    writer.write("_start:\n");
     // call static method initalizers 
-
+    for (Environment environment : packageMap.values()) {
+      if(getEnvironmentType(environment) == EnvironmentType.CLASS) {
+        String label = "STATICFIELDINITIALIZER$" + getClassLabel(environment);
+        if (environment != startMethodClassEnvironment) {
+          externs.add(label);
+        }
+        writer.write("  call " + label + "\n");
+      }
+    }
     // call the static int test() function
     String staticMethodLabel = "STATICMETHOD$" + startMethodClassEnvironment.PackageName + "." + startMethodClassEnvironment.mName + "$test@";
-    writer.write("  push 0");
-    writer.write("  mov eax, " + staticMethodLabel);
-    writer.write("  call eax");
-    writer.write("  add esp, 4");
-    writer.write("  mov dword [ebp - -12], eax");
+    writer.write("  push 0\n");
+    writer.write("  mov eax, " + staticMethodLabel + "\n");
+    writer.write("  call eax\n");
+    writer.write("  add esp, 4\n");
+    writer.write("  mov dword [ebp - -12], eax\n");
     // move the return value into ebx
     writer.write("  mov ebx, eax\n");
     //Load the value 1 (indicating sys_exit) into register eax, 
@@ -250,6 +258,30 @@ public class CodeGeneration {
         sig.name != null && sig.name.equals("test") &&
         sig.parameterTypes != null && sig.parameterTypes.size() == 0 && 
         sig.type != null && sig.type.equals("int");
+  }
+
+  public void generateStaticFieldInitializer(Environment environment, Set<String> externs) throws IOException, InvalidSyntaxException {
+    String label = "STATICFIELDINITIALIZER$" + getClassLabel(environment);
+    writer.write("global " + label + "\n" + label + ":\n");
+
+    for (Map.Entry<String, ParseTreeNode> declaration : environment.mVariableDeclarations.entrySet()) {
+      String key = declaration.getKey();
+      ParseTreeNode value = declaration.getValue();
+      if (environment.mVariableToType.get(key).modifiers.contains(TokenType.STATIC)) {
+        // we have a static variable
+        // check if it has an enitialization expression
+        ParseTreeNode variableInitializer = findNodeWithTokenType(value, TokenType.VARIABLE_INITIALIZER);
+        if (variableInitializer != null) {
+          // we have an initialization field generate code to initialize it
+          generateForNode(environment, variableInitializer, externs);
+          // set the resulting value in eax to the static field
+          String staticFieldLabel = "STATICFIELD$" + getClassLabel(environment) + "$" + key;
+          writer.write("  lea ebx, [" + staticFieldLabel + "]\n");
+          writer.write("  mov [ebx], eax\n");
+        }
+      } 
+    }
+    writer.write("  ret\n");
   }
 
   public void generateForClass(Environment environment) throws IOException, InvalidSyntaxException {
@@ -269,6 +301,7 @@ public class CodeGeneration {
         writer.write("global " + label + "\n" + label + ":\n  dd 0\n\n");
       }
     }
+    generateStaticFieldInitializer(environment, externs);
 
     Environment startMethodEnvironment = null;
     for (Environment child : environment.mChildrenEnvironments) {
@@ -288,7 +321,7 @@ public class CodeGeneration {
     if (startMethodEnvironment != null) {
       // The start method was found in this class.
       // Generate start code at the end of this file
-      generateStartCode(startMethodEnvironment);
+      generateStartCode(moveUpToClassEnvironment(startMethodEnvironment), externs);
     }
 
     writer.flush();
@@ -557,6 +590,10 @@ public class CodeGeneration {
     generateForMethodNode(currentEnvironment, node, currentOffsets, currentOffset, externs);
     writer.write("  call eax\n");
     writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
+  }
+
+  public void generateForNode(Environment environment, ParseTreeNode node, Set<String> externs) throws IOException, InvalidSyntaxException {
+    generateForNode(environment, node, new HashMap<>(), 0, externs);
   }
 
   public void generateForNode(Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {

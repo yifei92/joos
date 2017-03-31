@@ -2,6 +2,7 @@ package joos.environment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,7 @@ public class Environment {
 			mOnDemandeImports=parent.mOnDemandeImports;
 			PackageName=parent.PackageName;
 		}
-		mVariableDeclarations = new HashMap<>();
+		mVariableDeclarations = new LinkedHashMap<>();
 		mChildrenEnvironments = new ArrayList<>();
 	}
 

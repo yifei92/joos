@@ -6,6 +6,7 @@ public class C {
   }
 
   public static int test() {
+   System.out.println("a = " + C.a);
    return 123;
   }
 }

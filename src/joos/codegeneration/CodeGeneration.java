@@ -248,7 +248,6 @@ public class CodeGeneration {
     writer.write("  mov eax, " + staticMethodLabel + "\n");
     writer.write("  call eax\n");
     writer.write("  add esp, 4\n");
-    writer.write("  mov dword [ebp - -12], eax\n");
     // move the return value into ebx
     writer.write("  mov ebx, eax\n");
     //Load the value 1 (indicating sys_exit) into register eax, 

@@ -6,6 +6,6 @@ public class C {
   }
 
   public static int test() {
-   return 0;
+   return 123;
   }
 }

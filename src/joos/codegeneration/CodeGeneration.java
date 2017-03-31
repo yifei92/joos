@@ -224,6 +224,34 @@ public class CodeGeneration {
     writer.write("\n");
   }
 
+  public void generateStartCode(Environment startMethodClassEnvironment) {
+    writer.write("global _start\n");
+    writer.write("_start\n");
+    // call static method initalizers 
+
+    // call the static int test() function
+    String staticMethodLabel = "STATICMETHOD$" + startMethodClassEnvironment.PackageName + "." + startMethodClassEnvironment.mName + "$test@";
+    writer.write("  push 0");
+    writer.write("  mov eax, " + staticMethodLabel);
+    writer.write("  call eax");
+    writer.write("  add esp, 4");
+    writer.write("  mov dword [ebp - -12], eax");
+    // move the return value into ebx
+    writer.write("  mov ebx, eax\n");
+    //Load the value 1 (indicating sys_exit) into register eax, 
+    writer.write("  mov eax, 1\n");
+    //then execute the instruction int 0x80.
+    writer.write("  int 0x80\n");
+  }
+
+  private boolean isStartMethod(Environment method) throws InvalidSyntaxException {
+    MethodSignature sig = method.getMethodSignature(packageMap, null);
+    return sig.modifiers != null && sig.modifiers.contains(TokenType.STATIC) &&
+        sig.name != null && sig.name.equals("test") &&
+        sig.parameterTypes != null && sig.parameterTypes.size() == 0 && 
+        sig.type != null && sig.type.equals("int");
+  }
+
   public void generateForClass(Environment environment) throws IOException, InvalidSyntaxException {
     if(getEnvironmentType(environment) != EnvironmentType.CLASS) {
       // We don't need to generate code for interfaces
@@ -241,15 +269,26 @@ public class CodeGeneration {
         writer.write("global " + label + "\n" + label + ":\n  dd 0\n\n");
       }
     }
+
+    Environment startMethodEnvironment = null;
     for (Environment child : environment.mChildrenEnvironments) {
       switch(getEnvironmentType(child)) {
         case METHOD:
           generateForMethod(environment, child, externs);
+          if (isStartMethod(child)) {
+            startMethodEnvironment = child;
+          }
           break;
         case CONSTRUCTOR:
           generateForConstructor(environment, child, externs);
           break;
       }
+    }
+    
+    if (startMethodEnvironment != null) {
+      // The start method was found in this class.
+      // Generate start code at the end of this file
+      generateStartCode(startMethodEnvironment);
     }
 
     writer.flush();
@@ -505,6 +544,21 @@ public class CodeGeneration {
     return new Pair(stat, fieldEnv);
   }
 
+  public void generateForMethodInvocation(Environment currentEnvironment, ParseTreeNode node, Map<String, Pair<Integer, Type>> currentOffsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
+    int numArgs = 0;
+    if (node.children.get(node.children.size() - 2).children.size() > 0) {
+      for (ParseTreeNode param : node.children.get(node.children.size() - 2).children.get(0).children) {
+        if (param.token.getType() == TokenType.COMMA) continue;
+        generateForNode(currentEnvironment, param, currentOffsets, currentOffset, externs);
+        numArgs++;
+        writer.write("  push eax\n");
+      }
+    }
+    generateForMethodNode(currentEnvironment, node, currentOffsets, currentOffset, externs);
+    writer.write("  call eax\n");
+    writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
+  }
+
   public void generateForNode(Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
     Environment currentEnvironment = environment;
     Map<String, Pair<Integer, Type>> currentOffsets = new HashMap(offsets);
@@ -521,18 +575,7 @@ public class CodeGeneration {
     }
     switch (node.token.getType()) {
       case METHOD_INVOCATION: {
-        int numArgs = 0;
-        if (node.children.get(node.children.size() - 2).children.size() > 0) {
-          for (ParseTreeNode param : node.children.get(node.children.size() - 2).children.get(0).children) {
-            if (param.token.getType() == TokenType.COMMA) continue;
-            generateForNode(currentEnvironment, param, currentOffsets, currentOffset, externs);
-            numArgs++;
-            writer.write("  push eax\n");
-          }
-        }
-        generateForMethodNode(currentEnvironment, node, currentOffsets, currentOffset, externs);
-        writer.write("  call eax\n");
-        writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
+        generateForMethodInvocation(currentEnvironment, node, currentOffsets, currentOffset, externs);
         return;
       }
       case IF_THEN_STATEMENT:

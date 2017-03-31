@@ -221,7 +221,7 @@ public class CodeGeneration {
         // for each of the methods in this interface
         if(interfc.mChildrenEnvironments != null) {
           for(Environment abstractMethod : interfc.mChildrenEnvironments) {
-            writer.write("  dd 00000000\n");
+            writer.write("  dd 0\n");
           }
         }
       }
@@ -298,12 +298,14 @@ public class CodeGeneration {
     externs.add("__exception");
     generateInterfaceTable(environment);
     generateVTable(environment, externs);
+    writer.write("section .data\n");
     for (String key : environment.mVariableToType.keySet()) {
       if (environment.mVariableToType.get(key).modifiers.contains(TokenType.STATIC)) {
         String label = "STATICFIELD$" + getClassLabel(environment) + "$" + key;
         writer.write("global " + label + "\n" + label + ":\n  dd 0\n\n");
       }
     }
+    writer.write("section .text\n");
     generateStaticFieldInitializer(environment, externs);
 
     Environment startMethodEnvironment = null;

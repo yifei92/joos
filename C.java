@@ -1,16 +1,10 @@
 package C;
 
-import B.B;
-import A.A;
-
 public class C {
-  public void funcc() {
-
+  public static int test1() {
+    return 1;
   }
   C() {
-    A a = new B();
-    a.funca();
-    C c = new C();
-    c.funcc();
+  int a = C.test1();
   }
 }

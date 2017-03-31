@@ -487,12 +487,15 @@ public class TypeCheckingEvaluator {
 				return typedef;
 			case UNARY_EXPRESSION_NOT_PLUS_MINUS:
 				if(currentnode.children.size()==1){
-					return check(currentnode.children.get(0),PackageMap,rootenv);
+					Type t=check(currentnode.children.get(0),PackageMap,rootenv);
+					currentnode.type=t;
+					return t;
 				}
 				Type booType=check(currentnode.children.get(1),PackageMap,rootenv);
 				if(!booType.equals("boolean")&&!booType.equals("Boolean")){
 					throw new TypeLinkingException("bool not operator on no boolean type "+booType.name);
 				}
+				currentnode.type=booType;
 				return booType;
 			case ARRAY_CREATION_EXPRESSION:
 				check(currentnode.children.get(2), PackageMap, rootenv);
@@ -518,10 +521,14 @@ public class TypeCheckingEvaluator {
 				return currentnode.type;
 			case	UNARY_EXPRESSION:
 				if(currentnode.children.size()==1){
-					return check(currentnode.children.get(0), PackageMap, rootenv);
+					t=check(currentnode.children.get(0), PackageMap, rootenv);
+					currentnode.type=t;
+					return t;
 				}
 				else {
-					return check(currentnode.children.get(1), PackageMap, rootenv);
+					t=check(currentnode.children.get(1), PackageMap, rootenv);
+					currentnode.type=t;
+					return t;
 				}
 			case	VARIABLE_DECLARATOR:
 				if(currentnode.children.size()==1){

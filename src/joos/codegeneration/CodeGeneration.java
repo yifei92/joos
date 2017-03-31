@@ -637,18 +637,19 @@ public class CodeGeneration {
           // eax is false by default
           writer.write("  mov eax, 0\n");          
           // conditional move true to eax
+          writer.write("mov ecx, 1\n");
           switch(node.children.get(1).token.getType()) {
             case COMP_LESS_THAN:
-              writer.write("cmovl eax, 1\n");
+              writer.write("cmovl eax, ecx\n");
             break;
             case COMP_GREATER_THAN:
-              writer.write("cmovg eax, 1\n");
+              writer.write("cmovg eax, ecx\n");
             break;
             case COMP_LESS_THAN_EQ:
-              writer.write("cmovle eax, 1\n");
+              writer.write("cmovle eax, ecx\n");
             break;
             case COMP_GREATER_THAN_EQ:
-              writer.write("cmovge eax, 1\n");
+              writer.write("cmovge eax, ecx\n");
             break;
           }
         }
@@ -672,12 +673,13 @@ public class CodeGeneration {
           // eax is false by default
           writer.write("  mov eax, 0\n");          
           // conditional move true to eax
+          writer.write("mov ecx, 1\n");
           switch(node.children.get(1).token.getType()) {
             case COMP_EQ:
-              writer.write("cmove eax, 1\n");
+              writer.write("cmove eax, ecx\n");
             break;
             case COMP_NOT_EQ:
-              writer.write("cmovne eax, 1\n");
+              writer.write("cmovne eax, ecx\n");
             break;
           }
         }
@@ -911,6 +913,7 @@ public class CodeGeneration {
         return;
       }
       case ARRAY_CREATION_EXPRESSION: {
+
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         writer.write("  push eax\n"); // size
         writer.write("  mov ebx, 4\n");
@@ -920,7 +923,7 @@ public class CodeGeneration {
         writer.write("  call __malloc\n"); // eax is pointer to array
         writer.write("  pop ebx\n"); // size
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
-          externs.add("VTABLE$java.lang.Object");
+          externs.add("InterfaceTABLE$java.lang.Object");
         }
         writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
         writer.write("  mov dword [eax + 4],"+subTypingTesting.getrow(node.type.name)+"\n");

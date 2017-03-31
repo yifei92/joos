@@ -18,6 +18,7 @@ public class SubTypingTesting {
 
 	public SubTypingTesting(Map<String, Environment> packageMap) {
 		this.packageMap = packageMap;
+		this.initialize();
 	}
 
 	//int[][] lookuptable;
@@ -36,7 +37,7 @@ public class SubTypingTesting {
 		writer.write("subtypecheckingtable:");
 		//lookuptable=new int[classlist.size()][classlist.size()];
 		for(int i=0;i<classlist.size();i++){
-			for(int j=0;j<classlist.size();i++) {
+			for(int j=0;j<classlist.size();j++) {
 				if (i == j) {
 					//lookuptable[i][j]=1;
 					writer.write("dd 0x1\n");

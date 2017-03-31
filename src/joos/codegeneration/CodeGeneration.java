@@ -280,8 +280,7 @@ public class CodeGeneration {
           generateForNode(environment, variableInitializer, externs);
           // set the resulting value in eax to the static field
           String staticFieldLabel = "STATICFIELD$" + getClassLabel(environment) + "$" + key;
-          writer.write("  lea ebx, [" + staticFieldLabel + "]\n");
-          writer.write("  mov [ebx], eax\n");
+          writer.write("  mov [" + staticFieldLabel + "], eax\n");
         }
       } 
     }

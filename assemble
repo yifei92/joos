@@ -1,5 +1,5 @@
 #!/bin/bash
 for filename in *.s; do 
-  nasm -O1 -f elf -g -F dwarf $filename
+  nasm -O1 -f elf -g -F dwarf $filename 
 done
-ld -melf_i386 -o main *.o
+ld -melf_i386 -o main *.o test/java3/runtime.o

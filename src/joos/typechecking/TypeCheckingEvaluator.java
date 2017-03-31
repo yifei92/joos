@@ -261,17 +261,23 @@ public class TypeCheckingEvaluator {
 						if(isnumicType(left)||left.equals("boolean")){
 							throw new TypeLinkingException("Cannot check instanceof on simple types");
 						}
-						return new Type("boolean");
+						Type t=new Type("boolean");
+						currentnode.type=t;
+						return t;
 					}
 					if(isnumicType(check(currentnode.children.get(0),PackageMap,rootenv))&& isnumicType(check(currentnode.children.get(2),PackageMap,rootenv)) ){
-						return new Type("boolean");
+						Type t=new Type("boolean");
+						currentnode.type=t;
+						return t;
 					}
 					else{
 						throw new TypeLinkingException("comparison expression has non numeric input");
 					}
 				}
 				else {
-					return check(currentnode.children.get(0),PackageMap,rootenv);
+					Type t=check(currentnode.children.get(0),PackageMap,rootenv);
+					currentnode.type=t;
+					return t;
 				}
 
 			case RETURN_STATEMENT:
@@ -490,7 +496,9 @@ public class TypeCheckingEvaluator {
 				return booType;
 			case ARRAY_CREATION_EXPRESSION:
 				check(currentnode.children.get(2), PackageMap, rootenv);
-				return new Type(check(currentnode.children.get(1), PackageMap, rootenv).name+"[]");
+				Type t=new Type(check(currentnode.children.get(1), PackageMap, rootenv).name+"[]");
+				currentnode.type=t;
+				return t;
 			case METHOD_DECLARATION:
 				check(currentnode.children.get(0),PackageMap,rootenv);
 				return check(currentnode.children.get(1),PackageMap,rootenv);
@@ -606,7 +614,7 @@ public class TypeCheckingEvaluator {
 		}
 	}
 
-	boolean isnumicType(Type t){
+	static boolean isnumicType(Type t){
 		if(t.equals("int")||t.equals("short")||t.equals("byte")||t.equals("char")){
 			return true;
 		}
@@ -622,7 +630,7 @@ public class TypeCheckingEvaluator {
 		return name;
 	}
 
-	boolean assignable(String parent,String child,Map<String, Environment> PackageMap){
+	public static boolean assignable(String parent,String child,Map<String, Environment> PackageMap){
 		if(parent.equals(child)){
 			return true;
 		}
@@ -694,7 +702,7 @@ public class TypeCheckingEvaluator {
 		return returnboo;
 	}
 
-	boolean assignableArray(String parent,String child,Map<String, Environment> PackageMap){
+	static boolean assignableArray(String parent,String child,Map<String, Environment> PackageMap){
 		if(parent.equals(child)){
 			return true;
 		}

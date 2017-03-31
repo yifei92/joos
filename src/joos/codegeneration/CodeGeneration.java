@@ -20,6 +20,7 @@ import joos.commons.Type;
 import joos.environment.Environment;
 import joos.environment.Environment.EnvironmentType;
 import joos.exceptions.InvalidSyntaxException;
+import joos.typechecking.TypeCheckingEvaluator;
 
 import static joos.environment.EnvironmentUtils.getNameFromTypeNode;
 import static joos.environment.EnvironmentUtils.findNodeWithTokenType;
@@ -1029,6 +1030,9 @@ public class CodeGeneration {
       }
       case CAST_EXPRESSION: {
         generateForNode(currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs);
+        if(TypeCheckingEvaluator.isprimitiveType(node.children.get(node.children.size() - 1).type)){
+          return;
+        }
         writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
         writer.write("  mov ebx, [subtypecheckingtable+ebx*4+"+offset+"]\n");

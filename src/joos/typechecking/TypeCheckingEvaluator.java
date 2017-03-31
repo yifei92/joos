@@ -614,6 +614,16 @@ public class TypeCheckingEvaluator {
 		}
 	}
 
+	public static boolean isprimitiveType(Type t){
+		if(isnumicType(t)){
+			return true;
+		}
+		if(t.name.equals("boolean")){
+			return true;
+		}
+		return false;
+	}
+
 	static boolean isnumicType(Type t){
 		if(t.equals("int")||t.equals("short")||t.equals("byte")||t.equals("char")){
 			return true;

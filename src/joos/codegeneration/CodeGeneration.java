@@ -64,6 +64,10 @@ public class CodeGeneration {
     for (String type : methodSignature.parameterTypes) {
       ret += type.replace("[]", "~") + "#";
     }
+    if (methodSignature.modifiers.contains(TokenType.NATIVE)) {
+      return "NATIVEjava.io.OutputStream.nativeWrite";   // hardcode any natice method to use the only native function we have
+    }
+
     return ret;
   }
 
@@ -322,6 +326,9 @@ public class CodeGeneration {
 
   public void generateForMethod(Environment classEnv, Environment methodEnv, Set<String> externs) throws IOException, InvalidSyntaxException {
     MethodSignature methodSignature = methodEnv.getMethodSignature(packageMap, "");
+    if(methodSignature.modifiers.contains(TokenType.NATIVE)){
+      return;   //hardcode native method definition do not do anything since we assume that is will be a gloabal label
+    }
     String label = getMethodLabel(classEnv, methodSignature);
     writer.write("global " + label + "\n" + label + ":\n");
     Map<String, Pair<Integer, Type>> offsets = new HashMap();

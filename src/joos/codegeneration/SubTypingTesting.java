@@ -70,12 +70,12 @@ public class SubTypingTesting {
 			e.printStackTrace();
 		}
 	}
-
+/*
 	public int getrow(String classname){
 		int index=classlist.indexOf(classname);
 		return index*4*classlist.size();
 	}
-
+*/
 	public int getoffset(String classname){
 		int index=classlist.indexOf(classname);
 		return index*4;

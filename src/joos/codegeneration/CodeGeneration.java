@@ -362,7 +362,7 @@ public class CodeGeneration {
     writer.write("  call __malloc\n");
     writer.write("  mov dword [ebp + 8], eax\n"); // set this
     writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
-    writer.write("  mov dword [eax + 4], "+subTypingTesting.getrow(getClassLabel(classEnv))+"\n");
+    writer.write("  mov dword [eax + 4], "+subTypingTesting.getoffset(getClassLabel(classEnv))+"\n");
     for (int j = 4; j < size; j += 4) {
       writer.write("  mov dword [eax + " + j + "], 0\n");
     }
@@ -620,7 +620,7 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
           writer.write("  mov ebx, [eax + 8]\n");
-          writer.write("  mov eax, [subtypecheckingtable+ebx+"+offset+"]\n");
+          writer.write("  mov eax, [subtypecheckingtable+ebx*4+"+offset+"]\n");
           return;
         } else {
           // Generate code for lhs
@@ -926,7 +926,7 @@ public class CodeGeneration {
           externs.add("InterfaceTABLE$java.lang.Object");
         }
         writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
-        writer.write("  mov dword [eax + 4],"+subTypingTesting.getrow(node.type.name)+"\n");
+        writer.write("  mov dword [eax + 4],"+subTypingTesting.getoffset(node.type.name)+"\n");
         writer.write("  mov dword [eax + 8], ebx\n");
         writer.write("  push eax\n");
         writer.write("  push eax\n");
@@ -981,7 +981,7 @@ public class CodeGeneration {
         generateForNode(currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs);
         writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
-        writer.write("  mov ebx, [subtypecheckingtable+ebx+"+offset+"]\n");
+        writer.write("  mov ebx, [subtypecheckingtable+ebx*4+"+offset+"]\n");
         writer.write(" cmp ebx, 0\n");
         int unique=subTypingTesting.getuniqueid();
         writer.write(" je subtypingcheck"+unique+" \n");

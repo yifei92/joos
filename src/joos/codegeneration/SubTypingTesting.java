@@ -58,6 +58,7 @@ public class SubTypingTesting {
 		}
 
 		File file = new File("output/subteypchecking.s");
+		file.getParentFile().mkdirs();
 		try {
 			file.createNewFile();
 			FileWriter fileWriter = new FileWriter(file);

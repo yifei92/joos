@@ -680,7 +680,60 @@ public class CodeGeneration {
         }
         return;
       case UNARY_EXPRESSION: {
-        // TODO
+        if (node.children.size() == 1) {
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+        } else {
+          // get the value in eax of the unary expression
+          generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
+          // multiply by -1
+          Type unaryType = node.children.get(1).getFirstType();
+          if (unaryType.name.equals("int") || unaryType.name.equals("short")) {
+            writer.write("  imul eax, -1\n");
+          } else {
+            writer.write("  mul eax, -1\n");
+          }
+        }
+        return;
+      }
+      case UNARY_EXPRESSION_NOT_PLUS_MINUS: {
+        if (node.children.size() == 1) {
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+        } else {
+          generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
+          writer.write("  not eax\n");
+        }
+        return;
+      }
+      case CONDITIONAL_OR_EXPRESSION:
+      case CONDITIONAL_AND_EXPRESSION: {
+        if (node.children.size() == 1) {
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+        } else {
+          // generate code for the first expression
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
+          // save the running total onto the stack
+          writer.write("  push eax\n");
+          for (int i = 1 ; i < node.children.size() ; i++) {
+            ParseTreeNode child = node.children.get(i);
+            if (child.token.getType() != TokenType.BOOL_OP_AND) {
+              // generate the code for this expression
+              generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);         
+              // fetch the running total
+              writer.write("  pop ebx\n");
+              // apply the and operator to the running total
+              if (node.token.getType() == CONDITIONAL_AND_EXPRESSION) {
+                writer.write("  and ebx, eax\n");
+              } else {
+                writer.write("  or ebx, eax\n");
+              }
+              // save the running total
+              writer.write("  push ebx\n");
+            }
+          }
+          // all results must be in the eax
+          writer.write("  pop eax\n");
+        }
+        return;
       }
       case MULTIPLICATIVE_EXPRESSION: {
         if(node.children.size() == 1) {

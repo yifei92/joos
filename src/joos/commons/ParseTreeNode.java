@@ -136,6 +136,26 @@ public class ParseTreeNode {
 			}
 		}
 	}
+
+	/*
+	 * Iterates over this and its children for the first node with  type set and returns that
+	 */
+	public Type getFirstType() {
+		if (this.type != null) {
+			return this.type;
+		}
+		if (children != null) {
+			Type childType = null;
+			for (ParseTreeNode child : children) {
+				childType = child.getFirstType();
+				if (childType != null) {
+					return childType;
+				}
+			}
+		}
+		return null;
+	}
+
 	//helper funtion
 	static public String getfullnamefromnamenode(ParseTreeNode namenode){
 		String name="";

@@ -296,6 +296,7 @@ public class CodeGeneration {
       // We don't need to generate code for interfaces
       return;
     }
+
     writer = new StringWriter();
     Set<String> externs = new HashSet();
     externs.add("subtypecheckingtable");
@@ -748,16 +749,16 @@ public class CodeGeneration {
           writer.write("  push eax\n");
           for (int i = 1 ; i < node.children.size() ; i++) {
             ParseTreeNode child = node.children.get(i);
-            if (child.token.getType() != TokenType.BOOL_OP_AND) {
+            if (child.token.getType() != TokenType.BOOL_OP_AND&&child.token.getType() != TokenType.BOOL_OP_OR) {
               // generate the code for this expression
               generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);
               // fetch the running total
-              writer.write("  pop ebx\n");
+              writer.write("  pop ebx ; pop last result\n");
               // apply the and operator to the running total
               if (node.token.getType() == TokenType.CONDITIONAL_AND_EXPRESSION) {
-                writer.write("  and ebx, eax\n");
+                writer.write("  and ebx, eax ; && op\n");
               } else {
-                writer.write("  or ebx, eax\n");
+                writer.write("  or ebx, eax  ; || op\n");
               }
               // save the running total
               writer.write("  push ebx\n");
@@ -875,7 +876,7 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
           writer.write("  mov ebx, [eax + 8]\n");
-          writer.write("  mov eax, [subtypecheckingtable+ebx*4+"+offset+"]\n");
+          writer.write("  mov eax, [subtypecheckingtable+ebx*4+"+offset+"]  ;check instance of\n");
           return;
         } else {
           // Generate code for lhs
@@ -1303,7 +1304,7 @@ public class CodeGeneration {
         }
         writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
-        writer.write("  mov ebx, [subtypecheckingtable+ebx*4+"+offset+"]\n");
+        writer.write("  mov ebx, [subtypecheckingtable+ebx*4+"+offset+"] ; check cast expression\n");
         writer.write(" cmp ebx, 0\n");
         int unique=subTypingTesting.getuniqueid();
         writer.write(" je subtypingcheck"+unique+" \n");

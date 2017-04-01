@@ -42,8 +42,10 @@ STATICMETHOD$java.util.Arrays$equals@boolean~#boolean~#:
   push ebp
   mov ebp, esp
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   push eax
   mov eax, [ebp - -16]
+  mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0
@@ -59,7 +61,9 @@ label3start:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0
@@ -118,8 +122,10 @@ STATICMETHOD$java.util.Arrays$equals@char~#char~#:
   push ebp
   mov ebp, esp
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   push eax
   mov eax, [ebp - -16]
+  mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0
@@ -135,7 +141,9 @@ label6start:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0

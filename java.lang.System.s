@@ -47,7 +47,7 @@ CONSTRUCTOR$java.lang.System@:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.System
-  mov dword [eax + 4], 52
+  mov dword [eax + 4], 60
   mov dword [eax + 4], 0
   mov eax, [ebp + 8]
   pop ebp

@@ -37,7 +37,7 @@ CONSTRUCTOR$java.lang.Boolean@boolean#:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Boolean
-  mov dword [eax + 4], 92
+  mov dword [eax + 4], 100
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp - -12]
@@ -56,7 +56,7 @@ CONSTRUCTOR$java.lang.Boolean@:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Boolean
-  mov dword [eax + 4], 92
+  mov dword [eax + 4], 100
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp + 8]

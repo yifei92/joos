@@ -31,7 +31,7 @@ CONSTRUCTOR$java.lang.Character@char#:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Character
-  mov dword [eax + 4], 76
+  mov dword [eax + 4], 84
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp - -12]
@@ -50,7 +50,7 @@ CONSTRUCTOR$java.lang.Character@:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Character
-  mov dword [eax + 4], 76
+  mov dword [eax + 4], 84
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp + 8]

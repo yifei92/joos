@@ -38,6 +38,7 @@ METHOD$java.lang.String$length@:
   mov ebp, esp
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
+  mov eax, [eax + 8]
   pop ebp
   ret
 
@@ -115,6 +116,7 @@ CONSTRUCTOR$java.lang.String@char~#:
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   push eax
   mov ebx, 4
   mul ebx
@@ -151,7 +153,9 @@ label11start:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0
@@ -544,6 +548,7 @@ cmovl eax, ecx
   mov eax, 1
   mov dword [ebp - 12], eax
   mov eax, [ebp - -12]
+  imul eax, -1
   mov dword [ebp - -12], eax
 label15end:
   mov eax, [ebp - -12]
@@ -918,6 +923,9 @@ cmove eax, ecx
   je label23end
   mov eax, 0
 label23end:
+  mov ebx, [eax + 8]
+  mov eax, [subtypecheckingtable+ebx*4+116]
+  not eax
   cmp eax, 0
   je label24end
   mov eax, 0
@@ -925,6 +933,7 @@ label24end:
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
   push eax
+  mov eax, [ebp - -12]
   mov ebx, [eax + 8]
   mov ebx, [subtypecheckingtable+ebx*4+124]
  cmp ebx, 0
@@ -1150,6 +1159,7 @@ label30start:
   mov eax, 0
 mov ecx, 1
 cmovl eax, ecx
+  push eax
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp + 8]
@@ -1167,6 +1177,10 @@ cmovl eax, ecx
   mov eax, 0
 mov ecx, 1
 cmovle eax, ecx
+  pop ebx
+  and ebx, eax
+  push ebx
+  pop eax
   cmp eax, 0
   je label30end
   mov eax, [ebp - 4]
@@ -1203,6 +1217,7 @@ label31start:
   mov eax, 0
 mov ecx, 1
 cmovge eax, ecx
+  push eax
   mov eax, [ebp - 8]
   push eax
   mov eax, [ebp + 8]
@@ -1220,6 +1235,10 @@ cmovge eax, ecx
   mov eax, 0
 mov ecx, 1
 cmovle eax, ecx
+  pop ebx
+  and ebx, eax
+  push ebx
+  pop eax
   cmp eax, 0
   je label31end
   mov eax, [ebp - 8]
@@ -1291,7 +1310,9 @@ label33start:
   push eax
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
+  mov eax, [eax + 8]
   mov eax, [ebp + 8]
+  mov eax, [eax + 8]
   mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
@@ -1353,6 +1374,7 @@ global METHOD$java.lang.String$compareTo@java.lang.Object#
 METHOD$java.lang.String$compareTo@java.lang.Object#:
   push ebp
   mov ebp, esp
+  mov eax, [ebp - -12]
   mov ebx, [eax + 8]
   mov ebx, [subtypecheckingtable+ebx*4+124]
  cmp ebx, 0
@@ -1387,24 +1409,33 @@ label35start:
   push eax
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
+  mov eax, [eax + 8]
   mov eax, [ebp + 8]
+  mov eax, [eax + 8]
   mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0
 mov ecx, 1
 cmovge eax, ecx
+  push eax
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp - -12]
   mov eax, [eax + 8]
+  mov eax, [eax + 8]
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0
 mov ecx, 1
 cmovge eax, ecx
+  pop ebx
+  and ebx, eax
+  push ebx
+  pop eax
   cmp eax, 0
   je label36end
   mov eax, 0
@@ -1413,7 +1444,9 @@ label36end:
   push eax
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
+  mov eax, [eax + 8]
   mov eax, [ebp + 8]
+  mov eax, [eax + 8]
   mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
@@ -1428,7 +1461,9 @@ label37end:
   push eax
   mov eax, [ebp - -12]
   mov eax, [eax + 8]
+  mov eax, [eax + 8]
   mov eax, [ebp - -12]
+  mov eax, [eax + 8]
   mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
@@ -1547,6 +1582,7 @@ METHOD$java.lang.String$toCharArray@:
   sub esp, 4
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
+  mov eax, [eax + 8]
   push eax
   mov ebx, 4
   mul ebx
@@ -1579,7 +1615,9 @@ label41start:
   mov eax, [ebp - 8]
   push eax
   mov eax, [ebp - 4]
+  mov eax, [eax + 8]
   mov eax, [ebp - 4]
+  mov eax, [eax + 8]
   pop ebx
   cmp ebx, eax
   mov eax, 0

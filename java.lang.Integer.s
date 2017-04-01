@@ -38,7 +38,7 @@ CONSTRUCTOR$java.lang.Integer@int#:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Integer
-  mov dword [eax + 4], 60
+  mov dword [eax + 4], 68
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp - -12]
@@ -91,6 +91,7 @@ label8start:
   mov eax, 0
 mov ecx, 1
 cmovl eax, ecx
+  push eax
   mov eax, [ebp - 12]
   push eax
   mov eax, [ebp - -12]
@@ -107,6 +108,10 @@ cmovl eax, ecx
   mov eax, 0
 mov ecx, 1
 cmove eax, ecx
+  push eax
+  pop ebx
+  or ebx, eax
+  push ebx
   mov eax, [ebp - 12]
   push eax
   mov eax, [ebp - -12]
@@ -124,6 +129,7 @@ cmove eax, ecx
   mov eax, 0
 mov ecx, 1
 cmovge eax, ecx
+  push eax
   mov eax, [ebp - 12]
   push eax
   mov eax, [ebp - -12]
@@ -141,6 +147,18 @@ cmovge eax, ecx
   mov eax, 0
 mov ecx, 1
 cmovle eax, ecx
+  pop ebx
+  and ebx, eax
+  push ebx
+  pop eax
+  pop ebx
+  or ebx, eax
+  push ebx
+  pop eax
+  pop ebx
+  and ebx, eax
+  push ebx
+  pop eax
   cmp eax, 0
   je label8end
   mov eax, [ebp - 12]
@@ -161,6 +179,8 @@ mov ecx, 1
 cmove eax, ecx
   cmp eax, 0
   je label9else
+  mov eax, [ebp - 8]
+  not eax
   mov dword [ebp - 8], eax
   je label9end
 label9else:
@@ -205,6 +225,7 @@ label8end:
   cmp eax, 0
   je label10end
   mov eax, [ebp - 4]
+  imul eax, -1
   mov dword [ebp - 4], eax
 label10end:
   mov eax, [ebp - 4]
@@ -220,7 +241,7 @@ CONSTRUCTOR$java.lang.Integer@java.lang.String#:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Integer
-  mov dword [eax + 4], 60
+  mov dword [eax + 4], 68
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp - -12]
@@ -244,7 +265,7 @@ CONSTRUCTOR$java.lang.Integer@:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Integer
-  mov dword [eax + 4], 60
+  mov dword [eax + 4], 68
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, 0

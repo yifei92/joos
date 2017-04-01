@@ -20,11 +20,11 @@ extern subtypecheckingtable
 extern STATICFIELDINITIALIZER$java.lang.Class
 extern STATICFIELDINITIALIZER$java.lang.System
 
-global InterfaceTABLE$C.C
-InterfaceTABLE$C.C:
+global InterfaceTABLE$C
+InterfaceTABLE$C:
 
-global VTABLE$C.C
-VTABLE$C.C:
+global VTABLE$C
+VTABLE$C:
   dd METHOD$java.lang.Object$equals@java.lang.Object#
   dd METHOD$java.lang.Object$toString@
   dd METHOD$java.lang.Object$hashCode@
@@ -33,31 +33,32 @@ VTABLE$C.C:
 
 section .data
 section .text
-global STATICFIELDINITIALIZER$C.C
-STATICFIELDINITIALIZER$C.C:
+global STATICFIELDINITIALIZER$C
+STATICFIELDINITIALIZER$C:
   ret
-global CONSTRUCTOR$C.C@
-CONSTRUCTOR$C.C@:
+global CONSTRUCTOR$C@
+CONSTRUCTOR$C@:
   push ebp
   mov ebp, esp
   mov eax, 8
   call __malloc
   mov dword [ebp + 8], eax
-  mov dword [eax], InterfaceTABLE$C.C
-  mov dword [eax + 4], 100
+  mov dword [eax], InterfaceTABLE$C
+  mov dword [eax + 4], 52
   mov dword [eax + 4], 0
   mov eax, [ebp + 8]
   pop ebp
   ret
 
-global STATICMETHOD$C.C$test@
-STATICMETHOD$C.C$test@:
+global STATICMETHOD$C$test@
+STATICMETHOD$C$test@:
   push ebp
   mov ebp, esp
   sub esp, 4
   mov eax, 10
   mov dword [ebp - 4], eax
   mov eax, [ebp - 4]
+  imul eax, -1
   add esp, 4
   pop ebp
   ret
@@ -67,19 +68,19 @@ _start:
   call STATICFIELDINITIALIZER$java.io.OutputStream
   call STATICFIELDINITIALIZER$java.io.PrintStream
   call STATICFIELDINITIALIZER$java.util.Arrays
+  call STATICFIELDINITIALIZER$C
   call STATICFIELDINITIALIZER$java.lang.System
   call STATICFIELDINITIALIZER$java.lang.Integer
   call STATICFIELDINITIALIZER$java.lang.Character
   call STATICFIELDINITIALIZER$java.lang.Short
   call STATICFIELDINITIALIZER$java.lang.Boolean
-  call STATICFIELDINITIALIZER$C.C
   call STATICFIELDINITIALIZER$java.lang.Class
   call STATICFIELDINITIALIZER$java.lang.Object
   call STATICFIELDINITIALIZER$java.lang.String
   call STATICFIELDINITIALIZER$java.lang.Byte
   call STATICFIELDINITIALIZER$java.lang.Number
   push 0
-  mov eax, STATICMETHOD$C.C$test@
+  mov eax, STATICMETHOD$C$test@
   call eax
   add esp, 4
   mov ebx, eax

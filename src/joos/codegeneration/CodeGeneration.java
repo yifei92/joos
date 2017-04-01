@@ -243,7 +243,11 @@ public class CodeGeneration {
       }
     }
     // call the static int test() function
-    String staticMethodLabel = "STATICMETHOD$" + startMethodClassEnvironment.PackageName + "." + startMethodClassEnvironment.mName + "$test@";
+    String packagePrefix = "";
+    if (startMethodClassEnvironment.PackageName != null && !startMethodClassEnvironment.PackageName.equals("")) {
+      packagePrefix = startMethodClassEnvironment.PackageName + ".";
+    }
+    String staticMethodLabel = "STATICMETHOD$" + packagePrefix + startMethodClassEnvironment.mName + "$test@";
     writer.write("  push 0\n");
     writer.write("  mov eax, " + staticMethodLabel + "\n");
     writer.write("  call eax\n");

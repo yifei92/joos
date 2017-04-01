@@ -32,7 +32,7 @@ CONSTRUCTOR$java.lang.Short@short#:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Short
-  mov dword [eax + 4], 84
+  mov dword [eax + 4], 92
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp - -12]
@@ -60,7 +60,7 @@ CONSTRUCTOR$java.lang.Short@:
   call __malloc
   mov dword [ebp + 8], eax
   mov dword [eax], InterfaceTABLE$java.lang.Short
-  mov dword [eax + 4], 84
+  mov dword [eax + 4], 92
   mov dword [eax + 4], 0
   mov dword [eax + 8], 0
   mov eax, [ebp + 8]

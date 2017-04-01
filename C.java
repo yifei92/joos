@@ -1,12 +1,19 @@
 package C;
 
+import B.B;
+
 public class C {
-  public static int a = 10;
+  public static int a = C.init() + C.init();
+  public static int b = C.init() + C.init();
+
+  public static int init() {
+    return 2;
+  }
+
   C() {
   }
 
   public static int test() {
-   System.out.println("a = " + C.a);
-   return 123;
+   return C.a + C.b + B.a + B.b;
   }
 }

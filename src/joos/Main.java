@@ -59,10 +59,6 @@ public class Main {
 			for (Environment environment : packageMap.values()) {
 				HierarchyChecking.check(environment, packageMap);
 			}
-			/*for (Map.Entry<String, Environment> entry : packageMap.entrySet()) {
-			    entry.getValue().print();
-			    System.out.println("");
-			}*/
 			for(String key : treeMap.keySet()){
 				TypeLinking typeLinking=new TypeLinking();
 				typeLinking.check(treeMap.get(key),packageMap.get(key),packageMap,key);
@@ -81,7 +77,7 @@ public class Main {
 				TypeChecker.check(environment, packageMap);
 			}
 			for (String key : treeMap.keySet()) {
-				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C") || key.contains("J1_formal_with_same_name_as_field")) {
+				if(key.equals("A.A") || key.equals("B.B") || key.equals("C.C")) {
 					//System.out.println("class " + key);
 					//treeMap.get(key).print();
 				}

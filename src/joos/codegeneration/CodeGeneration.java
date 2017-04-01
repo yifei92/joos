@@ -680,23 +680,41 @@ public class CodeGeneration {
         }
         return;
       case ADDITIVE_EXPRESSION: {
+        // TODO need to be able to concat strings.
         if(node.children.size() == 1) {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
-          // Generate code for lhs
-          // assume result is in eax
+          // Flag to keep track of whether or not we should add or subtract the current result 
+          // from the running total
+          boolean isPlus = false;
+          // generate code for the first expression
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
-          // save the lhs
+          // save the running total onto the stack
           writer.write("  push eax\n");
-          // Generate for rhs
-          generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
-          // fetch the saved lhs from the stack
-          writer.write("  pop ebx\n");
-          if(node.children.get(1).token.getType() == TokenType.OP_PLUS) {
-            writer.write("  add eax, ebx\n");
-          } else if (node.children.get(1).token.getType() == TokenType.OP_MINUS) {
-            writer.write("  sub eax, ebx\n");
+          for (int i = 1 ; i < node.children.size() ; i++) {
+            ParseTreeNode child = node.children.get(i);
+            TokenType type = child.token.getType();
+            if (type == TokenType.OP_PLUS) {
+              isPlus = true;
+            } else if (type == TokenType.OP_MINUS) {
+              isPlus = false;
+            } else {
+              // generate the code for this expression
+              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);         
+              // fetch the running total
+              writer.write("  pop ebx\n");
+              // apply the current operator to the running total
+              if(isPlus) {
+                writer.write("  add ebx, eax\n");
+              } else {
+                writer.write("  sub ebx, eax\n");
+              }
+              // save the running total
+              writer.write("  push ebx\n");
+            }
           }
+          // all results must be in the eax
+          writer.write("  pop eax\n");
         }
         return;
       }

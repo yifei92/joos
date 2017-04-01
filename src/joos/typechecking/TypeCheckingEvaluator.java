@@ -79,14 +79,16 @@ public class TypeCheckingEvaluator {
 			case CONDITIONAL_OR_EXPRESSION:
 				if(currentnode.children.size()>1){
 					if(check(currentnode.children.get(0),PackageMap,rootenv).equals("boolean") && check(currentnode.children.get(2),PackageMap,rootenv).equals("boolean") ){
-						return check(currentnode.children.get(0),PackageMap,rootenv);
+						currentnode.type=check(currentnode.children.get(0),PackageMap,rootenv);
+						return currentnode.type;
 					}
 					else{
 						throw new TypeLinkingException("and expression has non boolean input");
 					}
 				}
 				else {
-					return check(currentnode.children.get(0),PackageMap,rootenv);
+					currentnode.type=check(currentnode.children.get(0),PackageMap,rootenv);
+					return currentnode.type;
 				}
 			case ADDITIVE_EXPRESSION:
 				if(currentnode.children.size()>1) {
@@ -145,6 +147,7 @@ public class TypeCheckingEvaluator {
 							}
 						}
 					}
+					currentnode.type=new Type("int");
 					return new Type("int");
 				}
 				else {
@@ -249,15 +252,18 @@ public class TypeCheckingEvaluator {
 				right=check(currentnode.children.get(2),PackageMap,rootenv);
 
 				if(left.equals(right)){
+					currentnode.type=new Type("boolean");
 					return new Type("boolean");
 				};
 				if(left.equals("null")||right.equals("null")){
+					currentnode.type=new Type("boolean");
 					return new Type("boolean");
 				}
 				if (!assignable(left.name,right.name,PackageMap) && !assignable(right.name,left.name,PackageMap)) {
 					throw new TypeLinkingException(rootenv.mName+"cannot cast equality " + left.name + " to " + right.name);
 				}
 				System.out.println("      "+left.name+right.name);
+				currentnode.type=new Type("boolean");
 				return new Type("boolean");
 
 			case RELATIONAL_EXPRESSION:

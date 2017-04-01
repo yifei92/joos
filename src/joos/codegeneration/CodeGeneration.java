@@ -511,7 +511,7 @@ public class CodeGeneration {
         return;
       }
       String prefix = name.substring(0, dotIndex);
-      if (generateForName(environment, prefix, offsets, externs).first) {
+      if (generateForName(environment, prefix, node, offsets, externs).first) {
         // a.b.c() static
         Environment classEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
         MethodSignature methodSignature = classEnv.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
@@ -525,6 +525,13 @@ public class CodeGeneration {
         // a.b.c()
         Environment typeEnvironment = node.children.get(0).type.environment;
         MethodSignature methodSignature = typeEnvironment.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
+
+        writer.write("  cmp eax, 0\n");
+        writer.write("  jne EXCEPTION$" + node.children.get(1).getFirstTerminalNode().token.getIndex() + "m\n");
+
+        writer.write("  call __exception\n");
+
+        writer.write("EXCEPTION$" + node.children.get(1).getFirstTerminalNode().token.getIndex() + "m:\n");
         writer.write("  push eax\n"); //push new this
         writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
         generateForMethodOffset(typeEnvironment, methodSignature);
@@ -534,8 +541,14 @@ public class CodeGeneration {
       // primary.c()
       generateForNode(environment, node.children.get(0), offsets, currentOffset, externs);
       String name = ((TerminalToken)findNodeWithTokenType(node.children.get(2), TokenType.IDENTIFIER).token).getRawValue();
-      Environment typeEnvironment = node.children.get(0).type.environment;
+      Environment typeEnvironment = packageMap.get(node.children.get(0).type.name);
       MethodSignature methodSignature = typeEnvironment.getMethodSignatures(packageMap).get(name).get(argTypes);
+      writer.write("  cmp eax, 0\n");
+      writer.write("  jne EXCEPTION$" + node.children.get(2).getFirstTerminalNode().token.getIndex() + "\n");
+
+      writer.write("  call __exception\n");
+
+      writer.write("EXCEPTION$" + node.children.get(2).getFirstTerminalNode().token.getIndex() + ":\n");
       writer.write("  push eax\n"); //push new this
       writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
       generateForMethodOffset(typeEnvironment, methodSignature);
@@ -543,7 +556,7 @@ public class CodeGeneration {
     }
   }
 
-  private Pair<Boolean, Environment> generateForName(Environment environment, String name, Map<String, Pair<Integer, Type>> offsets, Set<String> externs) throws IOException, InvalidSyntaxException {
+  private Pair<Boolean, Environment> generateForName(Environment environment, String name, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, Set<String> externs) throws IOException, InvalidSyntaxException {
     int dotIndex = name.indexOf('.');
     String prefix = dotIndex == -1 ? name : name.substring(0, dotIndex);
     boolean stat = false;
@@ -566,6 +579,7 @@ public class CodeGeneration {
       }
     }
 
+    int i = 0;
     while (dotIndex != -1) {
       int newDotIndex = name.indexOf('.', dotIndex + 1);
       if (newDotIndex == -1) {
@@ -582,6 +596,12 @@ public class CodeGeneration {
         writer.write("  mov eax, [" + label +"]\n");
         fieldEnv = packageMap.get(fieldEnv.mVariableToType.get(prefix).name);
       } else {
+        writer.write("  cmp eax, 0\n");
+        writer.write("  jne EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "$" + i + "\n");
+
+        writer.write("  call __exception\n");
+
+        writer.write("EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "$" + i + ":\n");
         if (prefix.equals("length") && fieldEnv == null) {
           writer.write("  mov eax, [eax + 8]\n");
           return new Pair(false, null);
@@ -592,6 +612,7 @@ public class CodeGeneration {
         fieldEnv = packageMap.get(pair.second.name);
       }
       dotIndex = newDotIndex;
+      i++;
     }
     return new Pair(stat, fieldEnv);
   }
@@ -918,11 +939,6 @@ public class CodeGeneration {
           }
         }
         return;
-
-      }
-      case SHIFT_EXPRESSION: {
-        // just contains an additive expression
-        generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
       }
       case AND_EXPRESSION:
         if(node.children.size()>1){
@@ -940,9 +956,6 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         }
         return;
-      case EXCLUSIVE_OR_EXPRESSION: {
-        generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
-      }
       case INCLUSIVE_OR_EXPRESSION:
         if(node.children.size()>1){
           uniqueid=subTypingTesting.getuniqueid();
@@ -960,7 +973,7 @@ public class CodeGeneration {
         }
         return;
       case NAME:
-        generateForName(currentEnvironment, getNameFromTypeNode(node), currentOffsets, externs);
+        generateForName(currentEnvironment, getNameFromTypeNode(node), node, currentOffsets, externs);
         return;
       case BOOLEAN_LITERAL_TRUE:
         writer.write("  mov eax, 1\n");
@@ -1052,6 +1065,7 @@ public class CodeGeneration {
               Environment fieldEnv = generateForName(
                 currentEnvironment,
                 name.substring(0, dotIndex),
+                node,
                 currentOffsets,
                 externs
               ).second;
@@ -1066,6 +1080,13 @@ public class CodeGeneration {
             String fieldName = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
             writer.write("  push eax\n");
             generateForNode(currentEnvironment, node.children.get(0).children.get(0).children.get(0), currentOffsets, currentOffset, externs);
+
+            writer.write("  cmp eax, 0\n");
+            writer.write("  jne EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "\n");
+
+            writer.write("  call __exception\n");
+
+            writer.write("EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + ":\n");
             writer.write("  pop ebx\n");
             int offset = getOffsetForField(
               packageMap.get(node.children.get(0).children.get(0).children.get(0).type.name),
@@ -1084,18 +1105,29 @@ public class CodeGeneration {
               currentOffset,
               externs
             );
-            writer.write("  mov ebx, 4\n");
-            writer.write("  mul ebx\n");
-            writer.write("  add eax, 12\n");
             switch (node.children.get(0).children.get(0).children.get(0).token.getType()) {
               case NAME: {
                 writer.write("  mov ebx, eax\n"); //ebx is the index
                 generateForName(
                   currentEnvironment,
                   getNameFromTypeNode(node.children.get(0).children.get(0).children.get(0)),
+                  node,
                   currentOffsets,
                   externs
                 ); // eax is the array
+                writer.write("  cmp ebx, [eax + 8]\n");
+                writer.write("  jnge EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a\n");
+
+                writer.write("  call __exception\n");
+
+                writer.write("EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a:\n");
+                writer.write("  push eax\n");
+                writer.write("  mov eax, ebx\n");
+                writer.write("  mov ebx, 4\n");
+                writer.write("  mul ebx\n");
+                writer.write("  add eax, 12\n");
+
+                writer.write("  pop ebx\n"); // the array
                 writer.write("  add eax, ebx\n");
                 writer.write("  pop ebx\n"); // the value
                 writer.write("  mov dword [eax], ebx\n");
@@ -1112,6 +1144,19 @@ public class CodeGeneration {
                   externs
                 );
                 writer.write("  pop ebx\n"); // the index
+                writer.write("  cmp ebx, [eax + 8]\n");
+                writer.write("  jnge EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a\n");
+
+                writer.write("  call __exception\n");
+
+                writer.write("EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a:\n");
+                writer.write("  push eax\n");
+                writer.write("  mov eax, ebx\n");
+                writer.write("  mov ebx, 4\n");
+                writer.write("  mul ebx\n");
+                writer.write("  add eax, 12\n");
+
+                writer.write("  pop ebx\n"); // the array
                 writer.write("  add eax, ebx\n");
                 writer.write("  pop ebx\n"); // the value
                 writer.write("  mov dword [eax], ebx\n");
@@ -1126,6 +1171,14 @@ public class CodeGeneration {
       }
       case FIELD_ACCESS: {
         generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+
+        writer.write("  cmp eax, 0\n");
+        writer.write("  jne EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "\n");
+
+        writer.write("  call __exception\n");
+
+        writer.write("EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + ":\n");
+
         int offset;
         String identifier = ((TerminalToken)node.children.get(2).token).getRawValue();
         if (node.children.get(0).type.type == TypeType.ARRAY && identifier.equals("length")) {
@@ -1143,6 +1196,17 @@ public class CodeGeneration {
         generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         writer.write("  push eax\n");
         generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
+        writer.write("  mov ebx, eax\n");
+        writer.write("  pop eax\n"); // the array
+        writer.write("  cmp ebx, [eax + 8]\n");
+        writer.write("  jnge EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a\n");
+
+        writer.write("  call __exception\n");
+
+        writer.write("EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a:\n");
+        writer.write("  push eax\n");
+        writer.write("  mov eax, ebx\n");
+
         writer.write("  add eax, 3\n");
         writer.write("  mov ebx, 4\n");
         writer.write("  mul ebx\n");

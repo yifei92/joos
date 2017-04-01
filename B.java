@@ -1,13 +1,9 @@
-package B;
-
 public class B {
-  public static int a = B.init() + B.init() - B.init();
-  public static int b = B.init() - B.init();
+  public B() {
 
-  public static int init() {
-    return 1;
   }
 
-  B() {
+  public void method() {
+    int i = 3 + 7;
   }
 }

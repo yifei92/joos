@@ -1,4 +1,4 @@
 #!/bin/bash
-rm *.s
-rm *.o
+rm -r output/*.s
+rm -r output/*.o
 rm main

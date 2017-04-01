@@ -1019,7 +1019,7 @@ public class CodeGeneration {
         }
         writer.write("  push eax\n");
 
-        writer.write("  mov eax, 8\n");
+        writer.write("  mov eax, 12\n");
         writer.write("  call __malloc\n"); // allocate string
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.String")) {
           externs.add("InterfaceTABLE$java.lang.String");

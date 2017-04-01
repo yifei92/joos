@@ -82,6 +82,10 @@ public class SubTypingTesting {
 		return index*4;
 	}
 
+	public int getrowsize(){
+		return classlist.size();
+	}
+
 	public int getuniqueid(){
 		id++;
 		return id;

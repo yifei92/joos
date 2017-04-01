@@ -296,6 +296,7 @@ public class CodeGeneration {
       // We don't need to generate code for interfaces
       return;
     }
+
     writer = new StringWriter();
     Set<String> externs = new HashSet();
     externs.add("subtypecheckingtable");
@@ -451,6 +452,17 @@ public class CodeGeneration {
       writer.write("  push dword [ebp + 8]\n");
       writer.write("  call " + constructorLabel + "\n");
       writer.write("  add esp, 4\n");
+    }
+
+    // field initializers
+    for (String fieldName : classEnv.mVariableDeclarations.keySet()) {
+      if (classEnv.mVariableToType.get(fieldName).modifiers.contains(TokenType.STATIC)) continue;
+      ParseTreeNode fieldNode = classEnv.mVariableDeclarations.get(fieldName).children.get(2).children.get(0);
+      if (fieldNode.children.size() == 3) {
+        generateForNode(classEnv, fieldNode.children.get(2), offsets, 0, externs);
+      }
+      writer.write("  mov ebx, [ebp + 8]\n");
+      writer.write("  mov dword [ebx + " + getOffsetForField(classEnv, fieldName).first + "], eax\n");
     }
 
     generateForNode(constructorEnv, constructorEnv.mScope.children.get(2), offsets, 0, externs);
@@ -721,7 +733,7 @@ public class CodeGeneration {
         uniqueid=subTypingTesting.getuniqueid();
         writer.write("  je label"+uniqueid+"else\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je label"+uniqueid+"end\n");
+        writer.write("  jmp label"+uniqueid+"end\n");
         writer.write("label"+uniqueid+"else:\n");
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
         writer.write("label"+uniqueid+"end:\n");
@@ -734,7 +746,7 @@ public class CodeGeneration {
         writer.write("  cmp eax, 0\n");
         writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je label"+uniqueid+"start\n");
+        writer.write("  jmp label"+uniqueid+"start\n");
         writer.write("label"+uniqueid+"end:\n");
         return;
       case FOR_STATEMENT:
@@ -756,7 +768,7 @@ public class CodeGeneration {
         writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(8), currentOffsets, currentOffset, externs);
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
-        writer.write("  je label"+uniqueid+"start\n");
+        writer.write("  jmp label"+uniqueid+"start\n");
         writer.write("label"+uniqueid+"end:\n");
         if (currentEnvironment.mVariableDeclarations.size() > 0) {
           writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
@@ -799,16 +811,16 @@ public class CodeGeneration {
           writer.write("  push eax\n");
           for (int i = 1 ; i < node.children.size() ; i++) {
             ParseTreeNode child = node.children.get(i);
-            if (child.token.getType() != TokenType.BOOL_OP_AND) {
+            if (child.token.getType() != TokenType.BOOL_OP_AND&&child.token.getType() != TokenType.BOOL_OP_OR) {
               // generate the code for this expression
               generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);
               // fetch the running total
-              writer.write("  pop ebx\n");
+              writer.write("  pop ebx ; pop last result\n");
               // apply the and operator to the running total
               if (node.token.getType() == TokenType.CONDITIONAL_AND_EXPRESSION) {
-                writer.write("  and ebx, eax\n");
+                writer.write("  and ebx, eax ; && op\n");
               } else {
-                writer.write("  or ebx, eax\n");
+                writer.write("  or ebx, eax  ; || op\n");
               }
               // save the running total
               writer.write("  push ebx\n");
@@ -984,7 +996,7 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
           writer.write("  mov ebx, [eax + 8]\n");
-          writer.write("  mov eax, [subtypecheckingtable+ebx*4+"+offset+"]\n");
+          writer.write("  mov eax, [subtypecheckingtable*"+subTypingTesting.getrowsize()+"+"+offset+"]  ;check instance of\n");
           return;
         } else {
           // Generate code for lhs
@@ -1101,29 +1113,31 @@ public class CodeGeneration {
         List<Integer> list = new ArrayList();
         getDataForStringLiteral(list, node.children.get(1));
         int size = list.size();
-        writer.write("  mov eax, " + (size + 2) * 4 + "\n");
+        writer.write("  mov eax, " + (size + 3) * 4 + "\n");
         externs.add("__malloc");
         writer.write("  call __malloc\n"); // allocate array
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
           externs.add("InterfaceTABLE$java.lang.Object");
         }
         writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
-        writer.write("  mov dword [eax + 4], " + size + "\n");
-        int i = 8;
+        writer.write("  mov dword [eax + 4],"+subTypingTesting.getoffset("char[]")+"\n");
+        writer.write("  mov dword [eax + 8], " + size + "\n");
+        int i = 12;
         for (int val : list) { // populate array
           writer.write("  mov dword [eax + " + i + "], " + val + "\n");
           i += 4;
         }
         writer.write("  push eax\n");
 
-        writer.write("  mov eax, 8\n");
+        writer.write("  mov eax, 12\n");
         writer.write("  call __malloc\n"); // allocate string
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.String")) {
-          externs.add("VTABLE$java.lang.String");
+          externs.add("InterfaceTABLE$java.lang.String");
         }
-        writer.write("  mov dword [eax], VTABLE$java.lang.String\n");
+        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.String\n");
+        writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset("java.lang.String") + "\n");
         writer.write("  pop ebx\n");
-        writer.write("  mov dword [eax + 4], ebx\n");
+        writer.write("  mov dword [eax + 8], ebx\n");
         return;
       }
       case ESCAPE: {
@@ -1166,7 +1180,7 @@ public class CodeGeneration {
               } else {
                 writer.write("  mov ebx, eax\n");
                 writer.write("  mov eax, [ebp + 8]\n");
-                // writer.write("  mov dword [eax + " + getOffsetForField(currentEnvironment.getParentClassEnvironment(), name) + "], ebx\n");
+                writer.write("  mov dword [eax + " + getOffsetForField(currentEnvironment.getParentClassEnvironment(), name).first + "], ebx\n");
                 writer.write("  mov eax, ebx\n");
               }
             } else {
@@ -1405,6 +1419,13 @@ public class CodeGeneration {
         writer.write("  mov eax, [ebp + 8]\n");
         return;
       }
+      case RETURN_STATEMENT: {
+        generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
+        writer.write("  add esp, " + currentOffset + "\n");
+        writer.write("  pop ebp\n");
+        writer.write("  ret\n");
+        return;
+      }
       case CAST_EXPRESSION: {
         generateForNode(currentEnvironment, node.children.get(node.children.size() - 1), currentOffsets, currentOffset, externs);
         if(TypeCheckingEvaluator.isprimitiveType(node.children.get(node.children.size() - 1).type)){
@@ -1412,7 +1433,7 @@ public class CodeGeneration {
         }
         writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
-        writer.write("  mov ebx, [subtypecheckingtable+ebx*4+"+offset+"]\n");
+        writer.write("  mov ebx, [subtypecheckingtable+ebx*"+subTypingTesting.getrowsize()+"+"+offset+"] ; check cast expression\n");
         writer.write(" cmp ebx, 0\n");
         int unique=subTypingTesting.getuniqueid();
         writer.write(" je subtypingcheck"+unique+" \n");

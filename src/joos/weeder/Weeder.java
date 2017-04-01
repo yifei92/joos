@@ -178,8 +178,8 @@ public class Weeder {
 					if (EXPRESSION.token.getType() == TokenType.INTEGER_LITERAL) {
 						TerminalToken negint = (TerminalToken) EXPRESSION.token;
 						negint.setRawValue("-" + negint.getRawValue());
+						parseTree.children.remove(0);
 					}
-					parseTree.children.remove(0);
 				}
 				break;
 			default:

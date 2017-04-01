@@ -22,7 +22,7 @@ for filename in test/a5/J1_*.java; do
     failuresArray+=($testname)
   fi
   ./assemble
-  rm *.o
+  rm output/*.o
 done
 
 for filename in test/a5/Je_*.java; do 
@@ -36,7 +36,7 @@ for filename in test/a5/Je_*.java; do
     failuresArray+=($testname)
   fi
   ./assemble
-  rm *.o
+  rm output/*.o
 done
 
 for directory in test/a5/J1_*/; do 
@@ -55,7 +55,7 @@ for directory in test/a5/J1_*/; do
     failuresArray+=($testname)
   fi
   ./assemble
-  rm *.o
+  rm output/*.o
   printf "\n\n"
 done
 
@@ -68,18 +68,18 @@ for directory in test/a5/Je_*/; do
     params="$params $f";
   done
   params="$params $javafiles"
-  rm *.s
+  rm output/*.s
   ./joosc $params
   if [ $? == 0 ]
     then
     failuresArray+=($testname)
   fi
   ./assemble
-  rm *.o
+  rm output/*.o
   printf "\n\n"
 done
 
 echo "++++++++++++Test Failures++++++++++++"
 printf '%s\n' "${failuresArray[@]}"
-rm *.s
-rm *.o
+rm output/*.s
+rm output/*.o

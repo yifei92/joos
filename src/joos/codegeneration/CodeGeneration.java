@@ -336,7 +336,7 @@ public class CodeGeneration {
     writer.flush();
 
     String filename = getClassLabel(environment);
-    File file = new File(filename + ".s");
+    File file = new File("output/" + filename + ".s");
     file.createNewFile();
     FileWriter fileWriter = new FileWriter(file);
     for (String extern : externs) {

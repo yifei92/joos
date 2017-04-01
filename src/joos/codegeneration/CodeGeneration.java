@@ -441,15 +441,17 @@ public class CodeGeneration {
     int size = (getFieldList(classEnv).size() + 2) * 4;
     writer.write("  push ebp\n");
     writer.write("  mov ebp, esp\n");
-    writer.write("  mov eax, " + size + "\n");
-    externs.add("__malloc");
-    writer.write("  call __malloc\n");
-    writer.write("  mov dword [ebp + 8], eax\n"); // set this
-    writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
-    writer.write("  mov dword [eax + 4], "+subTypingTesting.getoffset(getClassLabel(classEnv))+"\n");
-    for (int j = 4; j < size; j += 4) {
-      writer.write("  mov dword [eax + " + j + "], 0\n");
+
+    // implicit super call
+    List<Environment> extendedEnvironments = getExtendedEnvironments(classEnv, packageMap);
+    if (extendedEnvironments != null && extendedEnvironments.size() > 0) {
+      String constructorLabel = "CONSTRUCTOR$" + getClassLabel(extendedEnvironments.get(0)) + "@";
+      externs.add(constructorLabel);
+      writer.write("  push dword [ebp + 8]\n");
+      writer.write("  call " + constructorLabel + "\n");
+      writer.write("  add esp, 4\n");
     }
+
     generateForNode(constructorEnv, constructorEnv.mScope.children.get(2), offsets, 0, externs);
     writer.write("  mov eax, [ebp + 8]\n"); //return this
     writer.write("  pop ebp\n");
@@ -1191,9 +1193,22 @@ public class CodeGeneration {
             writer.write("  push eax\n");
           }
         }
-        writer.write("  push 0\n");
+
         Environment classEnv = getEnvironmentFromTypeNode(currentEnvironment, node.children.get(1), packageMap);
-        int size = (getFieldList(currentEnvironment).size() + 1) * 4;
+        int size = (getFieldList(currentEnvironment).size() + 2) * 4;
+
+        writer.write("  mov eax, " + size + "\n");
+        externs.add("__malloc");
+        writer.write("  call __malloc\n");
+
+        writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
+        writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset(getClassLabel(classEnv)) + "\n");
+        for (int j = 8; j < size; j += 4) {
+          writer.write("  mov dword [eax + " + j + "], 0\n");
+        }
+
+        writer.write("  push eax\n"); // set this
+
         String constructorLabel = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
         for (String argType : argTypes) {
           constructorLabel += argType.replace("[]", "~") + "#";

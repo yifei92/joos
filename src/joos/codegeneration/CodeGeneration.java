@@ -1311,6 +1311,7 @@ public class CodeGeneration {
       }
       case RETURN_STATEMENT: {
         generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
+        writer.write("  add esp, " + currentOffset + "\n");
         writer.write("  pop ebp\n");
         writer.write("  ret\n");
         return;

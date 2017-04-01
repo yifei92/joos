@@ -29,24 +29,34 @@ public class TypeCheckingEvaluator {
 		switch (currentnode.token.getType()) {
 			case STRING_LITERAL:
 			case STRING_LITERAL_WITH_QUOTES:
+				currentnode.type=new Type("java.lang.String");
 				return new Type("java.lang.String");
 			case INTEGER_LITERAL:
+				currentnode.type=new Type("int");
 				return new Type("int");
 			case INT:
-				return Type.newType("int", Type.newPrimitive("int", currentnode), currentnode);
+				currentnode.type=Type.newType("int", Type.newPrimitive("int", currentnode), currentnode);
+				return currentnode.type;
 			case SHORT:
-				return Type.newType("short", Type.newPrimitive("short", currentnode), currentnode);
+				currentnode.type=Type.newType("short", Type.newPrimitive("short", currentnode), currentnode);
+				return currentnode.type;
 			case BYTE:
-				return Type.newType("byte", Type.newPrimitive("byte", currentnode), currentnode);
+				currentnode.type=Type.newType("byte", Type.newPrimitive("byte", currentnode), currentnode);
+				return currentnode.type;
 			case CHAR:
-				return Type.newType("char", Type.newPrimitive("char", currentnode), currentnode);
+				currentnode.type=Type.newType("char", Type.newPrimitive("char", currentnode), currentnode);
+				return currentnode.type;
 			case CHAR_LITERAL_WITH_QUOTES:
+				currentnode.type=new Type("char");
 				return new Type("char");
 			case BOOLEAN:
-				return Type.newType("boolean", Type.newPrimitive("boolean", currentnode), currentnode);
+				currentnode.type=Type.newType("boolean", Type.newPrimitive("boolean", currentnode), currentnode);
+				return currentnode.type;
 			case BOOLEAN_LITERAL:
+				currentnode.type=new Type("boolean");
 				return new Type("boolean");
 			case NULL_LITERAL:
+				currentnode.type=new Type("null");
 				return new Type("null");
 			case THIS:
 				Environment local=EnvironmentUtils.findEvironment(rootenv,root,currentnode);
@@ -60,7 +70,8 @@ public class TypeCheckingEvaluator {
 				if(method.mType!= Environment.EnvironmentType.METHOD){
 					if(rootenv.PackageName.equals(""))
 					{
-						return new Type(rootenv.mName);
+						currentnode.type=new Type(rootenv.mName);
+						return currentnode.type;
 					}
 					return new Type(rootenv.PackageName+"."+rootenv.mName);
 				}
@@ -70,9 +81,11 @@ public class TypeCheckingEvaluator {
 
 				if(rootenv.PackageName.equals(""))
 				{
-					return new Type(rootenv.mName);
+					currentnode.type=new Type(rootenv.mName);
+					return currentnode.type;
 				}
-				return new Type(rootenv.PackageName+"."+rootenv.mName);
+				currentnode.type=new Type(rootenv.PackageName+"."+rootenv.mName);;
+				return currentnode.type;
 			case INCLUSIVE_OR_EXPRESSION:
 			case AND_EXPRESSION:
 			case CONDITIONAL_AND_EXPRESSION:

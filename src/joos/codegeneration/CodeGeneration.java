@@ -1003,15 +1003,16 @@ public class CodeGeneration {
         List<Integer> list = new ArrayList();
         getDataForStringLiteral(list, node.children.get(1));
         int size = list.size();
-        writer.write("  mov eax, " + (size + 2) * 4 + "\n");
+        writer.write("  mov eax, " + (size + 3) * 4 + "\n");
         externs.add("__malloc");
         writer.write("  call __malloc\n"); // allocate array
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
-          externs.add("VTABLE$java.lang.Object");
+          externs.add("InterfaceTABLE$java.lang.Object");
         }
-        writer.write("  mov dword [eax], VTABLE$java.lang.Object\n");
-        writer.write("  mov dword [eax + 4], " + size + "\n");
-        int i = 8;
+        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
+        writer.write("  mov dword [eax + 4],"+subTypingTesting.getoffset("char[]")+"\n");
+        writer.write("  mov dword [eax + 8], " + size + "\n");
+        int i = 12;
         for (int val : list) { // populate array
           writer.write("  mov dword [eax + " + i + "], " + val + "\n");
           i += 4;
@@ -1021,11 +1022,12 @@ public class CodeGeneration {
         writer.write("  mov eax, 8\n");
         writer.write("  call __malloc\n"); // allocate string
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.String")) {
-          externs.add("VTABLE$java.lang.String");
+          externs.add("InterfaceTABLE$java.lang.String");
         }
-        writer.write("  mov dword [eax], VTABLE$java.lang.String\n");
+        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.String\n");
+        writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset("java.lang.String") + "\n");
         writer.write("  pop ebx\n");
-        writer.write("  mov dword [eax + 4], ebx\n");
+        writer.write("  mov dword [eax + 8], ebx\n");
         return;
       }
       case ESCAPE: {

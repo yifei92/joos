@@ -679,6 +679,69 @@ public class CodeGeneration {
           writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
         }
         return;
+      case UNARY_EXPRESSION: {
+        // TODO
+      }
+      case MULTIPLICATIVE_EXPRESSION: {
+        if(node.children.size() == 1) {
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+        } else {
+          // Flag to keep track of whether or not we should add or subtract the current result 
+          // from the running total
+          TokenType operator = null;
+          // generate code for the first expression
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
+          // save the running total onto the stack
+          writer.write("  push eax\n");
+          for (int i = 1 ; i < node.children.size() ; i++) {
+            ParseTreeNode child = node.children.get(i);
+            TokenType type = child.token.getType();
+            if (type == TokenType.STAR || type == TokenType.OP_REMAINDER || type == TokenType.OP_DIV) {
+              operator = type;
+            } else {
+              // generate the code for this expression
+              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);         
+              // fetch the running total
+              writer.write("  pop ebx\n");
+              // apply the current operator to the running total
+              switch(operator) {
+                case STAR:
+                  writer.write("  imul ebx, eax\n");
+                break;
+                case OP_REMAINDER:
+                  // move result of last expression into ecx
+                  // this is the divisor
+                  writer.write("  mov ecx, eax\n");
+                  // move the running total into eax
+                  // this is the dividend
+                  writer.write("  mov eax, ebx\n");
+                  // perform the division
+                  writer.write("  div ecx\n");
+                  // move the remainder from edx into ebx
+                  writer.write("  mov ebx, edx\n");
+                break;
+                case OP_DIV:
+                  // move result of last expression into ecx
+                  // this is the divisor
+                  writer.write("  mov ecx, eax\n");
+                  // move the running total into eax
+                  // this is the dividend
+                  writer.write("  mov eax, ebx\n");
+                  // perform the division
+                  writer.write("  div ecx\n");
+                  // move the quotient from eax into ebx
+                  writer.write("  mov ebx, eax\n");
+                break;
+              }
+              // save the running total
+              writer.write("  push ebx\n");
+            }
+          }
+          // all results must be in the eax
+          writer.write("  pop eax\n");
+        }
+        return;
+      }
       case ADDITIVE_EXPRESSION: {
         // TODO need to be able to concat strings.
         if(node.children.size() == 1) {

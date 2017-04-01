@@ -14,6 +14,7 @@ public class C {
   }
 
   public static int test() {
-   return C.a + C.b + B.a + B.b;
+
+    return (C.a * C.b) % C.b;
   }
 }

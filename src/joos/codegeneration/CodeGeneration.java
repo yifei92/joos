@@ -243,7 +243,11 @@ public class CodeGeneration {
       }
     }
     // call the static int test() function
-    String staticMethodLabel = "STATICMETHOD$" + startMethodClassEnvironment.PackageName + "." + startMethodClassEnvironment.mName + "$test@";
+    String packagePrefix = "";
+    if (startMethodClassEnvironment.PackageName != null && !startMethodClassEnvironment.PackageName.equals("")) {
+      packagePrefix = startMethodClassEnvironment.PackageName + ".";
+    }
+    String staticMethodLabel = "STATICMETHOD$" + packagePrefix + startMethodClassEnvironment.mName + "$test@";
     writer.write("  push 0\n");
     writer.write("  mov eax, " + staticMethodLabel + "\n");
     writer.write("  call eax\n");
@@ -332,7 +336,8 @@ public class CodeGeneration {
     writer.flush();
 
     String filename = getClassLabel(environment);
-    File file = new File(filename + ".s");
+    File file = new File("output/" + filename + ".s");
+    file.getParentFile().mkdirs();
     file.createNewFile();
     FileWriter fileWriter = new FileWriter(file);
     for (String extern : externs) {
@@ -437,15 +442,17 @@ public class CodeGeneration {
     int size = (getFieldList(classEnv).size() + 2) * 4;
     writer.write("  push ebp\n");
     writer.write("  mov ebp, esp\n");
-    writer.write("  mov eax, " + size + "\n");
-    externs.add("__malloc");
-    writer.write("  call __malloc\n");
-    writer.write("  mov dword [ebp + 8], eax\n"); // set this
-    writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
-    writer.write("  mov dword [eax + 4], "+subTypingTesting.getoffset(getClassLabel(classEnv))+"\n");
-    for (int j = 4; j < size; j += 4) {
-      writer.write("  mov dword [eax + " + j + "], 0\n");
+
+    // implicit super call
+    List<Environment> extendedEnvironments = getExtendedEnvironments(classEnv, packageMap);
+    if (extendedEnvironments != null && extendedEnvironments.size() > 0) {
+      String constructorLabel = "CONSTRUCTOR$" + getClassLabel(extendedEnvironments.get(0)) + "@";
+      externs.add(constructorLabel);
+      writer.write("  push dword [ebp + 8]\n");
+      writer.write("  call " + constructorLabel + "\n");
+      writer.write("  add esp, 4\n");
     }
+
     generateForNode(constructorEnv, constructorEnv.mScope.children.get(2), offsets, 0, externs);
     writer.write("  mov eax, [ebp + 8]\n"); //return this
     writer.write("  pop ebp\n");
@@ -714,14 +721,14 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
           // generate code for the first expression
-          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
           writer.write("  push eax\n");
           for (int i = 1 ; i < node.children.size() ; i++) {
             ParseTreeNode child = node.children.get(i);
             if (child.token.getType() != TokenType.BOOL_OP_AND) {
               // generate the code for this expression
-              generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);         
+              generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);
               // fetch the running total
               writer.write("  pop ebx\n");
               // apply the and operator to the running total
@@ -1191,9 +1198,24 @@ public class CodeGeneration {
             writer.write("  push eax\n");
           }
         }
-        writer.write("  push 0\n");
+
         Environment classEnv = getEnvironmentFromTypeNode(currentEnvironment, node.children.get(1), packageMap);
-        int size = (getFieldList(currentEnvironment).size() + 1) * 4;
+        int size = (getFieldList(currentEnvironment).size() + 2) * 4;
+
+        writer.write("  mov eax, " + size + "\n");
+        externs.add("__malloc");
+        writer.write("  call __malloc\n");
+        if (classEnv != currentEnvironment.getParentClassEnvironment()) {
+          externs.add("InterfaceTABLE$" + getClassLabel(classEnv));
+        }
+        writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
+        writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset(getClassLabel(classEnv)) + "\n");
+        for (int j = 8; j < size; j += 4) {
+          writer.write("  mov dword [eax + " + j + "], 0\n");
+        }
+
+        writer.write("  push eax\n"); // set this
+
         String constructorLabel = "CONSTRUCTOR$" + getClassLabel(classEnv) + "@";
         for (String argType : argTypes) {
           constructorLabel += argType.replace("[]", "~") + "#";

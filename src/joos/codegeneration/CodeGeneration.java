@@ -682,7 +682,7 @@ public class CodeGeneration {
         uniqueid=subTypingTesting.getuniqueid();
         writer.write("  je label"+uniqueid+"else\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je label"+uniqueid+"end\n");
+        writer.write("  jmp label"+uniqueid+"end\n");
         writer.write("label"+uniqueid+"else:\n");
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
         writer.write("label"+uniqueid+"end:\n");
@@ -695,7 +695,7 @@ public class CodeGeneration {
         writer.write("  cmp eax, 0\n");
         writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(4), currentOffsets, currentOffset, externs);
-        writer.write("  je label"+uniqueid+"start\n");
+        writer.write("  jmp label"+uniqueid+"start\n");
         writer.write("label"+uniqueid+"end:\n");
         return;
       case FOR_STATEMENT:
@@ -717,7 +717,7 @@ public class CodeGeneration {
         writer.write("  je label"+uniqueid+"end\n");
         generateForNode(currentEnvironment, node.children.get(8), currentOffsets, currentOffset, externs);
         generateForNode(currentEnvironment, node.children.get(6), currentOffsets, currentOffset, externs);
-        writer.write("  je label"+uniqueid+"start\n");
+        writer.write("  jmp label"+uniqueid+"start\n");
         writer.write("label"+uniqueid+"end:\n");
         if (currentEnvironment.mVariableDeclarations.size() > 0) {
           writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
@@ -887,7 +887,7 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
           int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
           writer.write("  mov ebx, [eax + 8]\n");
-          writer.write("  mov eax, [subtypecheckingtable*4"+subTypingTesting.getrowsize()+"+"+offset+"]  ;check instance of\n");
+          writer.write("  mov eax, [subtypecheckingtable*"+subTypingTesting.getrowsize()+"+"+offset+"]  ;check instance of\n");
           return;
         } else {
           // Generate code for lhs

@@ -108,7 +108,9 @@ public class TypeCheckingEvaluator {
 						}
 					}
 					if(numeric) {
-						return new Type("int");
+						Type t=new Type("int");
+						currentnode.type=t;
+						return t;
 					}
 					else{
 						for (int i = 0; i < currentnode.children.size(); i++) {
@@ -119,7 +121,9 @@ public class TypeCheckingEvaluator {
 							}
 						}
 						if(findstring){
-							return new Type("java.lang.String");
+							Type t=new Type("java.lang.String");
+							currentnode.type=t;
+							return t;
 						}
 						else {
 							throw new TypeLinkingException("string concatenate without string");
@@ -127,7 +131,9 @@ public class TypeCheckingEvaluator {
 					}
 				}
 				else {
-					return check(currentnode.children.get(0),PackageMap,rootenv);
+					Type t= check(currentnode.children.get(0),PackageMap,rootenv);
+					currentnode.type=t;
+					return t;
 				}
 			case MULTIPLICATIVE_EXPRESSION:
 				if(currentnode.children.size()>1) {

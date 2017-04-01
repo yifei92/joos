@@ -232,7 +232,7 @@ public class CodeGeneration {
   public void generateStartCode(Environment startMethodClassEnvironment, Set<String> externs) {
     writer.write("global _start\n");
     writer.write("_start:\n");
-    // call static method initalizers 
+    // call static method initalizers
     for (Environment environment : packageMap.values()) {
       if(getEnvironmentType(environment) == EnvironmentType.CLASS) {
         String label = "STATICFIELDINITIALIZER$" + getClassLabel(environment);
@@ -250,7 +250,7 @@ public class CodeGeneration {
     writer.write("  add esp, 4\n");
     // move the return value into ebx
     writer.write("  mov ebx, eax\n");
-    //Load the value 1 (indicating sys_exit) into register eax, 
+    //Load the value 1 (indicating sys_exit) into register eax,
     writer.write("  mov eax, 1\n");
     //then execute the instruction int 0x80.
     writer.write("  int 0x80\n");
@@ -260,7 +260,7 @@ public class CodeGeneration {
     MethodSignature sig = method.getMethodSignature(packageMap, null);
     return sig.modifiers != null && sig.modifiers.contains(TokenType.STATIC) &&
         sig.name != null && sig.name.equals("test") &&
-        sig.parameterTypes != null && sig.parameterTypes.size() == 0 && 
+        sig.parameterTypes != null && sig.parameterTypes.size() == 0 &&
         sig.type != null && sig.type.equals("int");
   }
 
@@ -282,7 +282,7 @@ public class CodeGeneration {
           String staticFieldLabel = "STATICFIELD$" + getClassLabel(environment) + "$" + key;
           writer.write("  mov [" + staticFieldLabel + "], eax\n");
         }
-      } 
+      }
     }
     writer.write("  ret\n");
   }
@@ -322,7 +322,7 @@ public class CodeGeneration {
           break;
       }
     }
-    
+
     if (startMethodEnvironment != null) {
       // The start method was found in this class.
       // Generate start code at the end of this file
@@ -558,6 +558,7 @@ public class CodeGeneration {
         stat = true;
       }
     }
+
     while (dotIndex != -1) {
       int newDotIndex = name.indexOf('.', dotIndex + 1);
       if (newDotIndex == -1) {
@@ -565,7 +566,6 @@ public class CodeGeneration {
       } else {
         prefix = name.substring(dotIndex + 1, newDotIndex);
       }
-      if (prefix.equals("length")) return new Pair(stat, null);
       if (stat) {
         stat = false;
         String label = "STATICFIELD$" + getClassLabel(fieldEnv) + "$" + prefix;
@@ -575,10 +575,14 @@ public class CodeGeneration {
         writer.write("  mov eax, [" + label +"]\n");
         fieldEnv = packageMap.get(fieldEnv.mVariableToType.get(prefix).name);
       } else {
+        if (prefix.equals("length") && fieldEnv == null) {
+          writer.write("  mov eax, [eax + 8]\n");
+          return new Pair(false, null);
+        }
         Pair<Integer, Type> pair = getOffsetForField(fieldEnv, prefix);
         int offset = pair.first;
-        fieldEnv = packageMap.get(pair.second.name);
         writer.write("  mov eax, [eax + " + offset + "]\n");
+        fieldEnv = packageMap.get(pair.second.name);
       }
       dotIndex = newDotIndex;
     }
@@ -686,11 +690,11 @@ public class CodeGeneration {
         if(node.children.size() == 1) {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
-          // Flag to keep track of whether or not we should add or subtract the current result 
+          // Flag to keep track of whether or not we should add or subtract the current result
           // from the running total
           TokenType operator = null;
           // generate code for the first expression
-          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
           writer.write("  push eax\n");
           for (int i = 1 ; i < node.children.size() ; i++) {
@@ -700,7 +704,7 @@ public class CodeGeneration {
               operator = type;
             } else {
               // generate the code for this expression
-              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);         
+              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               // fetch the running total
               writer.write("  pop ebx\n");
               // apply the current operator to the running total
@@ -747,11 +751,11 @@ public class CodeGeneration {
         if(node.children.size() == 1) {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
-          // Flag to keep track of whether or not we should add or subtract the current result 
+          // Flag to keep track of whether or not we should add or subtract the current result
           // from the running total
           boolean isPlus = false;
           // generate code for the first expression
-          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
           writer.write("  push eax\n");
           for (int i = 1 ; i < node.children.size() ; i++) {
@@ -763,7 +767,7 @@ public class CodeGeneration {
               isPlus = false;
             } else {
               // generate the code for this expression
-              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);         
+              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
               // fetch the running total
               writer.write("  pop ebx\n");
               // apply the current operator to the running total
@@ -804,7 +808,7 @@ public class CodeGeneration {
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default
-          writer.write("  mov eax, 0\n");          
+          writer.write("  mov eax, 0\n");
           // conditional move true to eax
           writer.write("mov ecx, 1\n");
           switch(node.children.get(1).token.getType()) {
@@ -840,7 +844,7 @@ public class CodeGeneration {
           // do a comparison
           writer.write("  cmp ebx, eax\n");
           // eax is false by default
-          writer.write("  mov eax, 0\n");          
+          writer.write("  mov eax, 0\n");
           // conditional move true to eax
           writer.write("mov ecx, 1\n");
           switch(node.children.get(1).token.getType()) {
@@ -1061,10 +1065,16 @@ public class CodeGeneration {
       }
       case FIELD_ACCESS: {
         generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
-        int offset = getOffsetForField(
-          packageMap.get(node.children.get(0).type.name),
-          ((TerminalToken)node.children.get(2).token).getRawValue()
-        ).first;
+        int offset;
+        String identifier = ((TerminalToken)node.children.get(2).token).getRawValue();
+        if (node.children.get(0).type.type == TypeType.ARRAY && identifier.equals("length")) {
+          offset = 8;
+        } else {
+          offset = getOffsetForField(
+            packageMap.get(node.children.get(0).type.name),
+            ((TerminalToken)node.children.get(2).token).getRawValue()
+          ).first;
+        }
         writer.write("  mov eax, [eax + " + offset + "]\n");
         return;
       }

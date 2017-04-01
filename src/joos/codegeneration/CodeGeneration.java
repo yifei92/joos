@@ -725,7 +725,7 @@ public class CodeGeneration {
               // fetch the running total
               writer.write("  pop ebx\n");
               // apply the and operator to the running total
-              if (node.token.getType() == CONDITIONAL_AND_EXPRESSION) {
+              if (node.token.getType() == TokenType.CONDITIONAL_AND_EXPRESSION) {
                 writer.write("  and ebx, eax\n");
               } else {
                 writer.write("  or ebx, eax\n");

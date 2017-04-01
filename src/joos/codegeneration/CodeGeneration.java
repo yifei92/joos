@@ -697,7 +697,11 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
           // multiply by -1
           Type unaryType = node.children.get(1).getFirstType();
-          writer.write("  imul eax, -1\n");
+          if (unaryType.name.equals("int") || unaryType.name.equals("short")) {
+            writer.write("  imul eax, -1\n");
+          } else {
+            writer.write("  mul eax, -1\n");
+          }
         }
         return;
       }
@@ -716,14 +720,14 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
           // generate code for the first expression
-          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);         
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
           writer.write("  push eax\n");
           for (int i = 1 ; i < node.children.size() ; i++) {
             ParseTreeNode child = node.children.get(i);
             if (child.token.getType() != TokenType.BOOL_OP_AND) {
               // generate the code for this expression
-              generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);         
+              generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);
               // fetch the running total
               writer.write("  pop ebx\n");
               // apply the and operator to the running total
@@ -1200,7 +1204,9 @@ public class CodeGeneration {
         writer.write("  mov eax, " + size + "\n");
         externs.add("__malloc");
         writer.write("  call __malloc\n");
-
+        if (classEnv != currentEnvironment.getParentClassEnvironment()) {
+          externs.add("InterfaceTABLE$" + getClassLabel(classEnv));
+        }
         writer.write("  mov dword [eax], InterfaceTABLE$" + getClassLabel(classEnv) + "\n");
         writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset(getClassLabel(classEnv)) + "\n");
         for (int j = 8; j < size; j += 4) {

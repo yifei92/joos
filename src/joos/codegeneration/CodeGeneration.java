@@ -454,6 +454,17 @@ public class CodeGeneration {
       writer.write("  add esp, 4\n");
     }
 
+    // field initializers
+    for (String fieldName : classEnv.mVariableDeclarations.keySet()) {
+      if (classEnv.mVariableToType.get(fieldName).modifiers.contains(TokenType.STATIC)) continue;
+      ParseTreeNode fieldNode = classEnv.mVariableDeclarations.get(fieldName).children.get(2).children.get(0);
+      if (fieldNode.children.size() == 3) {
+        generateForNode(classEnv, fieldNode.children.get(2), offsets, 0, externs);
+      }
+      writer.write("  mov ebx, [ebp + 8]\n");
+      writer.write("  mov dword [ebx + " + getOffsetForField(classEnv, fieldName).first + "], eax\n");
+    }
+
     generateForNode(constructorEnv, constructorEnv.mScope.children.get(2), offsets, 0, externs);
     writer.write("  mov eax, [ebp + 8]\n"); //return this
     writer.write("  pop ebp\n");
@@ -993,29 +1004,31 @@ public class CodeGeneration {
         List<Integer> list = new ArrayList();
         getDataForStringLiteral(list, node.children.get(1));
         int size = list.size();
-        writer.write("  mov eax, " + (size + 2) * 4 + "\n");
+        writer.write("  mov eax, " + (size + 3) * 4 + "\n");
         externs.add("__malloc");
         writer.write("  call __malloc\n"); // allocate array
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
-          externs.add("VTABLE$java.lang.Object");
+          externs.add("InterfaceTABLE$java.lang.Object");
         }
-        writer.write("  mov dword [eax], VTABLE$java.lang.Object\n");
-        writer.write("  mov dword [eax + 4], " + size + "\n");
-        int i = 8;
+        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
+        writer.write("  mov dword [eax + 4],"+subTypingTesting.getoffset("char[]")+"\n");
+        writer.write("  mov dword [eax + 8], " + size + "\n");
+        int i = 12;
         for (int val : list) { // populate array
           writer.write("  mov dword [eax + " + i + "], " + val + "\n");
           i += 4;
         }
         writer.write("  push eax\n");
 
-        writer.write("  mov eax, 8\n");
+        writer.write("  mov eax, 12\n");
         writer.write("  call __malloc\n"); // allocate string
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.String")) {
-          externs.add("VTABLE$java.lang.String");
+          externs.add("InterfaceTABLE$java.lang.String");
         }
-        writer.write("  mov dword [eax], VTABLE$java.lang.String\n");
+        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.String\n");
+        writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset("java.lang.String") + "\n");
         writer.write("  pop ebx\n");
-        writer.write("  mov dword [eax + 4], ebx\n");
+        writer.write("  mov dword [eax + 8], ebx\n");
         return;
       }
       case ESCAPE: {
@@ -1058,7 +1071,7 @@ public class CodeGeneration {
               } else {
                 writer.write("  mov ebx, eax\n");
                 writer.write("  mov eax, [ebp + 8]\n");
-                // writer.write("  mov dword [eax + " + getOffsetForField(currentEnvironment.getParentClassEnvironment(), name) + "], ebx\n");
+                writer.write("  mov dword [eax + " + getOffsetForField(currentEnvironment.getParentClassEnvironment(), name).first + "], ebx\n");
                 writer.write("  mov eax, ebx\n");
               }
             } else {
@@ -1295,6 +1308,12 @@ public class CodeGeneration {
       }
       case THIS: {
         writer.write("  mov eax, [ebp + 8]\n");
+        return;
+      }
+      case RETURN_STATEMENT: {
+        generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
+        writer.write("  pop ebp\n");
+        writer.write("  ret\n");
         return;
       }
       case CAST_EXPRESSION: {

@@ -1,14 +1,11 @@
-public class C extends B {
+package C;
+
+public class C {
   public C() {
-
-  }
-
-  public void method() {
-    int a = 1 + 2;
   }
 
   public static int test() {
-    C c = new C();
+    String a = "a" + '0';
     return 0;
   }
 }

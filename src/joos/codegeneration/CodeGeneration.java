@@ -835,6 +835,7 @@ public class CodeGeneration {
           // Flag to keep track of whether or not we should add or subtract the current result
           // from the running total
           boolean isPlus = false;
+          Type runningTotalType = node.children.get(0).getFirstType();
           // generate code for the first expression
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
@@ -848,13 +849,37 @@ public class CodeGeneration {
               isPlus = false;
             } else {
               // generate the code for this expression
-              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
+              Type currentOperandType = child.getFirstType();
+              generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);
               // fetch the running total
               writer.write("  pop ebx\n");
               // apply the current operator to the running total
+              // int
+              // short
+              // byte
+              // char
+              // String
               if(isPlus) {
-                writer.write("  add ebx, eax\n");
+                if (runningTotalType.name.equals("String") && currentOperandType.name.equals("String")) {
+                  // string to string concatenation
+                   
+                  // running total type stays as string
+                } else if (!runningTotalType.name.equals("String") && currentOperandType.name.equals("String")) {
+                  // numeric to string concat 
+                  
+                  // running total type will now always be string
+                  runningTotalType = currentOperandType;
+                } else if (runningTotalType.name.equals("String") && !currentOperandType.name.equals("String")) {
+                  // String to numeric concat
+                  
+                  // running total type stays as string
+                } else {
+                  // simple addition
+                  writer.write("  add ebx, eax\n");
+                  runningTotalType = currentOperandType;
+                }
               } else {
+                // we can only subtract numeric types so just do a sub
                 writer.write("  sub ebx, eax\n");
               }
               // save the running total

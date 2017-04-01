@@ -743,7 +743,8 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else {
           generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
-          writer.write("  not eax\n");
+          writer.write("  not eax \n");
+          writer.write("  and eax, 1\n");
         }
         return;
       }

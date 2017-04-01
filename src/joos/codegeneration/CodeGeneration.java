@@ -632,6 +632,57 @@ public class CodeGeneration {
     writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
   }
 
+  private static int stringMethodInvocationExceptionCount = 0;
+
+  private static String getNextExceptionLabel() {
+    ++stringMethodInvocationExceptionCount;
+    return "EXCEPTION$" + stringMethodInvocationExceptionCount + "m:\n";
+  }
+
+  /**
+   * Used for invoking methods on the String object.
+   * Assumes that the string object is in eax and the param is in ebx
+   * overrites eax if the method is static
+   */
+  public void generateStringMethodInvocation(String name, String paramType, boolean isStatic, Set<String> externs) throws InvalidSyntaxException {
+    // for each arg push onto stack
+    writer.write("  push ebx\n");
+
+    if (!isStatic) {
+      // check if the string object is null
+      writer.write("  cmp eax, 0\n");
+      String exceptionLabel = getNextExceptionLabel();
+      writer.write("  jne " + exceptionLabel);
+      writer.write("  call __exception\n");
+      writer.write(exceptionLabel);
+    }
+    
+    if (!isStatic) {
+      writer.write("  push eax\n"); //push new this
+    } else {
+      writer.write("  push 0\n"); //push fake this
+    }
+    Environment stringEnvironment = packageMap.get("java.lang.String");
+    MethodSignature methodSig = null;
+    for (Environment meth : stringEnvironment.mChildrenEnvironments) {
+      if (getEnvironmentType(meth) == EnvironmentType.METHOD) {
+        MethodSignature sig = meth.getMethodSignature(packageMap, null);
+        if (sig.name.equals(name) && sig.parameterTypes.size() == 1 && sig.parameterTypes.get(0).equals(paramType)) {
+          methodSig = sig;
+        }
+      }
+    }
+    if (!isStatic) {
+      writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
+    } else {
+      String label = getMethodLabel(stringEnvironment, methodSig);
+      externs.add(label);
+      writer.write("  mov eax, " + label + "\n");
+    }
+    writer.write("  call eax\n");
+    writer.write("  add esp, 8\n");
+  }
+
   public void generateForNode(Environment environment, ParseTreeNode node, Set<String> externs) throws IOException, InvalidSyntaxException {
     generateForNode(environment, node, new HashMap<>(), 0, externs);
   }
@@ -855,29 +906,62 @@ public class CodeGeneration {
               // fetch the running total
               writer.write("  pop ebx\n");
               // apply the current operator to the running total
-              // int
-              // short
-              // byte
-              // char
-              // String
+              // ebx is first value and eax is the second value
               if(isPlus) {
-                if (runningTotalType.name.equals("String") && currentOperandType.name.equals("String")) {
+                if (runningTotalType.name.equals("java.lang.String") && currentOperandType.name.equals("java.lang.String")) {
                   // string to string concatenation
-                   
+                  writer.write("  mov ecx, eax\n");
+                  writer.write("  mov eax, ebx\n");
+                  writer.write("  mov ebx, ecx\n");
+                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
                   // running total type stays as string
-                } else if (!runningTotalType.name.equals("String") && currentOperandType.name.equals("String")) {
+                  runningTotalType = currentOperandType;
+                } else if(runningTotalType.name.equals("char") && currentOperandType.name.equals("java.lang.String")) {
+                  // char to string concatenation
+                  // save the current operand
+                  writer.write("  push eax\n");
+                  // convert char to string
+                  generateStringMethodInvocation("valueOf", "char", true, externs);
+                  // char string is now in eax
+                  writer.write("  pop ebx\n");
+                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
+                  // our running type from now on is string
+                  runningTotalType = currentOperandType;
+                } else if (!runningTotalType.name.equals("java.lang.String") && currentOperandType.name.equals("java.lang.String")) {
                   // numeric to string concat 
-                  
+                  // numeric to string concatenation
+                  // save the current operand
+                  writer.write("  push eax\n");
+                  // convert numeric to string
+                  generateStringMethodInvocation("valueOf", runningTotalType.name, true, externs);
+                  // numeric string is now in eax
+                  writer.write("  pop ebx\n");
+                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
+                  // our running type from now on is string
                   // running total type will now always be string
                   runningTotalType = currentOperandType;
-                } else if (runningTotalType.name.equals("String") && !currentOperandType.name.equals("String")) {
+                } else if (runningTotalType.name.equals("java.lang.String") && !currentOperandType.name.equals("java.lang.String")) {
                   // String to numeric concat
-                  
+                  // save the running total operand
+                  writer.write("  push ebx\n");
+                  writer.write("  mov ebx, eax\n");
+                  // convert numeric to string
+                  generateStringMethodInvocation("valueOf", currentOperandType.name, true, externs);
+                  // move the converted numeric into ebx 
+                  writer.write("  mov ebx, eax\n");
+                  // retreive the saved running total
+                  writer.write("  pop eax\n");
+                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
                   // running total type stays as string
                 } else {
                   // simple addition
                   writer.write("  add ebx, eax\n");
-                  runningTotalType = currentOperandType;
+                  // our running type will always be numeric until we hit a string
+                  runningTotalType = Type.newInt();
                 }
               } else {
                 // we can only subtract numeric types so just do a sub
@@ -1021,9 +1105,9 @@ public class CodeGeneration {
         externs.add("__malloc");
         writer.write("  call __malloc\n"); // allocate array
         if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
-          externs.add("VTABLE$java.lang.Object");
+          externs.add("InterfaceTABLE$java.lang.Object");
         }
-        writer.write("  mov dword [eax], VTABLE$java.lang.Object\n");
+        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
         writer.write("  mov dword [eax + 4], " + size + "\n");
         int i = 8;
         for (int val : list) { // populate array

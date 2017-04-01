@@ -5,7 +5,9 @@ public class C {
   }
 
   public static int test() {
-    String a = "a" + '0';
+    String a = "a";
+    String b = "b";
+    a.concat(b);
     return 0;
   }
 }

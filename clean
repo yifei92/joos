@@ -1,0 +1,4 @@
+#!/bin/bash
+rm *.s
+rm *.o
+rm main

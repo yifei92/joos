@@ -695,11 +695,7 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
           // multiply by -1
           Type unaryType = node.children.get(1).getFirstType();
-          if (unaryType.name.equals("int") || unaryType.name.equals("short")) {
-            writer.write("  imul eax, -1\n");
-          } else {
-            writer.write("  mul eax, -1\n");
-          }
+          writer.write("  imul eax, -1\n");
         }
         return;
       }

@@ -980,7 +980,7 @@ public class CodeGeneration {
 
                   writer.write("  cmp eax, 0\n");
                   writer.write("  mov edx, 0\n");
-                  writer.write("  jl POSITIVE$" + child.getFirstTerminalNode().token.getIndex() + "\n");
+                  writer.write("  jge POSITIVE$" + child.getFirstTerminalNode().token.getIndex() + "\n");
                   writer.write("  mov edx, -1\n");
                   writer.write("POSITIVE$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
 

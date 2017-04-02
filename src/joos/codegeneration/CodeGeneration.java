@@ -700,7 +700,6 @@ public class CodeGeneration {
       generateForMethodOffset(stringEnvironment, methodSig);
       writer.write("  mov eax, [eax]\n");
     } else {
-      System.out.println(methodSig);
       String label = getMethodLabel(stringEnvironment, methodSig);
       if (moveUpToClassEnvironment(callFromEnvironment) != stringEnvironment) {
         externs.add(label);
@@ -882,7 +881,7 @@ public class CodeGeneration {
                   writer.write("  jne EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + "\n");
                   writer.write("  call __exception\n");
                   writer.write("EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
-                  
+
                   // move the running total into eax
                   // this is the dividend
                   writer.write("  mov eax, ebx\n");
@@ -896,13 +895,13 @@ public class CodeGeneration {
                   // move result of last expression into ecx
                   // this is the divisor
                   writer.write("  mov ecx, eax\n");
-                  
+
                   writer.write("  cmp ecx, 0\n");
                   // check divide by zero
                   writer.write("  jne EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + "\n");
                   writer.write("  call __exception\n");
                   writer.write("EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
-                  
+
                   // move the running total into eax
                   // this is the dividend
                   writer.write("  mov eax, ebx\n");

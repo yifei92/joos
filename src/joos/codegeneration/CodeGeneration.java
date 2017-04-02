@@ -700,6 +700,7 @@ public class CodeGeneration {
       generateForMethodOffset(stringEnvironment, methodSig);
       writer.write("  mov eax, [eax]\n");
     } else {
+      System.out.println(methodSig);
       String label = getMethodLabel(stringEnvironment, methodSig);
       if (moveUpToClassEnvironment(callFromEnvironment) != stringEnvironment) {
         externs.add(label);
@@ -800,11 +801,7 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
           // multiply by -1
           Type unaryType = node.children.get(1).getFirstType();
-          if (unaryType.name.equals("int") || unaryType.name.equals("short")) {
-            writer.write("  imul eax, -1\n");
-          } else {
-            writer.write("  mul eax, -1\n");
-          }
+          writer.write("  imul eax, -1\n");
         }
         return;
       }
@@ -891,6 +888,12 @@ public class CodeGeneration {
                   // move result of last expression into ecx
                   // this is the divisor
                   writer.write("  mov ecx, eax\n");
+                  writer.write("  cmp ecx, 0\n");
+
+                  // check divide by zero
+                  writer.write("  jne EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + "\n");
+                  writer.write("  call __exception\n");
+                  writer.write("EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
                   // move the running total into eax
                   // this is the dividend
                   writer.write("  mov eax, ebx\n");
@@ -1020,11 +1023,15 @@ public class CodeGeneration {
           //TODO: dis gon b some wierd shit
           writer.write("  childrenofinstanceof"+subTypingTesting.getuniqueid()+":\n");
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+          uniqueid=subTypingTesting.getuniqueid();
+          writer.write(" cmp eax,0\n");
+          writer.write(" je end"+uniqueid+"\n");
           int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
           writer.write("  mov ebx, [eax + 4] ; start checking\n");
           writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
           writer.write(" mul ebx \n");
           writer.write("  mov eax, [subtypecheckingtable+eax+"+offset+"]  ;check instance of\n");
+          writer.write("end"+uniqueid+":\n");
           return;
         } else {
           // Generate code for lhs

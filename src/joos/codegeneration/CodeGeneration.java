@@ -64,7 +64,7 @@ public class CodeGeneration {
     list.add((int)'l');
     list.add((int)'l');
     return list;
-  } 
+  }
 
   public String getMethodLabel(Environment environment, MethodSignature methodSignature) {
     String ret = "";
@@ -383,10 +383,10 @@ public class CodeGeneration {
     writer.write("global " + label + "\n" + label + ":\n");
     Map<String, Pair<Integer, Type>> offsets = new HashMap();
     offsets.put("this", new Pair(-8, Type.newObject(classEnv.mName, classEnv, null)));
-    int i = -12;
+    int i = -8 - methodEnv.mVariableDeclarations.size() * 4;
     for (String param : methodEnv.mVariableDeclarations.keySet()) {
       offsets.put(param, new Pair(i, methodEnv.mVariableToType.get(param)));
-      i -= 4;
+      i += 4;
     }
     writer.write("  push ebp\n");
     writer.write("  mov ebp, esp\n");
@@ -606,8 +606,19 @@ public class CodeGeneration {
         writer.write("  mov eax, [ebp + 8]\n"); //this
         writer.write("  mov eax, [eax + " + offset + "]\n");
       } else {
-        fieldEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
-        stat = true;
+        try {
+          fieldEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
+          stat = true;
+        } catch (InvalidSyntaxException e) {
+          for (String packageString : packageMap.keySet()) {
+            if (name.length() >= packageString.length() && name.substring(0, packageString.length()).equals(packageString)) {
+              fieldEnv = packageMap.get(packageString);
+              dotIndex = packageString.length() == name.length() ? -1 : packageString.length();
+              stat = true;
+              break;
+            }
+          }
+        }
       }
     }
 
@@ -1234,10 +1245,10 @@ public class CodeGeneration {
         if(node.children.size()>1){
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           for(int i=2;i<node.children.size();i+=2){
-            writer.write("push eax;");
+            writer.write("push eax;\n");
             generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-            writer.write("pop ebx;");
-            writer.write("and eax, ebx;");
+            writer.write("pop ebx;\n");
+            writer.write("and eax, ebx;\n");
           }
         }
         else {
@@ -1248,10 +1259,10 @@ public class CodeGeneration {
         if(node.children.size()>1){
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           for(int i=2;i<node.children.size();i+=2){
-            writer.write("push eax;");
+            writer.write("push eax;\n");
             generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-            writer.write("pop ebx;");
-            writer.write("or eax, ebx;");
+            writer.write("pop ebx;\n");
+            writer.write("or eax, ebx;\n");
           }
         }
         else {
@@ -1612,6 +1623,12 @@ public class CodeGeneration {
         writer.write(" je subtypingcheck"+unique+" \n");
         writer.write("  mov ebx, [eax + 4]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
+        if(node.children.get(2).token.getType()==TokenType.DIMS){
+          offset=subTypingTesting.getoffset(node.children.get(1).type.name+"[]");
+        }
+        if(node.children.get(2).token.getType()==TokenType.DIMS_OPT&&node.children.get(2).children.size()>0){
+          offset=subTypingTesting.getoffset(node.children.get(1).type.name+"[]");
+        }
         writer.write("push eax\n");
         writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
         writer.write(" mul ebx \n");

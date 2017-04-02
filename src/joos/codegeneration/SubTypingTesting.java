@@ -25,7 +25,7 @@ public class SubTypingTesting {
 	public void initialize(){
 		StringWriter writer = new StringWriter();
 		List<String> temp=new ArrayList<>();
-		temp.add("shot");
+		temp.add("short");
 		temp.add("byte");
 		temp.add("char");
 		temp.add("int");
@@ -43,19 +43,21 @@ public class SubTypingTesting {
 				if (i == j) {
 					//lookuptable[i][j]=1;
 					writer.write("dd 0x1\n");
-					break;
+					continue;
 				}
 				boolean assible = TypeCheckingEvaluator.assignable(classlist.get(j), classlist.get(i), packageMap);
 				;
 				if (assible) {
 					//lookuptable[i][j]=1;
 					writer.write("dd 0x1\n");
-					break;
+					continue;
 				} else {
 					writer.write("dd 0x0\n");
 				}
 			}
 		}
+
+		System.out.print("subtyping table size "+classlist.size());
 
 		File file = new File("output/subteypchecking.s");
 		file.getParentFile().mkdirs();

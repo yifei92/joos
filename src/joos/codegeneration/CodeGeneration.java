@@ -540,10 +540,9 @@ public class CodeGeneration {
         String methodClassName = methodSignature.origin;
         if (methodClassName.charAt(0) == '.') methodClassName = methodClassName.substring(1);
         if (methodSignature.modifiers.contains(TokenType.NATIVE)) {
-          writer.write("  pop eax\n");
           String nativeLabel = "NATIVE" + getClassLabel(packageMap.get(methodClassName)) + "." + methodSignature.name;
           externs.add(nativeLabel);
-          writer.write("  call " + nativeLabel + "\n");
+          writer.write("  mov eax, " + nativeLabel + "\n");
           return true;
         }
         writer.write("  push 0\n"); //fake this for call
@@ -661,19 +660,31 @@ public class CodeGeneration {
   }
 
   public void generateForMethodInvocation(Environment currentEnvironment, ParseTreeNode node, Map<String, Pair<Integer, Type>> currentOffsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
-    int numArgs = 0;
-    if (node.children.get(node.children.size() - 2).children.size() > 0) {
-      for (ParseTreeNode param : node.children.get(node.children.size() - 2).children.get(0).children) {
-        if (param.token.getType() == TokenType.COMMA) continue;
-        generateForNode(currentEnvironment, param, currentOffsets, currentOffset, externs);
-        numArgs++;
-        writer.write("  push eax\n");
-      }
-    }
     if (!generateForMethodNode(currentEnvironment, node, currentOffsets, currentOffset, externs)) {
+      writer.write("  push eax\n");
+      int numArgs = 0;
+      if (node.children.get(node.children.size() - 2).children.size() > 0) {
+        for (ParseTreeNode param : node.children.get(node.children.size() - 2).children.get(0).children) {
+          if (param.token.getType() == TokenType.COMMA) continue;
+          generateForNode(currentEnvironment, param, currentOffsets, currentOffset, externs);
+          numArgs++;
+          writer.write("  pop ebx\n");
+          writer.write("  pop ecx\n");
+          writer.write("  push eax\n");
+          writer.write("  push ecx\n");
+          writer.write("  push ebx\n");
+        }
+      }
+      writer.write("  pop eax\n");
       writer.write("  call eax\n");
       writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
+    } else {
+      writer.write("  push eax\n");
+      generateForNode(currentEnvironment, node.children.get(node.children.size() - 2).children.get(0).children.get(0), currentOffsets, currentOffset, externs);
+      writer.write("  pop ebx\n");
+      writer.write("  call ebx\n");
     }
+
   }
 
   private static int stringMethodInvocationExceptionCount = 0;
@@ -733,7 +744,7 @@ public class CodeGeneration {
       // restore eax
       writer.write("  pop eax\n");
       writer.write(exceptionLabel + ":\n");
-      // if so then we need to 
+      // if so then we need to
     }
     // push arg onto stack
     writer.write("  push ebx\n");
@@ -1645,7 +1656,7 @@ public class CodeGeneration {
         }
 
         Environment classEnv = getEnvironmentFromTypeNode(currentEnvironment, node.children.get(1), packageMap);
-        int size = (getFieldList(currentEnvironment).size() + 2) * 4;
+        int size = (getFieldList(classEnv).size() + 2) * 4;
 
         writer.write("  mov eax, " + size + "\n");
         externs.add("__malloc");

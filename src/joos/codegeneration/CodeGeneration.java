@@ -718,7 +718,24 @@ public class CodeGeneration {
    * overrites eax if the method is static
    */
   public void generateStringMethodInvocation(Environment callFromEnvironment, String name, String paramType, boolean isStatic, Set<String> externs) throws IOException, InvalidSyntaxException {
-    // for each arg push onto stack
+    // push the arg onto the stack
+    if (name.equals("concat")) {
+      // first check if the argument is null
+      writer.write("  cmp ebx, 0\n");
+      String exceptionLabel = getNextExceptionLabel();
+      writer.write("  jne " + exceptionLabel +"\n");
+      // if its null then change it to a null literal string object
+      // save eax
+      writer.write("  push eax\n");
+      generateForStringLiteral(getNullLiteralIntList(), callFromEnvironment, externs);
+      // move literal pointer to ebx where it belongs
+      writer.write("  mov ebx, eax\n");
+      // restore eax
+      writer.write("  pop eax\n");
+      writer.write(exceptionLabel + ":\n");
+      // if so then we need to 
+    }
+    // push arg onto stack
     writer.write("  push ebx\n");
 
     if (!isStatic) {
@@ -726,7 +743,12 @@ public class CodeGeneration {
       writer.write("  cmp eax, 0\n");
       String exceptionLabel = getNextExceptionLabel();
       writer.write("  jne " + exceptionLabel +"\n");
-      writer.write("  call __exception\n");
+      if (name.equals("concat")) {
+        // if eax is null then we need a null string literal object to be pointed to in eax
+        generateForStringLiteral(getNullLiteralIntList(), callFromEnvironment, externs);
+      } else {
+        writer.write("  call __exception\n");
+      }
       writer.write(exceptionLabel + ":\n");
     }
 

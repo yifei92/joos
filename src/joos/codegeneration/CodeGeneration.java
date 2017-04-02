@@ -1268,6 +1268,24 @@ public class CodeGeneration {
                 writer.write("  pop ebx\n"); // the array
                 writer.write("  add eax, ebx\n");
                 writer.write("  pop ebx\n"); // the value
+
+                /*
+                int unique=subTypingTesting.getuniqueid();
+                writer.write("  cmp ebx, 0 \n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+                writer.write("  mov ecx, [ebx + 4]\n"); // get class descriptor
+                writer.write("  mov edx, [eax + 4]\n");
+                writer.write("push eax\n");
+                writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
+                writer.write(" mul ecx \n");
+                writer.write("  mov ecx, [subtypecheckingtable+eax+edx] ; check array assignment\n");
+                writer.write("pop eax\n");
+                writer.write(" cmp ecx, 0\n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+                writer.write(" call __exception\n");
+                writer.write("subtypingcheck"+unique+":\n");
+                */
+
                 writer.write("  mov dword [eax], ebx\n");
                 writer.write("  mov eax, ebx\n");
                 break;
@@ -1297,6 +1315,24 @@ public class CodeGeneration {
                 writer.write("  pop ebx\n"); // the array
                 writer.write("  add eax, ebx\n");
                 writer.write("  pop ebx\n"); // the value
+
+                /*
+                int unique=subTypingTesting.getuniqueid();
+                writer.write("  cmp ebx, 0 \n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+                writer.write("  mov ecx, [ebx + 4]\n"); // get class descriptor
+                writer.write("  mov edx, [eax + 4]\n");
+                writer.write("push eax\n");
+                writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
+                writer.write(" mul ecx \n");
+                writer.write("  mov ecx, [subtypecheckingtable+eax+edx] ; check array assignment\n");
+                writer.write("pop eax\n");
+                writer.write(" cmp ecx, 0\n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+                writer.write(" call __exception\n");
+                writer.write("subtypingcheck"+unique+":\n");
+                */
+
                 writer.write("  mov dword [eax], ebx\n");
                 writer.write("  mov eax, ebx\n");
                 break;

@@ -64,7 +64,7 @@ public class CodeGeneration {
     list.add((int)'l');
     list.add((int)'l');
     return list;
-  } 
+  }
 
   public String getMethodLabel(Environment environment, MethodSignature methodSignature) {
     String ret = "";
@@ -606,8 +606,19 @@ public class CodeGeneration {
         writer.write("  mov eax, [ebp + 8]\n"); //this
         writer.write("  mov eax, [eax + " + offset + "]\n");
       } else {
-        fieldEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
-        stat = true;
+        try {
+          fieldEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
+          stat = true;
+        } catch (InvalidSyntaxException e) {
+          for (String packageString : packageMap.keySet()) {
+            if (name.length() >= packageString.length() && name.substring(0, packageString.length()).equals(packageString)) {
+              fieldEnv = packageMap.get(packageString);
+              dotIndex = packageString.length() == name.length() ? -1 : packageString.length();
+              stat = true;
+              break;
+            }
+          }
+        }
       }
     }
 

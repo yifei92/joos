@@ -5,9 +5,8 @@ public class C {
   }
 
   public static int test() {
-    String a = "a";
-    String b = "b";
-    System.out.println(a + b + 10);
-    return 0;
+    C c = new C();
+    String a = "a" + 
+    return 1;
   }
 }

@@ -28,6 +28,17 @@ public class Type {
 		this.decl = decl;
 	}
 
+	public boolean isNotPrimitiveOrNullOrString() {
+		return 
+		!name.equals("null") && 
+		!name.equals("int") &&
+		!name.equals("short") &&
+		!name.equals("String") &&
+		!name.equals("byte") &&
+		!name.equals("boolean") &&
+		!name.equals("char");
+	}
+
 	public Boolean equals(String s){
 		return this.name.equals(s);
 	}

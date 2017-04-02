@@ -91,12 +91,12 @@ public class Environment {
   }
 
   /**
-   * Given a field name checks this environment and all parent environments for the given name and 
+   * Given a field name checks this environment and all parent environments for the given name and
    * returns its modifiers.
    * Returns null if no such field exists
    */
   public Set<TokenType> getFieldModifiers(String name, Map<String, Environment> packageMap) throws InvalidSyntaxException {
-    ParseTreeNode variableDeclaration = mVariableDeclarations.get(name); 
+    ParseTreeNode variableDeclaration = mVariableDeclarations.get(name);
     if (variableDeclaration != null) {
       return EnvironmentUtils.getAllModifiers(variableDeclaration);
     } else {
@@ -370,7 +370,7 @@ public class Environment {
         for (Environment childEnvironment : environment.mChildrenEnvironments) {
           EnvironmentType childType = getEnvironmentType(childEnvironment);
           if (childType == EnvironmentType.METHOD || childType == EnvironmentType.ABSTRACT_METHOD) {
-            MethodSignature methodSignature = childEnvironment.getMethodSignature(packageMap, environment.mName + "." + environment.PackageName);
+            MethodSignature methodSignature = childEnvironment.getMethodSignature(packageMap, environment.PackageName + "." + environment.mName);
             if (methodSignatures.containsKey(methodSignature.name)) {
               if (methodSignatures.get(methodSignature.name).containsKey(methodSignature.parameterTypes)) {
                 throw new InvalidSyntaxException("A class must not declare two methods with the same signature.");
@@ -485,7 +485,7 @@ public class Environment {
   public List<Environment> getAllImplementedEnvironments(Map<String, Environment> packageMap) throws InvalidSyntaxException {
     if (mAllImplementedEnvironments == null) {
       mAllImplementedEnvironments = getAllImplementedEnvironmentsRecursive(packageMap);
-    } 
+    }
     return mAllImplementedEnvironments;
   }
 

@@ -90,12 +90,31 @@ public class TypeChecker {
   // Check that no bitwise operations occur.
   private static void checkForBitwiseOpts(Environment environment) throws InvalidSyntaxException {
     List<ParseTreeNode> bitwiseOptNodes = new ArrayList<>();
-    findNodesWithTokenType(environment.mScope, TokenType.BOOL_OP_EAGER_AND, bitwiseOptNodes);
+
+    List<ParseTreeNode> eagerNodes = new ArrayList<>();
+    findNodesWithTokenType(environment.mScope, TokenType.AND_EXPRESSION, eagerNodes);
+    findNodesWithTokenType(environment.mScope, TokenType.INCLUSIVE_OR_EXPRESSION, eagerNodes);
+    if (eagerNodes.size() > 0) {
+      for (ParseTreeNode eagerNode : eagerNodes) {
+        if (eagerNode.children != null) {
+          for (ParseTreeNode child : eagerNode.children) {
+            TokenType type = child.token.getType();
+            if (type != TokenType.BOOL_OP_EAGER_AND && type != TokenType.BOOL_OP_EAGER_OR) {
+              Type nodeType = child.getFirstType();
+              if (nodeType == null || (!nodeType.name.equals("boolean") && !nodeType.name.equals("java.lang.Boolean"))) {
+                bitwiseOptNodes.add(eagerNode);
+              }
+            }
+          }
+        }
+      }
+    }
     findNodesWithTokenType(environment.mScope, TokenType.BITWISE_XOR, bitwiseOptNodes);
-    findNodesWithTokenType(environment.mScope, TokenType.BOOL_OP_EAGER_OR, bitwiseOptNodes);
     findNodesWithTokenType(environment.mScope, TokenType.OP_LEFT_SHIFT, bitwiseOptNodes);
     findNodesWithTokenType(environment.mScope, TokenType.OP_RIGHT_SHIFT, bitwiseOptNodes);
     findNodesWithTokenType(environment.mScope, TokenType.OP_UNSIGNED_RIGHT_SHIFT, bitwiseOptNodes);
+    
+
     if (bitwiseOptNodes.size() > 0) {
       throw new InvalidSyntaxException("Error! Detected bitwise operation!");
     }

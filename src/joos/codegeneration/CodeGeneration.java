@@ -1559,6 +1559,12 @@ public class CodeGeneration {
         writer.write(" je subtypingcheck"+unique+" \n");
         writer.write("  mov ebx, [eax + 4]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
+        if(node.children.get(2).token.getType()==TokenType.DIMS){
+          offset=subTypingTesting.getoffset(node.children.get(1).type.name+"[]");
+        }
+        if(node.children.get(2).token.getType()==TokenType.DIMS_OPT&&node.children.get(2).children.size()>0){
+          offset=subTypingTesting.getoffset(node.children.get(1).type.name+"[]");
+        }
         writer.write("push eax\n");
         writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
         writer.write(" mul ebx \n");

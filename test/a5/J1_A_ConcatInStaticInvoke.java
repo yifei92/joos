@@ -4,6 +4,7 @@ public class J1_A_ConcatInStaticInvoke {
 	public J1_A_ConcatInStaticInvoke() {}
 	
 	public static int method(String str) {
+		System.out.println(str);
 		return str.length();
 	}
 	

@@ -2,6 +2,7 @@ package joos.codegeneration;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -55,6 +56,15 @@ public class CodeGeneration {
     this.packageMap = packageMap;
     this.subTypingTesting = subTypingTesting;
   }
+
+  private List<Integer> getNullLiteralIntList() {
+    List<Integer> list = new ArrayList<>();
+    list.add((int)'n');
+    list.add((int)'u');
+    list.add((int)'l');
+    list.add((int)'l');
+    return list;
+  } 
 
   public String getMethodLabel(Environment environment, MethodSignature methodSignature) {
     String ret = "";
@@ -662,6 +672,35 @@ public class CodeGeneration {
     return "EXCEPTION$" + stringMethodInvocationExceptionCount + "m";
   }
 
+  public void generateForStringLiteral(List<Integer> list, Environment currentEnvironment, Set<String> externs) {
+    int size = list.size();
+    writer.write("  mov eax, " + (size + 3) * 4 + "\n");
+    externs.add("__malloc");
+    writer.write("  call __malloc\n"); // allocate array
+    if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
+      externs.add("InterfaceTABLE$java.lang.Object");
+    }
+    writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
+    writer.write("  mov dword [eax + 4],"+subTypingTesting.getoffset("char[]")+"\n");
+    writer.write("  mov dword [eax + 8], " + size + "\n");
+    int i = 12;
+    for (int val : list) { // populate array
+      writer.write("  mov dword [eax + " + i + "], " + val + "\n");
+      i += 4;
+    }
+    writer.write("  push eax\n");
+
+    writer.write("  mov eax, 12\n");
+    writer.write("  call __malloc\n"); // allocate string
+    if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.String")) {
+      externs.add("InterfaceTABLE$java.lang.String");
+    }
+    writer.write("  mov dword [eax], InterfaceTABLE$java.lang.String\n");
+    writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset("java.lang.String") + "\n");
+    writer.write("  pop ebx\n");
+    writer.write("  mov dword [eax + 8], ebx\n");
+  }
+
   /**
    * Used for invoking methods on the String object.
    * Assumes that the string object is in eax and the param is in ebx
@@ -939,9 +978,6 @@ public class CodeGeneration {
           boolean isStringEnv = moveUpToClassEnvironment(currentEnvironment).mName.contains("String");
           boolean isPlus = false;
           Type runningTotalType = node.children.get(0).getFirstType();
-          if (isStringEnv) {
-            writer.write("  ;im_in_concat_function_additive_expr\n");
-          }
           // generate code for the first expression
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
@@ -962,7 +998,24 @@ public class CodeGeneration {
               // apply the current operator to the running total
               // ebx is first value and eax is the second value
               if(isPlus) {
-                if (runningTotalType.name.equals("java.lang.String") && currentOperandType.name.equals("java.lang.String")) {
+                if (runningTotalType.name.equals("null") && currentOperandType.name.equals("java.lang.String")) {
+                  // save the rhs string
+                  writer.write("  push eax\n");
+                  // generate a string with "null"
+                  generateForStringLiteral(getNullLiteralIntList(), currentEnvironment, externs);
+                  writer.write("  pop ebx\n");
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
+                } else if (runningTotalType.name.equals("java.lang.String") && currentOperandType.name.equals("null")) {
+                  // save the lhs string
+                  writer.write("  push ebx\n");
+                  // generate a string with "null"
+                  generateForStringLiteral(getNullLiteralIntList(), currentEnvironment, externs);
+                  writer.write("  mov ebx, eax\n");
+                  writer.write("  pop eax\n");
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
+                } else if (runningTotalType.name.equals("java.lang.String") && currentOperandType.name.equals("java.lang.String")) {
                   // string to string concatenation
                   writer.write("  mov ecx, eax\n");
                   writer.write("  mov eax, ebx\n");
@@ -1160,32 +1213,7 @@ public class CodeGeneration {
       case STRING_LITERAL_WITH_QUOTES: {
         List<Integer> list = new ArrayList();
         getDataForStringLiteral(list, node.children.get(1));
-        int size = list.size();
-        writer.write("  mov eax, " + (size + 3) * 4 + "\n");
-        externs.add("__malloc");
-        writer.write("  call __malloc\n"); // allocate array
-        if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.Object")) {
-          externs.add("InterfaceTABLE$java.lang.Object");
-        }
-        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.Object\n");
-        writer.write("  mov dword [eax + 4],"+subTypingTesting.getoffset("char[]")+"\n");
-        writer.write("  mov dword [eax + 8], " + size + "\n");
-        int i = 12;
-        for (int val : list) { // populate array
-          writer.write("  mov dword [eax + " + i + "], " + val + "\n");
-          i += 4;
-        }
-        writer.write("  push eax\n");
-
-        writer.write("  mov eax, 12\n");
-        writer.write("  call __malloc\n"); // allocate string
-        if (currentEnvironment.getParentClassEnvironment() != packageMap.get("java.lang.String")) {
-          externs.add("InterfaceTABLE$java.lang.String");
-        }
-        writer.write("  mov dword [eax], InterfaceTABLE$java.lang.String\n");
-        writer.write("  mov dword [eax + 4], " + subTypingTesting.getoffset("java.lang.String") + "\n");
-        writer.write("  pop ebx\n");
-        writer.write("  mov dword [eax + 8], ebx\n");
+        generateForStringLiteral(list, currentEnvironment, externs);
         return;
       }
       case ESCAPE: {

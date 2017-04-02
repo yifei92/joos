@@ -775,7 +775,7 @@ public class CodeGeneration {
     writer.write("  call __exception\n");
     writer.write(exceptionLabel + ":\n");
 
-    writer.write("  push eax\n"); //push new this 
+    writer.write("  push eax\n"); //push new this
     MethodSignature methodSig = null;
     for (Environment meth : object.mChildrenEnvironments) {
       if (getEnvironmentType(meth) == EnvironmentType.METHOD) {
@@ -977,9 +977,15 @@ public class CodeGeneration {
                   // move the running total into eax
                   // this is the dividend
                   writer.write("  mov eax, ebx\n");
+
+                  writer.write("  cmp eax, 0\n");
                   writer.write("  mov edx, 0\n");
+                  writer.write("  jl POSITIVE$" + child.getFirstTerminalNode().token.getIndex() + "\n");
+                  writer.write("  mov edx, -1\n");
+                  writer.write("POSITIVE$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
+
                   // perform the division
-                  writer.write("  div ecx\n");
+                  writer.write("  idiv ecx\n");
                   // move the remainder from edx into ebx
                   writer.write("  mov ebx, edx\n");
                 break;
@@ -997,9 +1003,14 @@ public class CodeGeneration {
                   // move the running total into eax
                   // this is the dividend
                   writer.write("  mov eax, ebx\n");
+
+                  writer.write("  cmp eax, 0\n");
                   writer.write("  mov edx, 0\n");
+                  writer.write("  jge POSITIVE$" + child.getFirstTerminalNode().token.getIndex() + "\n");
+                  writer.write("  mov edx, -1\n");
+                  writer.write("POSITIVE$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
                   // perform the division
-                  writer.write("  div ecx\n");
+                  writer.write("  idiv ecx\n");
                   // move the quotient from eax into ebx
                   writer.write("  mov ebx, eax\n");
                 break;

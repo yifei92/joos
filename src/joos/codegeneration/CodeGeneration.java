@@ -1067,15 +1067,13 @@ public class CodeGeneration {
       }
       case AND_EXPRESSION:
         if(node.children.size()>1){
-          uniqueid=subTypingTesting.getuniqueid();
-          for(int i=0;i<node.children.size();i++) {
-            if(1%2==0) {
-              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-              writer.write("  cmp eax, 0\n");
-              writer.write("  je label"+uniqueid+"end\n");
-            }
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+          for(int i=2;i<node.children.size();i+=2){
+            writer.write("push eax;");
+            generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
+            writer.write("pop ebx;");
+            writer.write("and eax, ebx;");
           }
-          writer.write("label"+uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
@@ -1083,15 +1081,13 @@ public class CodeGeneration {
         return;
       case INCLUSIVE_OR_EXPRESSION:
         if(node.children.size()>1){
-          uniqueid=subTypingTesting.getuniqueid();
-          for(int i=0;i<node.children.size();i++) {
-            if(1%2==0) {
-              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-              writer.write("  cmp eax, 1\n");
-              writer.write("  je label"+uniqueid+"end\n");
-            }
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+          for(int i=2;i<node.children.size();i+=2){
+            writer.write("push eax;");
+            generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
+            writer.write("pop ebx;");
+            writer.write("or eax, ebx;");
           }
-          writer.write("label"+uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);

@@ -77,7 +77,7 @@ public class Main {
 				TypeChecker.check(environment, packageMap);
 			}
 			for (String key : treeMap.keySet()) {
-				if(key.equals("J1_A_ConcatInStaticInvoke") || key.equals("B.B") || key.equals("C.C")) {
+				if(key.equals("J1_A_ConcatInSimpleInvoke") || key.equals("B.B") || key.equals("C.C")) {
 					System.out.println("class " + key);
 					treeMap.get(key).print();
 				}

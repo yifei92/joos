@@ -698,6 +698,7 @@ public class CodeGeneration {
     if (!isStatic) {
       writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
     } else {
+      System.out.println(methodSig);
       String label = getMethodLabel(stringEnvironment, methodSig);
       if (moveUpToClassEnvironment(callFromEnvironment) != stringEnvironment) {
         externs.add(label);
@@ -798,11 +799,7 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(1), currentOffsets, currentOffset, externs);
           // multiply by -1
           Type unaryType = node.children.get(1).getFirstType();
-          if (unaryType.name.equals("int") || unaryType.name.equals("short")) {
-            writer.write("  imul eax, -1\n");
-          } else {
-            writer.write("  mul eax, -1\n");
-          }
+          writer.write("  imul eax, -1\n");
         }
         return;
       }

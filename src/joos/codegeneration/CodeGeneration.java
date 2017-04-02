@@ -1011,11 +1011,15 @@ public class CodeGeneration {
           //TODO: dis gon b some wierd shit
           writer.write("  childrenofinstanceof"+subTypingTesting.getuniqueid()+":\n");
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+          uniqueid=subTypingTesting.getuniqueid();
+          writer.write(" cmp eax,0\n");
+          writer.write(" je end"+uniqueid+"\n");
           int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
           writer.write("  mov ebx, [eax + 4] ; start checking\n");
           writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
           writer.write(" mul ebx \n");
           writer.write("  mov eax, [subtypecheckingtable+eax+"+offset+"]  ;check instance of\n");
+          writer.write("end"+uniqueid+":\n");
           return;
         } else {
           // Generate code for lhs

@@ -498,7 +498,7 @@ public class CodeGeneration {
     }
   }
 
-  private void generateForMethodNode(Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
+  private boolean generateForMethodNode(Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
     List<String> argTypes = new ArrayList();
     if (node.children.get(node.children.size() -2).children.size() > 0) {
       for (ParseTreeNode arg : node.children.get(node.children.size() - 2).children.get(0).children) {
@@ -520,13 +520,20 @@ public class CodeGeneration {
         writer.write("  mov eax, [eax]\n"); //top of INTERFACETABLE
         generateForMethodOffset(typeEnvironment, methodSignature);
         writer.write("  mov eax, [eax]\n");
-        return;
+        return false;
       }
       String prefix = name.substring(0, dotIndex);
       if (generateForName(environment, prefix, node, offsets, externs).first) {
         // a.b.c() static
         Environment classEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
         MethodSignature methodSignature = classEnv.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
+        if (methodSignature.modifiers.contains(TokenType.NATIVE)) {
+          writer.write("  pop eax\n");
+          String nativeLabel = "NATIVE" + getClassLabel(classEnv) + "." + methodSignature.name;
+          externs.add(nativeLabel);
+          writer.write("  call " + nativeLabel + "\n");
+          return true;
+        }
         writer.write("  push 0\n"); //fake this for call
         String label = getMethodLabel(classEnv, methodSignature);
         if (classEnv != environment.getParentClassEnvironment()) {
@@ -566,6 +573,7 @@ public class CodeGeneration {
       generateForMethodOffset(typeEnvironment, methodSignature);
       writer.write("  mov eax, [eax]\n");
     }
+    return false;
   }
 
   private Pair<Boolean, Environment> generateForName(Environment environment, String name, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, Set<String> externs) throws IOException, InvalidSyntaxException {
@@ -639,9 +647,10 @@ public class CodeGeneration {
         writer.write("  push eax\n");
       }
     }
-    generateForMethodNode(currentEnvironment, node, currentOffsets, currentOffset, externs);
-    writer.write("  call eax\n");
-    writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
+    if (!generateForMethodNode(currentEnvironment, node, currentOffsets, currentOffset, externs)) {
+      writer.write("  call eax\n");
+      writer.write("  add esp, " + (numArgs + 1) * 4 + "\n");
+    }
   }
 
   private static int stringMethodInvocationExceptionCount = 0;
@@ -668,7 +677,7 @@ public class CodeGeneration {
       writer.write("  call __exception\n");
       writer.write(exceptionLabel + ":\n");
     }
-    
+
     if (!isStatic) {
       writer.write("  push eax\n"); //push new this
     } else {
@@ -702,6 +711,7 @@ public class CodeGeneration {
   }
 
   public void generateForNode(Environment environment, ParseTreeNode node, Map<String, Pair<Integer, Type>> offsets, int currentOffset, Set<String> externs) throws IOException, InvalidSyntaxException {
+    boolean newScope = false;
     Environment currentEnvironment = environment;
     Map<String, Pair<Integer, Type>> currentOffsets = new HashMap(offsets);
     for (Environment childEnv : environment.mChildrenEnvironments) {
@@ -712,6 +722,7 @@ public class CodeGeneration {
           currentOffset += 4;
           currentOffsets.put(var, new Pair(currentOffset, currentEnvironment.mVariableToType.get(var)));
         }
+        newScope = true;
         break;
       }
     }
@@ -756,6 +767,7 @@ public class CodeGeneration {
         for (Environment childEnv : currentEnvironment.mChildrenEnvironments) {
           if (childEnv.mScope == node.children.get(8)) {
             currentEnvironment = childEnv;
+            if (currentEnvironment.mVariableDeclarations.size() > 0) writer.write("  sub esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
             for (String var : childEnv.mVariableDeclarations.keySet()) {
               currentOffset += 4;
               currentOffsets.put(var, new Pair(currentOffset, childEnv.mVariableToType.get(var)));
@@ -944,7 +956,7 @@ public class CodeGeneration {
                   // our running type from now on is string
                   runningTotalType = currentOperandType;
                 } else if (!runningTotalType.name.equals("java.lang.String") && currentOperandType.name.equals("java.lang.String")) {
-                  // numeric to string concat 
+                  // numeric to string concat
                   // numeric to string concatenation
                   // save the current operand
                   writer.write("  push eax\n");
@@ -964,7 +976,7 @@ public class CodeGeneration {
                   writer.write("  mov ebx, eax\n");
                   // convert numeric to string
                   generateStringMethodInvocation(currentEnvironment, "valueOf", currentOperandType.name, true, externs);
-                  // move the converted numeric into ebx 
+                  // move the converted numeric into ebx
                   writer.write("  mov ebx, eax\n");
                   // retreive the saved running total
                   writer.write("  pop eax\n");
@@ -1454,7 +1466,7 @@ public class CodeGeneration {
         generateForNode(currentEnvironment, child, currentOffsets, currentOffset, externs);
       }
     }
-    if (currentEnvironment.mScope == node && currentEnvironment.mVariableDeclarations.size() > 0) {
+    if (newScope && currentEnvironment.mVariableDeclarations.size() > 0) {
       writer.write("  add esp, " + currentEnvironment.mVariableDeclarations.size() * 4 + "\n");
     }
   }

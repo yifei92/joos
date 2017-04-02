@@ -995,9 +995,10 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
         } else if(node.children.get(1).token.getType() == TokenType.INSTANCEOF) {
           //TODO: dis gon b some wierd shit
-          generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
+          writer.write("  childrenofinstanceof"+subTypingTesting.getuniqueid()+":\n");
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           int offset=subTypingTesting.getoffset(node.children.get(0).type.name);
-          writer.write("  mov ebx, [eax + 8]\n");
+          writer.write("  mov ebx, [eax + 4] ; start checking\n");
           writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
           writer.write(" mul ebx \n");
           writer.write("  mov eax, [subtypecheckingtable+eax+"+offset+"]  ;check instance of\n");
@@ -1434,7 +1435,7 @@ public class CodeGeneration {
         int unique=subTypingTesting.getuniqueid();
         writer.write("  cmp eax, 0 \n");
         writer.write(" je subtypingcheck"+unique+" \n");
-        writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
+        writer.write("  mov ebx, [eax + 4]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
         writer.write("push eax\n");
         writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");

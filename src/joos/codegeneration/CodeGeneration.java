@@ -1313,7 +1313,7 @@ public class CodeGeneration {
                 writer.write(" mul ecx \n");
                 writer.write("  mov ecx, [subtypecheckingtable+eax+edx] ; check array assignment\n");
                 writer.write("pop eax\n");
-                writer.write(" cmp ecx, 0\n");
+                writer.write(" cmp ecx, 1\n");
                 writer.write(" je subtypingcheck"+unique+" \n");
                 writer.write(" call __exception\n");
                 writer.write("subtypingcheck"+unique+":\n");
@@ -1360,7 +1360,7 @@ public class CodeGeneration {
                 writer.write(" mul ecx \n");
                 writer.write("  mov ecx, [subtypecheckingtable+eax+edx] ; check array assignment\n");
                 writer.write("pop eax\n");
-                writer.write(" cmp ecx, 0\n");
+                writer.write(" cmp ecx, 1\n");
                 writer.write(" je subtypingcheck"+unique+" \n");
                 writer.write(" call __exception\n");
                 writer.write("subtypingcheck"+unique+":\n");
@@ -1525,7 +1525,7 @@ public class CodeGeneration {
         writer.write(" mul ebx \n");
         writer.write("  mov ebx, [subtypecheckingtable+eax+"+offset+"] ; check cast expression\n");
         writer.write("pop eax\n");
-        writer.write(" cmp ebx, 0\n");
+        writer.write(" cmp ebx, 1\n");
         writer.write(" je subtypingcheck"+unique+" \n");
         writer.write(" call __exception\n");
         writer.write("subtypingcheck"+unique+":\n");

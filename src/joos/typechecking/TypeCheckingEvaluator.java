@@ -363,6 +363,7 @@ public class TypeCheckingEvaluator {
 					if(m==null){
 						throw new TypeLinkingException("unable to find method "+fullname+rootenv.mName);
 					}
+					currentnode.type=new Type(m.type);
 					return new Type(m.type);
 				}
 				if(currentnode.children.get(4).children!=null&&currentnode.children.get(4).children.size()>0)
@@ -380,6 +381,7 @@ public class TypeCheckingEvaluator {
 				if(m==null){
 					throw new TypeLinkingException("unable to find method "+methodname);
 				}
+				currentnode.type=new Type(m.type);
 				return new Type(m.type);
 
 			case ARRAY_ACCESS:

@@ -383,10 +383,10 @@ public class CodeGeneration {
     writer.write("global " + label + "\n" + label + ":\n");
     Map<String, Pair<Integer, Type>> offsets = new HashMap();
     offsets.put("this", new Pair(-8, Type.newObject(classEnv.mName, classEnv, null)));
-    int i = -12;
+    int i = -8 - methodEnv.mVariableDeclarations.size() * 4;
     for (String param : methodEnv.mVariableDeclarations.keySet()) {
       offsets.put(param, new Pair(i, methodEnv.mVariableToType.get(param)));
-      i -= 4;
+      i += 4;
     }
     writer.write("  push ebp\n");
     writer.write("  mov ebp, esp\n");

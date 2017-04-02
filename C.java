@@ -7,7 +7,7 @@ public class C {
   public static int test() {
     String a = "a";
     String b = "b";
-    a.concat(b);
+    String c = a.concat(b);
     return 0;
   }
 }

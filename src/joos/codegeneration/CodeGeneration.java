@@ -656,7 +656,7 @@ public class CodeGeneration {
    * Assumes that the string object is in eax and the param is in ebx
    * overrites eax if the method is static
    */
-  public void generateStringMethodInvocation(Environment callFromEnvironment, String name, String paramType, boolean isStatic, Set<String> externs) throws InvalidSyntaxException {
+  public void generateStringMethodInvocation(Environment callFromEnvironment, String name, String paramType, boolean isStatic, Set<String> externs) throws IOException, InvalidSyntaxException {
     // for each arg push onto stack
     writer.write("  push ebx\n");
 
@@ -686,6 +686,8 @@ public class CodeGeneration {
     }
     if (!isStatic) {
       writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
+      generateForMethodOffset(stringEnvironment, methodSig);
+      writer.write("  mov eax, [eax]\n");
     } else {
       String label = getMethodLabel(stringEnvironment, methodSig);
       if (moveUpToClassEnvironment(callFromEnvironment) != stringEnvironment) {
@@ -900,8 +902,12 @@ public class CodeGeneration {
         } else {
           // Flag to keep track of whether or not we should add or subtract the current result
           // from the running total
+          boolean isStringEnv = moveUpToClassEnvironment(currentEnvironment).mName.contains("String");
           boolean isPlus = false;
           Type runningTotalType = node.children.get(0).getFirstType();
+          if (isStringEnv) {
+            writer.write("  ;im_in_concat_function_additive_expr\n");
+          }
           // generate code for the first expression
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
@@ -987,6 +993,9 @@ public class CodeGeneration {
           }
           // all results must be in the eax
           writer.write("  pop eax\n");
+          if (isStringEnv) {
+            writer.write("  ;im_in_concat_function_additive_expr_end\n");
+          }
         }
         return;
       }

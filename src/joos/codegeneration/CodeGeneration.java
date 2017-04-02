@@ -529,14 +529,14 @@ public class CodeGeneration {
         MethodSignature methodSignature = classEnv.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
         if (methodSignature.modifiers.contains(TokenType.NATIVE)) {
           writer.write("  pop eax\n");
-          String nativeLabel = "NATIVE" + getClassLabel(classEnv) + "." + methodSignature.name;
+          String nativeLabel = "NATIVE" + getClassLabel(packageMap.get(methodSignature.origin)) + "." + methodSignature.name;
           externs.add(nativeLabel);
           writer.write("  call " + nativeLabel + "\n");
           return true;
         }
         writer.write("  push 0\n"); //fake this for call
-        String label = getMethodLabel(classEnv, methodSignature);
-        if (classEnv != environment.getParentClassEnvironment()) {
+        String label = getMethodLabel(packageMap.get(methodSignature.origin), methodSignature);
+        if (packageMap.get(methodSignature.origin) != environment.getParentClassEnvironment()) {
           externs.add(label);
         }
         writer.write("  mov eax, " + label + "\n");

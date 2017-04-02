@@ -96,6 +96,7 @@ public class Main {
 			}
 		} catch (InvalidSyntaxException e) {
 			// An error occured in one of the steps
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 			System.out.println("Error");
 			System.exit(42);

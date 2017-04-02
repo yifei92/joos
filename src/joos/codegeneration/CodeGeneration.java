@@ -1181,10 +1181,10 @@ public class CodeGeneration {
         if(node.children.size()>1){
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           for(int i=2;i<node.children.size();i+=2){
-            writer.write("push eax;");
+            writer.write("push eax;\n");
             generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-            writer.write("pop ebx;");
-            writer.write("and eax, ebx;");
+            writer.write("pop ebx;\n");
+            writer.write("and eax, ebx;\n");
           }
         }
         else {
@@ -1195,10 +1195,10 @@ public class CodeGeneration {
         if(node.children.size()>1){
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           for(int i=2;i<node.children.size();i+=2){
-            writer.write("push eax;");
+            writer.write("push eax;\n");
             generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-            writer.write("pop ebx;");
-            writer.write("or eax, ebx;");
+            writer.write("pop ebx;\n");
+            writer.write("or eax, ebx;\n");
           }
         }
         else {

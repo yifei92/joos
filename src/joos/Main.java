@@ -76,6 +76,12 @@ public class Main {
 			for (Environment environment : packageMap.values()) {
 				TypeChecker.check(environment, packageMap);
 			}
+			for (String key : treeMap.keySet()) {
+				if(key.equals("J1_A_ConcatInSimpleInvoke") || key.equals("B.B") || key.equals("C.C")) {
+					System.out.println("class " + key);
+					treeMap.get(key).print();
+				}
+			}
 			for (Environment environment : packageMap.values()) {
 				AssignmentChecking.check(environment, packageMap);
 			}

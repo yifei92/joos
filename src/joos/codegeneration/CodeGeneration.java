@@ -764,15 +764,22 @@ public class CodeGeneration {
    * Used for invoking methods on the String object.
    * Assumes that the object is in eax
    */
-  public void generateToStringOnObject(Environment object) throws IOException, InvalidSyntaxException {
+  public void generateToStringOnObject(Environment currentEnvironment, Environment object, Set<String> externs) throws IOException, InvalidSyntaxException {
     // for each arg push onto stack
     //writer.write("  push ebx\n");
 
     // check if the string object is null
     writer.write("  cmp eax, 0\n");
+    // plz don't mind the usage of getNextExceptionLabel its just for a unique int kekkekekekeke
+    // ^ written at 2am
     String exceptionLabel = getNextExceptionLabel();
     writer.write("  jne " + exceptionLabel +"\n");
-    writer.write("  call __exception\n");
+    // if the object is null we need to have a null string literal
+    generateForStringLiteral(getNullLiteralIntList(), currentEnvironment, externs);
+    // skip over the rest
+    writer.write("jmp " + exceptionLabel + "skip\n");
+
+    writer.write("  jne " + exceptionLabel +"\n");
     writer.write(exceptionLabel + ":\n");
 
     writer.write("  push eax\n"); //push new this
@@ -792,6 +799,8 @@ public class CodeGeneration {
 
     writer.write("  call eax\n");
     writer.write("  add esp, 4\n");
+
+    writer.write(exceptionLabel + "skip:");
   }
 
   public void generateForNode(Environment environment, ParseTreeNode node, Set<String> externs) throws IOException, InvalidSyntaxException {
@@ -1065,7 +1074,7 @@ public class CodeGeneration {
                   Environment typeEnvironment = packageMap.get(typeName);
                   // generate a call to toString on the object in eax
                   writer.write("  mov eax, ebx\n");
-                  generateToStringOnObject(typeEnvironment);
+                  generateToStringOnObject(currentEnvironment, typeEnvironment, externs);
                   // String for object is now in eax
                   // restore the rhs into the arg register for concat
                   writer.write("  pop ebx\n");
@@ -1082,7 +1091,7 @@ public class CodeGeneration {
                   System.out.println("getting typeEnvironment for " + typeName);
                   Environment typeEnvironment = packageMap.get(typeName);
                   // generate a call to toString on the object in eax
-                  generateToStringOnObject(typeEnvironment);
+                  generateToStringOnObject(currentEnvironment, typeEnvironment, externs);
                   writer.write("  mov ebx, eax\n");
                   writer.write("  pop eax\n");
                   generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);

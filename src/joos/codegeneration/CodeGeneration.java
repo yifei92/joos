@@ -1079,15 +1079,13 @@ public class CodeGeneration {
       }
       case AND_EXPRESSION:
         if(node.children.size()>1){
-          uniqueid=subTypingTesting.getuniqueid();
-          for(int i=0;i<node.children.size();i++) {
-            if(1%2==0) {
-              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-              writer.write("  cmp eax, 0\n");
-              writer.write("  je label"+uniqueid+"end\n");
-            }
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+          for(int i=2;i<node.children.size();i+=2){
+            writer.write("push eax;");
+            generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
+            writer.write("pop ebx;");
+            writer.write("and eax, ebx;");
           }
-          writer.write("label"+uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
@@ -1095,15 +1093,13 @@ public class CodeGeneration {
         return;
       case INCLUSIVE_OR_EXPRESSION:
         if(node.children.size()>1){
-          uniqueid=subTypingTesting.getuniqueid();
-          for(int i=0;i<node.children.size();i++) {
-            if(1%2==0) {
-              generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
-              writer.write("  cmp eax, 1\n");
-              writer.write("  je label"+uniqueid+"end\n");
-            }
+          generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
+          for(int i=2;i<node.children.size();i+=2){
+            writer.write("push eax;");
+            generateForNode(currentEnvironment, node.children.get(i), currentOffsets, currentOffset, externs);
+            writer.write("pop ebx;");
+            writer.write("or eax, ebx;");
           }
-          writer.write("label"+uniqueid+"end:\n");
         }
         else {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
@@ -1447,18 +1443,20 @@ public class CodeGeneration {
         if(TypeCheckingEvaluator.isprimitiveType(node.children.get(node.children.size() - 1).type)){
           return;
         }
+        int unique=subTypingTesting.getuniqueid();
+        writer.write("  cmp eax, 0 \n");
+        writer.write(" je subtypingcheck"+unique+" \n");
         writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
         writer.write("push eax\n");
         writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
         writer.write(" mul ebx \n");
         writer.write("  mov ebx, [subtypecheckingtable+eax+"+offset+"] ; check cast expression\n");
+        writer.write("pop eax\n");
         writer.write(" cmp ebx, 0\n");
-        int unique=subTypingTesting.getuniqueid();
         writer.write(" je subtypingcheck"+unique+" \n");
         writer.write(" call __exception\n");
         writer.write("subtypingcheck"+unique+":\n");
-        writer.write("pop eax\n");
         return;
       }
     }

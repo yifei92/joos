@@ -36,6 +36,10 @@ public class Type {
 		return this.name.equals(t.name);
 	}
 
+	public static Type newInt() {
+		return new Type(TypeType.PRIMITIVE, "int", null, null, null);
+	}
+
 	public static Type newPrimitive(String name, ParseTreeNode decl) {
 		return new Type(TypeType.PRIMITIVE, name, null, null, decl);
 	}

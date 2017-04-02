@@ -704,7 +704,6 @@ public class TypeCheckingEvaluator {
 			return true;
 		}
 		if(isnumicType(new Type(parent))&&isnumicType(new Type(child))){
-			System.out.println("assign fail "+parent+"  "+child);
 			return false;
 		}
 

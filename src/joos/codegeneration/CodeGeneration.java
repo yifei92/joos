@@ -760,6 +760,40 @@ public class CodeGeneration {
     writer.write("  add esp, 8\n");
   }
 
+  /**
+   * Used for invoking methods on the String object.
+   * Assumes that the object is in eax
+   */
+  public void generateToStringOnObject(Environment object) throws IOException, InvalidSyntaxException {
+    // for each arg push onto stack
+    //writer.write("  push ebx\n");
+
+    // check if the string object is null
+    writer.write("  cmp eax, 0\n");
+    String exceptionLabel = getNextExceptionLabel();
+    writer.write("  jne " + exceptionLabel +"\n");
+    writer.write("  call __exception\n");
+    writer.write(exceptionLabel + ":\n");
+
+    writer.write("  push eax\n"); //push new this 
+    MethodSignature methodSig = null;
+    for (Environment meth : object.mChildrenEnvironments) {
+      if (getEnvironmentType(meth) == EnvironmentType.METHOD) {
+        MethodSignature sig = meth.getMethodSignature(packageMap, null);
+        if (sig.name.equals("toString") && sig.parameterTypes.size() == 0) {
+          methodSig = sig;
+        }
+      }
+    }
+
+    writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
+    generateForMethodOffset(object, methodSig);
+    writer.write("  mov eax, [eax]\n");
+
+    writer.write("  call eax\n");
+    writer.write("  add esp, 4\n");
+  }
+
   public void generateForNode(Environment environment, ParseTreeNode node, Set<String> externs) throws IOException, InvalidSyntaxException {
     generateForNode(environment, node, new HashMap<>(), 0, externs);
   }
@@ -986,7 +1020,6 @@ public class CodeGeneration {
         } else {
           // Flag to keep track of whether or not we should add or subtract the current result
           // from the running total
-          boolean isStringEnv = moveUpToClassEnvironment(currentEnvironment).mName.contains("String");
           boolean isPlus = false;
           Type runningTotalType = node.children.get(0).getFirstType();
           // generate code for the first expression
@@ -1009,7 +1042,41 @@ public class CodeGeneration {
               // apply the current operator to the running total
               // ebx is first value and eax is the second value
               if(isPlus) {
-                if (runningTotalType.name.equals("null") && currentOperandType.name.equals("java.lang.String")) {
+                if(runningTotalType.isNotPrimitiveOrNullOrString() && currentOperandType.name.equals("java.lang.String")) {
+                  // save the rhs string
+                  writer.write("  push eax\n");
+
+                  String typeName = runningTotalType.name.replace("[]", "");
+                  // get the type environment of the object in eax
+                  if (runningTotalType.name.contains("[]")) {
+                    typeName = "java.lang.Object";
+                  }
+                  Environment typeEnvironment = packageMap.get(typeName);
+                  // generate a call to toString on the object in eax
+                  writer.write("  mov eax, ebx\n");
+                  generateToStringOnObject(typeEnvironment);
+                  // String for object is now in eax
+                  // restore the rhs into the arg register for concat
+                  writer.write("  pop ebx\n");
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
+                  runningTotalType = currentOperandType;
+                } else if(runningTotalType.name.equals("java.lang.String") && currentOperandType.isNotPrimitiveOrNullOrString()) {
+                  writer.write("  push ebx\n");
+                  // get the type environment of the object in eax
+                  String typeName = currentOperandType.name.replace("[]", "");
+                  if (currentOperandType.name.contains("[]")) {
+                    typeName = "java.lang.Object";
+                  }
+                  System.out.println("getting typeEnvironment for " + typeName);
+                  Environment typeEnvironment = packageMap.get(typeName);
+                  // generate a call to toString on the object in eax
+                  generateToStringOnObject(typeEnvironment);
+                  writer.write("  mov ebx, eax\n");
+                  writer.write("  pop eax\n");
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
+                  writer.write("  mov ebx, eax\n");
+                } else if (runningTotalType.name.equals("null") && currentOperandType.name.equals("java.lang.String")) {
                   // save the rhs string
                   writer.write("  push eax\n");
                   // generate a string with "null"
@@ -1091,9 +1158,6 @@ public class CodeGeneration {
           }
           // all results must be in the eax
           writer.write("  pop eax\n");
-          if (isStringEnv) {
-            writer.write("  ;im_in_concat_function_additive_expr_end\n");
-          }
         }
         return;
       }

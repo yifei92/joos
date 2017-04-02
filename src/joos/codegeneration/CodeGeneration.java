@@ -527,16 +527,18 @@ public class CodeGeneration {
         // a.b.c() static
         Environment classEnv = getEnvironmentFromTypeName(environment, prefix, packageMap);
         MethodSignature methodSignature = classEnv.getMethodSignatures(packageMap).get(name.substring(dotIndex + 1)).get(argTypes);
+        String methodClassName = methodSignature.origin;
+        if (methodClassName.charAt(0) == '.') methodClassName = methodClassName.substring(1);
         if (methodSignature.modifiers.contains(TokenType.NATIVE)) {
           writer.write("  pop eax\n");
-          String nativeLabel = "NATIVE" + getClassLabel(packageMap.get(methodSignature.origin)) + "." + methodSignature.name;
+          String nativeLabel = "NATIVE" + getClassLabel(packageMap.get(methodClassName)) + "." + methodSignature.name;
           externs.add(nativeLabel);
           writer.write("  call " + nativeLabel + "\n");
           return true;
         }
         writer.write("  push 0\n"); //fake this for call
-        String label = getMethodLabel(packageMap.get(methodSignature.origin), methodSignature);
-        if (packageMap.get(methodSignature.origin) != environment.getParentClassEnvironment()) {
+        String label = getMethodLabel(packageMap.get(methodClassName), methodSignature);
+        if (packageMap.get(methodClassName) != environment.getParentClassEnvironment()) {
           externs.add(label);
         }
         writer.write("  mov eax, " + label + "\n");

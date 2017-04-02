@@ -730,6 +730,9 @@ public class TypeCheckingEvaluator {
 		Environment childenv=PackageMap.get(child);
 		Environment parentenv=PackageMap.get(parent);
 		boolean returnboo=false;
+		if(childenv==null){
+			System.out.println(child);
+		}
 		try {
 			returnboo=childenv.extendsEnvironment(parentenv,PackageMap);
 		} catch (InvalidSyntaxException e) {

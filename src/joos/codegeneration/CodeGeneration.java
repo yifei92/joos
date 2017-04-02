@@ -739,7 +739,6 @@ public class CodeGeneration {
       generateForMethodOffset(stringEnvironment, methodSig);
       writer.write("  mov eax, [eax]\n");
     } else {
-      System.out.println(methodSig);
       String label = getMethodLabel(stringEnvironment, methodSig);
       if (moveUpToClassEnvironment(callFromEnvironment) != stringEnvironment) {
         externs.add(label);
@@ -863,7 +862,14 @@ public class CodeGeneration {
           generateForNode(currentEnvironment, node.children.get(0), currentOffsets, currentOffset, externs);
           // save the running total onto the stack
           writer.write("  push eax\n");
+          writer.write("  mov ebx, eax\n");
           for (int i = 1 ; i < node.children.size() ; i++) {
+            if (node.token.getType() == TokenType.CONDITIONAL_OR_EXPRESSION) {
+              writer.write("  cmp ebx, 1\n");
+            } else {
+              writer.write("  cmp ebx, 0\n");
+            }
+            writer.write("  je SHORTCIRCUIT$" + node.children.get(1).getFirstTerminalNode().token.getIndex() + "\n");
             ParseTreeNode child = node.children.get(i);
             if (child.token.getType() != TokenType.BOOL_OP_AND&&child.token.getType() != TokenType.BOOL_OP_OR) {
               // generate the code for this expression
@@ -881,6 +887,7 @@ public class CodeGeneration {
             }
           }
           // all results must be in the eax
+          writer.write("  SHORTCIRCUIT$" + node.children.get(1).getFirstTerminalNode().token.getIndex() + ":\n");
           writer.write("  pop eax\n");
         }
         return;
@@ -921,7 +928,7 @@ public class CodeGeneration {
                   writer.write("  jne EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + "\n");
                   writer.write("  call __exception\n");
                   writer.write("EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
-                  
+
                   // move the running total into eax
                   // this is the dividend
                   writer.write("  mov eax, ebx\n");
@@ -935,13 +942,13 @@ public class CodeGeneration {
                   // move result of last expression into ecx
                   // this is the divisor
                   writer.write("  mov ecx, eax\n");
-                  
+
                   writer.write("  cmp ecx, 0\n");
                   // check divide by zero
                   writer.write("  jne EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + "\n");
                   writer.write("  call __exception\n");
                   writer.write("EXCEPTION$" + child.getFirstTerminalNode().token.getIndex() + ":\n");
-                  
+
                   // move the running total into eax
                   // this is the dividend
                   writer.write("  mov eax, ebx\n");

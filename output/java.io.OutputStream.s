@@ -60,10 +60,8 @@ METHOD$java.io.OutputStream$write@int#:
   mov ebp, esp
   mov eax, [ebp - -12]
   push eax
-  push 0
-  mov eax, NATIVEjava.io.OutputStream.nativeWrite
-  call eax
-  add esp, 8
+  pop eax
+  call NATIVEjava.io.OutputStream.nativeWrite
   pop ebp
   ret
 

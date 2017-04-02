@@ -68,6 +68,7 @@ global METHOD$java.io.PrintStream$print@java.lang.String#
 METHOD$java.io.PrintStream$print@java.lang.String#:
   push ebp
   mov ebp, esp
+  sub esp, 4
   mov eax, 0
   mov dword [ebp - 4], eax
 label1start:
@@ -112,7 +113,6 @@ EXCEPTION$52m:
   mov eax, [eax]
   call eax
   add esp, 8
-  add esp, 4
   mov eax, [ebp - 4]
   push eax
   mov eax, 1
@@ -134,13 +134,13 @@ METHOD$java.io.PrintStream$println@:
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 0
   push eax
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   push eax

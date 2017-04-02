@@ -95,7 +95,7 @@ CONSTRUCTOR$java.lang.String@:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -143,7 +143,7 @@ EXCEPTION$79$0:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -170,6 +170,7 @@ EXCEPTION$72:
   pop ebx
   mov dword [eax + 8], ebx
   mov eax, ebx
+  sub esp, 4
   mov eax, 0
   mov dword [ebp - 4], eax
 label11start:
@@ -230,7 +231,6 @@ EXCEPTION$103a:
   pop ebx
   mov dword [eax], ebx
   mov eax, ebx
-  add esp, 4
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 4]
   push eax
@@ -304,21 +304,7 @@ EXCEPTION$160m:
   call eax
   add esp, 4
   pop ebx
-  mov ecx, eax
-  mov eax, ebx
-  mov ebx, ecx
-  push ebx
-  cmp eax, 0
-  jne EXCEPTION$2m
-  call __exception
-EXCEPTION$2m:
-  push eax
-  mov eax, [eax]
-  add eax, 28
-  mov eax, [eax]
-  call eax
-  add esp, 8
-  mov ebx, eax
+  add ebx, eax
   push ebx
   pop eax
   ;im_in_concat_function_additive_expr_end
@@ -329,7 +315,7 @@ EXCEPTION$2m:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -474,25 +460,7 @@ EXCEPTION$221a:
   call eax
   add esp, 4
   pop ebx
-  push eax
-  push ebx
-  push 0
-  mov eax, STATICMETHOD$java.lang.String$valueOf@int#
-  call eax
-  add esp, 8
-  pop ebx
-  push ebx
-  cmp eax, 0
-  jne EXCEPTION$3m
-  call __exception
-EXCEPTION$3m:
-  push eax
-  mov eax, [eax]
-  add eax, 28
-  mov eax, [eax]
-  call eax
-  add esp, 8
-  mov ebx, eax
+  add ebx, eax
   push ebx
   pop eax
   ;im_in_concat_function_additive_expr_end
@@ -529,7 +497,7 @@ label13end:
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   mov dword [eax + 8], 0
   push eax
   call CONSTRUCTOR$java.lang.String@char~#
@@ -554,7 +522,7 @@ STATICMETHOD$java.lang.String$valueOf@char#:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -597,7 +565,7 @@ EXCEPTION$256a:
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   mov dword [eax + 8], 0
   push eax
   call CONSTRUCTOR$java.lang.String@char~#
@@ -622,7 +590,7 @@ STATICMETHOD$java.lang.String$valueOf@int#:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -658,7 +626,7 @@ cmove eax, ecx
   mov eax, 56
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 11
   mov dword [eax + 12], 45
   mov dword [eax + 16], 50
@@ -675,7 +643,7 @@ cmove eax, ecx
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 16
@@ -756,7 +724,12 @@ cmovg eax, ecx
   mov eax, 10
   pop ebx
   mov ecx, eax
+  cmp ecx, 0
+  jne EXCEPTION$367
+  call __exception
+EXCEPTION$367:
   mov eax, ebx
+  mov edx, 0
   div ecx
   mov ebx, edx
   push ebx
@@ -767,7 +740,12 @@ cmovg eax, ecx
   mov eax, 10
   pop ebx
   mov ecx, eax
+  cmp ecx, 0
+  jne EXCEPTION$373
+  call __exception
+EXCEPTION$373:
   mov eax, ebx
+  mov edx, 0
   div ecx
   mov ebx, eax
   push ebx
@@ -855,7 +833,7 @@ label18end:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -952,7 +930,7 @@ label19end:
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   mov dword [eax + 8], 0
   push eax
   call CONSTRUCTOR$java.lang.String@char~#
@@ -1006,7 +984,7 @@ STATICMETHOD$java.lang.String$valueOf@boolean#:
   mov eax, 28
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 4
   mov dword [eax + 12], 116
   mov dword [eax + 16], 114
@@ -1016,7 +994,7 @@ STATICMETHOD$java.lang.String$valueOf@boolean#:
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 0
@@ -1027,7 +1005,7 @@ label20else:
   mov eax, 32
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 5
   mov dword [eax + 12], 102
   mov dword [eax + 16], 97
@@ -1038,7 +1016,7 @@ label20else:
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 0
@@ -1065,7 +1043,7 @@ cmove eax, ecx
   mov eax, 28
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 4
   mov dword [eax + 12], 110
   mov dword [eax + 16], 117
@@ -1075,7 +1053,7 @@ cmove eax, ecx
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 0
@@ -1118,7 +1096,7 @@ cmove eax, ecx
   mov eax, 28
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 4
   mov dword [eax + 12], 110
   mov dword [eax + 16], 117
@@ -1128,7 +1106,7 @@ cmove eax, ecx
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 0
@@ -1163,33 +1141,40 @@ cmove eax, ecx
   pop ebp
   ret
 label23end:
-  mov ebx, [eax + 8]
- mov eax , 37
+  childrenofinstanceof24:
+  mov eax, [ebp - -12]
+ cmp eax,0
+ je end25
+  mov ebx, [eax + 4] ; start checking
+ mov eax , 42
  mul ebx 
-  mov eax, [subtypecheckingtable+eax+116]  ;check instance of
+  mov eax, [subtypecheckingtable+eax+136]  ;check instance of
+end25:
   not eax 
   and eax, 1
   cmp eax, 0
-  je label24end
+  je label26end
   mov eax, 0
   add esp, 0
   pop ebp
   ret
-label24end:
+label26end:
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
   push eax
   mov eax, [ebp - -12]
-  mov ebx, [eax + 8]
+  cmp eax, 0 
+ je subtypingcheck27 
+  mov ebx, [eax + 4]
 push eax
- mov eax , 37
+ mov eax , 42
  mul ebx 
-  mov ebx, [subtypecheckingtable+eax+124] ; check cast expression
- cmp ebx, 0
- je subtypingcheck25 
- call __exception
-subtypingcheck25:
+  mov ebx, [subtypecheckingtable+eax+144] ; check cast expression
 pop eax
+ cmp ebx, 0
+ je subtypingcheck27 
+ call __exception
+subtypingcheck27:
   cmp eax, 0
   jne EXCEPTION$626
   call __exception
@@ -1222,23 +1207,23 @@ METHOD$java.lang.String$substring@int#int#:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label26end
+  je label28end
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 0
   push eax
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 8
   pop ebp
   ret
-label26end:
+label28end:
   mov eax, [ebp - -16]
   push eax
   mov eax, [ebp + 8]
@@ -1254,23 +1239,23 @@ label26end:
 mov ecx, 1
 cmovg eax, ecx
   cmp eax, 0
-  je label27end
+  je label29end
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 0
   push eax
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 8
   pop ebp
   ret
-label27end:
+label29end:
   mov eax, [ebp - -16]
   push eax
   mov eax, [ebp - -12]
@@ -1280,23 +1265,23 @@ label27end:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label28end
+  je label30end
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 0
   push eax
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 8
   pop ebp
   ret
-label28end:
+label30end:
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - -16]
   push eax
@@ -1313,7 +1298,7 @@ label28end:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -1334,7 +1319,7 @@ ARRAYINIT$690:
   mov dword [ebp - 8], eax
   mov eax, [ebp - -12]
   mov dword [ebp - 4], eax
-label29start:
+label31start:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp - -16]
@@ -1344,7 +1329,7 @@ label29start:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label29end
+  je label31end
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp + 8]
@@ -1390,14 +1375,14 @@ EXCEPTION$714a:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 4], eax
-  jmp label29start
-label29end:
+  jmp label31start
+label31end:
   mov eax, [ebp - 8]
   push eax
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   mov dword [eax + 8], 0
   push eax
   call CONSTRUCTOR$java.lang.String@char~#
@@ -1420,7 +1405,7 @@ METHOD$java.lang.String$trim@:
   mov dword [ebp - 8], eax
   mov eax, 0
   mov dword [ebp - 4], eax
-label30start:
+label32start:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp + 8]
@@ -1457,7 +1442,7 @@ cmovle eax, ecx
   push ebx
   pop eax
   cmp eax, 0
-  je label30end
+  je label32end
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 4]
   push eax
@@ -1468,8 +1453,8 @@ cmovle eax, ecx
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 4], eax
-  jmp label30start
-label30end:
+  jmp label32start
+label32end:
   ;im_in_concat_function_additive_expr
   mov eax, [ebp + 8]
   push eax
@@ -1486,7 +1471,7 @@ label30end:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 8], eax
-label31start:
+label33start:
   mov eax, [ebp - 8]
   push eax
   mov eax, 0
@@ -1517,7 +1502,7 @@ cmovle eax, ecx
   push ebx
   pop eax
   cmp eax, 0
-  je label31end
+  je label33end
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 8]
   push eax
@@ -1528,8 +1513,8 @@ cmovle eax, ecx
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 8], eax
-  jmp label31start
-label31end:
+  jmp label33start
+label33end:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp - 8]
@@ -1539,24 +1524,24 @@ label31end:
 mov ecx, 1
 cmovg eax, ecx
   cmp eax, 0
-  je label32else
+  je label34else
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 0
   push eax
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 8
   pop ebp
   ret
-  jmp label32end
-label32else:
+  jmp label34end
+label34else:
   mov eax, [ebp - 4]
   push eax
   ;im_in_concat_function_additive_expr
@@ -1579,7 +1564,7 @@ label32else:
   add esp, 8
   pop ebp
   ret
-label32end:
+label34end:
   add esp, 8
   pop ebp
   ret
@@ -1591,9 +1576,10 @@ METHOD$java.lang.String$hashCode@:
   sub esp, 4
   mov eax, 0
   mov dword [ebp - 4], eax
+  sub esp, 4
   mov eax, 0
   mov dword [ebp - 8], eax
-label33start:
+label35start:
   mov eax, [ebp - 8]
   push eax
   mov eax, [ebp + 8]
@@ -1609,7 +1595,7 @@ EXCEPTION$852$0:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label33end
+  je label35end
   ;im_in_concat_function_additive_expr
   mov eax, 31
   push eax
@@ -1644,7 +1630,6 @@ EXCEPTION$869a:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 4], eax
-  add esp, 4
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 8]
   push eax
@@ -1655,8 +1640,8 @@ EXCEPTION$869a:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 8], eax
-  jmp label33start
-label33end:
+  jmp label35start
+label35end:
   add esp, 4
   mov eax, [ebp - 4]
   add esp, 4
@@ -1682,16 +1667,18 @@ METHOD$java.lang.String$compareTo@java.lang.Object#:
   push ebp
   mov ebp, esp
   mov eax, [ebp - -12]
-  mov ebx, [eax + 8]
+  cmp eax, 0 
+ je subtypingcheck36 
+  mov ebx, [eax + 4]
 push eax
- mov eax , 37
+ mov eax , 42
  mul ebx 
-  mov ebx, [subtypecheckingtable+eax+124] ; check cast expression
- cmp ebx, 0
- je subtypingcheck34 
- call __exception
-subtypingcheck34:
+  mov ebx, [subtypecheckingtable+eax+144] ; check cast expression
 pop eax
+ cmp ebx, 0
+ je subtypingcheck36 
+ call __exception
+subtypingcheck36:
   push eax
   mov eax, [ebp + 8]
   push eax
@@ -1715,10 +1702,10 @@ METHOD$java.lang.String$compareTo@java.lang.String#:
   mov dword [ebp - 4], eax
   mov eax, 1
   mov dword [ebp - 8], eax
-label35start:
+label37start:
   mov eax, [ebp - 8]
   cmp eax, 0
-  je label35end
+  je label37end
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp + 8]
@@ -1757,12 +1744,12 @@ cmovge eax, ecx
   push ebx
   pop eax
   cmp eax, 0
-  je label36end
+  je label38end
   mov eax, 0
   add esp, 8
   pop ebp
   ret
-label36end:
+label38end:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp + 8]
@@ -1778,12 +1765,12 @@ EXCEPTION$953$0:
 mov ecx, 1
 cmovge eax, ecx
   cmp eax, 0
-  je label37end
+  je label39end
   mov eax, -1
   add esp, 8
   pop ebp
   ret
-label37end:
+label39end:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp - -12]
@@ -1803,12 +1790,12 @@ EXCEPTION$965$1:
 mov ecx, 1
 cmovge eax, ecx
   cmp eax, 0
-  je label38end
+  je label40end
   mov eax, 1
   add esp, 8
   pop ebp
   ret
-label38end:
+label40end:
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
   push eax
@@ -1858,12 +1845,12 @@ EXCEPTION$981a:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label39end
+  je label41end
   mov eax, -1
   add esp, 8
   pop ebp
   ret
-label39end:
+label41end:
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
   push eax
@@ -1913,12 +1900,12 @@ EXCEPTION$999a:
 mov ecx, 1
 cmovg eax, ecx
   cmp eax, 0
-  je label40end
+  je label42end
   mov eax, 1
   add esp, 8
   pop ebp
   ret
-label40end:
+label42end:
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 4]
   push eax
@@ -1929,8 +1916,8 @@ label40end:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 4], eax
-  jmp label35start
-label35end:
+  jmp label37start
+label37end:
   mov eax, 0
   add esp, 8
   pop ebp
@@ -1958,7 +1945,7 @@ EXCEPTION$1036$0:
   call __malloc
   pop ebx
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], ebx
   push eax
   push eax
@@ -1977,9 +1964,10 @@ ARRAYINIT$1033:
 .end:
   pop eax
   mov dword [ebp - 4], eax
+  sub esp, 4
   mov eax, 0
   mov dword [ebp - 8], eax
-label41start:
+label43start:
   mov eax, [ebp - 8]
   push eax
   mov eax, [ebp - 4]
@@ -1994,7 +1982,7 @@ EXCEPTION$1050$0:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label41end
+  je label43end
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
   push eax
@@ -2032,7 +2020,6 @@ EXCEPTION$1061a:
   pop ebx
   mov dword [eax], ebx
   mov eax, ebx
-  add esp, 4
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 8]
   push eax
@@ -2043,8 +2030,8 @@ EXCEPTION$1061a:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 8], eax
-  jmp label41start
-label41end:
+  jmp label43start
+label43end:
   add esp, 4
   mov eax, [ebp - 4]
   add esp, 4
@@ -2065,7 +2052,7 @@ METHOD$java.lang.String$indexOf@java.lang.String#:
   mov dword [ebp - 8], eax
   mov eax, 0
   mov dword [ebp - 4], eax
-label42start:
+label44start:
   mov eax, [ebp - 4]
   push eax
   mov eax, [ebp + 8]
@@ -2081,13 +2068,13 @@ label42start:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label42end
+  je label44end
   sub esp, 4
   mov eax, 1
   mov dword [ebp - 12], eax
   mov eax, 0
   mov dword [ebp - 8], eax
-label43start:
+label45start:
   mov eax, [ebp - 8]
   push eax
   mov eax, [ebp - -12]
@@ -2107,7 +2094,7 @@ EXCEPTION$1129m:
 mov ecx, 1
 cmovl eax, ecx
   cmp eax, 0
-  je label43end
+  je label45end
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 8]
   push eax
@@ -2131,11 +2118,11 @@ cmovl eax, ecx
 mov ecx, 1
 cmovge eax, ecx
   cmp eax, 0
-  je label44else
+  je label46else
   mov eax, 0
   mov dword [ebp - 12], eax
-  jmp label44end
-label44else:
+  jmp label46end
+label46else:
   mov eax, [ebp + 8]
   mov eax, [eax + 8]
   push eax
@@ -2193,11 +2180,11 @@ EXCEPTION$1163a:
 mov ecx, 1
 cmovne eax, ecx
   cmp eax, 0
-  je label45end
+  je label47end
   mov eax, 0
   mov dword [ebp - 12], eax
-label45end:
-label44end:
+label47end:
+label46end:
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 8]
   push eax
@@ -2208,16 +2195,16 @@ label44end:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 8], eax
-  jmp label43start
-label43end:
+  jmp label45start
+label45end:
   mov eax, [ebp - 12]
   cmp eax, 0
-  je label46end
+  je label48end
   mov eax, [ebp - 4]
   add esp, 12
   pop ebp
   ret
-label46end:
+label48end:
   add esp, 4
   ;im_in_concat_function_additive_expr
   mov eax, [ebp - 4]
@@ -2229,8 +2216,8 @@ label46end:
   pop eax
   ;im_in_concat_function_additive_expr_end
   mov dword [ebp - 4], eax
-  jmp label42start
-label42end:
+  jmp label44start
+label44end:
   mov eax, -1
   add esp, 8
   pop ebp

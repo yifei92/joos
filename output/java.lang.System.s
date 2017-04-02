@@ -32,7 +32,7 @@ STATICFIELDINITIALIZER$java.lang.System:
   mov eax, 8
   call __malloc
   mov dword [eax], InterfaceTABLE$java.io.PrintStream
-  mov dword [eax + 4], 28
+  mov dword [eax + 4], 48
   push eax
   call CONSTRUCTOR$java.io.PrintStream@
   add esp, 4

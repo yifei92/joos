@@ -217,25 +217,7 @@ EXCEPTION$139m:
   call eax
   add esp, 8
   pop ebx
-  push eax
-  push ebx
-  push 0
-  mov eax, STATICMETHOD$java.lang.String$valueOf@int#
-  call eax
-  add esp, 8
-  pop ebx
-  push ebx
-  cmp eax, 0
-  jne EXCEPTION$1m
-  call __exception
-EXCEPTION$1m:
-  push eax
-  mov eax, [eax]
-  add eax, 28
-  mov eax, [eax]
-  call eax
-  add esp, 8
-  mov ebx, eax
+  add ebx, eax
   push ebx
   mov eax, 48
   pop ebx

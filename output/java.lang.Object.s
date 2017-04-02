@@ -52,7 +52,7 @@ METHOD$java.lang.Object$toString@:
   mov eax, 84
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.Object
-  mov dword [eax + 4],-4
+  mov dword [eax + 4],20
   mov dword [eax + 8], 18
   mov dword [eax + 12], 83
   mov dword [eax + 16], 111
@@ -76,7 +76,7 @@ METHOD$java.lang.Object$toString@:
   mov eax, 12
   call __malloc
   mov dword [eax], InterfaceTABLE$java.lang.String
-  mov dword [eax + 4], 124
+  mov dword [eax + 4], 144
   pop ebx
   mov dword [eax + 8], ebx
   add esp, 0

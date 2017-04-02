@@ -63,6 +63,7 @@ cmovne eax, ecx
   pop ebp
   ret
 label2end:
+  sub esp, 4
   mov eax, 0
   mov dword [ebp - 4], eax
 label3start:
@@ -130,7 +131,6 @@ cmovne eax, ecx
   pop ebp
   ret
 label4end:
-  add esp, 4
   mov eax, [ebp - 4]
   push eax
   mov eax, 1
@@ -178,6 +178,7 @@ cmovne eax, ecx
   pop ebp
   ret
 label5end:
+  sub esp, 4
   mov eax, 0
   mov dword [ebp - 4], eax
 label6start:
@@ -245,7 +246,6 @@ cmovne eax, ecx
   pop ebp
   ret
 label7end:
-  add esp, 4
   mov eax, [ebp - 4]
   push eax
   mov eax, 1

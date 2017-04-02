@@ -34,7 +34,7 @@ public class SubTypingTesting {
 			classlist.add(s+"[]");
 		}
 		writer.write("global subtypecheckingtable\n");
-		writer.write("subtypecheckingtable:");
+		writer.write("subtypecheckingtable:\n");
 		//lookuptable=new int[classlist.size()][classlist.size()];
 		for(int i=0;i<classlist.size();i++){
 			for(int j=0;j<classlist.size();j++) {

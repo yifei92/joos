@@ -24,12 +24,14 @@ public class SubTypingTesting {
 	//int[][] lookuptable;
 	public void initialize(){
 		StringWriter writer = new StringWriter();
-		classlist.add("shot");
-		classlist.add("byte");
-		classlist.add("char");
-		classlist.add("int");
-		classlist.add("boolean");
-		for(String s:packageMap.keySet()){
+		List<String> temp=new ArrayList<>();
+		temp.add("shot");
+		temp.add("byte");
+		temp.add("char");
+		temp.add("int");
+		temp.add("boolean");
+		temp.addAll(packageMap.keySet());
+		for(String s:temp){
 			classlist.add(s);
 			classlist.add(s+"[]");
 		}
@@ -44,8 +46,6 @@ public class SubTypingTesting {
 					break;
 				}
 				boolean assible = TypeCheckingEvaluator.assignable(classlist.get(j), classlist.get(i), packageMap);
-				Environment childenv = packageMap.get(classlist.get(i));
-				Environment parentenv = packageMap.get(classlist.get(j));
 				;
 				if (assible) {
 					//lookuptable[i][j]=1;

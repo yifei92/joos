@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar joosc.jar "$@"
+java -Xms128M -Xmx512M -jar joosc.jar "$@"

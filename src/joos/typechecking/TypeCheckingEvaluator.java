@@ -777,7 +777,6 @@ public class TypeCheckingEvaluator {
 		}
 
 		if(isnumicType(new Type(parent))&&isnumicType(new Type(child))){
-			System.out.println("assign fail "+parent+"  "+child);
 			return false;
 		}
 		if((parent.equals("java.lang.Cloneable")||parent.equals("java.io.Serializable"))&&child.contains("[]")){

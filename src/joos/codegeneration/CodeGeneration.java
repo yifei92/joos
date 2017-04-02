@@ -1329,9 +1329,9 @@ public class CodeGeneration {
         return;
       }
       case ASSIGNMENT: {
-        generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
         switch (node.children.get(0).children.get(0).token.getType()) {
           case NAME: {
+            generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
             String name = getNameFromTypeNode(node.children.get(0).children.get(0));
             int dotIndex = name.lastIndexOf('.');
             if (dotIndex == -1) {
@@ -1360,6 +1360,7 @@ public class CodeGeneration {
             break;
           }
           case FIELD_ACCESS: {
+            generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
             String fieldName = ((TerminalToken)findNodeWithTokenType(node.children.get(0).children.get(0).children.get(2), TokenType.IDENTIFIER).token).getRawValue();
             writer.write("  push eax\n");
             generateForNode(currentEnvironment, node.children.get(0).children.get(0).children.get(0), currentOffsets, currentOffset, externs);
@@ -1380,7 +1381,6 @@ public class CodeGeneration {
             break;
           }
           case ARRAY_ACCESS: {
-            writer.write("  push eax\n"); // push the value to assign
             generateForNode(
               currentEnvironment,
               node.children.get(0).children.get(0).children.get(2),
@@ -1388,6 +1388,11 @@ public class CodeGeneration {
               currentOffset,
               externs
             );
+            writer.write("  push eax\n"); // push index to assign
+            generateForNode(currentEnvironment, node.children.get(2), currentOffsets, currentOffset, externs);
+            writer.write("  mov ebx, eax\n");
+            writer.write("  pop eax\n");
+            writer.write("  push ebx\n");
             switch (node.children.get(0).children.get(0).children.get(0).token.getType()) {
               case NAME: {
                 writer.write("  mov ebx, eax\n"); //ebx is the index

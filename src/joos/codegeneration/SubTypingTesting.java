@@ -57,8 +57,6 @@ public class SubTypingTesting {
 			}
 		}
 
-		System.out.print("subtyping table size "+classlist.size());
-
 		File file = new File("output/subteypchecking.s");
 		file.getParentFile().mkdirs();
 		try {

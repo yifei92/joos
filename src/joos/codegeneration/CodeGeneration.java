@@ -1431,18 +1431,20 @@ public class CodeGeneration {
         if(TypeCheckingEvaluator.isprimitiveType(node.children.get(node.children.size() - 1).type)){
           return;
         }
+        int unique=subTypingTesting.getuniqueid();
+        writer.write("  cmp eax, 0 \n");
+        writer.write(" je subtypingcheck"+unique+" \n");
         writer.write("  mov ebx, [eax + 8]\n"); // get class descriptor
         int offset=subTypingTesting.getoffset(node.children.get(1).type.name);
         writer.write("push eax\n");
         writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
         writer.write(" mul ebx \n");
         writer.write("  mov ebx, [subtypecheckingtable+eax+"+offset+"] ; check cast expression\n");
+        writer.write("pop eax\n");
         writer.write(" cmp ebx, 0\n");
-        int unique=subTypingTesting.getuniqueid();
         writer.write(" je subtypingcheck"+unique+" \n");
         writer.write(" call __exception\n");
         writer.write("subtypingcheck"+unique+":\n");
-        writer.write("pop eax\n");
         return;
       }
     }

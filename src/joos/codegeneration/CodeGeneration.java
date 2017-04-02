@@ -648,7 +648,7 @@ public class CodeGeneration {
 
   private static String getNextExceptionLabel() {
     ++stringMethodInvocationExceptionCount;
-    return "EXCEPTION$" + stringMethodInvocationExceptionCount + "m:\n";
+    return "EXCEPTION$" + stringMethodInvocationExceptionCount + "m";
   }
 
   /**
@@ -656,7 +656,7 @@ public class CodeGeneration {
    * Assumes that the string object is in eax and the param is in ebx
    * overrites eax if the method is static
    */
-  public void generateStringMethodInvocation(String name, String paramType, boolean isStatic, Set<String> externs) throws InvalidSyntaxException {
+  public void generateStringMethodInvocation(Environment callFromEnvironment, String name, String paramType, boolean isStatic, Set<String> externs) throws InvalidSyntaxException {
     // for each arg push onto stack
     writer.write("  push ebx\n");
 
@@ -664,9 +664,9 @@ public class CodeGeneration {
       // check if the string object is null
       writer.write("  cmp eax, 0\n");
       String exceptionLabel = getNextExceptionLabel();
-      writer.write("  jne " + exceptionLabel);
+      writer.write("  jne " + exceptionLabel +"\n");
       writer.write("  call __exception\n");
-      writer.write(exceptionLabel);
+      writer.write(exceptionLabel + ":\n");
     }
     
     if (!isStatic) {
@@ -688,7 +688,9 @@ public class CodeGeneration {
       writer.write("  mov eax, [eax]\n"); //INTERFACETABLE
     } else {
       String label = getMethodLabel(stringEnvironment, methodSig);
-      externs.add(label);
+      if (moveUpToClassEnvironment(callFromEnvironment) != stringEnvironment) {
+        externs.add(label);
+      }
       writer.write("  mov eax, " + label + "\n");
     }
     writer.write("  call eax\n");
@@ -925,7 +927,7 @@ public class CodeGeneration {
                   writer.write("  mov ecx, eax\n");
                   writer.write("  mov eax, ebx\n");
                   writer.write("  mov ebx, ecx\n");
-                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
                   writer.write("  mov ebx, eax\n");
                   // running total type stays as string
                   runningTotalType = currentOperandType;
@@ -934,10 +936,10 @@ public class CodeGeneration {
                   // save the current operand
                   writer.write("  push eax\n");
                   // convert char to string
-                  generateStringMethodInvocation("valueOf", "char", true, externs);
+                  generateStringMethodInvocation(currentEnvironment, "valueOf", "char", true, externs);
                   // char string is now in eax
                   writer.write("  pop ebx\n");
-                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
                   writer.write("  mov ebx, eax\n");
                   // our running type from now on is string
                   runningTotalType = currentOperandType;
@@ -947,10 +949,10 @@ public class CodeGeneration {
                   // save the current operand
                   writer.write("  push eax\n");
                   // convert numeric to string
-                  generateStringMethodInvocation("valueOf", runningTotalType.name, true, externs);
+                  generateStringMethodInvocation(currentEnvironment, "valueOf", runningTotalType.name, true, externs);
                   // numeric string is now in eax
                   writer.write("  pop ebx\n");
-                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
                   writer.write("  mov ebx, eax\n");
                   // our running type from now on is string
                   // running total type will now always be string
@@ -961,12 +963,12 @@ public class CodeGeneration {
                   writer.write("  push ebx\n");
                   writer.write("  mov ebx, eax\n");
                   // convert numeric to string
-                  generateStringMethodInvocation("valueOf", currentOperandType.name, true, externs);
+                  generateStringMethodInvocation(currentEnvironment, "valueOf", currentOperandType.name, true, externs);
                   // move the converted numeric into ebx 
                   writer.write("  mov ebx, eax\n");
                   // retreive the saved running total
                   writer.write("  pop eax\n");
-                  generateStringMethodInvocation("concat", "java.lang.String", false, externs);
+                  generateStringMethodInvocation(currentEnvironment, "concat", "java.lang.String", false, externs);
                   writer.write("  mov ebx, eax\n");
                   // running total type stays as string
                 } else {

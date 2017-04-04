@@ -1454,6 +1454,37 @@ public class CodeGeneration {
                 writer.write("  pop ebx\n"); //index
                 writer.write("  pop eax\n"); //array
 
+
+                //subteype checking
+                writer.write("  push eax\n"); //array
+                writer.write("  push ebx\n"); //index
+                writer.write("  push ecx\n"); //value
+
+                int unique=subTypingTesting.getuniqueid();
+                writer.write("  cmp ecx, 0 \n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+
+                if(TypeCheckingEvaluator.isprimitiveType( node.children.get(2).type)){
+                  writer.write("  mov edx, "+subTypingTesting.getoffset(node.children.get(2).type.name)+"\n"); // get class descriptor vale
+                }
+                else{
+                  writer.write("  mov edx, [ecx + 4]\n"); // get class descriptor vale
+                }
+                writer.write("  mov ebx, [eax + 4]\n"); // get class descriptor array
+                writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
+                writer.write(" mul edx \n");
+                writer.write("  mov ecx, [subtypecheckingtable+eax+ebx-4] ; check array assignment\n");
+                writer.write(" cmp ecx, 1\n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+                writer.write(" call __exception\n");
+                writer.write("subtypingcheck"+unique+":\n");
+
+                writer.write("  pop ecx\n"); //value
+                writer.write("  pop ebx\n"); //index
+                writer.write("  pop eax\n"); //array
+
+
+
                 writer.write("  cmp ebx, [eax + 8]\n");
                 writer.write("  jnge EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a\n");
 
@@ -1517,6 +1548,35 @@ public class CodeGeneration {
                 writer.write("  mov ecx, eax\n");//value
                 writer.write("  pop ebx\n"); //index
                 writer.write("  pop eax\n"); //array
+
+
+                //subteype checking
+                writer.write("  push eax\n"); //array
+                writer.write("  push ebx\n"); //index
+                writer.write("  push ecx\n"); //value
+
+                int unique=subTypingTesting.getuniqueid();
+                writer.write("  cmp ecx, 0 \n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+                if(TypeCheckingEvaluator.isprimitiveType( node.children.get(2).type)){
+                  writer.write("  mov edx, "+subTypingTesting.getoffset(node.children.get(2).type.name)+"\n"); // get class descriptor vale
+                }
+                else{
+                  writer.write("  mov edx, [ecx + 4]\n"); // get class descriptor vale
+                }
+                writer.write("  mov ebx, [eax + 4]\n"); // get class descriptor array
+                writer.write(" mov eax , "+subTypingTesting.getrowsize()+"\n");
+                writer.write(" mul edx \n");
+                writer.write("  mov ecx, [subtypecheckingtable+eax+ebx-4] ; check array assignment\n");
+                writer.write(" cmp ecx, 1\n");
+                writer.write(" je subtypingcheck"+unique+" \n");
+                writer.write(" call __exception\n");
+                writer.write("subtypingcheck"+unique+":\n");
+
+                writer.write("  pop ecx\n"); //value
+                writer.write("  pop ebx\n"); //index
+                writer.write("  pop eax\n"); //array
+
 
                 writer.write("  cmp ebx, [eax + 8]\n");
                 writer.write("  jnge EXCEPTION$" + node.getFirstTerminalNode().token.getIndex() + "a\n");
